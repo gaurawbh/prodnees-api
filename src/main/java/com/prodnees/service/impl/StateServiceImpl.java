@@ -5,6 +5,8 @@ import com.prodnees.domain.State;
 import com.prodnees.service.StateService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class StateServiceImpl implements StateService {
     private final StateDao stateDao;
@@ -20,11 +22,21 @@ public class StateServiceImpl implements StateService {
 
     @Override
     public State getById(int id) {
-        return null;
+        return stateDao.getById(id);
     }
 
     @Override
-    public State getByBatchProductId(int batchProductId) {
-        return null;
+    public State getByName(String name) {
+        return stateDao.getByName(name);
+    }
+
+    @Override
+    public List<State> getAllByBatchProductId(int batchProductId) {
+        return stateDao.getAllByBatchProductId(batchProductId);
+    }
+
+    @Override
+    public List<State> getAllByBatchProductIdAndComplete(int batchProductId, boolean isComplete) {
+        return stateDao.getAllByBatchProductIdAndComplete(batchProductId, isComplete);
     }
 }

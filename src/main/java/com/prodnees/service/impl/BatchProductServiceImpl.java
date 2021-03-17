@@ -20,11 +20,11 @@ public class BatchProductServiceImpl implements BatchProductService {
 
     @Override
     public BatchProduct getById(int id) {
-        return null;
+        return batchProductDao.getById(id);
     }
 
     @Override
     public List<BatchProduct> getAllByProductId(int productId) {
-        return null;
+        return batchProductDao.getAllByProductId(productId);
     }
 }

@@ -21,11 +21,11 @@ public class RawProductServiceImpl implements RawProductService {
 
     @Override
     public RawProduct getById(int id) {
-        return null;
+        return rawProductDao.getById(id);
     }
 
     @Override
     public RawProduct getByName(String name) {
-        return null;
+        return rawProductDao.getByName(name);
     }
 }

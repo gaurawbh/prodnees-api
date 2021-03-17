@@ -20,11 +20,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getById(int id) {
-        return null;
+        return productDao.getById(id);
     }
 
     @Override
     public Product getByName(String name) {
-        return null;
+        return productDao.getByName(name);
     }
 }

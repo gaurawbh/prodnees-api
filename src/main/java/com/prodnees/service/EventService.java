@@ -10,7 +10,8 @@ public interface EventService {
 
     List<Event> getAllByBatchProductId(int batchProductId);
 
-    List<Event> getAllByStateId(int batchProductId);
+    List<Event> getAllByStateId(int stateId);
+    Event getByBatchProductIdAndName(int batchProductId, String name);
 
 
 }
