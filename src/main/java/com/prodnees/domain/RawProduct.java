@@ -3,7 +3,6 @@ package com.prodnees.domain;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.NamedEntityGraph;
 
 @Entity
 public class RawProduct {

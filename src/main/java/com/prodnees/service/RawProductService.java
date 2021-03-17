@@ -1,7 +1,6 @@
 package com.prodnees.service;
 
 import com.prodnees.domain.RawProduct;
-import org.springframework.stereotype.Service;
 
 public interface RawProductService {
 

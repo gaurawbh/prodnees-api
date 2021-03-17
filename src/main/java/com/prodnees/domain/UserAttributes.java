@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class UserDetails {
+public class UserAttributes {
     @Id
     private int userId;
     private String firstName;
@@ -17,7 +17,7 @@ public class UserDetails {
         return userId;
     }
 
-    public UserDetails setUserId(int userId) {
+    public UserAttributes setUserId(int userId) {
         this.userId = userId;
         return this;
     }
@@ -26,7 +26,7 @@ public class UserDetails {
         return firstName;
     }
 
-    public UserDetails setFirstName(String firstName) {
+    public UserAttributes setFirstName(String firstName) {
         this.firstName = firstName;
         return this;
     }
@@ -35,7 +35,7 @@ public class UserDetails {
         return lastName;
     }
 
-    public UserDetails setLastName(String lastName) {
+    public UserAttributes setLastName(String lastName) {
         this.lastName = lastName;
         return this;
     }
@@ -44,7 +44,7 @@ public class UserDetails {
         return email;
     }
 
-    public UserDetails setEmail(String email) {
+    public UserAttributes setEmail(String email) {
         this.email = email;
         return this;
     }
@@ -53,7 +53,7 @@ public class UserDetails {
         return phoneNumber;
     }
 
-    public UserDetails setPhoneNumber(String phoneNumber) {
+    public UserAttributes setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
         return this;
     }
@@ -62,7 +62,7 @@ public class UserDetails {
         return address;
     }
 
-    public UserDetails setAddress(String address) {
+    public UserAttributes setAddress(String address) {
         this.address = address;
         return this;
     }

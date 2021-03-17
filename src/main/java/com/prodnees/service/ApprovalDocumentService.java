@@ -1,9 +1,7 @@
 package com.prodnees.service;
 
 import com.prodnees.domain.ApprovalDocument;
-import com.prodnees.domain.Document;
 import com.prodnees.domain.DocumentState;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
