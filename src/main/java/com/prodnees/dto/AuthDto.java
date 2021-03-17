@@ -10,6 +10,9 @@ public class AuthDto {
     private String email;
     private String password;
 
+    public AuthDto() {
+    }
+
     public AuthDto(String email, String password) {
         this.email = email;
         this.password = password;
@@ -23,4 +26,13 @@ public class AuthDto {
         return password;
     }
 
+    public AuthDto setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public AuthDto setPassword(String password) {
+        this.password = password;
+        return this;
+    }
 }

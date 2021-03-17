@@ -20,7 +20,7 @@ public enum APIErrors {
     INVALID_USER_ROLE(26, "invalid user role"),
     INVALID_JWT_TOKEN(30, "invalid or missing token"),
     PROTECTED_URL(31, "attempt to access the protected url"),
-    TEMP_PASSWORD_UNCHANGED(32, "user cannot access the app without changing the temp password, /secure/user/change-temp-password"),
+    TEMP_PASSWORD_UNCHANGED(32, "user cannot access the app without changing the temp password, /secure/user/temp-password"),
     INVALID_REQUEST_BODY(42, "invalid request body"),
     OBJECT_NOT_FOUND(42, "object does not exist"),
     DUPLICATE_DATA(44, "duplicate row for object %s"),

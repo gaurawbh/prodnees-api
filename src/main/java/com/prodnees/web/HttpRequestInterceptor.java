@@ -19,6 +19,9 @@ public class HttpRequestInterceptor implements HandlerInterceptor {
         if (response.getStatus() == HttpServletResponse.SC_FORBIDDEN) {
             throw new NeesForbiddenException(APIErrors.PROTECTED_URL);
         }
+        if (response.getHeader("temp_password_unchanged") != null) {
+            throw new NeesForbiddenException(APIErrors.TEMP_PASSWORD_UNCHANGED);
+        }
 
         return true;
     }

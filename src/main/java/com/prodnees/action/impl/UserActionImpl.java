@@ -1,6 +1,8 @@
 package com.prodnees.action.impl;
 
 import com.prodnees.action.UserAction;
+import com.prodnees.dao.TempPasswordInfoDao;
+import com.prodnees.domain.TempPasswordInfo;
 import com.prodnees.domain.User;
 import com.prodnees.domain.UserAttributes;
 import com.prodnees.dto.UserRegistrationDto;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,13 +29,16 @@ public class UserActionImpl implements UserAction {
     private final UserService userService;
     private final UserAttributesService userAttributesService;
     private final LocalEmailService localEmailService;
+    private final TempPasswordInfoDao tempPasswordInfoDao;
 
     public UserActionImpl(UserService userService,
                           UserAttributesService userAttributesService,
-                          LocalEmailService localEmailService) {
+                          LocalEmailService localEmailService,
+                          TempPasswordInfoDao tempPasswordInfoDao) {
         this.userService = userService;
         this.userAttributesService = userAttributesService;
         this.localEmailService = localEmailService;
+        this.tempPasswordInfoDao = tempPasswordInfoDao;
     }
 
     @Override
@@ -63,6 +69,7 @@ public class UserActionImpl implements UserAction {
                 .setLastName(dto.getLastName())
                 .setEmail(user.getEmail());
         userAttributesService.save(attributes);
+        tempPasswordInfoDao.save(new TempPasswordInfo().setEmail(user.getEmail()).setCreatedDateTime(LocalDateTime.now()));
         return mapToModel(user);
     }
 

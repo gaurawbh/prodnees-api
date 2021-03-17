@@ -61,7 +61,7 @@ public class JWTRequestFilter extends OncePerRequestFilter {
         }
 
         if (userService.existsByEmail(username)
-                && blockedJwtDao.existsByJwt(jwt)
+                && !blockedJwtDao.existsByJwt(jwt)
                 && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = loginUserDetailsService.loadUserByUsername(username);
 
@@ -69,14 +69,13 @@ public class JWTRequestFilter extends OncePerRequestFilter {
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-
         }
         filterChain.doFilter(request, response);
 
     }
 
     private void checkChangePasswordUrl(HttpServletRequest request, HttpServletResponse response) {
-        if (!request.getRequestURI().equals("/secure/user/change-temp-password")) {
+        if (!request.getRequestURI().equals("/secure/user/temp-password")) {
             response.setHeader("temp_password_unchanged", APIErrors.TEMP_PASSWORD_UNCHANGED.getMessage());
         }
     }

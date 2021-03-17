@@ -11,13 +11,20 @@ import com.prodnees.filter.UserValidator;
 import com.prodnees.model.UserModel;
 import com.prodnees.web.response.SuccessResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
+import static com.prodnees.web.response.SuccessResponse.configure;
 
 @RestController
 @RequestMapping("/secure/")
@@ -51,18 +58,26 @@ public class UserController {
      * @return
      */
     @PutMapping("/user/temp-password")
+    @Transactional
     public ResponseEntity<?> update(@Validated @RequestBody TempPasswordDto dto,
                                     HttpServletRequest servletRequest) {
         int userId = userValidator.extractUserId(servletRequest);
         User user = userAction.getById(userId);
-        user.setPassword(dto.getPassword());
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
         UserModel userModel = userAction.save(user);
         forgotPasswordInfoDao.deleteByEmail(user.getEmail()); // remove row from ForgotPasswordInfo
         tempPasswordInfoDao.deleteByEmail(user.getEmail()); // remove row from TempPasswordInfo
         String jwt = userValidator.extractToken(servletRequest);
         blockedJwtDao.save(new BlockedJwt().setJwt(jwt).setUserId(user.getId()).setEmail(user.getEmail())); // add to BlockedJwt
 
-        return SuccessResponse.configure(userModel);
+        return configure(userModel);
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<?> get(@RequestParam Optional<Integer> id, HttpServletRequest servletRequest) {
+        int userId = userValidator.extractUserId(servletRequest);
+        return configure(userAction.getModelById(userId));
     }
 
 
