@@ -66,6 +66,11 @@ public class UserActionImpl implements UserAction {
         return mapToModel(user);
     }
 
+    @Override
+    public UserModel save(User user) {
+        return mapToModel(userService.save(user));
+    }
+
     @Async
     void sendInitialPassword(String email, String initialPassword) {
         Map<String, Object> mailMap = new HashMap<>();
@@ -73,7 +78,6 @@ public class UserActionImpl implements UserAction {
         mailMap.put(LocalEmailService.TemplatePlaceHolders.PRE_HEADER, String.format("New email from %s. ", "ProdNees"));
         mailMap.put(LocalEmailService.TemplatePlaceHolders.MESSAGE, String.format("Your temporary password for ProdNees is: %s ", initialPassword));
         mailMap.put(LocalEmailService.TemplatePlaceHolders.PARA_ONE, "Please change your temporary password on your next login");
-        mailMap.put(LocalEmailService.TemplatePlaceHolders.SENDER, localEmailService.getSystemEmailAddress());
 
         try {
             localEmailService.sendTemplateEmail(email, "Your Temporary Password", mailMap);
@@ -84,13 +88,23 @@ public class UserActionImpl implements UserAction {
     }
 
     @Override
-    public UserModel getById(int id) {
+    public UserModel getModelById(int id) {
         return mapToModel(userService.getById(id));
     }
 
     @Override
-    public UserModel getByEmail(String email) {
+    public UserModel getModelByEmail(String email) {
         return mapToModel(userService.getByEmail(email));
+    }
+
+    @Override
+    public User getById(int id) {
+        return userService.getById(id);
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        return userService.getByEmail(email);
     }
 
     UserModel mapToModel(User user) {

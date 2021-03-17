@@ -23,6 +23,7 @@ public class JwtServiceImpl implements JwtService {
     interface ClaimFields {
         String USER_ID = "userId";
         String ROLE = "role";
+        String IS_TEMPORARY_PASSWORD = "isTempPassword";
         String ZONE_ID = "zoneId";
         String SECRET_KEY = "secret-key";
     }
@@ -36,16 +37,24 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails.getUsername());
+        return createToken(claims, userDetails.getUsername(), false);
     }
 
-    private String createToken(Map<String, Object> claims, String subject) {
+    @Override
+    public String generateToken(UserDetails userDetails, boolean isTempPassword) {
+
+        Map<String, Object> claims = new HashMap<>();
+        return createToken(claims, userDetails.getUsername(), isTempPassword);
+    }
+
+    private String createToken(Map<String, Object> claims, String subject, boolean isTempPassword) {
 
         Map<String, Object> userDetails = new HashMap<>();
         User user = userDao.findByEmail(subject);
 
         userDetails.put(ClaimFields.USER_ID, user.getId());
         userDetails.put(ClaimFields.ROLE, user.getRole());
+        userDetails.put(ClaimFields.IS_TEMPORARY_PASSWORD, isTempPassword);
         int tokenValidity = TimeConstants.ONE_WEEK;
         return Jwts.builder()
                 .setClaims(claims)
@@ -80,6 +89,12 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public Date extractTokenExpiryDatetime(String token) {
         return extractJws(token).getBody().getExpiration();
+    }
+
+    @Override
+    public boolean hasUsedTempPassword(String token) {
+        Jws<Claims> jws = extractJws(token);
+        return (boolean) jws.getBody().get(ClaimFields.IS_TEMPORARY_PASSWORD);
     }
 
     private Jws<Claims> extractJws(String token) {

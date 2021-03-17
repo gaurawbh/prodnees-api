@@ -7,6 +7,8 @@ public interface JwtService{
 
     String generateToken(UserDetails userDetails);
 
+    String generateToken(UserDetails userDetails, boolean isTempPassword);
+
     String extractUsername(String token);
 
     int extractUserId(String token);
@@ -14,6 +16,8 @@ public interface JwtService{
     String extractUserRole(String token);
 
     Date extractTokenExpiryDatetime(String token);
+
+    boolean hasUsedTempPassword(String token);
 
 
 }

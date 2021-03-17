@@ -19,26 +19,11 @@ public class UserRegistrationDto {
         return firstName;
     }
 
-    public UserRegistrationDto setFirstName(String firstName) {
-        this.firstName = firstName;
-        return this;
-    }
-
     public String getLastName() {
         return lastName;
     }
 
-    public UserRegistrationDto setLastName(String lastName) {
-        this.lastName = lastName;
-        return this;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    public UserRegistrationDto setEmail(String email) {
-        this.email = email;
-        return this;
     }
 }

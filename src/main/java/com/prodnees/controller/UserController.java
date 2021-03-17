@@ -1,30 +1,69 @@
 package com.prodnees.controller;
 
 import com.prodnees.action.UserAction;
-import com.prodnees.config.constants.APIErrors;
-import com.prodnees.dto.UserRegistrationDto;
+import com.prodnees.dao.BlockedJwtDao;
+import com.prodnees.dao.ForgotPasswordInfoDao;
+import com.prodnees.dao.TempPasswordInfoDao;
+import com.prodnees.domain.BlockedJwt;
+import com.prodnees.domain.User;
+import com.prodnees.dto.TempPasswordDto;
+import com.prodnees.filter.UserValidator;
+import com.prodnees.model.UserModel;
 import com.prodnees.web.response.SuccessResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
+@RequestMapping("/secure/")
 @CrossOrigin
 public class UserController {
+
+    private final BlockedJwtDao blockedJwtDao;
     private final UserAction userAction;
+    private final UserValidator userValidator;
+    private final TempPasswordInfoDao tempPasswordInfoDao;
+    private final ForgotPasswordInfoDao forgotPasswordInfoDao;
 
-    public UserController(UserAction userAction) {
+    public UserController(BlockedJwtDao blockedJwtDao, UserAction userAction,
+                          UserValidator userValidator, TempPasswordInfoDao tempPasswordInfoDao,
+                          ForgotPasswordInfoDao forgotPasswordInfoDao) {
+        this.blockedJwtDao = blockedJwtDao;
         this.userAction = userAction;
+        this.userValidator = userValidator;
+        this.tempPasswordInfoDao = tempPasswordInfoDao;
+        this.forgotPasswordInfoDao = forgotPasswordInfoDao;
     }
 
-    @PostMapping("/user/signup")
-    public ResponseEntity<?> save(@Validated @RequestBody UserRegistrationDto dto) {
-        Assert.isTrue(!userAction.existsByEmail(dto.getEmail()), APIErrors.EMAIL_TAKEN.getMessage());
+    /**
+     * After the temp-password has been changed:
+     * <p> remove row by email from ForgotPasswordInfo</p>
+     * <p> remove row by email from TempPasswordInfo</p>
+     * <p>add row to BlockedJwt</p>
+     *
+     * @param dto
+     * @param servletRequest
+     * @return
+     */
+    @PutMapping("/user/temp-password")
+    public ResponseEntity<?> update(@Validated @RequestBody TempPasswordDto dto,
+                                    HttpServletRequest servletRequest) {
+        int userId = userValidator.extractUserId(servletRequest);
+        User user = userAction.getById(userId);
+        user.setPassword(dto.getPassword());
+        UserModel userModel = userAction.save(user);
+        forgotPasswordInfoDao.deleteByEmail(user.getEmail()); // remove row from ForgotPasswordInfo
+        tempPasswordInfoDao.deleteByEmail(user.getEmail()); // remove row from TempPasswordInfo
+        String jwt = userValidator.extractToken(servletRequest);
+        blockedJwtDao.save(new BlockedJwt().setJwt(jwt).setUserId(user.getId()).setEmail(user.getEmail())); // add to BlockedJwt
 
-        return SuccessResponse.configure(userAction.save(dto));
+        return SuccessResponse.configure(userModel);
     }
+
+
 }

@@ -1,5 +1,6 @@
 package com.prodnees.action;
 
+import com.prodnees.domain.User;
 import com.prodnees.dto.UserRegistrationDto;
 import com.prodnees.model.UserModel;
 
@@ -10,7 +11,16 @@ public interface UserAction {
 
     UserModel save(UserRegistrationDto dto);
 
-    UserModel getById(int id);
+    UserModel save(User user);
 
-    UserModel getByEmail(String email);
+    UserModel getModelById(int id);
+
+    UserModel getModelByEmail(String email);
+
+
+    User getById(int id);
+
+    User getByEmail(String email);
+
+
 }

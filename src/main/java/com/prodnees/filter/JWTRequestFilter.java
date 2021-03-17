@@ -1,5 +1,7 @@
 package com.prodnees.filter;
 
+import com.prodnees.config.constants.APIErrors;
+import com.prodnees.dao.BlockedJwtDao;
 import com.prodnees.service.LoginUserDetailsService;
 import com.prodnees.service.UserService;
 import com.prodnees.service.jwt.JwtService;
@@ -24,12 +26,15 @@ public class JWTRequestFilter extends OncePerRequestFilter {
     private final LoginUserDetailsService loginUserDetailsService;
     private final UserService userService;
     private final JwtService jwtService;
+    private final BlockedJwtDao blockedJwtDao;
 
     public JWTRequestFilter(LoginUserDetailsService loginUserDetailsService,
-                            UserService userService, JwtService jwtService) {
+                            UserService userService, JwtService jwtService,
+                            BlockedJwtDao blockedJwtDao) {
         this.loginUserDetailsService = loginUserDetailsService;
         this.userService = userService;
         this.jwtService = jwtService;
+        this.blockedJwtDao = blockedJwtDao;
     }
 
 
@@ -45,6 +50,10 @@ public class JWTRequestFilter extends OncePerRequestFilter {
                 String apiRequestMethod = request.getRequestURI();
                 String methodType = request.getMethod();
                 System.out.println(apiRequestMethod + " - " + methodType);
+                boolean tempPassword = jwtService.hasUsedTempPassword(jwt);
+                if (tempPassword) {
+                    checkChangePasswordUrl(request, response);
+                }
 
             } catch (Exception i) {
             }
@@ -52,7 +61,7 @@ public class JWTRequestFilter extends OncePerRequestFilter {
         }
 
         if (userService.existsByEmail(username)
-                && username != null
+                && blockedJwtDao.existsByJwt(jwt)
                 && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = loginUserDetailsService.loadUserByUsername(username);
 
@@ -66,4 +75,9 @@ public class JWTRequestFilter extends OncePerRequestFilter {
 
     }
 
+    private void checkChangePasswordUrl(HttpServletRequest request, HttpServletResponse response) {
+        if (!request.getRequestURI().equals("/secure/user/change-temp-password")) {
+            response.setHeader("temp_password_unchanged", APIErrors.TEMP_PASSWORD_UNCHANGED.getMessage());
+        }
+    }
 }
