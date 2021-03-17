@@ -3,7 +3,6 @@ package com.prodnees.model;
 import com.prodnees.domain.Document;
 import com.prodnees.domain.DocumentState;
 import com.prodnees.domain.User;
-
 import java.util.List;
 
 /**

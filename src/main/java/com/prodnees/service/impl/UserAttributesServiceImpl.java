@@ -20,7 +20,7 @@ public class UserAttributesServiceImpl implements UserAttributesService {
 
     @Override
     public UserAttributes getByUserId(int userId) {
-        return null;
+        return userAttributesDao.getByUserId( userId);
     }
 
     @Override

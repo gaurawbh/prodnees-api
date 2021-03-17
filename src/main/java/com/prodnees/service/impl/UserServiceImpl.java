@@ -14,6 +14,16 @@ public class UserServiceImpl implements UserService {
         this.userDao = userDao;
     }
 
+    @Override
+    public boolean existsById(int id) {
+        return userDao.existsById(id);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return userDao.existsByEmail(email);
+    }
+
     /**
      * todo encrypt user password before saving the user
      * @param user
@@ -26,11 +36,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getById(int id) {
-        return null;
+        return userDao.getById(id);
     }
 
     @Override
     public User getByEmail(String email) {
-        return null;
+        return userDao.findByEmail(email);
     }
 }

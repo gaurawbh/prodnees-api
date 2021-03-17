@@ -4,7 +4,6 @@ import com.prodnees.dao.BatchProductDao;
 import com.prodnees.domain.BatchProduct;
 import com.prodnees.service.BatchProductService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 @Service
 public class BatchProductServiceImpl implements BatchProductService {

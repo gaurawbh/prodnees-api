@@ -1,7 +1,6 @@
 package com.prodnees.service;
 
 import com.prodnees.domain.BatchProduct;
-
 import java.util.List;
 public interface BatchProductService {
 

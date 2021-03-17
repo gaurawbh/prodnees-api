@@ -2,7 +2,6 @@ package com.prodnees.service;
 
 import com.prodnees.domain.ApprovalDocument;
 import com.prodnees.domain.DocumentState;
-
 import java.util.List;
 
 public interface ApprovalDocumentService {

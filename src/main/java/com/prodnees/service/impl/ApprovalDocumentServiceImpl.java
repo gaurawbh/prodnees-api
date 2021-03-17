@@ -5,7 +5,6 @@ import com.prodnees.domain.ApprovalDocument;
 import com.prodnees.domain.DocumentState;
 import com.prodnees.service.ApprovalDocumentService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 @Service
 public class ApprovalDocumentServiceImpl implements ApprovalDocumentService {

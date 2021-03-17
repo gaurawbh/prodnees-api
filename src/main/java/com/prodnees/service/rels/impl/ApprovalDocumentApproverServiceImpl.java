@@ -4,7 +4,6 @@ import com.prodnees.dao.rels.ApprovalDocumentApproverDao;
 import com.prodnees.domain.rels.ApprovalDocumentApprover;
 import com.prodnees.service.rels.ApprovalDocumentApproverService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service

@@ -1,7 +1,6 @@
 package com.prodnees.service.rels;
 
 import com.prodnees.domain.rels.StateApprover;
-
 import java.util.List;
 
 public interface StateApproverService {
