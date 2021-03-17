@@ -6,10 +6,9 @@ import com.prodnees.dao.ForgotPasswordInfoDao;
 import com.prodnees.dao.TempPasswordInfoDao;
 import com.prodnees.domain.BlockedJwt;
 import com.prodnees.domain.User;
-import com.prodnees.dto.TempPasswordDto;
+import com.prodnees.dto.PasswordDto;
 import com.prodnees.filter.UserValidator;
 import com.prodnees.model.UserModel;
-import com.prodnees.web.response.SuccessResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,8 +21,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
+
 import static com.prodnees.web.response.SuccessResponse.configure;
 
 @RestController
@@ -59,8 +60,8 @@ public class UserController {
      */
     @PutMapping("/user/temp-password")
     @Transactional
-    public ResponseEntity<?> update(@Validated @RequestBody TempPasswordDto dto,
-                                    HttpServletRequest servletRequest) {
+    public ResponseEntity<?> updateTemporaryPassword(@Validated @RequestBody PasswordDto dto,
+                                                     HttpServletRequest servletRequest) {
         int userId = userValidator.extractUserId(servletRequest);
         User user = userAction.getById(userId);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -71,6 +72,16 @@ public class UserController {
         String jwt = userValidator.extractToken(servletRequest);
         blockedJwtDao.save(new BlockedJwt().setJwt(jwt).setUserId(user.getId()).setEmail(user.getEmail())); // add to BlockedJwt
 
+        return configure(userModel);
+    }
+
+    public ResponseEntity<?> updatePassword(@Validated @RequestBody PasswordDto dto,
+                                            HttpServletRequest servletRequest) {
+        int userId = userValidator.extractUserId(servletRequest);
+        User user = userAction.getById(userId);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        UserModel userModel = userAction.save(user);
         return configure(userModel);
     }
 

@@ -5,9 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 public class SuccessResponse {
-    public static ResponseEntity<?> configure(String message, int code) {
+    public static ResponseEntity<?> configure(String message, Object object) {
         return new ResponseEntity<>(
-                new GlobalResponse(HttpStatus.OK, false, message, code),
+                new GlobalResponse(HttpStatus.OK, false, message, APIErrors.SUCCESS.getCode(), object),
                 HttpStatus.OK);
     }
 
