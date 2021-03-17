@@ -2,7 +2,6 @@ package com.prodnees.service.impl;
 
 import com.prodnees.dao.ApprovalDocumentDao;
 import com.prodnees.domain.ApprovalDocument;
-import com.prodnees.domain.DocumentState;
 import com.prodnees.service.ApprovalDocumentService;
 import org.springframework.stereotype.Service;
 

@@ -4,6 +4,7 @@ import com.prodnees.dao.rels.BatchProductOwnerDao;
 import com.prodnees.domain.rels.BatchProductOwner;
 import com.prodnees.service.rels.BatchProductOwnerService;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 @Service
 public class BatchProductOwnerServiceImpl implements BatchProductOwnerService {

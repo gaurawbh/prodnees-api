@@ -1,6 +1,7 @@
 package com.prodnees.service.rels;
 
 import com.prodnees.domain.rels.BatchProductOwner;
+
 import java.util.List;
 
 public interface BatchProductOwnerService {

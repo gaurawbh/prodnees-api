@@ -2,6 +2,7 @@ package com.prodnees.model;
 
 import com.prodnees.domain.Product;
 import com.prodnees.domain.User;
+
 import java.util.List;
 
 /**

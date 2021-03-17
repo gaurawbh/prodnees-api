@@ -4,6 +4,7 @@ import com.prodnees.dao.rels.StateRawProductDao;
 import com.prodnees.domain.rels.StateRawProduct;
 import com.prodnees.service.rels.StateRawProductService;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 @Service
 public class StateRawProductServiceImpl implements StateRawProductService {

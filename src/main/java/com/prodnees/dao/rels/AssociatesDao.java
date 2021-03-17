@@ -1,6 +1,5 @@
 package com.prodnees.dao.rels;
 
-import com.prodnees.domain.UserAttributes;
 import com.prodnees.domain.rels.Associates;
 import org.springframework.data.jpa.repository.JpaRepository;
 
