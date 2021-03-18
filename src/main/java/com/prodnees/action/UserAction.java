@@ -3,7 +3,6 @@ package com.prodnees.action;
 import com.prodnees.domain.User;
 import com.prodnees.dto.UserRegistrationDto;
 import com.prodnees.model.UserModel;
-
 import java.util.List;
 
 public interface UserAction {

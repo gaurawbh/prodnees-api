@@ -4,6 +4,7 @@ import com.prodnees.dao.ProductDao;
 import com.prodnees.domain.Product;
 import com.prodnees.service.ProductService;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -26,5 +27,15 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product getByName(String name) {
         return productDao.getByName(name);
+    }
+
+    @Override
+    public List<Product> getAllByIds(Iterable<Integer> productIdIterable) {
+        return productDao.findAllById(productIdIterable);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        productDao.deleteById(id);
     }
 }

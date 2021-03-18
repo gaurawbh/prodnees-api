@@ -1,6 +1,7 @@
 package com.prodnees.domain.rels;
 
 
+import com.prodnees.domain.rels.id.DocumentRightsId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
@@ -13,7 +14,16 @@ public class DocumentRights implements Serializable {
     private int userId;
     @Id
     private int documentId;
-    private DocumentRightsType documentRightsType;
+    private ObjectRightsType objectRightsType;
+
+    public DocumentRights() {
+    }
+
+    public DocumentRights(int userId, int documentId, ObjectRightsType objectRightsType) {
+        this.userId = userId;
+        this.documentId = documentId;
+        this.objectRightsType = objectRightsType;
+    }
 
     public int getUserId() {
         return userId;
@@ -33,12 +43,12 @@ public class DocumentRights implements Serializable {
         return this;
     }
 
-    public DocumentRightsType getDocumentRightsType() {
-        return documentRightsType;
+    public ObjectRightsType getDocumentRightsType() {
+        return objectRightsType;
     }
 
-    public DocumentRights setDocumentRightsType(DocumentRightsType documentRightsType) {
-        this.documentRightsType = documentRightsType;
+    public DocumentRights setDocumentRightsType(ObjectRightsType objectRightsType) {
+        this.objectRightsType = objectRightsType;
         return this;
     }
 }

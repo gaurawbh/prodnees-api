@@ -8,7 +8,7 @@ import javax.persistence.Id;
  * Application User Login Details
  */
 @Entity
-public final class User {
+public class User {
     @Id
     @GeneratedValue
     private int id;

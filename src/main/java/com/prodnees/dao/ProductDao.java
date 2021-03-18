@@ -8,4 +8,6 @@ public interface ProductDao extends JpaRepository<Product, Integer> {
     Product getById(int id);
 
     Product getByName(String name);
+
+    void deleteById(int id);
 }

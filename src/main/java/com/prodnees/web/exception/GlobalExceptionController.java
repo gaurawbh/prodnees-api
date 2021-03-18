@@ -17,19 +17,19 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
-
+import java.util.Objects;
+import java.util.Optional;
 import static com.prodnees.config.constants.APIErrors.ACCESS_DENIED;
 
 @ControllerAdvice
 @CrossOrigin
 public final class GlobalExceptionController {
-
+    private static final String FOREIGN_KEY_CONSTRAINT_ERROR = "cannot delete or update a parent row: a foreign key constraint fails";
 
     @ExceptionHandler(value = MissingServletRequestPartException.class)
     public ResponseEntity<?> exception(MissingServletRequestPartException e) {
@@ -190,14 +190,21 @@ public final class GlobalExceptionController {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<?> exception(DataIntegrityViolationException e) {
+        StringBuilder errorMessageBuilder = new StringBuilder();
         if (e.getRootCause() instanceof SQLIntegrityConstraintViolationException) {
-            SQLIntegrityConstraintViolationException exception = (SQLIntegrityConstraintViolationException) e.getRootCause();
-            return new ResponseEntity<>(new GlobalResponse(HttpStatus.ACCEPTED, true,
-                    exception.getMessage(), 99), HttpStatus.ACCEPTED);
-        } else {
-            return new ResponseEntity<>(new GlobalResponse(HttpStatus.ACCEPTED, true,
-                    e.getRootCause().getMessage(), 99), HttpStatus.ACCEPTED);
+            Throwable throwable = e.getRootCause();
+            Optional<String> exMessage = Optional.ofNullable(throwable.getMessage());
+            exMessage.ifPresentOrElse(s -> {
+                if (s.toLowerCase().contains(FOREIGN_KEY_CONSTRAINT_ERROR)) {
+                    errorMessageBuilder.append("object cannot be deleted, the object is in use(referenced by another object)");
+                } else {
+                    errorMessageBuilder.append(s);
+                }
+            }, () -> errorMessageBuilder.append(Objects.requireNonNull(e.getRootCause()).getMessage()));
         }
+
+        return new ResponseEntity<>(new GlobalResponse(HttpStatus.UNPROCESSABLE_ENTITY, true,
+                errorMessageBuilder.toString(), 99), HttpStatus.ACCEPTED);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

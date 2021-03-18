@@ -13,7 +13,7 @@ public class BatchProduct {
     private int productId;
     private String name;
     private String description;
-    private LocalDate createDate;
+    private LocalDate createdDate;
 
     public int getId() {
         return id;
@@ -51,12 +51,12 @@ public class BatchProduct {
         return this;
     }
 
-    public LocalDate getCreateDate() {
-        return createDate;
+    public LocalDate getCreatedDate() {
+        return createdDate;
     }
 
-    public BatchProduct setCreateDate(LocalDate createDate) {
-        this.createDate = createDate;
+    public BatchProduct setCreatedDate(LocalDate createDate) {
+        this.createdDate = createDate;
         return this;
     }
 }
