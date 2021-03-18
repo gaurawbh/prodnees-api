@@ -5,11 +5,13 @@ import com.prodnees.dao.TempPasswordInfoDao;
 import com.prodnees.domain.TempPasswordInfo;
 import com.prodnees.domain.User;
 import com.prodnees.domain.UserAttributes;
+import com.prodnees.domain.rels.Associates;
 import com.prodnees.dto.UserRegistrationDto;
 import com.prodnees.model.UserModel;
 import com.prodnees.service.UserAttributesService;
 import com.prodnees.service.UserService;
 import com.prodnees.service.email.LocalEmailService;
+import com.prodnees.service.rels.AssociatesService;
 import com.prodnees.util.OtpUtil;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -17,10 +19,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -30,15 +35,18 @@ public class UserActionImpl implements UserAction {
     private final UserAttributesService userAttributesService;
     private final LocalEmailService localEmailService;
     private final TempPasswordInfoDao tempPasswordInfoDao;
+    private final AssociatesService associatesService;
 
     public UserActionImpl(UserService userService,
                           UserAttributesService userAttributesService,
                           LocalEmailService localEmailService,
-                          TempPasswordInfoDao tempPasswordInfoDao) {
+                          TempPasswordInfoDao tempPasswordInfoDao,
+                          AssociatesService associatesService) {
         this.userService = userService;
         this.userAttributesService = userAttributesService;
         this.localEmailService = localEmailService;
         this.tempPasswordInfoDao = tempPasswordInfoDao;
+        this.associatesService = associatesService;
     }
 
     @Override
@@ -112,6 +120,14 @@ public class UserActionImpl implements UserAction {
     @Override
     public User getByEmail(String email) {
         return userService.getByEmail(email);
+    }
+
+    @Override
+    public List<UserModel> getAllAssociates(int adminId) {
+        List<Associates> associatesList= associatesService.getAllByAdminId(adminId);
+        List<UserModel> userModelList = new ArrayList<>();
+        associatesList.forEach(associates -> userModelList.add(mapToModel(getById(associates.getUserId()))));
+        return userModelList;
     }
 
     UserModel mapToModel(User user) {

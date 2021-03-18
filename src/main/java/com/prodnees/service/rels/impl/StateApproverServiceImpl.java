@@ -4,7 +4,10 @@ import com.prodnees.dao.rels.StateApproverDao;
 import com.prodnees.domain.rels.StateApprover;
 import com.prodnees.service.rels.StateApproverService;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class StateApproverServiceImpl implements StateApproverService {
     private final StateApproverDao stateApproverDao;
@@ -19,17 +22,17 @@ public class StateApproverServiceImpl implements StateApproverService {
     }
 
     @Override
-    public StateApprover getByStateIdAndApproverId(int stateId, int approverId) {
-        return null;
+    public Optional<StateApprover> findByStateIdAndApproverId(int stateId, int approverId) {
+        return stateApproverDao.findByStateIdAndApproverId(stateId, approverId);
     }
 
     @Override
     public List<StateApprover> getAllByStateId(int stateId) {
-        return null;
+        return stateApproverDao.getAllByStateId(stateId);
     }
 
     @Override
     public List<StateApprover> getAllByApproverId(int approverId) {
-        return null;
+        return stateApproverDao.getAllByApproverId(approverId);
     }
 }

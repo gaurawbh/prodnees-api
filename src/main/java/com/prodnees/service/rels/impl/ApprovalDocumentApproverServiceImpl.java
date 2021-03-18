@@ -4,7 +4,9 @@ import com.prodnees.dao.rels.ApprovalDocumentApproverDao;
 import com.prodnees.domain.rels.ApprovalDocumentApprover;
 import com.prodnees.service.rels.ApprovalDocumentApproverService;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ApprovalDocumentApproverServiceImpl implements ApprovalDocumentApproverService {
@@ -21,17 +23,17 @@ public class ApprovalDocumentApproverServiceImpl implements ApprovalDocumentAppr
     }
 
     @Override
-    public ApprovalDocumentApprover getByApprovalDocumentIdAndApproverId(int approvalDocumentId, int approverId) {
-        return null;
+    public Optional<ApprovalDocumentApprover> getByApprovalDocumentIdAndApproverId(int approvalDocumentId, int approverId) {
+        return approvalDocumentApproverDao.findByApprovalDocumentIdAndApproverId(approvalDocumentId, approverId);
     }
 
     @Override
     public List<ApprovalDocumentApprover> getAllByApprovalDocumentId(int approvalDocumentId) {
-        return null;
+        return approvalDocumentApproverDao.getAllByApprovalDocumentId(approvalDocumentId);
     }
 
     @Override
-    public List<ApprovalDocumentApprover> getAllByApproverId(int approvalDocumentId) {
-        return null;
+    public List<ApprovalDocumentApprover> getAllByApproverId(int approverId) {
+        return approvalDocumentApproverDao.getAllByApproverId(approverId);
     }
 }

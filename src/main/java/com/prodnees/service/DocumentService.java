@@ -8,4 +8,6 @@ public interface DocumentService {
 
     Document getById(int id);
 
+    Document getByName(String name);
+
 }

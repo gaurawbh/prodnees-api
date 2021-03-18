@@ -25,6 +25,6 @@ public class UserAttributesServiceImpl implements UserAttributesService {
 
     @Override
     public UserAttributes getByEmail(String email) {
-        return null;
+        return userAttributesDao.getByEmail(email);
     }
 }

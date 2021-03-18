@@ -4,7 +4,10 @@ import com.prodnees.dao.rels.BatchProductOwnerDao;
 import com.prodnees.domain.rels.BatchProductOwner;
 import com.prodnees.service.rels.BatchProductOwnerService;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class BatchProductOwnerServiceImpl implements BatchProductOwnerService {
     private final BatchProductOwnerDao batchProductOwnerDao;
@@ -19,17 +22,17 @@ public class BatchProductOwnerServiceImpl implements BatchProductOwnerService {
     }
 
     @Override
-    public BatchProductOwner getByBatchProductIdAndOwnerId(int batchProductId, int ownerId) {
-        return null;
+    public Optional<BatchProductOwner> getByBatchProductIdAndOwnerId(int batchProductId, int ownerId) {
+        return batchProductOwnerDao.findByBatchProductIdAndOwnerId(batchProductId, ownerId);
     }
 
     @Override
     public List<BatchProductOwner> getAllByBatchProductId(int batchProductId) {
-        return null;
+        return batchProductOwnerDao.getAllByBatchProductId(batchProductId);
     }
 
     @Override
-    public List<BatchProductOwner> getAllByOwnerId(int batchProductId) {
-        return null;
+    public List<BatchProductOwner> getAllByOwnerId(int ownerId) {
+        return batchProductOwnerDao.getAllByOwnerId(ownerId);
     }
 }

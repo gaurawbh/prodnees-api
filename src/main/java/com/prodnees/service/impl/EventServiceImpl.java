@@ -4,7 +4,9 @@ import com.prodnees.dao.EventDao;
 import com.prodnees.domain.Event;
 import com.prodnees.service.EventService;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+
 @Service
 public class EventServiceImpl implements EventService {
     private final EventDao eventDao;
@@ -20,16 +22,21 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event getById(int id) {
-        return null;
+        return eventDao.getById(id);
     }
 
     @Override
     public List<Event> getAllByBatchProductId(int batchProductId) {
-        return null;
+        return eventDao.getAllByBatchProductId(batchProductId);
     }
 
     @Override
-    public List<Event> getAllByStateId(int batchProductId) {
-        return null;
+    public List<Event> getAllByStateId(int stateId) {
+        return eventDao.getAllByStateId(stateId);
+    }
+
+    @Override
+    public Event getByBatchProductIdAndName(int batchProductId, String name) {
+        return eventDao.getByBatchProductIdAndName(batchProductId, name);
     }
 }

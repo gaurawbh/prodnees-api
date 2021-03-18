@@ -20,6 +20,11 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public Document getById(int id) {
-        return null;
+        return documentDao.getById(id);
+    }
+
+    @Override
+    public Document getByName(String name) {
+        return documentDao.getByName(name);
     }
 }
