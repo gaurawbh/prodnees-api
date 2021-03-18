@@ -3,14 +3,15 @@ package com.prodnees.service.rels;
 import com.prodnees.domain.rels.BatchProductOwner;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BatchProductOwnerService {
     BatchProductOwner save(BatchProductOwner batchProductOwner);
 
-    BatchProductOwner getByBatchProductIdAndOwnerId(int batchProductId, int ownerId);
+    Optional<BatchProductOwner> getByBatchProductIdAndOwnerId(int batchProductId, int ownerId);
 
     List<BatchProductOwner> getAllByBatchProductId(int batchProductId);
 
-    List<BatchProductOwner> getAllByOwnerId(int batchProductId);
+    List<BatchProductOwner> getAllByOwnerId(int ownerId);
 
 }

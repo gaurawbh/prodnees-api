@@ -1,17 +1,17 @@
-package com.prodnees.dao.rels;
+package com.prodnees.service.rels;
 
 import com.prodnees.domain.rels.Associates;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface AssociatesDao extends JpaRepository<Associates, Integer> {
+public interface AssociatesService {
+
+    Associates save(Associates associates);
 
     Optional<Associates> findByAdminIdAndUserId(int adminId, int userId);
 
     List<Associates> getAllByAdminId(int adminId);
 
     List<Associates> getAllByUserId(int userId);
-
 }

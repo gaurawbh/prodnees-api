@@ -28,11 +28,11 @@ public class StateApproverServiceImpl implements StateApproverService {
 
     @Override
     public List<StateApprover> getAllByStateId(int stateId) {
-        return null;
+        return stateApproverDao.getAllByStateId(stateId);
     }
 
     @Override
     public List<StateApprover> getAllByApproverId(int approverId) {
-        return null;
+        return stateApproverDao.getAllByApproverId(approverId);
     }
 }

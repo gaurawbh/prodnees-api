@@ -6,6 +6,8 @@ import com.prodnees.service.rels.StateRawProductService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class StateRawProductServiceImpl implements StateRawProductService {
     private final StateRawProductDao stateRawProductDao;
@@ -20,17 +22,17 @@ public class StateRawProductServiceImpl implements StateRawProductService {
     }
 
     @Override
-    public StateRawProduct getByStateIdAndRawProductId(int stateId, int rawProductId) {
-        return null;
+    public Optional<StateRawProduct> getByStateIdAndRawProductId(int stateId, int rawProductId) {
+        return stateRawProductDao.findByStateIdAndRawProductId(stateId, rawProductId);
     }
 
     @Override
     public List<StateRawProduct> getAllByStateId(int stateId) {
-        return null;
+        return stateRawProductDao.getAllByStateId(stateId);
     }
 
     @Override
-    public List<StateRawProduct> getAllByRawProductId(int stateId) {
-        return null;
+    public List<StateRawProduct> getAllByRawProductId(int rawProductId) {
+        return stateRawProductDao.getAllByRawProductId(rawProductId);
     }
 }
