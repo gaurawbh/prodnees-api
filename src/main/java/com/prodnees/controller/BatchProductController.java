@@ -12,17 +12,17 @@ import com.prodnees.util.MapperUtil;
 import com.prodnees.web.response.SuccessResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+
+import static com.prodnees.config.constants.APIErrors.OBJECT_NOT_FOUND;
+import static com.prodnees.web.response.SuccessResponse.configure;
 
 @RestController
 @RequestMapping("/secure/")
@@ -57,17 +57,32 @@ public class BatchProductController {
         BatchProduct batchProduct = MapperUtil.getDozer().map(dto, BatchProduct.class);
         BatchProductModel batchProductModel = batchProductAction.save(batchProduct);
         batchProductRightsService.save(new BatchProductRights().setUserId(userId).setBatchProductId(batchProductModel.getId()).setObjectRightsType(ObjectRightsType.OWNER));
-        return SuccessResponse.configure(batchProductModel);
+        return configure(batchProductModel);
     }
 
-    @GetMapping("/")
-    public ResponseEntity<?> get(@RequestParam Optional<Integer> id, HttpServletRequest servletRequest) {
-        int userId = userValidator.extractUserId(servletRequest);
+    @GetMapping("/batch-products")
+    public ResponseEntity<?> get(@RequestParam Optional<Integer> id,
+                                 HttpServletRequest servletRequest) {
+        int ownerId = userValidator.extractUserId(servletRequest);
         AtomicReference<Object> atomicReference = new AtomicReference<>();
         id.ifPresentOrElse(integer -> {
+            Optional<BatchProductRights> batchProductRights = batchProductRightsService.getByBatchProductIdAndOwnerId(integer, ownerId);
+            Assert.isTrue(batchProductRights.isPresent(), OBJECT_NOT_FOUND.getMessage());
+            atomicReference.set(batchProductAction.getById(batchProductRights.get().getBatchProductId()));
         }, () -> {
+            Iterable<Integer> batchProductIds = batchProductRightsService.getAllByOwnerId(ownerId)
+                    .stream()
+                    .map(BatchProductRights::getBatchProductId)
+                    .collect(Collectors.toList());
+            atomicReference.set(batchProductAction.getAllByIds(batchProductIds));
         });
-        return SuccessResponse.configure();
+        return configure(atomicReference.get());
+    }
+
+    @PutMapping("/batch-product")
+    public ResponseEntity<?> update(@Validated @RequestBody BatchProductDto dto,
+                                    HttpServletRequest servletRequest) {
+        return configure();
     }
 
 

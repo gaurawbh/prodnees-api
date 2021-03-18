@@ -1,6 +1,7 @@
 package com.prodnees.service;
 
 import com.prodnees.domain.Product;
+
 import java.util.List;
 
 public interface ProductService {

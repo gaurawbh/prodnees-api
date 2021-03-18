@@ -2,6 +2,7 @@ package com.prodnees.action;
 
 import com.prodnees.domain.BatchProduct;
 import com.prodnees.model.BatchProductModel;
+
 import java.util.List;
 
 public interface BatchProductAction {
@@ -11,4 +12,6 @@ public interface BatchProductAction {
     BatchProduct getById(int id);
 
     List<BatchProduct> getAllByProductId(int productId);
+
+    List<BatchProductModel> getAllByIds(Iterable<Integer> batchProductIds);
 }

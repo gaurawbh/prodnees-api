@@ -14,6 +14,7 @@ public enum APIErrors {
     INVALID_PASSWORD(16, "password is a required field & password must be at least 6 characters long"),
     INVALID_USER_REGISTRATION_MODEL(19, "required properties missing, firstName, lastName, email, designationId, role are required properties"),
     ACCESS_DENIED(21, "you do not have access to this resource"),
+    UPDATE_DENIED(22,"you do not have enough permission to update / delete this resource"),
     USER_NOT_ENABLED(23, "user not enabled"),
     EMAIL_NOT_FOUND(24, "email not found: %s"),
     OTP_NOT_FOUND(25, "otp not found"),
