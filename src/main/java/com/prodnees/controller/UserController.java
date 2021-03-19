@@ -113,6 +113,7 @@ public class UserController {
         Assert.isTrue(dto.getPassword().equals(dto.getRepeatPassword()), "password and repeatPassword do not match");
         int userId = userValidator.extractUserId(servletRequest);
         User user = userAction.getById(userId);
+        Assert.isTrue(tempPasswordInfoDao.existsByEmail(user.getEmail()), "temporary password was not requested for you");// check that the temporary password was requested.
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         UserModel userModel = userAction.save(user);
