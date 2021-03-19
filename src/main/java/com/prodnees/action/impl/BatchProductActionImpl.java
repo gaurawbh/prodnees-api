@@ -8,6 +8,8 @@ import com.prodnees.service.ProductService;
 import com.prodnees.service.rels.BatchProductRightsService;
 import com.prodnees.service.rels.ProductRightsService;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,12 +37,20 @@ public class BatchProductActionImpl implements BatchProductAction {
 
     @Override
     public BatchProduct getById(int id) {
-        return null;
+        return batchProductService.getById(id);
     }
 
     @Override
     public List<BatchProduct> getAllByProductId(int productId) {
-        return null;
+        return batchProductService.getAllByProductId(productId);
+    }
+
+    @Override
+    public List<BatchProductModel> getAllByIds(Iterable<Integer> batchProductIds) {
+        List<BatchProduct> batchProductList = batchProductService.getAllByIds(batchProductIds);
+        List<BatchProductModel> batchProductModelList = new ArrayList<>();
+        batchProductList.forEach(batchProduct -> batchProductModelList.add(mapToModel(batchProduct)));
+        return batchProductModelList;
     }
 
     BatchProductModel mapToModel(BatchProduct batchProduct) {

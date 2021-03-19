@@ -2,6 +2,7 @@ package com.prodnees.domain.rels;
 
 
 import com.prodnees.domain.rels.id.DocumentRightsId;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;

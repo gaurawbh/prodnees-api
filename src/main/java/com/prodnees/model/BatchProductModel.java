@@ -1,6 +1,7 @@
 package com.prodnees.model;
 
 import com.prodnees.domain.Product;
+
 import java.time.LocalDate;
 
 /**

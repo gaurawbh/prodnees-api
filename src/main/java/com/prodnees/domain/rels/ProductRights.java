@@ -1,6 +1,7 @@
 package com.prodnees.domain.rels;
 
 import com.prodnees.domain.rels.id.ProductRightsId;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;

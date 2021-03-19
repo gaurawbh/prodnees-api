@@ -1,11 +1,15 @@
-package com.prodnees.service.rels;
+package com.prodnees.action;
 
 import com.prodnees.domain.rels.ProductRights;
+import com.prodnees.dto.ProductRightsDto;
+import com.prodnees.model.ProductRightsModel;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface ProductRightsService {
+public interface ProductRightsAction {
+
+    ProductRightsModel save(ProductRightsDto productRightsDto);
 
     ProductRights save(ProductRights productRights);
 
