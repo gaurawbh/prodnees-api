@@ -17,6 +17,8 @@ public interface UserValidator {
 
     String extractUserRole(HttpServletRequest servletRequest);
 
+    boolean hasUsedTempPassword(HttpServletRequest servletRequest);
+
     boolean isValidEmail(String email);
 
     boolean isSecureRequest(String url);

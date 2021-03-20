@@ -22,12 +22,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
-
 import static com.prodnees.web.response.SuccessResponse.configure;
 
 /**
@@ -113,7 +117,11 @@ public class UserController {
         Assert.isTrue(dto.getPassword().equals(dto.getRepeatPassword()), "password and repeatPassword do not match");
         int userId = userValidator.extractUserId(servletRequest);
         User user = userAction.getById(userId);
-        Assert.isTrue(tempPasswordInfoDao.existsByEmail(user.getEmail()), "temporary password was not requested for you");// check that the temporary password was requested.
+        boolean isValidRequest = tempPasswordInfoDao.existsByEmail(user.getEmail())
+                || forgotPasswordInfoDao.existsByEmail(user.getEmail());
+        Assert.isTrue(isValidRequest, "temporary password was not requested for you");// check that the temporary password was requested.
+        boolean isTempPasswordJwt = userValidator.hasUsedTempPassword(servletRequest);
+        Assert.isTrue(isTempPasswordJwt, "temporary password must be used to change your temporary password");
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         UserModel userModel = userAction.save(user);
