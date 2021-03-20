@@ -4,7 +4,6 @@ import com.prodnees.dao.BatchProductDao;
 import com.prodnees.domain.BatchProduct;
 import com.prodnees.service.BatchProductService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -33,5 +32,15 @@ public class BatchProductServiceImpl implements BatchProductService {
     @Override
     public List<BatchProduct> getAllByIds(Iterable<Integer> batchProductIds) {
         return batchProductDao.findAllById(batchProductIds);
+    }
+
+    @Override
+    public boolean existsById(int id) {
+        return batchProductDao.existsById(id);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        batchProductDao.deleteById(id);
     }
 }

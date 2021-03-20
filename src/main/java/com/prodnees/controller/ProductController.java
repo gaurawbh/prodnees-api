@@ -14,7 +14,7 @@ import com.prodnees.service.ProductService;
 import com.prodnees.util.MapperUtil;
 import com.prodnees.util.ValidatorUtil;
 import com.prodnees.web.exception.NeesNotFoundException;
-import com.prodnees.web.response.SuccessResponse;
+import com.prodnees.web.response.LocalResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -37,7 +37,7 @@ import static com.prodnees.config.constants.APIErrors.ACCESS_DENIED;
 import static com.prodnees.config.constants.APIErrors.EMAIL_NOT_FOUND;
 import static com.prodnees.config.constants.APIErrors.OBJECT_NOT_FOUND;
 import static com.prodnees.config.constants.APIErrors.UPDATE_DENIED;
-import static com.prodnees.web.response.SuccessResponse.configure;
+import static com.prodnees.web.response.LocalResponse.configure;
 
 
 @RestController
@@ -87,7 +87,7 @@ public class ProductController {
             atomicReference.set(productService.getAllByIds(productIdIterable));
         });
 
-        return SuccessResponse.configure(atomicReference.get());
+        return LocalResponse.configure(atomicReference.get());
     }
 
 
@@ -134,7 +134,7 @@ public class ProductController {
         Optional<ProductRights> optionalProductRights = productRightsAction.findByProductIdAndUserId(dto.getProductId(), userId);
         Assert.isTrue(optionalProductRights.isPresent() && optionalProductRights.get().getObjectRightsType() == ObjectRightsType.OWNER,
                 "only owners can invite others to admin their product");
-
+        //todo
         User user = userAction.getByEmail(dto.getEmail());
         return configure(productRightsAction.save(dto));
 

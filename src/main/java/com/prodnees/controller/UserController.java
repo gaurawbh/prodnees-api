@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
-import static com.prodnees.web.response.SuccessResponse.configure;
+import static com.prodnees.web.response.LocalResponse.configure;
 
 /**
  * todo in this controller

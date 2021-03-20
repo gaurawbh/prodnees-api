@@ -1,8 +1,6 @@
 package com.prodnees.service;
 
 import com.prodnees.domain.BatchProduct;
-import com.prodnees.model.BatchProductModel;
-
 import java.util.List;
 public interface BatchProductService {
 
@@ -13,4 +11,8 @@ public interface BatchProductService {
     List<BatchProduct> getAllByProductId(int productId);
 
     List<BatchProduct> getAllByIds(Iterable<Integer> batchProductIds);
+
+    boolean existsById(int id);
+
+    void deleteById(int id);
 }

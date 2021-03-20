@@ -1,18 +1,16 @@
-package com.prodnees.domain;
+package com.prodnees.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 
-@Entity
-public class State {
-    @Id
-    @GeneratedValue
+public class StateDto {
+
     private int id;
+    @Positive(message = "batchProductId is a required field must be a positive number")
     private int batchProductId;
+    @NotBlank(message = "name cannot be null or blank")
     private String name;
     private String description;
-    private boolean complete;
     private int lastStateId;
     private int nextStateId;
     private boolean initialState;
@@ -22,7 +20,7 @@ public class State {
         return id;
     }
 
-    public State setId(int id) {
+    public StateDto setId(int id) {
         this.id = id;
         return this;
     }
@@ -31,7 +29,7 @@ public class State {
         return batchProductId;
     }
 
-    public State setBatchProductId(int batchProductId) {
+    public StateDto setBatchProductId(int batchProductId) {
         this.batchProductId = batchProductId;
         return this;
     }
@@ -40,7 +38,7 @@ public class State {
         return name;
     }
 
-    public State setName(String name) {
+    public StateDto setName(String name) {
         this.name = name;
         return this;
     }
@@ -49,17 +47,8 @@ public class State {
         return description;
     }
 
-    public State setDescription(String description) {
+    public StateDto setDescription(String description) {
         this.description = description;
-        return this;
-    }
-
-    public boolean isComplete() {
-        return complete;
-    }
-
-    public State setComplete(boolean complete) {
-        this.complete = complete;
         return this;
     }
 
@@ -67,7 +56,7 @@ public class State {
         return lastStateId;
     }
 
-    public State setLastStateId(int lastStateId) {
+    public StateDto setLastStateId(int lastStateId) {
         this.lastStateId = lastStateId;
         return this;
     }
@@ -76,7 +65,7 @@ public class State {
         return nextStateId;
     }
 
-    public State setNextStateId(int nextStateId) {
+    public StateDto setNextStateId(int nextStateId) {
         this.nextStateId = nextStateId;
         return this;
     }
@@ -85,7 +74,7 @@ public class State {
         return initialState;
     }
 
-    public State setInitialState(boolean initialState) {
+    public StateDto setInitialState(boolean initialState) {
         this.initialState = initialState;
         return this;
     }
@@ -94,7 +83,7 @@ public class State {
         return finalState;
     }
 
-    public State setFinalState(boolean finalState) {
+    public StateDto setFinalState(boolean finalState) {
         this.finalState = finalState;
         return this;
     }

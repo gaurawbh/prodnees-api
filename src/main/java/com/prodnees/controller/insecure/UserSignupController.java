@@ -3,7 +3,7 @@ package com.prodnees.controller.insecure;
 import com.prodnees.action.UserAction;
 import com.prodnees.config.constants.APIErrors;
 import com.prodnees.dto.UserRegistrationDto;
-import com.prodnees.web.response.SuccessResponse;
+import com.prodnees.web.response.LocalResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
@@ -25,6 +25,6 @@ public class UserSignupController {
     public ResponseEntity<?> save(@Validated @RequestBody UserRegistrationDto dto) {
         Assert.isTrue(!userAction.existsByEmail(dto.getEmail()), APIErrors.EMAIL_TAKEN.getMessage());
 
-        return SuccessResponse.configure(userAction.save(dto));
+        return LocalResponse.configure(userAction.save(dto));
     }
 }

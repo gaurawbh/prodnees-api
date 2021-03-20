@@ -8,7 +8,6 @@ import com.prodnees.service.ProductService;
 import com.prodnees.service.rels.BatchProductRightsService;
 import com.prodnees.service.rels.ProductRightsService;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +30,11 @@ public class BatchProductActionImpl implements BatchProductAction {
     }
 
     @Override
+    public boolean existsById(int id) {
+        return batchProductService.existsById(id);
+    }
+
+    @Override
     public BatchProductModel save(BatchProduct batchProduct) {
         return mapToModel(batchProductService.save(batchProduct));
     }
@@ -38,6 +42,11 @@ public class BatchProductActionImpl implements BatchProductAction {
     @Override
     public BatchProduct getById(int id) {
         return batchProductService.getById(id);
+    }
+
+    @Override
+    public BatchProductModel getModelById(int id) {
+        return mapToModel(batchProductService.getById(id));
     }
 
     @Override
@@ -53,11 +62,17 @@ public class BatchProductActionImpl implements BatchProductAction {
         return batchProductModelList;
     }
 
+    @Override
+    public void deleteById(int id) {
+        batchProductService.deleteById(id);
+    }
+
     BatchProductModel mapToModel(BatchProduct batchProduct) {
         BatchProductModel model = new BatchProductModel();
         model.setId(batchProduct.getId())
                 .setName(batchProduct.getName())
-                .setProduct(productService.getById(batchProduct.getId()))
+                .setProduct(productService.getById(batchProduct.getProductId()))
+                .setStatus(batchProduct.getStatus())
                 .setDescription(batchProduct.getDescription())
                 .setCreatedDate(batchProduct.getCreatedDate());
         return model;

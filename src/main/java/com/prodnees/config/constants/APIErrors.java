@@ -24,6 +24,7 @@ public enum APIErrors {
     TEMP_PASSWORD_UNCHANGED(32, "user cannot access the app without changing the temp password, /secure/user/temp-password"),
     INVALID_REQUEST_BODY(42, "invalid request body"),
     OBJECT_NOT_FOUND(42, "object does not exist"),
+    REFERENCED_OBJECT(43, "object cannot be deleted, the object is in use(referenced by another object)"),
     DUPLICATE_DATA(44, "duplicate row for object %s"),
     INVALID_REQUEST_PARAM(45, "Invalid request param");
 

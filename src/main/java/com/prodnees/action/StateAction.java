@@ -1,10 +1,13 @@
-package com.prodnees.dao;
+package com.prodnees.action;
 
 import com.prodnees.domain.State;
-import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
-public interface StateDao extends JpaRepository<State, Integer> {
+public interface StateAction {
+
+    boolean existsByBatchProductId(int batchProductId);
+
+    State save(State state);
 
     State getById(int id);
 
@@ -13,6 +16,4 @@ public interface StateDao extends JpaRepository<State, Integer> {
     List<State> getAllByBatchProductId(int batchProductId);
 
     List<State> getAllByBatchProductIdAndComplete(int batchProductId, boolean isComplete);
-
-    boolean existsByBatchProductId(int batchProductId);
 }

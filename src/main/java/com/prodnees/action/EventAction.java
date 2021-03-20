@@ -1,10 +1,13 @@
-package com.prodnees.dao;
+package com.prodnees.action;
 
 import com.prodnees.domain.Event;
-import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
-public interface EventDao extends JpaRepository<Event, Integer> {
+public interface EventAction {
+
+    boolean existsByBatchProductId(int batchProductId);
+
+    Event save(Event event);
 
     Event getById(int id);
 
@@ -13,6 +16,4 @@ public interface EventDao extends JpaRepository<Event, Integer> {
     List<Event> getAllByStateId(int stateId);
 
     Event getByBatchProductIdAndName(int batchProductId, String name);
-
-    boolean existsByBatchProductId(int batchProductId);
 }

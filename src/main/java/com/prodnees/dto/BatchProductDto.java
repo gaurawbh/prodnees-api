@@ -6,7 +6,7 @@ import javax.validation.constraints.Positive;
 public class BatchProductDto {
 
     private int id;
-    @Positive(message = "productId must be a positive number")
+    @Positive(message = "productId is a required field must be a positive number")
     private int productId;
     @NotBlank(message = "name cannot be null or blank")
     private String name;

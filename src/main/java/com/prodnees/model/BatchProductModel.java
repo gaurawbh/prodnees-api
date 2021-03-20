@@ -1,7 +1,8 @@
 package com.prodnees.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.prodnees.domain.BatchProductStatus;
 import com.prodnees.domain.Product;
-
 import java.time.LocalDate;
 
 /**
@@ -12,6 +13,8 @@ public class BatchProductModel {
     private Product product;
     private String name;
     private String description;
+    private BatchProductStatus status;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdDate;
 
     public int getId() {
@@ -47,6 +50,15 @@ public class BatchProductModel {
 
     public BatchProductModel setDescription(String description) {
         this.description = description;
+        return this;
+    }
+
+    public BatchProductStatus getStatus() {
+        return status;
+    }
+
+    public BatchProductModel setStatus(BatchProductStatus status) {
+        this.status = status;
         return this;
     }
 

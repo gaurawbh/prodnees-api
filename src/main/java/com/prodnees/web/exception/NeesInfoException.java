@@ -1,25 +1,11 @@
 package com.prodnees.web.exception;
 
 public class NeesInfoException extends RuntimeException {
-    private String message;
-
-    public int getCode() {
-        return code;
-    }
-
-    public NeesInfoException setCode(int code) {
-        this.code = code;
-        return this;
-    }
-
-    private int code;
+    private final String message;
 
     public NeesInfoException(String message) {
         this.message = message;
-        this.code = 999;
-    }
-
-    public NeesInfoException() {
+        int code = 99;
     }
 
     @Override
@@ -27,8 +13,4 @@ public class NeesInfoException extends RuntimeException {
         return message;
     }
 
-    public NeesInfoException setMessage(String message) {
-        this.message = message;
-        return this;
-    }
 }

@@ -11,7 +11,7 @@ import com.prodnees.service.LoginUserDetailsService;
 import com.prodnees.service.jwt.JwtService;
 import com.prodnees.web.exception.NeesBadCredentialException;
 import com.prodnees.web.exception.NeesForbiddenException;
-import com.prodnees.web.response.SuccessResponse;
+import com.prodnees.web.response.LocalResponse;
 import io.jsonwebtoken.lang.Assert;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,9 +24,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.servlet.http.HttpServletRequest;
-
 import static com.prodnees.config.constants.APIErrors.EMAIL_NOT_FOUND;
 import static com.prodnees.config.constants.APIErrors.USER_NOT_ENABLED;
 
@@ -88,6 +86,6 @@ public class AuthController {
                     .setTempPassword(isTempPassword);
         }
 
-        return SuccessResponse.configure(authResponse);
+        return LocalResponse.configure(authResponse);
     }
 }

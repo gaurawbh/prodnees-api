@@ -13,6 +13,7 @@ public class BatchProduct {
     private int productId;
     private String name;
     private String description;
+    private BatchProductStatus status;
     private LocalDate createdDate;
 
     public int getId() {
@@ -48,6 +49,15 @@ public class BatchProduct {
 
     public BatchProduct setDescription(String description) {
         this.description = description;
+        return this;
+    }
+
+    public BatchProductStatus getStatus() {
+        return status;
+    }
+
+    public BatchProduct setStatus(BatchProductStatus batchProductStatus) {
+        this.status = batchProductStatus;
         return this;
     }
 
