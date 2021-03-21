@@ -3,10 +3,12 @@ package com.prodnees.action.impl;
 import com.prodnees.action.BatchProductAction;
 import com.prodnees.domain.BatchProduct;
 import com.prodnees.model.BatchProductModel;
+import com.prodnees.model.ProductModel;
 import com.prodnees.service.BatchProductService;
 import com.prodnees.service.ProductService;
 import com.prodnees.service.rels.BatchProductRightsService;
 import com.prodnees.service.rels.ProductRightsService;
+import com.prodnees.util.MapperUtil;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,9 +71,10 @@ public class BatchProductActionImpl implements BatchProductAction {
 
     BatchProductModel mapToModel(BatchProduct batchProduct) {
         BatchProductModel model = new BatchProductModel();
+        ProductModel productModel = MapperUtil.getDozer().map(productService.getById(batchProduct.getProductId()), ProductModel.class);
         model.setId(batchProduct.getId())
                 .setName(batchProduct.getName())
-                .setProduct(productService.getById(batchProduct.getProductId()))
+                .setProductModel(productModel)
                 .setStatus(batchProduct.getStatus())
                 .setDescription(batchProduct.getDescription())
                 .setCreatedDate(batchProduct.getCreatedDate());

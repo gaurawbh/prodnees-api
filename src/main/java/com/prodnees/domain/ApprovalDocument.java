@@ -11,7 +11,8 @@ public class ApprovalDocument {
     @GeneratedValue
     private int id;
     private int documentId;
-    private DocumentState documentState;
+    private ApprovalDocumentState state;
+    private int approverId;
 
     public int getId() {
         return id;
@@ -31,12 +32,21 @@ public class ApprovalDocument {
         return this;
     }
 
-    public DocumentState getDocumentState() {
-        return documentState;
+    public ApprovalDocumentState getState() {
+        return state;
     }
 
-    public ApprovalDocument setDocumentState(DocumentState documentState) {
-        this.documentState = documentState;
+    public ApprovalDocument setState(ApprovalDocumentState approvalDocumentState) {
+        this.state = approvalDocumentState;
+        return this;
+    }
+
+    public int getApproverId() {
+        return approverId;
+    }
+
+    public ApprovalDocument setApproverId(int approverId) {
+        this.approverId = approverId;
         return this;
     }
 }

@@ -2,17 +2,19 @@ package com.prodnees.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.prodnees.domain.BatchProductStatus;
-import com.prodnees.domain.Product;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * This is Product that is being Manufactured
  */
 public class BatchProductModel {
     private int id;
-    private Product product;
+    private ProductModel productModel;
     private String name;
     private String description;
+    private List<StateModel> stateModelList;
+    private ApprovalDocumentModel approvalDocumentModel;
     private BatchProductStatus status;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdDate;
@@ -26,12 +28,30 @@ public class BatchProductModel {
         return this;
     }
 
-    public Product getProduct() {
-        return product;
+    public ProductModel getProductModel() {
+        return productModel;
     }
 
-    public BatchProductModel setProduct(Product product) {
-        this.product = product;
+    public BatchProductModel setProductModel(ProductModel productModel) {
+        this.productModel = productModel;
+        return this;
+    }
+
+    public List<StateModel> getStateModelList() {
+        return stateModelList;
+    }
+
+    public BatchProductModel setStateModelList(List<StateModel> stateModelList) {
+        this.stateModelList = stateModelList;
+        return this;
+    }
+
+    public ApprovalDocumentModel getApprovalDocumentModel() {
+        return approvalDocumentModel;
+    }
+
+    public BatchProductModel setApprovalDocumentModel(ApprovalDocumentModel approvalDocumentModel) {
+        this.approvalDocumentModel = approvalDocumentModel;
         return this;
     }
 
@@ -70,4 +90,6 @@ public class BatchProductModel {
         this.createdDate = createdDate;
         return this;
     }
+
+
 }

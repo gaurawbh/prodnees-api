@@ -1,8 +1,5 @@
 package com.prodnees.model;
 
-import com.prodnees.domain.RawProduct;
-import com.prodnees.domain.User;
-
 import java.util.List;
 
 /**
@@ -17,11 +14,119 @@ public class StateModel {
     private String name;
     private String description;
     List<ApprovalDocumentModel> approvalDocuments;
-    List<User> approvers;
-    List<EventModel> events;
-    List<RawProduct> rawProducts;
+    List<EventModel> eventModelList;
+    List<RawProductModel> rawProductModelList;
     private boolean complete;
-    private StateModel lastState;
-    private StateModel nextState;
+    private int lastStateId;
+    private int nextStateId;
+    private boolean initialState;
+    private boolean finalState;
 
+    public int getId() {
+        return id;
+    }
+
+    public StateModel setId(int id) {
+        this.id = id;
+        return this;
+    }
+
+    public int getBatchProductId() {
+        return batchProductId;
+    }
+
+    public StateModel setBatchProductId(int batchProductId) {
+        this.batchProductId = batchProductId;
+        return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public StateModel setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public StateModel setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public List<ApprovalDocumentModel> getApprovalDocuments() {
+        return approvalDocuments;
+    }
+
+    public StateModel setApprovalDocuments(List<ApprovalDocumentModel> approvalDocuments) {
+        this.approvalDocuments = approvalDocuments;
+        return this;
+    }
+
+    public List<EventModel> getEventModelList() {
+        return eventModelList;
+    }
+
+    public StateModel setEventModelList(List<EventModel> eventModelList) {
+        this.eventModelList = eventModelList;
+        return this;
+    }
+
+    public List<RawProductModel> getRawProductModelList() {
+        return rawProductModelList;
+    }
+
+    public StateModel setRawProductModelList(List<RawProductModel> rawProductModelList) {
+        this.rawProductModelList = rawProductModelList;
+        return this;
+    }
+
+    public boolean isComplete() {
+        return complete;
+    }
+
+    public StateModel setComplete(boolean complete) {
+        this.complete = complete;
+        return this;
+    }
+
+    public int getLastStateId() {
+        return lastStateId;
+    }
+
+    public StateModel setLastStateId(int lastStateId) {
+        this.lastStateId = lastStateId;
+        return this;
+    }
+
+    public int getNextStateId() {
+        return nextStateId;
+    }
+
+    public StateModel setNextStateId(int nextStateId) {
+        this.nextStateId = nextStateId;
+        return this;
+    }
+
+    public boolean isInitialState() {
+        return initialState;
+    }
+
+    public StateModel setInitialState(boolean initialState) {
+        this.initialState = initialState;
+        return this;
+    }
+
+    public boolean isFinalState() {
+        return finalState;
+    }
+
+    public StateModel setFinalState(boolean finalState) {
+        this.finalState = finalState;
+        return this;
+    }
 }

@@ -1,30 +1,29 @@
 package com.prodnees.model;
 
-import com.prodnees.domain.Product;
-import com.prodnees.domain.UserAttributes;
 import com.prodnees.domain.rels.ObjectRightsType;
+import java.util.List;
 
 public class ProductRightsModel {
 
-    private Product product;
-    private UserAttributes userAttributes;
+    private ProductModel productModel;
+    private List<Integer> userIdList;
     private ObjectRightsType objectRightsType;
 
-    public Product getProduct() {
-        return product;
+    public ProductModel getProductModel() {
+        return productModel;
     }
 
-    public ProductRightsModel setProduct(Product product) {
-        this.product = product;
+    public ProductRightsModel setProductModel(ProductModel productModel) {
+        this.productModel = productModel;
         return this;
     }
 
-    public UserAttributes getUserAttributes() {
-        return userAttributes;
+    public List<Integer> getUserIdList() {
+        return userIdList;
     }
 
-    public ProductRightsModel setUserAttributes(UserAttributes userAttributes) {
-        this.userAttributes = userAttributes;
+    public ProductRightsModel setUserIdList(List<Integer> userIdList) {
+        this.userIdList = userIdList;
         return this;
     }
 

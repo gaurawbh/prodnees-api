@@ -1,10 +1,6 @@
 package com.prodnees.model;
 
-import com.prodnees.domain.Document;
-import com.prodnees.domain.DocumentState;
-import com.prodnees.domain.User;
-
-import java.util.List;
+import com.prodnees.domain.ApprovalDocumentState;
 
 /**
  * Document that needs to be approved
@@ -12,12 +8,53 @@ import java.util.List;
  */
 public class ApprovalDocumentModel {
     private int id;
-    private BatchProductModel batchProduct;
-    private StateModel state;
-    private Document document;
-    private DocumentState documentState;
-    private List<User> approvers;
+    private int approverId;
+    private DocumentModel document;
+    private String documentUrl;
+    private ApprovalDocumentState approvalDocumentState;
 
+    public int getId() {
+        return id;
+    }
 
+    public ApprovalDocumentModel setId(int id) {
+        this.id = id;
+        return this;
+    }
 
+    public int getApproverId() {
+        return approverId;
+    }
+
+    public ApprovalDocumentModel setApproverId(int approverId) {
+        this.approverId = approverId;
+        return this;
+    }
+
+    public DocumentModel getDocument() {
+        return document;
+    }
+
+    public ApprovalDocumentModel setDocument(DocumentModel document) {
+        this.document = document;
+        return this;
+    }
+
+    public String getDocumentUrl() {
+        return documentUrl;
+    }
+
+    public ApprovalDocumentModel setDocumentUrl(String documentUrl) {
+        this.documentUrl = documentUrl;
+        return this;
+    }
+
+    public ApprovalDocumentState getApprovalDocumentState() {
+        return approvalDocumentState;
+    }
+
+    public ApprovalDocumentModel setApprovalDocumentState(ApprovalDocumentState approvalDocumentState) {
+        this.approvalDocumentState = approvalDocumentState;
+        return this;
+    }
 }
