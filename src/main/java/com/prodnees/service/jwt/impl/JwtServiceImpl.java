@@ -3,6 +3,7 @@ package com.prodnees.service.jwt.impl;
 import com.prodnees.config.constants.TimeConstants;
 import com.prodnees.dao.UserDao;
 import com.prodnees.domain.User;
+import com.prodnees.service.JwtTailService;
 import com.prodnees.service.jwt.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -24,14 +25,17 @@ public class JwtServiceImpl implements JwtService {
         String USER_ID = "userId";
         String ROLE = "role";
         String IS_TEMPORARY_PASSWORD = "isTempPassword";
+        String TAIL = "tail";
         String ZONE_ID = "zoneId";
         String SECRET_KEY = "eyJ1c2VySWQiOjkwLCJzdWIiOiIxMTEzMzMyMjIiLCJpYXQiOjE1OTQ3MTI1OTEsImV4";
     }
 
     private final UserDao userDao;
+    private final JwtTailService jwtTailService;
 
-    public JwtServiceImpl(UserDao userDao) {
+    public JwtServiceImpl(UserDao userDao, JwtTailService jwtTailService) {
         this.userDao = userDao;
+        this.jwtTailService = jwtTailService;
     }
 
     @Override
@@ -55,6 +59,7 @@ public class JwtServiceImpl implements JwtService {
         userDetails.put(ClaimFields.USER_ID, user.getId());
         userDetails.put(ClaimFields.ROLE, user.getRole());
         userDetails.put(ClaimFields.IS_TEMPORARY_PASSWORD, isTempPassword);
+        userDetails.put(ClaimFields.TAIL, jwtTailService.generateAndUpdateNextTail(user));
         int tokenValidity = TimeConstants.ONE_WEEK;
         return Jwts.builder()
                 .setClaims(claims)
@@ -95,6 +100,16 @@ public class JwtServiceImpl implements JwtService {
     public boolean hasUsedTempPassword(String token) {
         Jws<Claims> jws = extractJws(token);
         return (boolean) jws.getBody().get(ClaimFields.IS_TEMPORARY_PASSWORD);
+    }
+    @Override
+    public boolean isValidTail(String username, String jwt) {
+        String tail = extractTail(jwt);
+        return jwtTailService.isValidTail(username, tail);
+    }
+
+    @Override
+    public String extractTail(String jwt) {
+        return extractAllClaims(jwt).get(ClaimFields.TAIL, String.class);
     }
 
     private Jws<Claims> extractJws(String token) {
