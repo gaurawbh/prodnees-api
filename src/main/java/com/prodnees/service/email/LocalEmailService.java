@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface LocalEmailService {
 
-    interface TemplatePlaceHolders {
+    interface PlaceHolders {
         String TITLE = "title";
         String PRE_HEADER = "preHeader";
         String RECIPIENT = "recipient";

@@ -5,13 +5,14 @@ import com.prodnees.dao.BlockedJwtDao;
 import com.prodnees.service.LoginUserDetailsService;
 import com.prodnees.service.UserService;
 import com.prodnees.service.jwt.JwtService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ public class JWTRequestFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION = "Authorization";
     private static final String BEARER_PREFIX = "Bearer ";
+    Logger localLogger = LoggerFactory.getLogger(this.getClass());
 
     private final LoginUserDetailsService loginUserDetailsService;
     private final UserService userService;
@@ -48,15 +50,14 @@ public class JWTRequestFilter extends OncePerRequestFilter {
             jwt = authorizationHeader.substring(7);
             try {
                 username = jwtService.extractUsername(jwt);
-                String apiRequestMethod = request.getRequestURI();
-                String methodType = request.getMethod();
-                System.out.println(apiRequestMethod + " - " + methodType);
+//                localLogger.info(String.format("%s - %s", request.getRequestURI(), request.getMethod()));
                 boolean tempPassword = jwtService.hasUsedTempPassword(jwt);
                 if (tempPassword) {
                     checkChangePasswordUrl(request, response);
                 }
 
             } catch (Exception i) {
+                localLogger.warn(String.format("user wasn't extracted from %s", this.getFilterName()));
             }
 
         }

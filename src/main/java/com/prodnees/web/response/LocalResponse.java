@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 public class LocalResponse {
-    private LocalResponse(){}
+    private LocalResponse() {
+    }
 
     private static final String DATETIME = "datetime";
     private static final String ERROR = "error";
@@ -74,9 +75,11 @@ public class LocalResponse {
         if (object instanceof ArrayList && !((ArrayList) object).isEmpty()) {
             objectList.addAll(((ArrayList<?>) object));
             objectMap.put(((ArrayList<?>) object).get(0).getClass().getSimpleName() + "s", objectList);
-        } else if (object instanceof ArrayList &&  ((ArrayList) object).isEmpty()) {
+        } else if (object instanceof ArrayList && ((ArrayList) object).isEmpty()) {
             objectMap.put(MESSAGE, "no data found");
             objectMap.put("data", "none");
+        } else if (object instanceof String) {
+            objectMap.put(MESSAGE, object);
         } else {
             objectList.add(object);
             objectMap.put(object.getClass().getSimpleName() + "s", objectList);

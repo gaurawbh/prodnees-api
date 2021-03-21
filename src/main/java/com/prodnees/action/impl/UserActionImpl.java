@@ -19,7 +19,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
@@ -89,10 +88,9 @@ public class UserActionImpl implements UserAction {
     @Async
     void sendInitialPassword(String email, String initialPassword) {
         Map<String, Object> mailMap = new HashMap<>();
-        mailMap.put(LocalEmailService.TemplatePlaceHolders.TITLE, "Temporary Password");
-        mailMap.put(LocalEmailService.TemplatePlaceHolders.PRE_HEADER, String.format("New email from %s. ", "ProdNees"));
-        mailMap.put(LocalEmailService.TemplatePlaceHolders.MESSAGE, String.format("Your temporary password for ProdNees is: %s ", initialPassword));
-        mailMap.put(LocalEmailService.TemplatePlaceHolders.PARA_ONE, "Please change your temporary password on your next login");
+        mailMap.put(LocalEmailService.PlaceHolders.TITLE, "Temporary Password");
+        mailMap.put(LocalEmailService.PlaceHolders.MESSAGE, String.format("Your temporary password for ProdNees is: %s ", initialPassword));
+        mailMap.put(LocalEmailService.PlaceHolders.PARA_ONE, "Please change your temporary password on your next login");
 
         try {
             localEmailService.sendTemplateEmail(email, "Your Temporary Password", mailMap);

@@ -8,7 +8,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
-
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
@@ -73,6 +72,7 @@ public class LocalEmailServiceImpl implements LocalEmailService {
     @Override
     @Async
     public void sendTemplateEmail(String to, String subject, Map<String, Object> templateModel) throws MessagingException, UnsupportedEncodingException {
+        templateModel.put(LocalEmailService.PlaceHolders.PRE_HEADER, String.format("New email from %s. ", "ProdNees"));
         Context thymeleafContext = new Context();
         thymeleafContext.setVariables(templateModel);
         String htmlBody = thymeleafTemplateEngine.process("mail_template.html", thymeleafContext);
