@@ -34,7 +34,6 @@ public class SignupController {
     @PostMapping("/user/signup")
     public ResponseEntity<?> save(@Validated @RequestBody UserRegistrationDto dto) {
         Assert.isTrue(!userAction.existsByEmail(dto.getEmail()), APIErrors.EMAIL_TAKEN.getMessage());
-
         return configure(userAction.save(dto));
     }
 

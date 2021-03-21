@@ -7,6 +7,7 @@ import com.prodnees.domain.User;
 import com.prodnees.domain.UserAttributes;
 import com.prodnees.domain.rels.Associates;
 import com.prodnees.dto.UserRegistrationDto;
+import com.prodnees.model.AssociateModel;
 import com.prodnees.model.UserModel;
 import com.prodnees.service.UserAttributesService;
 import com.prodnees.service.UserService;
@@ -19,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
@@ -77,12 +79,12 @@ public class UserActionImpl implements UserAction {
                 .setEmail(user.getEmail());
         userAttributesService.save(attributes);
         tempPasswordInfoDao.save(new TempPasswordInfo().setEmail(user.getEmail()).setCreatedDateTime(LocalDateTime.now()));
-        return mapToModel(user);
+        return mapToUserModel(user);
     }
 
     @Override
     public UserModel save(User user) {
-        return mapToModel(userService.save(user));
+        return mapToUserModel(userService.save(user));
     }
 
     @Async
@@ -102,12 +104,22 @@ public class UserActionImpl implements UserAction {
 
     @Override
     public UserModel getModelById(int id) {
-        return mapToModel(userService.getById(id));
+        return mapToUserModel(userService.getById(id));
+    }
+
+    @Override
+    public AssociateModel getAssociateById(int id) {
+        return mapToAssociateModel(getById(id));
+    }
+
+    @Override
+    public AssociateModel getAssociateByEmail(String email) {
+        return mapToAssociateModel(getByEmail(email));
     }
 
     @Override
     public UserModel getModelByEmail(String email) {
-        return mapToModel(userService.getByEmail(email));
+        return mapToUserModel(userService.getByEmail(email));
     }
 
     @Override
@@ -121,20 +133,31 @@ public class UserActionImpl implements UserAction {
     }
 
     @Override
-    public List<UserModel> getAllAssociates(int adminId) {
-        List<Associates> associatesList= associatesService.getAllByAdminId(adminId);
-        List<UserModel> userModelList = new ArrayList<>();
-        associatesList.forEach(associates -> userModelList.add(mapToModel(getById(associates.getUserId()))));
-        return userModelList;
+    public List<AssociateModel> getAllAssociates(int adminId) {
+        List<Associates> associatesList = associatesService.getAllByAdminId(adminId);
+        List<AssociateModel> associateModelList = new ArrayList<>();
+        associatesList.forEach(associates -> associateModelList.add(mapToAssociateModel(getById(associates.getAssociateId()))));
+        return associateModelList;
     }
 
-    UserModel mapToModel(User user) {
+    UserModel mapToUserModel(User user) {
         UserAttributes attributes = userAttributesService.getByUserId(user.getId());
         UserModel model = new UserModel();
         return model.setId(user.getId())
                 .setEmail(user.getEmail())
                 .setRole(user.getRole())
                 .setEnabled(user.isEnabled())
+                .setFirstName(attributes.getFirstName())
+                .setLastName(attributes.getLastName())
+                .setPhoneNumber(attributes.getPhoneNumber())
+                .setAddress(attributes.getAddress());
+    }
+
+    AssociateModel mapToAssociateModel(User user) {
+        UserAttributes attributes = userAttributesService.getByUserId(user.getId());
+        AssociateModel model = new AssociateModel();
+        return model.setId(user.getId())
+                .setEmail(user.getEmail())
                 .setFirstName(attributes.getFirstName())
                 .setLastName(attributes.getLastName())
                 .setPhoneNumber(attributes.getPhoneNumber())
