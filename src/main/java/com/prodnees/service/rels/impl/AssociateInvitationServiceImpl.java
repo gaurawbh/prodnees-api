@@ -4,6 +4,7 @@ import com.prodnees.dao.rels.AssociateInvitationDao;
 import com.prodnees.domain.rels.AssociateInvitation;
 import com.prodnees.service.rels.AssociateInvitationService;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -17,27 +18,27 @@ public class AssociateInvitationServiceImpl implements AssociateInvitationServic
 
     @Override
     public AssociateInvitation save(AssociateInvitation associateInvitation) {
-        return null;
+        return associateInvitationDao.save(associateInvitation);
     }
 
     @Override
     public boolean existsByInvitorIdAndInviteeIdAndAccepted(int invitorId, int inviteeId, boolean accepted) {
-        return false;
+        return associateInvitationDao.existsByInvitorIdAndInviteeIdAndAccepted(invitorId, inviteeId, accepted);
     }
 
     @Override
     public Optional<AssociateInvitation> findByInvitorIdAndInviteeId(int invitorId, int inviteeId) {
-        return Optional.empty();
+        return associateInvitationDao.findByInvitorIdAndInviteeId(invitorId, inviteeId);
     }
 
     @Override
     public List<AssociateInvitation> getAllByInvitorId(int invitorId) {
-        return null;
+        return associateInvitationDao.getAllByInvitorId(invitorId);
     }
 
     @Override
     public List<AssociateInvitation> getAllByInviteeId(int inviteeId) {
-        return null;
+        return associateInvitationDao.getAllByInviteeId(inviteeId);
     }
 
     @Override
@@ -47,6 +48,6 @@ public class AssociateInvitationServiceImpl implements AssociateInvitationServic
 
     @Override
     public boolean deleteByInvitorEmailAndInviteeEmail(String invitorEmail, String inviteeEmail) {
-        return associateInvitationDao.deleteByInvitorEmailAndInviteeEmail( invitorEmail,  inviteeEmail);
+        return associateInvitationDao.deleteByInvitorEmailAndInviteeEmail(invitorEmail, inviteeEmail);
     }
 }
