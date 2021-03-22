@@ -7,6 +7,7 @@ import com.prodnees.domain.InvitationAction;
 import com.prodnees.domain.User;
 import com.prodnees.domain.rels.AssociateInvitation;
 import com.prodnees.domain.rels.Associates;
+import com.prodnees.dto.AssociateInvitationActionDto;
 import com.prodnees.dto.AssociateInvitationDto;
 import com.prodnees.dto.UserRegistrationDto;
 import com.prodnees.filter.UserValidator;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -116,7 +118,7 @@ public class AssociateController {
      * @param dto {@link AssociateInvitationDto}
      * @returns ResponseEntity
      */
-    @PostMapping("/associates/invite")
+    @PostMapping("/associates-invitation")
     public ResponseEntity<?> inviteAssociate(@Validated @RequestBody AssociateInvitationDto dto,
                                              HttpServletRequest servletRequest) {
         String invitorEmail = userValidator.extractUserEmail(servletRequest);
@@ -125,7 +127,7 @@ public class AssociateController {
         AtomicBoolean atomicBoolean = new AtomicBoolean(true);
         associateInvitationOpt.ifPresentOrElse(associateInvitation -> {
             Assert.isTrue(!associateInvitation.getAction().equals(InvitationAction.ACCEPT),
-                    String.format("invitation has already been sent to %", dto.getInviteeEmail()));
+                    String.format("invitation has already been sent to %s", dto.getInviteeEmail()));
             associateInvitation.setAccepted(false)
                     .setInvitorComment(dto.getInvitorComment())
                     .setInviteeComment(null)
@@ -172,18 +174,61 @@ public class AssociateController {
         associateInvitationAction.save(associateInvitation);
     }
 
-    @GetMapping("/associates/invitations")
-    public ResponseEntity<?> get(@RequestParam Optional<Integer> id, HttpServletRequest servletRequest) {
-        int userId = userValidator.extractUserId(servletRequest);
-        AtomicReference<Object> atomicReference = new AtomicReference<>();
-        id.ifPresentOrElse(integer -> {
-        }, () -> {
-        });
-        return LocalResponse.configure();
+    /**
+     * @param servletRequest
+     * @return List of {@link AssociateInvitation} the invitor has invited
+     */
+    @GetMapping("/associates-invitations")
+    public ResponseEntity<?> getInvitationListByyInvitor(HttpServletRequest servletRequest) {
+        int invitorId = userValidator.extractUserId(servletRequest);
+        return LocalResponse.configure(associateInvitationAction.getAllByInvitorId(invitorId));
     }
 
-    @PutMapping("/associates/action")
-    public ResponseEntity<?> update(@RequestParam boolean accept, HttpServletRequest servletRequest) {
+    /**
+     * @param servletRequest
+     * @return List of {@link AssociateInvitation} the invitee has been invited to collaborate
+     */
+    @GetMapping("/associate-invitations/requests")
+    public ResponseEntity<?> getInvitationListByyInvitee(HttpServletRequest servletRequest) {
+        int inviteeId = userValidator.extractUserId(servletRequest);
+        return LocalResponse.configure(associateInvitationAction.getAllByInviteeId(inviteeId));
+    }
+
+    /**
+     * Update the  {@link AssociateInvitation} with the dto field values.
+     * <p>Send email that the invitation has been actioned</p>
+     *
+     * @param dto
+     * @param servletRequest
+     * @return
+     */
+    @PutMapping("/associate-invitation/action")
+    public ResponseEntity<?> actionInvitationRequest(@Validated @RequestBody AssociateInvitationActionDto dto,
+                                                     HttpServletRequest servletRequest) {
+        String inviteeEmail = userValidator.extractUserEmail(servletRequest);
+        Optional<AssociateInvitation> associateInvitationOpt = associateInvitationAction.findByInvitorEmailAndInviteeEmail(dto.getInvitorEmail(), inviteeEmail);
+        Assert.isTrue(associateInvitationOpt.isPresent(), APIErrors.OBJECT_NOT_FOUND.getMessage());
+        associateInvitationOpt.get().setAccepted(dto.isAccept())
+                .setAction(dto.isAccept() ? InvitationAction.ACCEPT : InvitationAction.DENY);
+
+        if (associateInvitationOpt.get().getAction().equals(InvitationAction.NONE)) {
+            return configure("This request is already actioned.");
+        }
+        boolean isSuccess = associateInvitationAction.actionInvitationRequest(dto.getInvitorEmail(), dto.isAccept());
+        return configure(isSuccess
+                ? "invitation sent successfully"
+                : "some unknown error has occurred when trying to email the collaborator, we are looking into it");
+    }
+
+    /**
+     * A User can delete an AssociateInvitation if the User is the Invitor
+     *
+     * @param id
+     * @param servletRequest
+     * @return
+     */
+    @DeleteMapping("/associate-invitation")
+    public ResponseEntity<?> delete(@RequestParam int id, HttpServletRequest servletRequest) {
         int userId = userValidator.extractUserId(servletRequest);
         return configure();
     }

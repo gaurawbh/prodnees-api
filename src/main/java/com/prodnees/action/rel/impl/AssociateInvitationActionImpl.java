@@ -63,7 +63,7 @@ public class AssociateInvitationActionImpl implements AssociateInvitationAction 
         Map<String, Object> invitationMailMap = new HashMap<>();
         invitationMailMap.put(EmailPlaceHolders.TITLE, "Invitation to collaborate ");
         invitationMailMap.put(EmailPlaceHolders.MESSAGE,
-                ValidatorUtil.ifValidOrElse(inviteeEmail, String.format("You have been invited by %s to collaborate in their Production process.", invitorEmail)));
+                ValidatorUtil.ifValidOrElse(invitorComment, String.format("You have been invited by %s to collaborate in their Production process.", invitorEmail)));
         invitationMailMap.put(EmailPlaceHolders.PARA_ONE,
                 inviteeIsUser
                         ? "Please login to see all your collaboration requests"
@@ -71,6 +71,21 @@ public class AssociateInvitationActionImpl implements AssociateInvitationAction 
 
         try {
             localEmailService.sendTemplateEmail(inviteeEmail, "Invitation to collaborate ", invitationMailMap);
+            return true;
+        } catch (MessagingException | UnsupportedEncodingException e) {
+            localLogger.error(e.getCause().getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean actionInvitationRequest(String invitorEmail, boolean accept) {
+        Map<String, Object> invitationActionMailMail = new HashMap<>();
+        invitationActionMailMail.put(EmailPlaceHolders.TITLE, "Collaboration invitation has been actioned");
+        invitationActionMailMail.put(EmailPlaceHolders.MESSAGE, "Your collaboration invitation has been actioned. Login to see the details");
+        try {
+            localEmailService.sendTemplateEmail(invitorEmail, "Collaboration invitation has been actioned", invitationActionMailMail);
             return true;
         } catch (MessagingException | UnsupportedEncodingException e) {
             localLogger.error(e.getCause().getMessage());
