@@ -93,4 +93,13 @@ public class AssociateInvitationActionImpl implements AssociateInvitationAction 
             return false;
         }
     }
+
+    @Override
+    public boolean deleteByInvitorEmailAndInviteeEmail(String invitorEmail, String inviteeEmail) {
+        boolean isSuccess = associateInvitationService.deleteByInvitorEmailAndInviteeEmail(invitorEmail, inviteeEmail);
+        if(!isSuccess){
+            localLogger.warn("could not delete AssociationInvitation record for email {}", invitorEmail);
+        }
+        return isSuccess;
+    }
 }

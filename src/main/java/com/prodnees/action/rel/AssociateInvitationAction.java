@@ -37,4 +37,6 @@ public interface AssociateInvitationAction {
      * @return
      */
     boolean actionInvitationRequest(String invitorEmail, boolean accept);
+
+    boolean deleteByInvitorEmailAndInviteeEmail(String invitorEmail, String inviteeEmail);
 }

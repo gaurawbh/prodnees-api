@@ -16,4 +16,6 @@ public interface AssociateInvitationDao extends JpaRepository<AssociateInvitatio
     List<AssociateInvitation> getAllByInviteeId(int inviteeId);
 
     Optional<AssociateInvitation> findByInvitorEmailAndInviteeEmail(String invitorEmail, String inviteeEmail);
+
+    boolean deleteByInvitorEmailAndInviteeEmail(String invitorEmail, String inviteeEmail);
 }

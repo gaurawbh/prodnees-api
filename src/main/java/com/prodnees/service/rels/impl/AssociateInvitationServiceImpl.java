@@ -44,4 +44,9 @@ public class AssociateInvitationServiceImpl implements AssociateInvitationServic
     public Optional<AssociateInvitation> findByInvitorEmailAndInviteeEmail(String invitorEmail, String inviteeEmail) {
         return associateInvitationDao.findByInvitorEmailAndInviteeEmail(invitorEmail, inviteeEmail);
     }
+
+    @Override
+    public boolean deleteByInvitorEmailAndInviteeEmail(String invitorEmail, String inviteeEmail) {
+        return associateInvitationDao.deleteByInvitorEmailAndInviteeEmail( invitorEmail,  inviteeEmail);
+    }
 }

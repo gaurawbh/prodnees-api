@@ -33,6 +33,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import static com.prodnees.config.constants.APIErrors.OBJECT_NOT_FOUND;
 import static com.prodnees.web.response.LocalResponse.configure;
 
 /**
@@ -207,7 +208,7 @@ public class AssociateController {
                                                      HttpServletRequest servletRequest) {
         String inviteeEmail = userValidator.extractUserEmail(servletRequest);
         Optional<AssociateInvitation> associateInvitationOpt = associateInvitationAction.findByInvitorEmailAndInviteeEmail(dto.getInvitorEmail(), inviteeEmail);
-        Assert.isTrue(associateInvitationOpt.isPresent(), APIErrors.OBJECT_NOT_FOUND.getMessage());
+        Assert.isTrue(associateInvitationOpt.isPresent(), OBJECT_NOT_FOUND.getMessage());
         associateInvitationOpt.get().setAccepted(dto.isAccept())
                 .setAction(dto.isAccept() ? InvitationAction.ACCEPT : InvitationAction.DENY);
 
@@ -221,15 +222,21 @@ public class AssociateController {
     }
 
     /**
-     * A User can delete an AssociateInvitation if the User is the Invitor
+     * A User can delete an  {@link AssociateInvitation} if the User is the Invitor
      *
-     * @param id
+     * @param inviteeEmail
      * @param servletRequest
      * @return
      */
     @DeleteMapping("/associate-invitation")
-    public ResponseEntity<?> delete(@RequestParam int id, HttpServletRequest servletRequest) {
-        int userId = userValidator.extractUserId(servletRequest);
-        return configure();
+    public ResponseEntity<?> delete(@RequestParam String inviteeEmail,
+                                    HttpServletRequest servletRequest) {
+        String invitorEmail = userValidator.extractUserEmail(servletRequest);
+        Optional<AssociateInvitation> associateInvitationOpt = associateInvitationAction.findByInvitorEmailAndInviteeEmail(invitorEmail, inviteeEmail);
+        Assert.isTrue(associateInvitationOpt.isPresent(), OBJECT_NOT_FOUND.getMessage());
+        boolean isSuccess = associateInvitationAction.deleteByInvitorEmailAndInviteeEmail(invitorEmail, inviteeEmail);
+        return configure(isSuccess
+                ? "record deleted successfully"
+                : "there was an error deleting the record. we are looking into it");
     }
 }
