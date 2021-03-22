@@ -4,6 +4,7 @@ import com.prodnees.config.constants.TimeConstants;
 import com.prodnees.dao.UserDao;
 import com.prodnees.domain.User;
 import com.prodnees.service.JwtTailService;
+import com.prodnees.service.jwt.ClaimFields;
 import com.prodnees.service.jwt.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -21,14 +22,6 @@ import java.util.function.Function;
 
 @Service
 public class JwtServiceImpl implements JwtService {
-    interface ClaimFields {
-        String USER_ID = "userId";
-        String ROLE = "role";
-        String IS_TEMPORARY_PASSWORD = "isTempPassword";
-        String TAIL = "tail";
-        String ZONE_ID = "zoneId";
-        String SECRET_KEY = "eyJ1c2VySWQiOjkwLCJzdWIiOiIxMTEzMzMyMjIiLCJpYXQiOjE1OTQ3MTI1OTEsImV4";
-    }
 
     private final UserDao userDao;
     private final JwtTailService jwtTailService;
