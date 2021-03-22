@@ -39,4 +39,9 @@ public class AssociateInvitationServiceImpl implements AssociateInvitationServic
     public List<AssociateInvitation> getAllByInviteeId(int inviteeId) {
         return null;
     }
+
+    @Override
+    public Optional<AssociateInvitation> findByInvitorEmailAndInviteeEmail(String invitorEmail, String inviteeEmail) {
+        return associateInvitationDao.findByInvitorEmailAndInviteeEmail(invitorEmail, inviteeEmail);
+    }
 }

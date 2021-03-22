@@ -3,6 +3,7 @@ package com.prodnees.action.impl;
 import com.prodnees.action.AuthAction;
 import com.prodnees.dao.ForgotPasswordInfoDao;
 import com.prodnees.domain.ForgotPasswordInfo;
+import com.prodnees.service.email.EmailPlaceHolders;
 import com.prodnees.service.email.LocalEmailService;
 import com.prodnees.util.OtpUtil;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -49,9 +50,9 @@ public class AuthActionImpl implements AuthAction {
         forgotPasswordInfoDao.save(forgotPasswordInfo);
         Map<String, Object> mailMap = new HashMap<>();
 
-        mailMap.put(LocalEmailService.PlaceHolders.TITLE, "Password Recovery");
-        mailMap.put(LocalEmailService.PlaceHolders.MESSAGE, String.format("Your temporary password for ProdNees is: [ %s ]", generatedPassword));
-        mailMap.put(LocalEmailService.PlaceHolders.PARA_ONE, "Please change your temporary password on your next login");
+        mailMap.put(EmailPlaceHolders.TITLE, "Password Recovery");
+        mailMap.put(EmailPlaceHolders.MESSAGE, String.format("Your temporary password for ProdNees is: [ %s ]", generatedPassword));
+        mailMap.put(EmailPlaceHolders.PARA_ONE, "Please change your temporary password on your next login");
         try {
             localEmailService.sendTemplateEmail(email, "Password Recovery", mailMap);
         } catch (MessagingException | UnsupportedEncodingException e) {

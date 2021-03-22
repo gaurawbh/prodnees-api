@@ -16,4 +16,5 @@ public interface AssociateInvitationService {
 
     List<AssociateInvitation> getAllByInviteeId(int inviteeId);
 
+    Optional<AssociateInvitation> findByInvitorEmailAndInviteeEmail(String invitorEmail, String inviteeEmail);
 }

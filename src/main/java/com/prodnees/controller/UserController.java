@@ -52,7 +52,6 @@ public class UserController {
         this.userValidator = userValidator;
         this.tempPasswordInfoDao = tempPasswordInfoDao;
         this.forgotPasswordInfoDao = forgotPasswordInfoDao;
-
         this.userAttributesService = userAttributesService;
     }
 

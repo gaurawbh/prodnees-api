@@ -72,7 +72,7 @@ public class LocalEmailServiceImpl implements LocalEmailService {
     @Override
     @Async
     public void sendTemplateEmail(String to, String subject, Map<String, Object> templateModel) throws MessagingException, UnsupportedEncodingException {
-        templateModel.put(LocalEmailService.PlaceHolders.PRE_HEADER, String.format("New email from %s. ", "ProdNees"));
+        templateModel.put(EmailPlaceHolders.PRE_HEADER, String.format("New email from %s. ", "ProdNees"));
         Context thymeleafContext = new Context();
         thymeleafContext.setVariables(templateModel);
         String htmlBody = thymeleafTemplateEngine.process("mail_template.html", thymeleafContext);
