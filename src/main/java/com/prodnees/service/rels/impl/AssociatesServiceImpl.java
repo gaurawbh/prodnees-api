@@ -23,8 +23,13 @@ public class AssociatesServiceImpl implements AssociatesService {
     }
 
     @Override
-    public Optional<Associates> findByAdminIdAndUserId(int adminId, int userId) {
-        return associatesDao.findByAdminIdAndUserId(adminId, userId);
+    public Optional<Associates> findByAdminIdAndAssociateId(int adminId, int userId) {
+        return associatesDao.findByAdminIdAndAssociateId(adminId, userId);
+    }
+
+    @Override
+    public Optional<Associates> findByAdminIdAndAssociateEmail(int adminId, String associateEmail) {
+        return associatesDao.findByAdminIdAndAssociateEmail(adminId,associateEmail);
     }
 
     @Override
@@ -33,7 +38,7 @@ public class AssociatesServiceImpl implements AssociatesService {
     }
 
     @Override
-    public List<Associates> getAllByUserId(int userId) {
-        return associatesDao.getAllByUserId(userId);
+    public List<Associates> getAllByAssociateId(int userId) {
+        return associatesDao.getAllByAssociateId(userId);
     }
 }

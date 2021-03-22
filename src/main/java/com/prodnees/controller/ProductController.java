@@ -2,7 +2,7 @@ package com.prodnees.controller;
 
 import com.prodnees.action.ProductRightsAction;
 import com.prodnees.action.UserAction;
-import com.prodnees.controller.insecure.UserSignupController;
+import com.prodnees.controller.insecure.SignupController;
 import com.prodnees.domain.Product;
 import com.prodnees.domain.User;
 import com.prodnees.domain.rels.ObjectRightsType;
@@ -130,7 +130,7 @@ public class ProductController {
         Assert.isTrue(userAction.existsByEmail(dto.getEmail()),
                 String.format(EMAIL_NOT_FOUND.getMessage(), dto.getEmail())
                         + String.format(". Invite them to signup at %s ",
-                        MvcUriComponentsBuilder.fromController(UserSignupController.class).path("/user/signup").build().toString()));
+                        MvcUriComponentsBuilder.fromController(SignupController.class).path("/user/signup").build().toString()));
         Optional<ProductRights> optionalProductRights = productRightsAction.findByProductIdAndUserId(dto.getProductId(), userId);
         Assert.isTrue(optionalProductRights.isPresent() && optionalProductRights.get().getObjectRightsType() == ObjectRightsType.OWNER,
                 "only owners can invite others to admin their product");

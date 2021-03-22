@@ -64,6 +64,7 @@ public class JWTRequestFilter extends OncePerRequestFilter {
 
         if (userService.existsByEmail(username)
                 && !blockedJwtDao.existsByJwt(jwt)
+                && jwtService.isValidTail(username, jwt)
                 && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = loginUserDetailsService.loadUserByUsername(username);
 

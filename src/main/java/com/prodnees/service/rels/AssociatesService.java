@@ -9,9 +9,11 @@ public interface AssociatesService {
 
     Associates save(Associates associates);
 
-    Optional<Associates> findByAdminIdAndUserId(int adminId, int userId);
+    Optional<Associates> findByAdminIdAndAssociateId(int adminId, int userId);
+
+    Optional<Associates> findByAdminIdAndAssociateEmail(int adminId, String associateEmail);
 
     List<Associates> getAllByAdminId(int adminId);
 
-    List<Associates> getAllByUserId(int userId);
+    List<Associates> getAllByAssociateId(int userId);
 }

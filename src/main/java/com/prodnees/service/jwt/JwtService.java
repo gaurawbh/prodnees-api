@@ -20,5 +20,7 @@ public interface JwtService{
 
     boolean hasUsedTempPassword(String token);
 
+    boolean isValidTail(String username, String jwt);
 
+    String extractTail(String jwt);
 }

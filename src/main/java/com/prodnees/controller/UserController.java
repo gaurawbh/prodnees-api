@@ -8,14 +8,18 @@ import com.prodnees.dao.TempPasswordInfoDao;
 import com.prodnees.domain.BlockedJwt;
 import com.prodnees.domain.User;
 import com.prodnees.domain.UserAttributes;
+import com.prodnees.domain.rels.Associates;
 import com.prodnees.dto.SecPasswordDto;
 import com.prodnees.dto.TempPasswordDto;
 import com.prodnees.dto.UserAttributesDto;
 import com.prodnees.filter.UserValidator;
+import com.prodnees.model.AssociateModel;
 import com.prodnees.model.UserModel;
 import com.prodnees.service.UserAttributesService;
 import com.prodnees.service.rels.AssociatesService;
 import com.prodnees.util.ValidatorUtil;
+import com.prodnees.web.exception.NeesNotFoundException;
+import org.checkerframework.checker.nullness.Opt;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,9 +33,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+
 import static com.prodnees.web.response.LocalResponse.configure;
 
 /**
@@ -146,20 +152,60 @@ public class UserController {
         return configure(userAttributesService.save(userAttributes));
     }
 
-
+    /**
+     * @param id
+     * @param email
+     * @param servletRequest
+     * @return
+     */
     @GetMapping("/associates")
     public ResponseEntity<?> getAssociates(@RequestParam Optional<Integer> id,
+                                           @RequestParam Optional<Integer> email,
                                            HttpServletRequest servletRequest) {
         int adminId = userValidator.extractUserId(servletRequest);
         AtomicReference<Object> modelAtomicReference = new AtomicReference<>();
-
         id.ifPresentOrElse(integer -> {
-            Assert.isTrue(associatesService.findByAdminIdAndUserId(adminId, integer).isPresent(), APIErrors.USER_NOT_FOUND.getMessage());
-            modelAtomicReference.set(userAction.getModelById(integer));
+            Assert.isTrue(associatesService.findByAdminIdAndAssociateId(adminId, integer).isPresent(), APIErrors.USER_NOT_FOUND.getMessage());
+            modelAtomicReference.set(userAction.getAssociateById(integer));
         }, () -> modelAtomicReference.set(userAction.getAllAssociates(adminId)));
 
         return configure(modelAtomicReference.get());
     }
+
+    /**
+     * If an associate exists by the provided email, it returns AssociateModel with address and phoneNumber
+     * <p>if an associate does not exist by email, address and phoneNumber fields are hidden, isAssoicate is set to false</p>
+     * @param email
+     * @param servletRequest
+     * @return
+     */
+    @GetMapping("/associates/search")
+    public ResponseEntity<?> searchAssociate(@RequestParam String email,
+                                             HttpServletRequest servletRequest) {
+        Assert.isTrue(userAction.existsByEmail(email), APIErrors.USER_NOT_FOUND.getMessage());
+        int adminId = userValidator.extractUserId(servletRequest);
+        AtomicReference<Object> modelAtomicReference = new AtomicReference<>();
+        Optional<Associates> associatesOptional = associatesService.findByAdminIdAndAssociateEmail(adminId, email);
+        associatesOptional.ifPresentOrElse(associates -> {
+
+            modelAtomicReference.set(userAction.getAssociateById(associates.getAssociateId()).setAssociate(true));
+        }, () -> {
+            AssociateModel associateModel = userAction.getAssociateByEmail(email)
+                    .setAddress("hidden")
+                    .setPhoneNumber("hidden")
+                    .setAssociate(false);
+            modelAtomicReference.set(associateModel);
+        });
+        return configure(modelAtomicReference.get());
+    }
+
+    @GetMapping("/associates/invite")
+    public ResponseEntity<?> inviteAssociate(@RequestParam String email) {
+
+        return configure();
+
+    }
+
 
 }
 
