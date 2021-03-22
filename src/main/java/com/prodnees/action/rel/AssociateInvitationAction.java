@@ -1,0 +1,20 @@
+package com.prodnees.action.rel;
+
+import com.prodnees.domain.rels.AssociateInvitation;
+import java.util.List;
+import java.util.Optional;
+
+public interface AssociateInvitationAction {
+
+    AssociateInvitation save(AssociateInvitation associateInvitation);
+
+    boolean existsByInvitorIdAndInviteeIdAndAccepted(int invitorId, int inviteeId, boolean accepted);
+
+    Optional<AssociateInvitation> findByInvitorIdAndInviteeId(int invitorId, int inviteeId);
+
+    List<AssociateInvitation> getAllByInvitorId(int invitorId);
+
+    List<AssociateInvitation> getAllByInviteeId(int inviteeId);
+
+    boolean sendInvitation(String invitorEmail, String inviteeEmail);
+}

@@ -15,8 +15,6 @@ public interface UserValidator {
 
     LocalDateTime extractTokenExpiryDatetime(HttpServletRequest request);
 
-    String extractUserRole(HttpServletRequest servletRequest);
-
     boolean hasUsedTempPassword(HttpServletRequest servletRequest);
 
     boolean isValidEmail(String email);

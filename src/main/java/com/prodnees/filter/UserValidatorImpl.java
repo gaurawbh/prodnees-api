@@ -53,11 +53,6 @@ public class UserValidatorImpl implements UserValidator {
         return localDateTimeConverter.convertToEntityAttribute(date);
     }
 
-
-    public String extractUserRole(HttpServletRequest servletRequest) {
-        return jwtService.extractUserRole(extractToken(servletRequest));
-    }
-
     @Override
     public boolean hasUsedTempPassword(HttpServletRequest servletRequest) {
             return jwtService.hasUsedTempPassword(extractToken(servletRequest));
