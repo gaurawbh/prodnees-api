@@ -14,25 +14,23 @@ import com.prodnees.filter.UserValidator;
 import com.prodnees.model.AssociateModel;
 import com.prodnees.model.UserModel;
 import com.prodnees.service.rels.AssociatesService;
+import com.prodnees.web.exception.NeesNotFoundException;
 import com.prodnees.web.response.LocalResponse;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.NoHandlerFoundException;
+
+import javax.annotation.processing.SupportedOptions;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+
 import static com.prodnees.config.constants.APIErrors.OBJECT_NOT_FOUND;
 import static com.prodnees.web.response.LocalResponse.configure;
 
@@ -177,22 +175,22 @@ public class AssociateController {
 
     /**
      * @param servletRequest
-     * @return List of {@link AssociateInvitation} the invitor has invited
+     * @return List of {@link AssociateInvitation}
+     * <p>the invitor has invited </p>
+     * <p>the invitee been invited</p>
      */
-    @GetMapping("/associates-invitations")
-    public ResponseEntity<?> getInvitationListByyInvitor(HttpServletRequest servletRequest) {
-        int invitorId = userValidator.extractUserId(servletRequest);
-        return LocalResponse.configure(associateInvitationAction.getAllByInvitorId(invitorId));
-    }
-
-    /**
-     * @param servletRequest
-     * @return List of {@link AssociateInvitation} the invitee has been invited to collaborate
-     */
-    @GetMapping("/associate-invitations/requests")
-    public ResponseEntity<?> getInvitationListByyInvitee(HttpServletRequest servletRequest) {
-        int inviteeId = userValidator.extractUserId(servletRequest);
-        return LocalResponse.configure(associateInvitationAction.getAllByInviteeId(inviteeId));
+    @GetMapping("/associates-invitations/{path}")
+    public ResponseEntity<?> getInvitationListByyInvitor(@PathVariable String path,
+                                                         HttpServletRequest servletRequest) throws NoHandlerFoundException {
+        int userId = userValidator.extractUserId(servletRequest);
+        switch (path) {
+            case "invites":
+                return LocalResponse.configure(associateInvitationAction.getAllByInvitorId(userId));
+            case "requests":
+                return LocalResponse.configure(associateInvitationAction.getAllByInviteeId(userId));
+            default:
+                throw new NeesNotFoundException(String.format("no handler found for %s", servletRequest.getRequestURI()), 99);
+        }
     }
 
     /**
