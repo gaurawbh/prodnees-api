@@ -80,7 +80,7 @@ public class UserController {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         int userId = userValidator.extractUserId(servletRequest);
         User user = userAction.getById(userId);
-        Assert.isTrue(passwordEncoder.matches(user.getPassword(), dto.getOldPassword()), "incorrect oldPassword, please try again");
+        Assert.isTrue(passwordEncoder.matches(dto.getOldPassword(), user.getPassword()), "incorrect oldPassword, please try again");
         Assert.isTrue(dto.getNewPassword().equals(dto.getRepeatNewPassword()), "newPassword and repeatNewPassword do not match");
         Assert.isTrue(!dto.getOldPassword().equals(dto.getNewPassword()), "password not updated, your oldPassword and newPassword are same");
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
@@ -134,7 +134,6 @@ public class UserController {
 
         return configure(userAttributesService.save(userAttributes));
     }
-
 
 
 }

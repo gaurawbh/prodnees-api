@@ -19,6 +19,7 @@ public enum APIErrors {
     EMAIL_NOT_FOUND(24, "email not found: %s"),
     OTP_NOT_FOUND(25, "otp not found"),
     INVALID_USER_ROLE(26, "invalid user role"),
+    ASSOCIATES_ONLY(27, "Only associates can be given this Right"),
     INVALID_JWT_TOKEN(30, "invalid or missing token"),
     PROTECTED_URL(31, "attempt to access the protected url"),
     TEMP_PASSWORD_UNCHANGED(32, "user cannot access the app without changing the temp password, /secure/user/temp-password"),

@@ -1,38 +1,38 @@
 package com.prodnees.service.rels.impl;
 
 import com.prodnees.dao.rels.BatchProductRightsDao;
-import com.prodnees.domain.rels.BatchProductRights;
-import com.prodnees.domain.rels.ObjectRightsType;
-import com.prodnees.service.rels.BatchProductRightsService;
+import com.prodnees.domain.rels.BatchProductRight;
+import com.prodnees.domain.rels.ObjectRightType;
+import com.prodnees.service.rels.BatchProductRightService;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class BatchProductRightsServiceImpl implements BatchProductRightsService {
+public class BatchProductRightServiceImpl implements BatchProductRightService {
     private final BatchProductRightsDao batchProductRightsDao;
 
-    public BatchProductRightsServiceImpl(BatchProductRightsDao batchProductRightsDao) {
+    public BatchProductRightServiceImpl(BatchProductRightsDao batchProductRightsDao) {
         this.batchProductRightsDao = batchProductRightsDao;
     }
 
     @Override
-    public BatchProductRights save(BatchProductRights batchProductRights) {
-        return batchProductRightsDao.save(batchProductRights);
+    public BatchProductRight save(BatchProductRight batchProductRight) {
+        return batchProductRightsDao.save(batchProductRight);
     }
 
     @Override
-    public Optional<BatchProductRights> findByBatchProductIdAndOwnerId(int batchProductId, int ownerId) {
+    public Optional<BatchProductRight> findByBatchProductIdAndOwnerId(int batchProductId, int ownerId) {
         return batchProductRightsDao.findByBatchProductIdAndUserId(batchProductId, ownerId);
     }
 
     @Override
-    public List<BatchProductRights> getAllByBatchProductId(int batchProductId) {
+    public List<BatchProductRight> getAllByBatchProductId(int batchProductId) {
         return batchProductRightsDao.getAllByBatchProductId(batchProductId);
     }
 
     @Override
-    public List<BatchProductRights> getAllByOwnerId(int ownerId) {
+    public List<BatchProductRight> getAllByOwnerId(int ownerId) {
         return batchProductRightsDao.getAllByUserId(ownerId);
     }
 
@@ -47,8 +47,8 @@ public class BatchProductRightsServiceImpl implements BatchProductRightsService 
     @Override
     public boolean hasBatchProductEditorRights(int batchProductId, int editorId) {
 
-        return batchProductRightsDao.existsByBatchProductIdAndUserIdAndObjectRightsType(batchProductId, editorId, ObjectRightsType.OWNER)
-                || batchProductRightsDao.existsByBatchProductIdAndUserIdAndObjectRightsType(batchProductId, editorId, ObjectRightsType.EDITOR);
+        return batchProductRightsDao.existsByBatchProductIdAndUserIdAndObjectRightType(batchProductId, editorId, ObjectRightType.OWNER)
+                || batchProductRightsDao.existsByBatchProductIdAndUserIdAndObjectRightType(batchProductId, editorId, ObjectRightType.EDITOR);
     }
 
     /**

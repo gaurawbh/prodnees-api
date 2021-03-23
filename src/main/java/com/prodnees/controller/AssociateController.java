@@ -119,7 +119,7 @@ public class AssociateController {
      * @param dto {@link AssociateInvitationDto}
      * @returns ResponseEntity
      */
-    @PostMapping("/associates-invitation")
+    @PostMapping("/associate-invitation")
     public ResponseEntity<?> inviteAssociate(@Validated @RequestBody AssociateInvitationDto dto,
                                              HttpServletRequest servletRequest) {
         String invitorEmail = userValidator.extractUserEmail(servletRequest);

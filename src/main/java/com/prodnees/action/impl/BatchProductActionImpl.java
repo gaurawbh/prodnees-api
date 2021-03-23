@@ -6,7 +6,7 @@ import com.prodnees.model.BatchProductModel;
 import com.prodnees.model.ProductModel;
 import com.prodnees.service.BatchProductService;
 import com.prodnees.service.ProductService;
-import com.prodnees.service.rels.BatchProductRightsService;
+import com.prodnees.service.rels.BatchProductRightService;
 import com.prodnees.service.rels.ProductRightsService;
 import com.prodnees.util.MapperUtil;
 import org.springframework.stereotype.Service;
@@ -18,16 +18,16 @@ public class BatchProductActionImpl implements BatchProductAction {
 
     private final BatchProductService batchProductService;
     private final ProductRightsService productRightsService;
-    private final BatchProductRightsService batchProductRightsService;
+    private final BatchProductRightService batchProductRightService;
     private final ProductService productService;
 
     public BatchProductActionImpl(BatchProductService batchProductService,
                                   ProductRightsService productRightsService,
-                                  BatchProductRightsService batchProductRightsService,
+                                  BatchProductRightService batchProductRightService,
                                   ProductService productService) {
         this.batchProductService = batchProductService;
         this.productRightsService = productRightsService;
-        this.batchProductRightsService = batchProductRightsService;
+        this.batchProductRightService = batchProductRightService;
         this.productService = productService;
     }
 

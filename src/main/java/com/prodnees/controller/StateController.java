@@ -4,7 +4,7 @@ import com.prodnees.action.EventAction;
 import com.prodnees.domain.State;
 import com.prodnees.dto.StateDto;
 import com.prodnees.filter.UserValidator;
-import com.prodnees.service.rels.BatchProductRightsService;
+import com.prodnees.service.rels.BatchProductRightService;
 import com.prodnees.util.MapperUtil;
 import com.prodnees.web.response.LocalResponse;
 import org.springframework.http.ResponseEntity;
@@ -28,14 +28,14 @@ import static com.prodnees.web.response.LocalResponse.configure;
 @CrossOrigin
 public class StateController {
     private final UserValidator userValidator;
-    private final BatchProductRightsService batchProductRightsService;
+    private final BatchProductRightService batchProductRightService;
     private final EventAction eventAction;
 
     public StateController(UserValidator userValidator,
-                           BatchProductRightsService batchProductRightsService,
+                           BatchProductRightService batchProductRightService,
                            EventAction eventAction) {
         this.userValidator = userValidator;
-        this.batchProductRightsService = batchProductRightsService;
+        this.batchProductRightService = batchProductRightService;
         this.eventAction = eventAction;
     }
 

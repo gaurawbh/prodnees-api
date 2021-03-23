@@ -91,7 +91,7 @@ public class UserActionImpl implements UserAction {
     void sendInitialPassword(String email, String initialPassword) {
         Map<String, Object> mailMap = new HashMap<>();
         mailMap.put(EmailPlaceHolders.TITLE, "Temporary Password");
-        mailMap.put(EmailPlaceHolders.MESSAGE, String.format("Your temporary password for ProdNees is: %s ", initialPassword));
+        mailMap.put(EmailPlaceHolders.MESSAGE, String.format("New account has been created for you. Your temporary password for ProdNees is: %s ", initialPassword));
         mailMap.put(EmailPlaceHolders.PARA_ONE, "Please change your temporary password on your next login");
 
         try {

@@ -1,26 +1,26 @@
 package com.prodnees.domain.rels;
 
-import com.prodnees.domain.rels.id.ProductRightsId;
+import com.prodnees.domain.rels.id.BatchProductRightId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import java.io.Serializable;
 
 @Entity
-@IdClass(ProductRightsId.class)
-public class ProductRights implements Serializable {
+@IdClass(BatchProductRightId.class)
+public class BatchProductRight implements Serializable {
     @Id
-    private int productId;
+    private int batchProductId;
     @Id
     private int userId;
     private ObjectRightType objectRightType;
 
-    public int getProductId() {
-        return productId;
+    public int getBatchProductId() {
+        return batchProductId;
     }
 
-    public ProductRights setProductId(int productId) {
-        this.productId = productId;
+    public BatchProductRight setBatchProductId(int batchProductId) {
+        this.batchProductId = batchProductId;
         return this;
     }
 
@@ -28,7 +28,7 @@ public class ProductRights implements Serializable {
         return userId;
     }
 
-    public ProductRights setUserId(int ownerId) {
+    public BatchProductRight setUserId(int ownerId) {
         this.userId = ownerId;
         return this;
     }
@@ -37,7 +37,7 @@ public class ProductRights implements Serializable {
         return objectRightType;
     }
 
-    public ProductRights setObjectRightsType(ObjectRightType objectRightType) {
+    public BatchProductRight setObjectRightsType(ObjectRightType objectRightType) {
         this.objectRightType = objectRightType;
         return this;
     }

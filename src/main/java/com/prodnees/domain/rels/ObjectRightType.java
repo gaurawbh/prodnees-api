@@ -1,5 +1,5 @@
 package com.prodnees.domain.rels;
 
-public enum ObjectRightsType {
+public enum ObjectRightType {
     OWNER, EDITOR, READER
 }

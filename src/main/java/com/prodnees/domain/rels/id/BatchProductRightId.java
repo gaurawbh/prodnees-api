@@ -3,14 +3,14 @@ package com.prodnees.domain.rels.id;
 import java.io.Serializable;
 
 
-public class BatchProductRightsId implements Serializable {
+public class BatchProductRightId implements Serializable {
     private int batchProductId;
     private int userId;
 
-    public BatchProductRightsId() {
+    public BatchProductRightId() {
     }
 
-    public BatchProductRightsId(int batchProductId, int userId) {
+    public BatchProductRightId(int batchProductId, int userId) {
         this.batchProductId = batchProductId;
         this.userId = userId;
     }
@@ -19,7 +19,7 @@ public class BatchProductRightsId implements Serializable {
         return batchProductId;
     }
 
-    public BatchProductRightsId setBatchProductId(int batchProductId) {
+    public BatchProductRightId setBatchProductId(int batchProductId) {
         this.batchProductId = batchProductId;
         return this;
     }
@@ -28,7 +28,7 @@ public class BatchProductRightsId implements Serializable {
         return userId;
     }
 
-    public BatchProductRightsId setUserId(int userId) {
+    public BatchProductRightId setUserId(int userId) {
         this.userId = userId;
         return this;
     }

@@ -5,10 +5,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 public class TempPasswordDto {
-    @NotBlank
+    @NotBlank(message = "password cannot be null or blank")
     @Size(min = 6, message = "password must be at least 6 characters long")
     private String password;
-    @NotBlank
+    @NotBlank(message = "repeatPassword cannot be null or blank")
     @Size(min = 6, message = "repeatPassword must be at least 6 characters long")
     private String repeatPassword;
 

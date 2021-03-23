@@ -4,7 +4,6 @@ import com.prodnees.dao.rels.AssociatesDao;
 import com.prodnees.domain.rels.Associates;
 import com.prodnees.service.rels.AssociatesService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +28,12 @@ public class AssociatesServiceImpl implements AssociatesService {
 
     @Override
     public Optional<Associates> findByAdminIdAndAssociateEmail(int adminId, String associateEmail) {
-        return associatesDao.findByAdminIdAndAssociateEmail(adminId,associateEmail);
+        return associatesDao.findByAdminIdAndAssociateEmail(adminId, associateEmail);
+    }
+
+    @Override
+    public boolean existsByAdminIdAndAssociateEmail(int adminId, String associateEmail) {
+        return associatesDao.existsByAdminIdAndAssociateEmail(adminId, associateEmail);
     }
 
     @Override

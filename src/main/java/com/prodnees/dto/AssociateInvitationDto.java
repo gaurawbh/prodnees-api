@@ -8,10 +8,10 @@ public class AssociateInvitationDto {
     @NotBlank(message = "inviteeEmail cannot be null or blank")
     @Email(regexp = regex)
     private String inviteeEmail;
-    @NotBlank(message = "inviteeFirstName first name cannot be null or blank, " +
+    @NotBlank(message = "inviteeFirstName cannot be null or blank, " +
             "Name will be used to create a new account if the Invitee does not have an account yet")
     private String inviteeFirstName;
-    @NotBlank(message = "inviteeLastName first name cannot be null or blank," +
+    @NotBlank(message = "inviteeLastName cannot be null or blank," +
             "Name will be used to create a new account if the Invitee does not have an account yet")
     private String inviteeLastName;
     private String invitorComment;
