@@ -17,7 +17,6 @@ import com.prodnees.service.rels.AssociatesService;
 import com.prodnees.util.MapperUtil;
 import com.prodnees.util.ValidatorUtil;
 import com.prodnees.web.exception.NeesNotFoundException;
-import com.prodnees.web.response.LocalResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -25,6 +24,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,6 +39,7 @@ import java.util.stream.Collectors;
 import static com.prodnees.config.constants.APIErrors.ACCESS_DENIED;
 import static com.prodnees.config.constants.APIErrors.OBJECT_NOT_FOUND;
 import static com.prodnees.config.constants.APIErrors.REFERENCED_OBJECT;
+import static com.prodnees.config.constants.APIErrors.UPDATE_DENIED;
 import static com.prodnees.web.response.LocalResponse.configure;
 
 @RestController
@@ -79,7 +80,7 @@ public class BatchProductController {
 
     @PostMapping("/batch-product")
     public ResponseEntity<?> saveBatchProduct(@Validated @RequestBody BatchProductDto dto,
-                                  HttpServletRequest servletRequest) {
+                                              HttpServletRequest servletRequest) {
         int userId = userValidator.extractUserId(servletRequest);
         dto.setId(0);
         BatchProduct batchProduct = MapperUtil.getDozer().map(dto, BatchProduct.class);
@@ -94,11 +95,11 @@ public class BatchProductController {
 
     @GetMapping("/batch-products")
     public ResponseEntity<?> getBatchProducts(@RequestParam Optional<Integer> id,
-                                 HttpServletRequest servletRequest) {
+                                              HttpServletRequest servletRequest) {
         int ownerId = userValidator.extractUserId(servletRequest);
         AtomicReference<Object> atomicReference = new AtomicReference<>();
         id.ifPresentOrElse(integer -> {
-            Optional<BatchProductRight> batchProductRights = batchProductRightAction.findByBatchProductIdAndOwnerId(integer, ownerId);
+            Optional<BatchProductRight> batchProductRights = batchProductRightAction.findByBatchProductIdAndUserId(integer, ownerId);
             Assert.isTrue(batchProductRights.isPresent(), OBJECT_NOT_FOUND.getMessage());
             atomicReference.set(batchProductAction.getModelById(batchProductRights.get().getBatchProductId()));
         }, () -> {
@@ -122,7 +123,7 @@ public class BatchProductController {
      */
     @PutMapping("/batch-product")
     public ResponseEntity<?> updateBatchProduct(@Validated @RequestBody BatchProductDto dto,
-                                    HttpServletRequest servletRequest) {
+                                                HttpServletRequest servletRequest) {
         int editorId = userValidator.extractUserId(servletRequest);
         Assert.isTrue(batchProductAction.existsById(dto.getId()), OBJECT_NOT_FOUND.getMessage());
         Assert.isTrue(batchProductRightAction.hasBatchProductEditorRights(dto.getId(), editorId), OBJECT_NOT_FOUND.getMessage());
@@ -143,9 +144,9 @@ public class BatchProductController {
      */
     @DeleteMapping("/batch-product")
     public ResponseEntity<?> deleteBatchProduct(@RequestParam int id,
-                                    HttpServletRequest servletRequest) {
+                                                HttpServletRequest servletRequest) {
         int ownerId = userValidator.extractUserId(servletRequest);
-        Optional<BatchProductRight> batchProductRightsOptional = batchProductRightAction.findByBatchProductIdAndOwnerId(id, ownerId);
+        Optional<BatchProductRight> batchProductRightsOptional = batchProductRightAction.findByBatchProductIdAndUserId(id, ownerId);
         batchProductRightsOptional.ifPresentOrElse(batchProductRights -> {
             Assert.isTrue(batchProductRights.getObjectRightsType().equals(ObjectRightType.OWNER), ACCESS_DENIED.getMessage());
             Assert.isTrue(!stateAction.existsByBatchProductId(id), REFERENCED_OBJECT.getMessage());
@@ -166,22 +167,69 @@ public class BatchProductController {
      * @param servletRequest
      * @return
      */
-    @PostMapping("/batch-product-rights")
-    public ResponseEntity<?> saveBatchProductRights(@Validated @RequestBody BatchProductRightDto dto,
-                                  HttpServletRequest servletRequest) {
+    @PutMapping("/batch-product-right")
+    public ResponseEntity<?> saveBatchProductRight(@Validated @RequestBody BatchProductRightDto dto,
+                                                   HttpServletRequest servletRequest) {
         int adminId = userValidator.extractUserId(servletRequest);
+        Assert.isTrue(dto.getObjectRightsType() != ObjectRightType.OWNER, "you can only assign an editor or a  viewer");
         Assert.isTrue(associatesService.existsByAdminIdAndAssociateEmail(adminId, dto.getEmail()), APIErrors.ASSOCIATES_ONLY.getMessage());
-        Optional<BatchProductRight> batchProductRightsOpt = batchProductRightAction.findByBatchProductIdAndOwnerId(dto.getBatchProductId(), adminId);
+        Optional<BatchProductRight> batchProductRightsOpt = batchProductRightAction.findByBatchProductIdAndUserId(dto.getBatchProductId(), adminId);
         Assert.isTrue(batchProductRightsOpt.isPresent() && batchProductRightsOpt.get().getObjectRightsType().equals(ObjectRightType.OWNER),
-                "only owners can invite others to admin their batch product");
+                "only owners can invite others to admin their batch product or update the rights");
         return configure(batchProductRightAction.save(dto));
     }
 
-
-    @DeleteMapping("/")
-    public ResponseEntity<?> deleteBatchProductRights(@Validated @RequestBody Object obj, HttpServletRequest servletRequest) {
+    /**
+     * if rightOf path is product,
+     * <i>return {@link java.util.List} of {@link BatchProductRight} by batchProductId</i>
+     * <p>if rightOf path is user,</p>
+     * <i>return {@link java.util.List} of {@link BatchProductRight} by userId</i>
+     *
+     * @param rightOf
+     * @param batchProductId
+     * @param servletRequest
+     * @return
+     */
+    @GetMapping("/batch-product-right/{rightOf}")
+    public ResponseEntity<?> getBatchProductRight(@PathVariable String rightOf,
+                                                  @RequestParam Optional<Integer> batchProductId,
+                                                  HttpServletRequest servletRequest) {
         int userId = userValidator.extractUserId(servletRequest);
-        return LocalResponse.configure();
+        AtomicReference<Object> atomicReference = new AtomicReference<>();
+
+        switch (rightOf) {
+            case "product":
+                return null;
+            case "user":
+                return null;
+            default:
+                throw new NeesNotFoundException(String.format("no handler found for %s", servletRequest.getRequestURI()), 99);
+        }
+
+    }
+
+    /**
+     * You must be the owner of the Batch Product
+     * <p>The other user must not be the owner of the Batch Product</p>
+     *
+     * @param batchProductId
+     * @param userId
+     * @param servletRequest
+     * @return
+     */
+    @DeleteMapping("/batch-product-right")
+    public ResponseEntity<?> deleteBatchProductRights(@RequestParam int batchProductId, int userId,
+                                                      HttpServletRequest servletRequest) {
+        int adminId = userValidator.extractUserId(servletRequest);
+        Assert.isTrue(userId != adminId, "you cannot delete your own batch product rights");
+        Optional<BatchProductRight> adminBatchProductRightOpt = batchProductRightAction.findByBatchProductIdAndUserId(batchProductId, adminId);// check you have permission, you are an owner
+        Assert.isTrue(adminBatchProductRightOpt.isPresent() && adminBatchProductRightOpt.get().getObjectRightsType() == ObjectRightType.OWNER,
+                UPDATE_DENIED.getMessage());
+        Optional<BatchProductRight> userBatchProductRightOpt = batchProductRightAction.findByBatchProductIdAndUserId(batchProductId, userId); // check the other user is not the owner
+        Assert.isTrue(userBatchProductRightOpt.isPresent() && userBatchProductRightOpt.get().getObjectRightsType() != ObjectRightType.OWNER,
+                "you cannot remove another owner's batch product rights");
+        batchProductRightAction.deleteByBatchProductIdAndUserId(batchProductId, userId);
+        return configure();
     }
 
 

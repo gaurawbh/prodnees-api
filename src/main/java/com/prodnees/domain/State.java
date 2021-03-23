@@ -4,6 +4,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+/**
+ * Future Enhancements:
+ * <p>add a reminder when a State is complete</p>
+ * <p>schedule emails when a State is complete</p>
+ */
+
 @Entity
 public class State {
     @Id

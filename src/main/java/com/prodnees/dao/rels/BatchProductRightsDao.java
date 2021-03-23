@@ -16,4 +16,6 @@ public interface BatchProductRightsDao extends JpaRepository<BatchProductRight, 
     List<BatchProductRight> getAllByUserId(int userId);
 
     boolean existsByBatchProductIdAndUserIdAndObjectRightType(int batchProductId, int userId, ObjectRightType rightsType);
+
+    void deleteByBatchProductIdAndUserId(int batchProductId, int userId);
 }

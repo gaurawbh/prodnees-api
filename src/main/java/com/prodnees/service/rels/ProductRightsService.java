@@ -1,19 +1,20 @@
 package com.prodnees.service.rels;
 
-import com.prodnees.domain.rels.ProductRights;
-
+import com.prodnees.domain.rels.ProductRight;
 import java.util.List;
 import java.util.Optional;
 
 public interface ProductRightsService {
 
-    ProductRights save(ProductRights productRights);
+    ProductRight save(ProductRight productRight);
 
     boolean existsByProductIdAndUserId(int productId, int userId);
 
-    Optional<ProductRights> findByProductIdAndUserId(int productId, int userId);
+    Optional<ProductRight> findByProductIdAndUserId(int productId, int userId);
 
-    List<ProductRights> getAllByUserId(int userId);
+    List<ProductRight> getAllByUserId(int userId);
 
-    List<ProductRights> getAllByProductId(int productId);
+    List<ProductRight> getAllByProductId(int productId);
+
+    void deleteByProductIdAndUserId(int productId, int userId);
 }

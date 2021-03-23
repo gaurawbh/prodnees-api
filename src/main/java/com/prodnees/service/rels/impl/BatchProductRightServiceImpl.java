@@ -22,7 +22,7 @@ public class BatchProductRightServiceImpl implements BatchProductRightService {
     }
 
     @Override
-    public Optional<BatchProductRight> findByBatchProductIdAndOwnerId(int batchProductId, int ownerId) {
+    public Optional<BatchProductRight> findByBatchProductIdAndUserId(int batchProductId, int ownerId) {
         return batchProductRightsDao.findByBatchProductIdAndUserId(batchProductId, ownerId);
     }
 
@@ -62,5 +62,10 @@ public class BatchProductRightServiceImpl implements BatchProductRightService {
     @Override
     public boolean hasBatchProductReaderRights(int batchProductId, int readerId) {
         return batchProductRightsDao.existsByBatchProductIdAndUserId(batchProductId, readerId);
+    }
+
+    @Override
+    public void deleteByBatchProductIdAndUserId(int batchProductId, int userId) {
+        batchProductRightsDao.deleteByBatchProductIdAndUserId(batchProductId, userId);
     }
 }

@@ -1,18 +1,19 @@
 package com.prodnees.dao.rels;
 
-import com.prodnees.domain.rels.ProductRights;
+import com.prodnees.domain.rels.ProductRight;
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
 import java.util.Optional;
 
-public interface ProductRightsDao extends JpaRepository<ProductRights, Integer> {
+public interface ProductRightsDao extends JpaRepository<ProductRight, Integer> {
 
-    Optional<ProductRights> findByProductIdAndUserId(int productId, int ownerId);
+    Optional<ProductRight> findByProductIdAndUserId(int productId, int ownerId);
 
-    List<ProductRights> getAllByUserId(int ownerId);
+    List<ProductRight> getAllByUserId(int ownerId);
 
-    List<ProductRights> getAllByProductId(int productId);
+    List<ProductRight> getAllByProductId(int productId);
 
     boolean existsByProductIdAndUserId(int productId, int userId);
+
+    void deleteByProductIdAndUserId(int productId, int userId);
 }

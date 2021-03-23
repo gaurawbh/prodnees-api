@@ -3,7 +3,7 @@ package com.prodnees.action.rel.impl;
 import com.prodnees.action.rel.ProductRightAction;
 import com.prodnees.domain.User;
 import com.prodnees.domain.UserAttributes;
-import com.prodnees.domain.rels.ProductRights;
+import com.prodnees.domain.rels.ProductRight;
 import com.prodnees.dto.ProductRightDto;
 import com.prodnees.model.ProductModel;
 import com.prodnees.model.ProductRightModel;
@@ -50,16 +50,16 @@ public class ProductRightActionImpl implements ProductRightAction {
     @Override
     public ProductRightModel save(ProductRightDto dto) {
         User user = userService.getByEmail(dto.getEmail());
-        ProductRights productRights = productRightsService.save(new ProductRights()
+        ProductRight productRight = productRightsService.save(new ProductRight()
                 .setUserId(user.getId())
                 .setProductId(dto.getProductId())
                 .setObjectRightsType(dto.getObjectRightsType()));
-        return mapToModel(productRights);
+        return mapToModel(productRight);
     }
 
     @Override
-    public ProductRights save(ProductRights productRights) {
-        return productRightsService.save(productRights);
+    public ProductRight save(ProductRight productRight) {
+        return productRightsService.save(productRight);
     }
 
     @Override
@@ -68,27 +68,27 @@ public class ProductRightActionImpl implements ProductRightAction {
     }
 
     @Override
-    public Optional<ProductRights> findByProductIdAndUserId(int productId, int userId) {
+    public Optional<ProductRight> findByProductIdAndUserId(int productId, int userId) {
         return productRightsService.findByProductIdAndUserId(productId, userId);
     }
 
     @Override
-    public List<ProductRights> getAllByUserId(int userId) {
+    public List<ProductRight> getAllByUserId(int userId) {
         return productRightsService.getAllByUserId(userId);
     }
 
     @Override
-    public List<ProductRights> getAllByProductId(int productId) {
+    public List<ProductRight> getAllByProductId(int productId) {
         return productRightsService.getAllByProductId(productId);
     }
 
-    public ProductRightModel mapToModel(ProductRights productRights) {
+    public ProductRightModel mapToModel(ProductRight productRight) {
         ProductRightModel productRightModel = new ProductRightModel();
-        ProductModel productModel = MapperUtil.getDozer().map(productService.getById(productRights.getProductId()), ProductModel.class);
-        UserAttributes userAttributes = userAttributesService.getByUserId(productRights.getUserId());
+        ProductModel productModel = MapperUtil.getDozer().map(productService.getById(productRight.getProductId()), ProductModel.class);
+        UserAttributes userAttributes = userAttributesService.getByUserId(productRight.getUserId());
         return productRightModel.setProductModel(productModel)
                 .setUserModel(new UserModel().setId(userAttributes.getUserId()).setEmail(userAttributes.getEmail()).setFirstName(userAttributes.getFirstName()).setLastName(userAttributes.getLastName()))
-                .setObjectRightsType(productRights.getObjectRightsType());
+                .setObjectRightsType(productRight.getObjectRightsType());
 
     }
 
@@ -106,6 +106,11 @@ public class ProductRightActionImpl implements ProductRightAction {
             return false;
         }
 
+    }
+
+    @Override
+    public void deleteByProductIdAndUserId(int productId, int userId) {
+        productRightsService.deleteByProductIdAndUserId(productId, userId);
     }
 
 }

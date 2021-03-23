@@ -12,17 +12,19 @@ public interface BatchProductRightAction {
 
     BatchProductRight save(BatchProductRight batchProductRight);
 
-    Optional<BatchProductRight> findByBatchProductIdAndOwnerId(int batchProductId, int ownerId);
+    Optional<BatchProductRight> findByBatchProductIdAndUserId(int batchProductId, int ownerId);
 
     List<BatchProductRightModel> getAllByBatchProductId(int batchProductId);
 
     List<BatchProductRight> getAllByOwnerId(int ownerId);
 
-    List<BatchProductRightModel> getAllModelByOwnerId(int ownerId);
+    List<BatchProductRightModel> getAllModelByUserId(int ownerId);
 
     boolean hasBatchProductEditorRights(int batchProductId, int editorId);
 
     boolean hasBatchProductReaderRights(int batchProductId, int readerId);
 
     boolean sendNewBatchProductRightsEmail(String email);
+
+    void deleteByBatchProductIdAndUserId(int batchProductId, int userId);
 }

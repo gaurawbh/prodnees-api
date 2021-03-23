@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,13 +51,20 @@ public class BatchProductRightActionImpl implements BatchProductRightAction {
     @Override
     public BatchProductRightModel save(BatchProductRightDto rightsDto) {
         User user = userService.getByEmail(rightsDto.getEmail());
-        BatchProductRight rights = new BatchProductRight()
-                .setUserId(user.getId())
-                .setBatchProductId(rightsDto.getBatchProductId())
-                .setObjectRightsType(rightsDto.getObjectRightsType());
+        Optional<BatchProductRight> batchProductRightOpt = findByBatchProductIdAndUserId(rightsDto.getBatchProductId(), user.getId());
+        AtomicReference<BatchProductRightModel> atomicReference = new AtomicReference<>();
+        batchProductRightOpt.ifPresentOrElse(batchProductRight -> {
+            batchProductRight.setObjectRightsType(rightsDto.getObjectRightsType());
+            atomicReference.set(mapToModel(batchProductRightService.save(batchProductRight)));
+        }, () -> {
+            BatchProductRight batchProductRight = new BatchProductRight()
+                    .setUserId(user.getId())
+                    .setBatchProductId(rightsDto.getBatchProductId())
+                    .setObjectRightsType(rightsDto.getObjectRightsType());
+            atomicReference.set(mapToModel(batchProductRightService.save(batchProductRight)));
+        });
         sendNewBatchProductRightsEmail(rightsDto.getEmail());
-
-        return mapToModel(batchProductRightService.save(rights));
+        return atomicReference.get();
     }
 
     @Override
@@ -65,8 +73,8 @@ public class BatchProductRightActionImpl implements BatchProductRightAction {
     }
 
     @Override
-    public Optional<BatchProductRight> findByBatchProductIdAndOwnerId(int batchProductId, int ownerId) {
-        return batchProductRightService.findByBatchProductIdAndOwnerId(batchProductId, ownerId);
+    public Optional<BatchProductRight> findByBatchProductIdAndUserId(int batchProductId, int ownerId) {
+        return batchProductRightService.findByBatchProductIdAndUserId(batchProductId, ownerId);
     }
 
     @Override
@@ -81,7 +89,7 @@ public class BatchProductRightActionImpl implements BatchProductRightAction {
     }
 
     @Override
-    public List<BatchProductRightModel> getAllModelByOwnerId(int ownerId) {
+    public List<BatchProductRightModel> getAllModelByUserId(int ownerId) {
         List<BatchProductRight> batchProductRights = batchProductRightService.getAllByOwnerId(ownerId);
         return batchProductRights.stream().map(this::mapToModel).collect(Collectors.toList());
     }
@@ -112,16 +120,22 @@ public class BatchProductRightActionImpl implements BatchProductRightAction {
     @Override
     public boolean sendNewBatchProductRightsEmail(String email) {
         Map<String, Object> batchProductRightsMailMail = new HashMap<>();
-        batchProductRightsMailMail.put(EmailPlaceHolders.TITLE, "New Batch Product Right");
-        batchProductRightsMailMail.put(EmailPlaceHolders.MESSAGE, "You have been added to a new Batch Product.");
+        batchProductRightsMailMail.put(EmailPlaceHolders.TITLE, "Batch Product Right");
+        batchProductRightsMailMail.put(EmailPlaceHolders.MESSAGE, "You have an update on a Batch Product.");
         try {
-            localEmailService.sendTemplateEmail(email, "New Batch Product Right", batchProductRightsMailMail);
+            localEmailService.sendTemplateEmail(email, "Batch Product Right", batchProductRightsMailMail);
             return true;
         } catch (MessagingException | UnsupportedEncodingException e) {
             localLogger.error(e.getCause().getMessage());
             e.printStackTrace();
             return false;
         }
+
+    }
+
+    @Override
+    public void deleteByBatchProductIdAndUserId(int batchProductId, int userId) {
+        batchProductRightService.deleteByBatchProductIdAndUserId(batchProductId, userId);
 
     }
 }

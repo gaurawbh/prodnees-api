@@ -1,14 +1,14 @@
 package com.prodnees.domain.rels;
 
-import com.prodnees.domain.rels.id.ProductRightsId;
+import com.prodnees.domain.rels.id.ProductRightId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import java.io.Serializable;
 
 @Entity
-@IdClass(ProductRightsId.class)
-public class ProductRights implements Serializable {
+@IdClass(ProductRightId.class)
+public class ProductRight implements Serializable {
     @Id
     private int productId;
     @Id
@@ -19,7 +19,7 @@ public class ProductRights implements Serializable {
         return productId;
     }
 
-    public ProductRights setProductId(int productId) {
+    public ProductRight setProductId(int productId) {
         this.productId = productId;
         return this;
     }
@@ -28,7 +28,7 @@ public class ProductRights implements Serializable {
         return userId;
     }
 
-    public ProductRights setUserId(int ownerId) {
+    public ProductRight setUserId(int ownerId) {
         this.userId = ownerId;
         return this;
     }
@@ -37,7 +37,7 @@ public class ProductRights implements Serializable {
         return objectRightType;
     }
 
-    public ProductRights setObjectRightsType(ObjectRightType objectRightType) {
+    public ProductRight setObjectRightsType(ObjectRightType objectRightType) {
         this.objectRightType = objectRightType;
         return this;
     }

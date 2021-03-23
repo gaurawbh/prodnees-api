@@ -2,7 +2,7 @@ package com.prodnees.domain.rels.id;
 
 import java.io.Serializable;
 
-public class ProductRightsId implements Serializable {
+public class ProductRightId implements Serializable {
     private int productId;
     private int userId;
 
@@ -10,7 +10,7 @@ public class ProductRightsId implements Serializable {
         return productId;
     }
 
-    public ProductRightsId setProductId(int productId) {
+    public ProductRightId setProductId(int productId) {
         this.productId = productId;
         return this;
     }
@@ -19,7 +19,7 @@ public class ProductRightsId implements Serializable {
         return userId;
     }
 
-    public ProductRightsId setUserId(int userId) {
+    public ProductRightId setUserId(int userId) {
         this.userId = userId;
         return this;
     }

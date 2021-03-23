@@ -7,7 +7,7 @@ import java.util.Optional;
 public interface BatchProductRightService {
     BatchProductRight save(BatchProductRight batchProductRight);
 
-    Optional<BatchProductRight> findByBatchProductIdAndOwnerId(int batchProductId, int ownerId);
+    Optional<BatchProductRight> findByBatchProductIdAndUserId(int batchProductId, int ownerId);
 
     List<BatchProductRight> getAllByBatchProductId(int batchProductId);
 
@@ -17,4 +17,5 @@ public interface BatchProductRightService {
 
     boolean hasBatchProductReaderRights(int batchProductId, int readerId);
 
+    void deleteByBatchProductIdAndUserId(int batchProductId, int userId);
 }

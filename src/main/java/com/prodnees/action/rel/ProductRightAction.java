@@ -1,6 +1,6 @@
 package com.prodnees.action.rel;
 
-import com.prodnees.domain.rels.ProductRights;
+import com.prodnees.domain.rels.ProductRight;
 import com.prodnees.dto.ProductRightDto;
 import com.prodnees.model.ProductRightModel;
 import java.util.List;
@@ -10,15 +10,17 @@ public interface ProductRightAction {
 
     ProductRightModel save(ProductRightDto productRightDto);
 
-    ProductRights save(ProductRights productRights);
+    ProductRight save(ProductRight productRight);
 
     boolean existsByProductIdAndUserId(int productId, int userId);
 
-    Optional<ProductRights> findByProductIdAndUserId(int productId, int userId);
+    Optional<ProductRight> findByProductIdAndUserId(int productId, int userId);
 
-    List<ProductRights> getAllByUserId(int userId);
+    List<ProductRight> getAllByUserId(int userId);
 
-    List<ProductRights> getAllByProductId(int productId);
+    List<ProductRight> getAllByProductId(int productId);
 
     boolean sendNewProductRightsEmail(String email);
+
+    void deleteByProductIdAndUserId(int productId, int userId);
 }
