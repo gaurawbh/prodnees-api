@@ -2,6 +2,7 @@ package com.prodnees.action;
 
 import com.prodnees.domain.BatchProduct;
 import com.prodnees.model.BatchProductModel;
+
 import java.util.List;
 
 public interface BatchProductAction {

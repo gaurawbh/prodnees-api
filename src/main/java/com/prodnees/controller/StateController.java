@@ -9,18 +9,12 @@ import com.prodnees.util.MapperUtil;
 import com.prodnees.web.response.LocalResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+
 import static com.prodnees.web.response.LocalResponse.configure;
 
 @RestController
@@ -58,7 +52,7 @@ public class StateController {
         return configure();
     }
 
-    @GetMapping("/")
+    @GetMapping("/states")
     public ResponseEntity<?> get(@RequestParam Optional<Integer> id, HttpServletRequest servletRequest) {
         int userId = userValidator.extractUserId(servletRequest);
         AtomicReference<Object> atomicReference = new AtomicReference<>();
@@ -68,13 +62,13 @@ public class StateController {
         return configure();
     }
 
-    @PutMapping("/")
+    @PutMapping("/state")
     public ResponseEntity<?> update(@Validated @RequestBody Object obj, HttpServletRequest servletRequest) {
         int userId = userValidator.extractUserId(servletRequest);
         return LocalResponse.configure();
     }
 
-    @DeleteMapping("/")
+    @DeleteMapping("/state")
     public ResponseEntity<?> delete(@RequestParam int id, HttpServletRequest servletRequest) {
         int userId = userValidator.extractUserId(servletRequest);
         return configure();

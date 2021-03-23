@@ -1,6 +1,7 @@
 package com.prodnees.dto;
 
 import com.prodnees.config.constants.LocalConstants;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 

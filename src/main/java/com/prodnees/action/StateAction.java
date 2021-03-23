@@ -1,6 +1,8 @@
 package com.prodnees.action;
 
 import com.prodnees.domain.State;
+import com.prodnees.dto.StateDto;
+
 import java.util.List;
 
 public interface StateAction {
@@ -9,6 +11,8 @@ public interface StateAction {
 
     State save(State state);
 
+    State save(StateDto stateDto);
+
     State getById(int id);
 
     State getByName(String name);
@@ -16,4 +20,12 @@ public interface StateAction {
     List<State> getAllByBatchProductId(int batchProductId);
 
     List<State> getAllByBatchProductIdAndComplete(int batchProductId, boolean isComplete);
+
+    /**
+     * Deleting a {@link State} should connect its head State and it tail State.
+     * <p>Only Owner should be allowed to delete a State</p>
+     *
+     * @param id
+     */
+    void deleteById(int id);
 }

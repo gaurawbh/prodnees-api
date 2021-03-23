@@ -2,6 +2,7 @@ package com.prodnees.dao;
 
 import com.prodnees.domain.State;
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.List;
 
 public interface StateDao extends JpaRepository<State, Integer> {

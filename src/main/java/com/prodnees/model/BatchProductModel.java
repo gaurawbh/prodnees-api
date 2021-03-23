@@ -2,6 +2,7 @@ package com.prodnees.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.prodnees.domain.BatchProductStatus;
+
 import java.time.LocalDate;
 import java.util.List;
 

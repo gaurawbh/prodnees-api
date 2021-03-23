@@ -4,6 +4,7 @@ import com.prodnees.dao.StateDao;
 import com.prodnees.domain.State;
 import com.prodnees.service.StateService;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -42,5 +43,10 @@ public class StateServiceImpl implements StateService {
     @Override
     public List<State> getAllByBatchProductIdAndComplete(int batchProductId, boolean isComplete) {
         return stateDao.getAllByBatchProductIdAndComplete(batchProductId, isComplete);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        stateDao.deleteById(id);
     }
 }

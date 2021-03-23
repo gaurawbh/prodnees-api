@@ -1,6 +1,7 @@
 package com.prodnees.service;
 
 import com.prodnees.domain.State;
+
 import java.util.List;
 
 public interface StateService {
@@ -17,4 +18,5 @@ public interface StateService {
 
     List<State> getAllByBatchProductIdAndComplete(int batchProductId, boolean isComplete);
 
+    void deleteById(int id);
 }
