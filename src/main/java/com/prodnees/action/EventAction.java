@@ -1,6 +1,7 @@
 package com.prodnees.action;
 
 import com.prodnees.domain.Event;
+
 import java.util.List;
 
 public interface EventAction {

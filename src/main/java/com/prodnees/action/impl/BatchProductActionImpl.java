@@ -10,6 +10,7 @@ import com.prodnees.service.rels.BatchProductRightService;
 import com.prodnees.service.rels.ProductRightsService;
 import com.prodnees.util.MapperUtil;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 

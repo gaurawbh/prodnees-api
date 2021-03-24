@@ -16,7 +16,6 @@ import com.prodnees.model.UserModel;
 import com.prodnees.service.rels.AssociatesService;
 import com.prodnees.web.exception.NeesNotFoundException;
 import com.prodnees.web.response.LocalResponse;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -24,7 +23,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import javax.annotation.processing.SupportedOptions;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.Optional;

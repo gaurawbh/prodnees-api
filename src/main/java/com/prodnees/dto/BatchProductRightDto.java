@@ -2,6 +2,7 @@ package com.prodnees.dto;
 
 import com.prodnees.config.constants.LocalConstants;
 import com.prodnees.domain.rels.ObjectRightType;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;

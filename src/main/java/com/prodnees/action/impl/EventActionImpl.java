@@ -4,6 +4,7 @@ import com.prodnees.action.EventAction;
 import com.prodnees.domain.Event;
 import com.prodnees.service.EventService;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 @Service
 public class EventActionImpl implements EventAction {
