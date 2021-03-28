@@ -24,11 +24,6 @@ public class UserServiceImpl implements UserService {
         return userDao.existsByEmail(email);
     }
 
-    /**
-     * todo encrypt user password before saving the user
-     * @param user
-     * @return
-     */
     @Override
     public User save(User user) {
         return userDao.save(user);

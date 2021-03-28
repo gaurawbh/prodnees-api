@@ -3,7 +3,7 @@ package com.prodnees.filter;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
-public interface UserValidator {
+public interface RequestValidator {
 
     boolean isValidPhoneNumber(String username);
 
@@ -16,9 +16,5 @@ public interface UserValidator {
     LocalDateTime extractTokenExpiryDatetime(HttpServletRequest request);
 
     boolean hasUsedTempPassword(HttpServletRequest servletRequest);
-
-    boolean isValidEmail(String email);
-
-    boolean isSecureRequest(String url);
 
 }

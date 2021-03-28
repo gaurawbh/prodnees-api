@@ -3,16 +3,15 @@ package com.prodnees.filter;
 import com.prodnees.service.jwt.JwtService;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Date;
 
 @Service
-public class UserValidatorImpl implements UserValidator {
+public class RequestValidatorImpl implements RequestValidator {
     private final JwtService jwtService;
 
-    public UserValidatorImpl(JwtService jwtService) {
+    public RequestValidatorImpl(JwtService jwtService) {
         this.jwtService = jwtService;
     }
 
@@ -56,41 +55,34 @@ public class UserValidatorImpl implements UserValidator {
 
     @Override
     public boolean hasUsedTempPassword(HttpServletRequest servletRequest) {
-            return jwtService.hasUsedTempPassword(extractToken(servletRequest));
+        return jwtService.hasUsedTempPassword(extractToken(servletRequest));
     }
 
     /**
      * CHARACTER CLASSES
-     * [abc]	        simple, matches a or b, or c
-     * [\^abc]	        negation, matches everything except a, b, or c
-     * [a-c]	        range, matches a or b, or c
-     * [a-c[f-h]]	    union, matches a, b, c, f, g, h
-     * [a-c&&[b-c]]	    intersection, matches b or c
-     * [a-c&&[\^b-c]]	subtraction, matches only a
-     * **********************************************
-     * PREDEFINED CHARACTER CLASSES
-     * .	Any character
-     * \d	A digit: [0-9]
-     * \D	A non-digit: [\^0-9]
-     * \s	A whitespace character: [ \t\n\x0B\f\r]
-     * \S	A non-whitespace character: [\^\s]
-     * \w	A word character: [a-zA-Z_0-9]
-     * \W	A non-word character: [\^\w]
+     * <p>[abc]	        simple, matches a or b, or c</p>
+     * <p>[\^abc]	        negation, matches everything except a, b, or c</p>
+     * <p>[a-c]	        range, matches a or b, or c</p>
+     * <p>[a-c[f-h]]	    union, matches a, b, c, f, g, h</p>
+     * <p>[a-c&&[b-c]]	    intersection, matches b or c</p>
+     * <p>[a-c&&[\^b-c]]	subtraction, matches only a</p>
+     * <p>**********************************************</p>
+     * <p>PREDEFINED CHARACTER CLASSES</p>
+     * <p>.	Any character</p>
+     * <p>\d	A digit: [0-9]</p>
+     * <p>\D	A non-digit: [\^0-9]</p>
+     * <p>\s	A whitespace character: [ \t\n\x0B\f\r]</p>
+     * <p>\S	A non-whitespace character: [\^\s]</p>
+     * <p>\w	A word character: [a-zA-Z_0-9]</p>
+     * <p>\W	A non-word character: [\^\w]</p>
      *
      * @param email
      * @return boolean
      */
     public boolean isValidEmail(String email) {
         String regex = "^[\\w-_.+]*[\\w-_.]@([\\w]+\\.)+[\\w]+[\\w]$";
-//        String regex_1 = "^[\\w-_.+]*[\\w-_.]@([\\w]+\\.)+[\\w]$";
         return email.matches(regex);
     }
-
-    @Override
-    public boolean isSecureRequest(String url) {
-        return url.startsWith("/secure");
-    }
-
 
 }
 

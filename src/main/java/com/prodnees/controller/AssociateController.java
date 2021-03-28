@@ -10,7 +10,7 @@ import com.prodnees.domain.rels.Associates;
 import com.prodnees.dto.AssociateInvitationActionDto;
 import com.prodnees.dto.AssociateInvitationDto;
 import com.prodnees.dto.UserRegistrationDto;
-import com.prodnees.filter.UserValidator;
+import com.prodnees.filter.RequestValidator;
 import com.prodnees.model.AssociateModel;
 import com.prodnees.model.UserModel;
 import com.prodnees.service.rels.AssociatesService;
@@ -20,15 +20,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.NoHandlerFoundException;
-
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-
 import static com.prodnees.config.constants.APIErrors.OBJECT_NOT_FOUND;
 import static com.prodnees.web.response.LocalResponse.configure;
 
@@ -41,16 +48,16 @@ import static com.prodnees.web.response.LocalResponse.configure;
 @Transactional
 public class AssociateController {
     private final AssociatesService associatesService;
-    private final UserValidator userValidator;
+    private final RequestValidator requestValidator;
     private final UserAction userAction;
     private final AssociateInvitationAction associateInvitationAction;
 
     public AssociateController(AssociatesService associatesService,
-                               UserValidator userValidator,
+                               RequestValidator requestValidator,
                                UserAction userAction,
                                AssociateInvitationAction associateInvitationAction) {
         this.associatesService = associatesService;
-        this.userValidator = userValidator;
+        this.requestValidator = requestValidator;
         this.userAction = userAction;
         this.associateInvitationAction = associateInvitationAction;
     }
@@ -66,7 +73,7 @@ public class AssociateController {
     public ResponseEntity<?> getAssociates(@RequestParam Optional<Integer> id,
                                            @RequestParam Optional<Integer> email,
                                            HttpServletRequest servletRequest) {
-        int adminId = userValidator.extractUserId(servletRequest);
+        int adminId = requestValidator.extractUserId(servletRequest);
         AtomicReference<Object> modelAtomicReference = new AtomicReference<>();
         id.ifPresentOrElse(integer -> {
             Assert.isTrue(associatesService.findByAdminIdAndAssociateId(adminId, integer).isPresent(), APIErrors.USER_NOT_FOUND.getMessage());
@@ -89,7 +96,7 @@ public class AssociateController {
     public ResponseEntity<?> searchAssociate(@RequestParam String email,
                                              HttpServletRequest servletRequest) {
         Assert.isTrue(userAction.existsByEmail(email), APIErrors.USER_NOT_FOUND.getMessage());
-        int adminId = userValidator.extractUserId(servletRequest);
+        int adminId = requestValidator.extractUserId(servletRequest);
         AtomicReference<Object> modelAtomicReference = new AtomicReference<>();
         Optional<Associates> associatesOptional = associatesService.findByAdminIdAndAssociateEmail(adminId, email);
         associatesOptional.ifPresentOrElse(
@@ -118,8 +125,8 @@ public class AssociateController {
     @PostMapping("/associate-invitation")
     public ResponseEntity<?> inviteAssociate(@Validated @RequestBody AssociateInvitationDto dto,
                                              HttpServletRequest servletRequest) {
-        String invitorEmail = userValidator.extractUserEmail(servletRequest);
-        int invitorId = userValidator.extractUserId(servletRequest);
+        String invitorEmail = requestValidator.extractUserEmail(servletRequest);
+        int invitorId = requestValidator.extractUserId(servletRequest);
         Optional<AssociateInvitation> associateInvitationOpt = associateInvitationAction.findByInvitorEmailAndInviteeEmail(invitorEmail, dto.getInviteeEmail());
         AtomicBoolean atomicBoolean = new AtomicBoolean(true);
         associateInvitationOpt.ifPresentOrElse(associateInvitation -> {
@@ -180,7 +187,7 @@ public class AssociateController {
     @GetMapping("/associates-invitations/{path}")
     public ResponseEntity<?> getInvitationListByyInvitor(@PathVariable String path,
                                                          HttpServletRequest servletRequest) throws NoHandlerFoundException {
-        int userId = userValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId(servletRequest);
         switch (path) {
             case "invites":
                 return LocalResponse.configure(associateInvitationAction.getAllByInvitorId(userId));
@@ -202,7 +209,7 @@ public class AssociateController {
     @PutMapping("/associate-invitation/action")
     public ResponseEntity<?> actionInvitationRequest(@Validated @RequestBody AssociateInvitationActionDto dto,
                                                      HttpServletRequest servletRequest) {
-        String inviteeEmail = userValidator.extractUserEmail(servletRequest);
+        String inviteeEmail = requestValidator.extractUserEmail(servletRequest);
         Optional<AssociateInvitation> associateInvitationOpt = associateInvitationAction.findByInvitorEmailAndInviteeEmail(dto.getInvitorEmail(), inviteeEmail);
         Assert.isTrue(associateInvitationOpt.isPresent(), OBJECT_NOT_FOUND.getMessage());
         associateInvitationOpt.get().setAccepted(dto.isAccept())
@@ -227,7 +234,7 @@ public class AssociateController {
     @DeleteMapping("/associate-invitation")
     public ResponseEntity<?> delete(@RequestParam String inviteeEmail,
                                     HttpServletRequest servletRequest) {
-        String invitorEmail = userValidator.extractUserEmail(servletRequest);
+        String invitorEmail = requestValidator.extractUserEmail(servletRequest);
         Optional<AssociateInvitation> associateInvitationOpt = associateInvitationAction.findByInvitorEmailAndInviteeEmail(invitorEmail, inviteeEmail);
         Assert.isTrue(associateInvitationOpt.isPresent(), OBJECT_NOT_FOUND.getMessage());
         boolean isSuccess = associateInvitationAction.deleteByInvitorEmailAndInviteeEmail(invitorEmail, inviteeEmail);
