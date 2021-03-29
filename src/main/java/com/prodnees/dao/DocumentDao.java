@@ -8,4 +8,6 @@ public interface DocumentDao extends JpaRepository<Document, Integer> {
     Document getById(int id);
 
     Document getByName(String name);
+
+    boolean existsByName(String name);
 }

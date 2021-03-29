@@ -5,6 +5,7 @@ import com.prodnees.action.rel.BatchProductRightAction;
 import com.prodnees.filter.RequestValidator;
 import com.prodnees.web.response.LocalResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,6 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @RestController
 @RequestMapping("/secure")
 @CrossOrigin
+@Transactional
 public class EventController {
 
     private final RequestValidator requestValidator;
@@ -36,14 +38,14 @@ public class EventController {
         this.batchProductRightAction = batchProductRightAction;
     }
 
-    @PostMapping("/state")
+    @PostMapping("/event")
     public ResponseEntity<?> save(@Validated @RequestBody Object dto,
                                   HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
         return LocalResponse.configure();
     }
 
-    @GetMapping("/states")
+    @GetMapping("/events")
     public ResponseEntity<?> get(@RequestParam Optional<Integer> id,
                                  HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
@@ -54,13 +56,13 @@ public class EventController {
         return LocalResponse.configure();
     }
 
-    @PutMapping("/state")
+    @PutMapping("/event")
     public ResponseEntity<?> update(@Validated @RequestBody Object obj, HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
         return LocalResponse.configure();
     }
 
-    @DeleteMapping("/state")
+    @DeleteMapping("/event")
     public ResponseEntity<?> delete(@RequestParam int id,
                                     HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);

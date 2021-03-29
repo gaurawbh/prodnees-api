@@ -2,14 +2,14 @@ package com.prodnees.domain.rels.id;
 
 import java.io.Serializable;
 
-public class DocumentRightsId implements Serializable {
+public class DocumentRightId implements Serializable {
     private int documentId;
     private int userId;
 
-    public DocumentRightsId() {
+    public DocumentRightId() {
     }
 
-    public DocumentRightsId(int documentId, int userId) {
+    public DocumentRightId(int documentId, int userId) {
         this.documentId = documentId;
         this.userId = userId;
     }
@@ -18,7 +18,7 @@ public class DocumentRightsId implements Serializable {
         return documentId;
     }
 
-    public DocumentRightsId setDocumentId(int documentId) {
+    public DocumentRightId setDocumentId(int documentId) {
         this.documentId = documentId;
         return this;
     }
@@ -27,7 +27,7 @@ public class DocumentRightsId implements Serializable {
         return userId;
     }
 
-    public DocumentRightsId setUserId(int userId) {
+    public DocumentRightId setUserId(int userId) {
         this.userId = userId;
         return this;
     }

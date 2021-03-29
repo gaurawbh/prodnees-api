@@ -10,4 +10,9 @@ public interface DocumentService {
 
     Document getByName(String name);
 
+    boolean existsByName(String name);
+
+    boolean existsById(int id);
+
+    void deleteById(int id);
 }

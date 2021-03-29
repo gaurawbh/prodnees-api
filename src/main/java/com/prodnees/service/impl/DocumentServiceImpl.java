@@ -27,4 +27,19 @@ public class DocumentServiceImpl implements DocumentService {
     public Document getByName(String name) {
         return documentDao.getByName(name);
     }
+
+    @Override
+    public boolean existsByName(String name) {
+        return documentDao.existsByName(name);
+    }
+
+    @Override
+    public boolean existsById(int id) {
+        return documentDao.existsById(id);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        documentDao.deleteById(id);
+    }
 }
