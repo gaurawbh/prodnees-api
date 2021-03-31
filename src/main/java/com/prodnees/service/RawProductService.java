@@ -1,6 +1,7 @@
 package com.prodnees.service;
 
 import com.prodnees.domain.RawProduct;
+import java.util.List;
 
 public interface RawProductService {
 
@@ -10,4 +11,5 @@ public interface RawProductService {
 
     RawProduct getByName(String name);
 
+    List<RawProduct> getAllByStateId(int id);
 }

@@ -6,10 +6,12 @@ import com.prodnees.domain.ApprovalDocumentState;
  * Document that needs to be approved
  * Used in States where a State may not be complete until a Document has been approved
  */
-public class ApprovalDocumentModel {
+public class StateApprovalDocumentModel {
     private int id;
     private int approverId;
+    private String approverEmail;
     private String name;
+    private int documentId;
     private String documentUrl;
     private String documentDownloadUrl;
     private ApprovalDocumentState approvalDocumentState;
@@ -18,7 +20,7 @@ public class ApprovalDocumentModel {
         return id;
     }
 
-    public ApprovalDocumentModel setId(int id) {
+    public StateApprovalDocumentModel setId(int id) {
         this.id = id;
         return this;
     }
@@ -27,8 +29,26 @@ public class ApprovalDocumentModel {
         return approverId;
     }
 
-    public ApprovalDocumentModel setApproverId(int approverId) {
+    public StateApprovalDocumentModel setApproverId(int approverId) {
         this.approverId = approverId;
+        return this;
+    }
+
+    public String getApproverEmail() {
+        return approverEmail;
+    }
+
+    public StateApprovalDocumentModel setApproverEmail(String approverEmail) {
+        this.approverEmail = approverEmail;
+        return this;
+    }
+
+    public int getDocumentId() {
+        return documentId;
+    }
+
+    public StateApprovalDocumentModel setDocumentId(int documentId) {
+        this.documentId = documentId;
         return this;
     }
 
@@ -36,7 +56,7 @@ public class ApprovalDocumentModel {
         return name;
     }
 
-    public ApprovalDocumentModel setName(String name) {
+    public StateApprovalDocumentModel setName(String name) {
         this.name = name;
         return this;
     }
@@ -45,7 +65,7 @@ public class ApprovalDocumentModel {
         return documentDownloadUrl;
     }
 
-    public ApprovalDocumentModel setDocumentDownloadUrl(String documentDownloadUrl) {
+    public StateApprovalDocumentModel setDocumentDownloadUrl(String documentDownloadUrl) {
         this.documentDownloadUrl = documentDownloadUrl;
         return this;
     }
@@ -54,7 +74,7 @@ public class ApprovalDocumentModel {
         return documentUrl;
     }
 
-    public ApprovalDocumentModel setDocumentUrl(String documentUrl) {
+    public StateApprovalDocumentModel setDocumentUrl(String documentUrl) {
         this.documentUrl = documentUrl;
         return this;
     }
@@ -63,7 +83,7 @@ public class ApprovalDocumentModel {
         return approvalDocumentState;
     }
 
-    public ApprovalDocumentModel setApprovalDocumentState(ApprovalDocumentState approvalDocumentState) {
+    public StateApprovalDocumentModel setApprovalDocumentState(ApprovalDocumentState approvalDocumentState) {
         this.approvalDocumentState = approvalDocumentState;
         return this;
     }

@@ -4,16 +4,16 @@ import java.util.List;
 
 /**
  * Every Product Batch has a state.
- * A Product Batch must have at least two states:
- * * Initial State [A Batch Production Start Point]
- * * Final State [A Batch Production Has Completed]
+ * <p>A Product Batch must have at least two states:</p>
+ * <p> Initial State [A Batch Production Start Point]</p>
+ * <p> Final State [A Batch Production Has Completed]</p>
  */
 public class StateModel {
     private int id;
     private int batchProductId;
     private String name;
     private String description;
-    List<ApprovalDocumentModel> approvalDocuments;
+    List<StateApprovalDocumentModel> approvalDocuments;
     List<EventModel> eventModelList;
     List<RawProductModel> rawProductModelList;
     private boolean complete;
@@ -58,11 +58,11 @@ public class StateModel {
         return this;
     }
 
-    public List<ApprovalDocumentModel> getApprovalDocuments() {
+    public List<StateApprovalDocumentModel> getApprovalDocuments() {
         return approvalDocuments;
     }
 
-    public StateModel setApprovalDocuments(List<ApprovalDocumentModel> approvalDocuments) {
+    public StateModel setApprovalDocuments(List<StateApprovalDocumentModel> approvalDocuments) {
         this.approvalDocuments = approvalDocuments;
         return this;
     }

@@ -1,37 +1,44 @@
-package com.prodnees.domain.rels;
+package com.prodnees.domain;
 
-import com.prodnees.domain.ApprovalDocumentState;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class StateApprovalDocument {
-
+public class BatchProductApprovalDocument {
     @Id
     @GeneratedValue
     private int id;
-    private int stateId;
+    private int batchProductId;
     private int documentId;
     private ApprovalDocumentState state;
     private int approverId;
     private String approverEmail;
 
+    public String getApproverEmail() {
+        return approverEmail;
+    }
+
+    public BatchProductApprovalDocument setApproverEmail(String approverEmail) {
+        this.approverEmail = approverEmail;
+        return this;
+    }
+
     public int getId() {
         return id;
     }
 
-    public StateApprovalDocument setId(int id) {
+    public BatchProductApprovalDocument setId(int id) {
         this.id = id;
         return this;
     }
 
-    public int getStateId() {
-        return stateId;
+    public int getBatchProductId() {
+        return batchProductId;
     }
 
-    public StateApprovalDocument setStateId(int stateId) {
-        this.stateId = stateId;
+    public BatchProductApprovalDocument setBatchProductId(int eventId) {
+        this.batchProductId = eventId;
         return this;
     }
 
@@ -39,7 +46,7 @@ public class StateApprovalDocument {
         return documentId;
     }
 
-    public StateApprovalDocument setDocumentId(int documentId) {
+    public BatchProductApprovalDocument setDocumentId(int documentId) {
         this.documentId = documentId;
         return this;
     }
@@ -48,7 +55,7 @@ public class StateApprovalDocument {
         return state;
     }
 
-    public StateApprovalDocument setState(ApprovalDocumentState state) {
+    public BatchProductApprovalDocument setState(ApprovalDocumentState state) {
         this.state = state;
         return this;
     }
@@ -57,17 +64,8 @@ public class StateApprovalDocument {
         return approverId;
     }
 
-    public StateApprovalDocument setApproverId(int approverId) {
+    public BatchProductApprovalDocument setApproverId(int approverId) {
         this.approverId = approverId;
-        return this;
-    }
-
-    public String getApproverEmail() {
-        return approverEmail;
-    }
-
-    public StateApprovalDocument setApproverEmail(String approverEmail) {
-        this.approverEmail = approverEmail;
         return this;
     }
 }

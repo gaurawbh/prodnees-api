@@ -14,7 +14,7 @@ public enum APIErrors {
     INVALID_PASSWORD(16, "password is a required field & password must be at least 6 characters long"),
     INVALID_USER_REGISTRATION_MODEL(19, "required properties missing, firstName, lastName, email, designationId, role are required properties"),
     ACCESS_DENIED(21, "you do not have access to this resource"),
-    UPDATE_DENIED(22,"you may not have enough permission to update / delete this resource"),
+    UPDATE_DENIED(22, "you may not have enough permission to update / delete this resource"),
     USER_NOT_ENABLED(23, "user not enabled"),
     EMAIL_NOT_FOUND(24, "email not found: %s"),
     OTP_NOT_FOUND(25, "otp not found"),
@@ -23,7 +23,8 @@ public enum APIErrors {
     INVALID_JWT_TOKEN(30, "invalid or missing token"),
     PROTECTED_URL(31, "attempt to access the protected url"),
     TEMP_PASSWORD_UNCHANGED(32, "user cannot access the app without changing the temp password, /secure/user/temp-password"),
-    INVALID_REQUEST_BODY(42, "invalid request body"),
+    BATCH_PRODUCT_NOT_FOUND(33, "batch product not found"),
+    INVALID_REQUEST_BODY(41, "invalid request body"),
     OBJECT_NOT_FOUND(42, "object does not exist"),
     REFERENCED_OBJECT(43, "object cannot be deleted, the object is in use(referenced by another object)"),
     DUPLICATE_DATA(44, "duplicate row for object %s"),
@@ -32,7 +33,7 @@ public enum APIErrors {
     private final int code;
     private final String message;
 
-    APIErrors(int code, String message) {
+     APIErrors(int code, String message) {
         this.code = code;
         this.message = message;
     }

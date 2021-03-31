@@ -2,14 +2,14 @@ package com.prodnees.model;
 
 public class BatchProductApprovalDocumentModel {
     private int batchProductId;
-    private ApprovalDocumentModel approvalDocumentModel;
+    private StateApprovalDocumentModel stateApprovalDocumentModel;
 
-    public ApprovalDocumentModel getApprovalDocumentModel() {
-        return approvalDocumentModel;
+    public StateApprovalDocumentModel getApprovalDocumentModel() {
+        return stateApprovalDocumentModel;
     }
 
-    public BatchProductApprovalDocumentModel setApprovalDocumentModel(ApprovalDocumentModel approvalDocumentModel) {
-        this.approvalDocumentModel = approvalDocumentModel;
+    public BatchProductApprovalDocumentModel setApprovalDocumentModel(StateApprovalDocumentModel stateApprovalDocumentModel) {
+        this.stateApprovalDocumentModel = stateApprovalDocumentModel;
         return this;
     }
 

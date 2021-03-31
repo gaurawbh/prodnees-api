@@ -2,14 +2,14 @@ package com.prodnees.action;
 
 import com.prodnees.domain.State;
 import com.prodnees.dto.StateDto;
-
+import com.prodnees.model.StateModel;
 import java.util.List;
 
 public interface StateAction {
 
     boolean existsByBatchProductId(int batchProductId);
 
-    State save(State state);
+    StateModel save(State state);
 
     State save(StateDto stateDto);
 
