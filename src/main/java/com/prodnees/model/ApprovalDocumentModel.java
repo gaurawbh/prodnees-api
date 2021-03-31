@@ -9,8 +9,9 @@ import com.prodnees.domain.ApprovalDocumentState;
 public class ApprovalDocumentModel {
     private int id;
     private int approverId;
-    private DocumentModel document;
+    private String name;
     private String documentUrl;
+    private String documentDownloadUrl;
     private ApprovalDocumentState approvalDocumentState;
 
     public int getId() {
@@ -31,12 +32,21 @@ public class ApprovalDocumentModel {
         return this;
     }
 
-    public DocumentModel getDocument() {
-        return document;
+    public String getName() {
+        return name;
     }
 
-    public ApprovalDocumentModel setDocument(DocumentModel document) {
-        this.document = document;
+    public ApprovalDocumentModel setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public String getDocumentDownloadUrl() {
+        return documentDownloadUrl;
+    }
+
+    public ApprovalDocumentModel setDocumentDownloadUrl(String documentDownloadUrl) {
+        this.documentDownloadUrl = documentDownloadUrl;
         return this;
     }
 

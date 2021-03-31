@@ -3,7 +3,6 @@ package com.prodnees.controller;
 import com.prodnees.action.DocumentAction;
 import com.prodnees.action.rel.DocumentRightAction;
 import com.prodnees.config.constants.APIErrors;
-import com.prodnees.domain.ApprovalDocument;
 import com.prodnees.domain.Document;
 import com.prodnees.domain.rels.DocumentRight;
 import com.prodnees.domain.rels.ObjectRightType;

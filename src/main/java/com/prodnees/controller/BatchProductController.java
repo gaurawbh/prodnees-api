@@ -4,19 +4,28 @@ import com.prodnees.action.BatchProductAction;
 import com.prodnees.action.EventAction;
 import com.prodnees.action.StateAction;
 import com.prodnees.action.rel.BatchProductRightAction;
+import com.prodnees.action.rel.DocumentRightAction;
 import com.prodnees.config.constants.APIErrors;
+import com.prodnees.domain.ApprovalDocumentState;
 import com.prodnees.domain.BatchProduct;
 import com.prodnees.domain.BatchProductStatus;
+import com.prodnees.domain.rels.Associates;
+import com.prodnees.domain.rels.BatchProductApprovalDocument;
 import com.prodnees.domain.rels.BatchProductRight;
+import com.prodnees.domain.rels.DocumentRight;
 import com.prodnees.domain.rels.ObjectRightType;
+import com.prodnees.dto.BatchProductApprovalDocumentDto;
 import com.prodnees.dto.BatchProductDto;
 import com.prodnees.dto.BatchProductRightDto;
 import com.prodnees.filter.RequestValidator;
 import com.prodnees.model.BatchProductModel;
 import com.prodnees.service.rels.AssociatesService;
+import com.prodnees.service.rels.BatchProductApprovalDocumentService;
+import com.prodnees.util.LocalAssert;
 import com.prodnees.util.MapperUtil;
 import com.prodnees.util.ValidatorUtil;
 import com.prodnees.web.exception.NeesNotFoundException;
+import com.prodnees.web.response.LocalResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -53,20 +62,25 @@ public class BatchProductController {
     private final StateAction stateAction;
     private final EventAction eventAction;
     private final AssociatesService associatesService;
+    private final DocumentRightAction documentRightAction;
+    private final BatchProductApprovalDocumentService batchProductApprovalDocumentService;
 
     public BatchProductController(RequestValidator requestValidator,
                                   BatchProductAction batchProductAction,
-                                  BatchProductRightAction
-                                          batchProductRightAction,
+                                  BatchProductRightAction batchProductRightAction,
                                   StateAction stateAction,
                                   EventAction eventAction,
-                                  AssociatesService associatesService) {
+                                  AssociatesService associatesService,
+                                  DocumentRightAction documentRightAction,
+                                  BatchProductApprovalDocumentService batchProductApprovalDocumentService) {
         this.requestValidator = requestValidator;
         this.batchProductAction = batchProductAction;
         this.batchProductRightAction = batchProductRightAction;
         this.stateAction = stateAction;
         this.eventAction = eventAction;
         this.associatesService = associatesService;
+        this.documentRightAction = documentRightAction;
+        this.batchProductApprovalDocumentService = batchProductApprovalDocumentService;
     }
 
     /**
@@ -230,6 +244,42 @@ public class BatchProductController {
                 "you cannot remove another owner's batch product rights");
         batchProductRightAction.deleteByBatchProductIdAndUserId(batchProductId, userId);
         return configure();
+    }
+
+    /**
+     * <p>Validate that user and approver are Associates</p>
+     * <p>Validate that user has right to Document</p>
+     * <p>Validate that user has right to Product</p>
+     *
+     * @param dto
+     * @param servletRequest
+     * @return
+     */
+    @PostMapping("/batch-product/approval-document")
+    public ResponseEntity<?> addApprovalDocument(@RequestBody @Validated BatchProductApprovalDocumentDto dto,
+                                                 HttpServletRequest servletRequest) {
+
+        int userId = requestValidator.extractUserId(servletRequest);
+        Optional<Associates> associatesOptional = associatesService.findByAdminIdAndAssociateEmail(userId, dto.getApproverEmail());
+        LocalAssert.isTrue(associatesOptional.isPresent(), "approver must be an associate.");
+        LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(dto.getDocumentId(), userId), "document not found");
+        LocalAssert.isTrue(batchProductRightAction.hasBatchProductEditorRights(dto.getBatchProductId(), userId), OBJECT_NOT_FOUND);
+        BatchProductApprovalDocument batchProductApprovalDocument = new BatchProductApprovalDocument()
+                .setBatchProductId(dto.getBatchProductId())
+                .setDocumentId(dto.getDocumentId())
+                .setApproverId(associatesOptional.get().getAssociateId())
+                .setApproverEmail(associatesOptional.get().getAssociateEmail())
+                .setState(ApprovalDocumentState.OPEN);
+
+        batchProductApprovalDocumentService.save(batchProductApprovalDocument);
+        DocumentRight documentRight = new DocumentRight()
+                .setUserId(associatesOptional.get().getAssociateId())
+                .setDocumentId(dto.getDocumentId())
+                .setDocumentRightsType(ObjectRightType.EDITOR);
+        documentRightAction.save(documentRight);
+
+        return LocalResponse.configure();
+
     }
 
 

@@ -4,7 +4,6 @@ import com.prodnees.dao.rels.StateApprovalDocumentDao;
 import com.prodnees.domain.rels.StateApprovalDocument;
 import com.prodnees.service.rels.StateApprovalDocumentService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -22,7 +21,7 @@ public class StateApprovalDocumentServiceImpl implements StateApprovalDocumentSe
 
     @Override
     public Optional<StateApprovalDocument> findByStateIdAndApprovalDocumentId(int stateId, int approvalDocumentId) {
-        return stateApprovalDocumentDao.findByStateIdAndApprovalDocumentId(stateId, approvalDocumentId);
+        return stateApprovalDocumentDao.findByStateIdAndDocumentId(stateId, approvalDocumentId);
     }
 
     @Override
@@ -32,6 +31,6 @@ public class StateApprovalDocumentServiceImpl implements StateApprovalDocumentSe
 
     @Override
     public List<StateApprovalDocument> getAllByApprovalDocumentId(int approvalDocumentId) {
-        return stateApprovalDocumentDao.getAllByApprovalDocumentId(approvalDocumentId);
+        return stateApprovalDocumentDao.getAllByDocumentId(approvalDocumentId);
     }
 }

@@ -10,7 +10,6 @@ import com.prodnees.service.rels.BatchProductRightService;
 import com.prodnees.service.rels.ProductRightsService;
 import com.prodnees.util.MapperUtil;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,6 +75,7 @@ public class BatchProductActionImpl implements BatchProductAction {
         model.setId(batchProduct.getId())
                 .setName(batchProduct.getName())
                 .setProductModel(productModel)
+                .setApprovalDocumentModel(null)
                 .setStatus(batchProduct.getStatus())
                 .setDescription(batchProduct.getDescription())
                 .setCreatedDate(batchProduct.getCreatedDate());

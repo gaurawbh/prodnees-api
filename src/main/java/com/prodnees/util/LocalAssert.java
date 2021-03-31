@@ -10,7 +10,7 @@ import com.prodnees.config.constants.APIErrors;
 import com.prodnees.web.exception.NeesBadRequestException;
 import org.springframework.util.Assert;
 
-public class LocalAssert extends Assert {
+public abstract class LocalAssert extends Assert {
 
     public static void isFalse(boolean expression, String message) {
         if (expression) {

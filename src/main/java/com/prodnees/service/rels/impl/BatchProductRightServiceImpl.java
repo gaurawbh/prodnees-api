@@ -5,7 +5,6 @@ import com.prodnees.domain.rels.BatchProductRight;
 import com.prodnees.domain.rels.ObjectRightType;
 import com.prodnees.service.rels.BatchProductRightService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -47,7 +46,6 @@ public class BatchProductRightServiceImpl implements BatchProductRightService {
      */
     @Override
     public boolean hasBatchProductEditorRights(int batchProductId, int editorId) {
-
         return batchProductRightsDao.existsByBatchProductIdAndUserIdAndObjectRightType(batchProductId, editorId, ObjectRightType.OWNER)
                 || batchProductRightsDao.existsByBatchProductIdAndUserIdAndObjectRightType(batchProductId, editorId, ObjectRightType.EDITOR);
     }
