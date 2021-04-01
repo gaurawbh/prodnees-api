@@ -4,8 +4,8 @@ import com.prodnees.dao.StateDao;
 import com.prodnees.domain.State;
 import com.prodnees.service.StateService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StateServiceImpl implements StateService {
@@ -48,5 +48,15 @@ public class StateServiceImpl implements StateService {
     @Override
     public void deleteById(int id) {
         stateDao.deleteById(id);
+    }
+
+    @Override
+    public boolean existsById(int id) {
+        return stateDao.existsById(id);
+    }
+
+    @Override
+    public Optional<State> findById(int id) {
+        return stateDao.findById(id);
     }
 }

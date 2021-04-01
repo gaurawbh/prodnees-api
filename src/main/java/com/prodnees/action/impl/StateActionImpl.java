@@ -7,7 +7,6 @@ import com.prodnees.domain.Event;
 import com.prodnees.domain.RawProduct;
 import com.prodnees.domain.State;
 import com.prodnees.domain.StateApprovalDocument;
-import com.prodnees.dto.StateDto;
 import com.prodnees.model.EventModel;
 import com.prodnees.model.RawProductModel;
 import com.prodnees.model.StateApprovalDocumentModel;
@@ -51,19 +50,37 @@ public class StateActionImpl implements StateAction {
     }
 
     @Override
+    public boolean existsById(int id) {
+        return stateService.existsById(id);
+    }
+
+    /**
+     * State must be validated before calling save method
+     * <p>Last State Validated</p>
+     * <p>Next State Validated</p>
+     *
+     * @param state
+     * @return
+     */
+    @Override
     public StateModel save(State state) {
         return entityToModel(stateService.save(state));
     }
 
+
     @Override
-    public State save(StateDto stateDto) {
-        State state = MapperUtil.getDozer().map(stateDto, State.class);
-        return stateService.save(state);
+    public Optional<State> findById(int id) {
+        return stateService.findById(id);
     }
 
     @Override
     public State getById(int id) {
         return stateService.getById(id);
+    }
+
+    @Override
+    public StateModel getModelById(int id) {
+        return entityToModel(stateService.getById(id));
     }
 
     @Override
@@ -95,7 +112,6 @@ public class StateActionImpl implements StateAction {
         stateService.deleteById(id);
     }
 
-    //todo
     private StateModel entityToModel(State state) {
         StateModel stateModel = new StateModel();
         List<StateApprovalDocument> stateApprovalDocumentList = stateApprovalDocumentService.getAllByStateId(state.getId());
@@ -103,6 +119,22 @@ public class StateActionImpl implements StateAction {
         List<RawProduct> rawProductList = rawProductService.getAllByStateId(state.getId());
         List<StateApprovalDocumentModel> stateApprovalDocumentModelList = new ArrayList<>();
         stateApprovalDocumentList.forEach(stateApprovalDocument -> stateApprovalDocumentModelList.add(entityToModel(stateApprovalDocument)));
+        List<EventModel> eventModelList = new ArrayList<>();
+        eventList.forEach(event -> eventModelList.add(entityToModel(event)));
+        List<RawProductModel> rawProductModelList = new ArrayList<>();
+        rawProductList.forEach(rawProduct -> rawProductModelList.add(entityToModel(rawProduct)));
+        stateModel.setId(state.getId())
+                .setBatchProductId(state.getBatchProductId())
+                .setName(state.getName())
+                .setDescription(state.getDescription())
+                .setApprovalDocuments(stateApprovalDocumentModelList)
+                .setEventModelList(eventModelList)
+                .setRawProductModelList(rawProductModelList)
+                .setComplete(state.isComplete())
+                .setLastStateId(state.getLastStateId())
+                .setNextStateId(state.getNextStateId())
+                .setInitialState(state.isInitialState())
+                .setFinalState(state.isFinalState());
         return stateModel;
     }
 
@@ -127,14 +159,12 @@ public class StateActionImpl implements StateAction {
 
     }
 
-    // TODO: 31/03/2021
     private EventModel entityToModel(Event event) {
-        return new EventModel();
-
+        return MapperUtil.getDozer().map(event, EventModel.class);
     }
-// TODO: 31/03/2021
+
     private RawProductModel entityToModel(RawProduct rawProduct) {
-        return new RawProductModel();
+        return MapperUtil.getDozer().map(rawProduct, RawProductModel.class);
 
     }
 }
