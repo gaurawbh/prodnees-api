@@ -1,6 +1,8 @@
 package com.prodnees.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDate;
@@ -13,6 +15,7 @@ public class BatchProduct {
     private int productId;
     private String name;
     private String description;
+    @Enumerated(EnumType.STRING)
     private BatchProductStatus status;
     private LocalDate createdDate;
 

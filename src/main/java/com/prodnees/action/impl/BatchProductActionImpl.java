@@ -2,6 +2,7 @@ package com.prodnees.action.impl;
 
 import com.prodnees.action.BatchProductAction;
 import com.prodnees.domain.BatchProduct;
+import com.prodnees.domain.BatchProductStatus;
 import com.prodnees.model.BatchProductModel;
 import com.prodnees.model.ProductModel;
 import com.prodnees.service.BatchProductService;
@@ -34,6 +35,24 @@ public class BatchProductActionImpl implements BatchProductAction {
     @Override
     public boolean existsById(int id) {
         return batchProductService.existsById(id);
+    }
+
+    @Override
+    public boolean existsByIdAndStatus(int id, BatchProductStatus status) {
+        return batchProductService.existsByIdAndStatus(id, status);
+    }
+
+    @Override
+    public boolean isEditable(int id) {
+        return existsByIdAndStatus(id, BatchProductStatus.COMPLETE) || existsByIdAndStatus(id, BatchProductStatus.SUSPENDED);
+    }
+
+    @Override
+    public List<BatchProductModel> getAllByUserIdAndStatus(int userId, BatchProductStatus status) {
+        List<BatchProduct> batchProductList = batchProductService.getAllByUserIdAndStatus(userId, status);
+        List<BatchProductModel> batchProductModelList = new ArrayList<>();
+        batchProductList.forEach(batchProduct -> batchProductModelList.add(mapToModel(batchProduct)));
+        return batchProductModelList;
     }
 
     @Override

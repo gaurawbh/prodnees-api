@@ -2,9 +2,9 @@ package com.prodnees.service.impl;
 
 import com.prodnees.dao.BatchProductDao;
 import com.prodnees.domain.BatchProduct;
+import com.prodnees.domain.BatchProductStatus;
 import com.prodnees.service.BatchProductService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -43,5 +43,15 @@ public class BatchProductServiceImpl implements BatchProductService {
     @Override
     public void deleteById(int id) {
         batchProductDao.deleteById(id);
+    }
+
+    @Override
+    public boolean existsByIdAndStatus(int id, BatchProductStatus status) {
+        return batchProductDao.existsByIdAndStatus(id, status);
+    }
+
+    @Override
+    public List<BatchProduct> getAllByUserIdAndStatus(int userId, BatchProductStatus status) {
+        return batchProductDao.getAllByUserIdAndStatus(userId, status.name());
     }
 }

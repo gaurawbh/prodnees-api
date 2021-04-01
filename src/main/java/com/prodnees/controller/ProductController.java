@@ -105,7 +105,7 @@ public class ProductController {
             Assert.isTrue(productRights.getObjectRightsType().equals(ObjectRightType.OWNER), UPDATE_DENIED.getMessage());
             Product product = productService.getById(dto.getId());
             product.setName(dto.getName())
-                    .setDescription(ValidatorUtil.ifValidOrElse(dto.getDescription(), product.getDescription()));
+                    .setDescription(ValidatorUtil.ifValidStringOrElse(dto.getDescription(), product.getDescription()));
             productAtomicReference.set(productService.save(product));
         }, () -> {
             throw new NeesNotFoundException();

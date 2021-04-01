@@ -1,6 +1,8 @@
 package com.prodnees.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
@@ -13,6 +15,7 @@ public class StateApprovalDocument {
     private int stateId;
     private int documentId;
     private String name;
+    @Enumerated(EnumType.STRING)
     private ApprovalDocumentState state;
     private int approverId;
     private String approverEmail;

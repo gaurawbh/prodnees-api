@@ -131,8 +131,8 @@ public class UserController {
         UserAttributes userAttributes = userAttributesService.getByUserId(userId);
         userAttributes.setFirstName(dto.getFirstName())
                 .setLastName(dto.getLastName())
-                .setAddress(ValidatorUtil.ifValidOrElse(dto.getAddress(), userAttributes.getAddress()))
-                .setPhoneNumber(ValidatorUtil.ifValidOrElse(dto.getPhoneNumber(), userAttributes.getPhoneNumber()));
+                .setAddress(ValidatorUtil.ifValidStringOrElse(dto.getAddress(), userAttributes.getAddress()))
+                .setPhoneNumber(ValidatorUtil.ifValidStringOrElse(dto.getPhoneNumber(), userAttributes.getPhoneNumber()));
 
         return configure(userAttributesService.save(userAttributes));
     }

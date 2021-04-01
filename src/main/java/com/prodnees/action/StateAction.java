@@ -21,7 +21,7 @@ public interface StateAction {
 
     State getByName(String name);
 
-    List<State> getAllByBatchProductId(int batchProductId);
+    List<StateModel> getAllByBatchProductId(int batchProductId);
 
     List<State> getAllByBatchProductIdAndComplete(int batchProductId, boolean isComplete);
 

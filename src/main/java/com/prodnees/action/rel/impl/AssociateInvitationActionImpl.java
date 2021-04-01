@@ -9,7 +9,6 @@ import com.prodnees.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -64,7 +63,7 @@ public class AssociateInvitationActionImpl implements AssociateInvitationAction 
         Map<String, Object> invitationMailMap = new HashMap<>();
         invitationMailMap.put(EmailPlaceHolders.TITLE, "Invitation to collaborate ");
         invitationMailMap.put(EmailPlaceHolders.MESSAGE,
-                ValidatorUtil.ifValidOrElse(invitorComment, String.format("You have been invited by %s to collaborate in their Production process.", invitorEmail)));
+                ValidatorUtil.ifValidStringOrElse(invitorComment, String.format("You have been invited by %s to collaborate in their Production process.", invitorEmail)));
         invitationMailMap.put(EmailPlaceHolders.PARA_ONE,
                 inviteeIsUser
                         ? "Please login to see all your collaboration requests"

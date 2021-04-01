@@ -89,8 +89,11 @@ public class StateActionImpl implements StateAction {
     }
 
     @Override
-    public List<State> getAllByBatchProductId(int batchProductId) {
-        return stateService.getAllByBatchProductId(batchProductId);
+    public List<StateModel> getAllByBatchProductId(int batchProductId) {
+        List<State> stateList = stateService.getAllByBatchProductId(batchProductId);
+        List<StateModel> stateModelList = new ArrayList<>();
+        stateList.forEach(state -> stateModelList.add(entityToModel(state)));
+        return stateModelList;
     }
 
     @Override

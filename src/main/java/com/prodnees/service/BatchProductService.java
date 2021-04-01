@@ -1,7 +1,7 @@
 package com.prodnees.service;
 
 import com.prodnees.domain.BatchProduct;
-
+import com.prodnees.domain.BatchProductStatus;
 import java.util.List;
 public interface BatchProductService {
 
@@ -16,4 +16,8 @@ public interface BatchProductService {
     boolean existsById(int id);
 
     void deleteById(int id);
+
+    boolean existsByIdAndStatus(int id, BatchProductStatus status);
+
+    List<BatchProduct> getAllByUserIdAndStatus(int userId, BatchProductStatus status);
 }

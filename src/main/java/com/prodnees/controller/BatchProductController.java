@@ -46,6 +46,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import static com.prodnees.config.constants.APIErrors.ACCESS_DENIED;
+import static com.prodnees.config.constants.APIErrors.BATCH_PRODUCT_NOT_FOUND;
 import static com.prodnees.config.constants.APIErrors.OBJECT_NOT_FOUND;
 import static com.prodnees.config.constants.APIErrors.REFERENCED_OBJECT;
 import static com.prodnees.config.constants.APIErrors.UPDATE_DENIED;
@@ -107,6 +108,14 @@ public class BatchProductController {
         return configure(batchProductModel);
     }
 
+    /**
+     * returns {@link BatchProductModel} by it's id if id is provided
+     * <p>returns list of {@link BatchProductModel}</p> that belongs to a user if id is not provided
+     *
+     * @param id
+     * @param servletRequest
+     * @return
+     */
     @GetMapping("/batch-products")
     public ResponseEntity<?> getBatchProducts(@RequestParam Optional<Integer> id,
                                               HttpServletRequest servletRequest) {
@@ -127,6 +136,63 @@ public class BatchProductController {
     }
 
     /**
+     * @param status         of {@link BatchProduct}
+     * @param servletRequest
+     * @return list of {@link BatchProductModel} that belongs to the User and by {@link BatchProductStatus}
+     */
+    @GetMapping("/batch-products/status")
+    public ResponseEntity<?> getAllByStatus(@RequestParam BatchProductStatus status,
+                                            HttpServletRequest servletRequest) {
+        int userId = requestValidator.extractUserId(servletRequest);
+        return configure(batchProductAction.getAllByUserIdAndStatus(userId, status));
+    }
+
+    /**
+     * Update {@link BatchProduct} -> {@link BatchProductStatus}
+     *
+     * @param status         of {@link BatchProduct}
+     * @param id             of {@link BatchProduct}
+     * @param servletRequest
+     * @return
+     */
+    @PutMapping("/batch-products/status")
+    public ResponseEntity<?> updateStatus(@RequestParam BatchProductStatus status,
+                                          @RequestParam int id,
+                                          HttpServletRequest servletRequest) {
+        int userId = requestValidator.extractUserId(servletRequest);
+        LocalAssert.isTrue(batchProductRightAction.hasBatchProductEditorRights(id, userId), UPDATE_DENIED);
+        BatchProduct batchProduct = batchProductAction.getById(id);
+        LocalAssert.isTrue(isValidBatchProductStatusUpdate(batchProduct.getStatus(), status), "invalid status for the Batch Product");
+        batchProduct.setStatus(status);
+        return LocalResponse.configure(batchProductAction.save(batchProduct));
+    }
+
+    /**
+     * Check if the new {@link BatchProductStatus} of a  {@link BatchProduct} is valid
+     *
+     * @param currentStatus
+     * @param newStatus
+     * @return
+     */
+
+    boolean isValidBatchProductStatusUpdate(BatchProductStatus currentStatus, BatchProductStatus newStatus) {
+        switch (newStatus) {
+            case SUSPENDED:
+            case COMPLETE:
+                return currentStatus == BatchProductStatus.INITIAL
+                        || currentStatus == BatchProductStatus.IN_PROGRESS;
+            case INITIAL:
+                return currentStatus == BatchProductStatus.IN_PROGRESS;
+            case IN_PROGRESS:
+                return currentStatus == BatchProductStatus.COMPLETE
+                        || currentStatus == BatchProductStatus.INITIAL;
+            default:
+                return false;
+        }
+    }
+
+
+    /**
      * only name and description can be changed of a BatchProduct.
      * <p>productId on Request Body will be ignored</p>
      * <i>User must have editor rights, i.e. {@link ObjectRightType#OWNER}  or {@link ObjectRightType#EDITOR} </i>
@@ -143,7 +209,7 @@ public class BatchProductController {
         Assert.isTrue(batchProductRightAction.hasBatchProductEditorRights(dto.getId(), editorId), OBJECT_NOT_FOUND.getMessage());
         BatchProduct batchProduct = batchProductAction.getById(dto.getId());
         batchProduct.setName(dto.getName())
-                .setDescription(ValidatorUtil.ifValidOrElse(dto.getDescription(), batchProduct.getDescription()));
+                .setDescription(ValidatorUtil.ifValidStringOrElse(dto.getDescription(), batchProduct.getDescription()));
 
         return configure(batchProductAction.save(batchProduct));
     }
@@ -209,13 +275,13 @@ public class BatchProductController {
                                                   @RequestParam Optional<Integer> batchProductId,
                                                   HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
-        AtomicReference<Object> atomicReference = new AtomicReference<>();
-
         switch (rightOf) {
-            case "product":
-                return null;
+            case "batch-product":
+                LocalAssert.isTrue(batchProductId.isPresent(), "batchProductId must be provided for batch-product rights");
+                LocalAssert.isTrue(batchProductRightAction.hasBatchProductReaderRights(batchProductId.get(), userId), BATCH_PRODUCT_NOT_FOUND);
+                return configure(batchProductRightAction.getAllByBatchProductId(batchProductId.get()));
             case "user":
-                return null;
+                return configure(batchProductRightAction.getAllModelByUserId(userId));
             default:
                 throw new NeesNotFoundException(String.format("no handler found for %s", servletRequest.getRequestURI()), 99);
         }
@@ -278,7 +344,7 @@ public class BatchProductController {
                 .setDocumentRightsType(ObjectRightType.EDITOR);
         documentRightAction.save(documentRight);
 
-        return LocalResponse.configure();
+        return configure();
 
     }
 
