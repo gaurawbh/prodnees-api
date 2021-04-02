@@ -1,6 +1,6 @@
 package com.prodnees.service;
 
-import com.prodnees.domain.UserAttributes;
+import com.prodnees.domain.user.UserAttributes;
 
 public interface UserAttributesService {
 

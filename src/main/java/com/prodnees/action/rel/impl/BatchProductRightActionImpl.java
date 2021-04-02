@@ -1,10 +1,10 @@
 package com.prodnees.action.rel.impl;
 
 import com.prodnees.action.rel.BatchProductRightAction;
-import com.prodnees.domain.BatchProduct;
-import com.prodnees.domain.User;
-import com.prodnees.domain.UserAttributes;
+import com.prodnees.domain.batchproduct.BatchProduct;
 import com.prodnees.domain.rels.BatchProductRight;
+import com.prodnees.domain.user.User;
+import com.prodnees.domain.user.UserAttributes;
 import com.prodnees.dto.BatchProductRightDto;
 import com.prodnees.model.BatchProductRightModel;
 import com.prodnees.model.UserModel;
@@ -17,7 +17,6 @@ import com.prodnees.service.rels.BatchProductRightService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;

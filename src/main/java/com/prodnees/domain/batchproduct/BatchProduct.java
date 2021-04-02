@@ -1,5 +1,6 @@
-package com.prodnees.domain;
+package com.prodnees.domain.batchproduct;
 
+import com.prodnees.domain.enums.BatchProductStatus;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;

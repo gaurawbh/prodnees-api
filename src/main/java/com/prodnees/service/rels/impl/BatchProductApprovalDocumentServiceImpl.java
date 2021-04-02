@@ -1,7 +1,7 @@
 package com.prodnees.service.rels.impl;
 
 import com.prodnees.dao.rels.BatchProductApprovalDocumentDao;
-import com.prodnees.domain.BatchProductApprovalDocument;
+import com.prodnees.domain.batchproduct.BatchProductApprovalDocument;
 import com.prodnees.service.rels.BatchProductApprovalDocumentService;
 import org.springframework.stereotype.Service;
 import java.util.List;

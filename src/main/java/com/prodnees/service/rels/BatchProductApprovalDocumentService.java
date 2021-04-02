@@ -1,6 +1,6 @@
 package com.prodnees.service.rels;
 
-import com.prodnees.domain.BatchProductApprovalDocument;
+import com.prodnees.domain.batchproduct.BatchProductApprovalDocument;
 import java.util.List;
 import java.util.Optional;
 

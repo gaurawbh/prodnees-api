@@ -7,7 +7,7 @@
 package com.prodnees.dao;
 
 
-import com.prodnees.domain.JwtTail;
+import com.prodnees.domain.user.JwtTail;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JwtTailDao extends JpaRepository<JwtTail, Integer> {

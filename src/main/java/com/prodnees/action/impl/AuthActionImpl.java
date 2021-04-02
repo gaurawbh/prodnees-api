@@ -2,14 +2,13 @@ package com.prodnees.action.impl;
 
 import com.prodnees.action.AuthAction;
 import com.prodnees.dao.ForgotPasswordInfoDao;
-import com.prodnees.domain.ForgotPasswordInfo;
+import com.prodnees.domain.user.ForgotPasswordInfo;
 import com.prodnees.service.email.EmailPlaceHolders;
 import com.prodnees.service.email.LocalEmailService;
 import com.prodnees.util.OtpUtil;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;

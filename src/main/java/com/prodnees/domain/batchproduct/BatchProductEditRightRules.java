@@ -1,4 +1,4 @@
-package com.prodnees.domain;
+package com.prodnees.domain.batchproduct;
 
 public class BatchProductEditRightRules {
     private int userId;

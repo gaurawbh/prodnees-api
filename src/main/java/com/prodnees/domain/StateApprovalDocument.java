@@ -1,5 +1,6 @@
 package com.prodnees.domain;
 
+import com.prodnees.domain.enums.ApprovalDocumentState;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;

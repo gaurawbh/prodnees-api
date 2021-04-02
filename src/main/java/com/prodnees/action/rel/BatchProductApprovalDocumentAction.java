@@ -1,6 +1,6 @@
 package com.prodnees.action.rel;
 
-import com.prodnees.domain.BatchProductApprovalDocument;
+import com.prodnees.domain.batchproduct.BatchProductApprovalDocument;
 import com.prodnees.model.StateApprovalDocumentModel;
 import java.util.List;
 import java.util.Optional;

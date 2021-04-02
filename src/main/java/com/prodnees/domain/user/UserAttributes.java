@@ -1,4 +1,4 @@
-package com.prodnees.domain;
+package com.prodnees.domain.user;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

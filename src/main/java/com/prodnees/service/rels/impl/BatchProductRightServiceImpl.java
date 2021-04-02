@@ -1,8 +1,8 @@
 package com.prodnees.service.rels.impl;
 
 import com.prodnees.dao.rels.BatchProductRightsDao;
+import com.prodnees.domain.enums.ObjectRightType;
 import com.prodnees.domain.rels.BatchProductRight;
-import com.prodnees.domain.rels.ObjectRightType;
 import com.prodnees.service.rels.BatchProductRightService;
 import org.springframework.stereotype.Service;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.prodnees.domain;
+package com.prodnees.domain.enums;
 
 /**
  * Approval Document State

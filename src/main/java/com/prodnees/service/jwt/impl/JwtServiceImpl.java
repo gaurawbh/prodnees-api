@@ -2,7 +2,7 @@ package com.prodnees.service.jwt.impl;
 
 import com.prodnees.config.constants.TimeConstants;
 import com.prodnees.dao.UserDao;
-import com.prodnees.domain.User;
+import com.prodnees.domain.user.User;
 import com.prodnees.service.JwtTailService;
 import com.prodnees.service.jwt.ClaimFields;
 import com.prodnees.service.jwt.JwtService;
@@ -14,7 +14,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;

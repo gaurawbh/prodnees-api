@@ -1,7 +1,7 @@
 package com.prodnees.domain.rels;
 
+import com.prodnees.domain.enums.ObjectRightType;
 import com.prodnees.domain.rels.id.BatchProductRightId;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;

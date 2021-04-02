@@ -4,7 +4,7 @@
  * anyone found doing so will be prosecuted by Gauri Baba.
  */
 
-package com.prodnees.domain;
+package com.prodnees.domain.user;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

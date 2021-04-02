@@ -1,7 +1,7 @@
 package com.prodnees.action;
 
-import com.prodnees.domain.BatchProduct;
-import com.prodnees.domain.BatchProductStatus;
+import com.prodnees.domain.batchproduct.BatchProduct;
+import com.prodnees.domain.enums.BatchProductStatus;
 import com.prodnees.model.BatchProductModel;
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.prodnees.domain;
+package com.prodnees.domain.enums;
 
 public enum InvitationAction {
     NONE, ACCEPT, DENY

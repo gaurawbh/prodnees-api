@@ -18,7 +18,7 @@ public class LoginUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        com.prodnees.domain.User user = userDao.findByEmail(userName);
+        com.prodnees.domain.user.User user = userDao.findByEmail(userName);
 
         if (user.getEmail().equals(userName)) {
             return User.withUsername(user.getEmail())

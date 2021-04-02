@@ -1,8 +1,8 @@
 package com.prodnees.action.rel.impl;
 
 import com.prodnees.action.rel.DocumentRightAction;
+import com.prodnees.domain.enums.ObjectRightType;
 import com.prodnees.domain.rels.DocumentRight;
-import com.prodnees.domain.rels.ObjectRightType;
 import com.prodnees.service.rels.DocumentRightService;
 import org.springframework.stereotype.Service;
 import java.util.List;

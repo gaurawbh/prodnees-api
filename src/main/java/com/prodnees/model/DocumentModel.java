@@ -1,6 +1,6 @@
 package com.prodnees.model;
 
-import com.prodnees.domain.rels.ObjectRightType;
+import com.prodnees.domain.enums.ObjectRightType;
 
 public class DocumentModel {
 

@@ -2,10 +2,10 @@ package com.prodnees.action.impl;
 
 import com.prodnees.action.UserAction;
 import com.prodnees.dao.TempPasswordInfoDao;
-import com.prodnees.domain.TempPasswordInfo;
-import com.prodnees.domain.User;
-import com.prodnees.domain.UserAttributes;
 import com.prodnees.domain.rels.Associates;
+import com.prodnees.domain.user.TempPasswordInfo;
+import com.prodnees.domain.user.User;
+import com.prodnees.domain.user.UserAttributes;
 import com.prodnees.dto.UserRegistrationDto;
 import com.prodnees.model.AssociateModel;
 import com.prodnees.model.UserModel;
@@ -21,7 +21,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;

@@ -1,8 +1,8 @@
 package com.prodnees.service.impl;
 
 import com.prodnees.dao.BatchProductDao;
-import com.prodnees.domain.BatchProduct;
-import com.prodnees.domain.BatchProductStatus;
+import com.prodnees.domain.batchproduct.BatchProduct;
+import com.prodnees.domain.enums.BatchProductStatus;
 import com.prodnees.service.BatchProductService;
 import org.springframework.stereotype.Service;
 import java.util.List;

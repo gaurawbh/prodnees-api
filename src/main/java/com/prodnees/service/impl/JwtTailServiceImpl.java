@@ -5,14 +5,14 @@
  */
 
 package com.prodnees.service.impl;
+
 import com.prodnees.dao.JwtTailDao;
-import com.prodnees.domain.JwtTail;
-import com.prodnees.domain.User;
+import com.prodnees.domain.user.JwtTail;
+import com.prodnees.domain.user.User;
 import com.prodnees.service.JwtTailService;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.stereotype.Service;
-
 import java.time.Instant;
 import java.time.LocalDate;
 

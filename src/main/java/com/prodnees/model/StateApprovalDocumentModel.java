@@ -1,6 +1,6 @@
 package com.prodnees.model;
 
-import com.prodnees.domain.ApprovalDocumentState;
+import com.prodnees.domain.enums.ApprovalDocumentState;
 
 /**
  * Document that needs to be approved

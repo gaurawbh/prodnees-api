@@ -4,7 +4,7 @@ import com.prodnees.action.AuthAction;
 import com.prodnees.action.UserAction;
 import com.prodnees.dao.ForgotPasswordInfoDao;
 import com.prodnees.dao.TempPasswordInfoDao;
-import com.prodnees.domain.User;
+import com.prodnees.domain.user.User;
 import com.prodnees.dto.AuthDto;
 import com.prodnees.model.AuthResponse;
 import com.prodnees.service.LoginUserDetailsService;
@@ -24,9 +24,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.servlet.http.HttpServletRequest;
-
 import static com.prodnees.config.constants.APIErrors.EMAIL_NOT_FOUND;
 import static com.prodnees.config.constants.APIErrors.USER_NOT_ENABLED;
 

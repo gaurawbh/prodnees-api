@@ -6,8 +6,8 @@
 
 package com.prodnees.service;
 
-import com.prodnees.domain.JwtTail;
-import com.prodnees.domain.User;
+import com.prodnees.domain.user.JwtTail;
+import com.prodnees.domain.user.User;
 
 public interface JwtTailService {
 

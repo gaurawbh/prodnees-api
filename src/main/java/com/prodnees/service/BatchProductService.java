@@ -1,7 +1,7 @@
 package com.prodnees.service;
 
-import com.prodnees.domain.BatchProduct;
-import com.prodnees.domain.BatchProductStatus;
+import com.prodnees.domain.batchproduct.BatchProduct;
+import com.prodnees.domain.enums.BatchProductStatus;
 import java.util.List;
 public interface BatchProductService {
 

@@ -1,7 +1,7 @@
 package com.prodnees.service.impl;
 
 import com.prodnees.dao.UserAttributesDao;
-import com.prodnees.domain.UserAttributes;
+import com.prodnees.domain.user.UserAttributes;
 import com.prodnees.service.UserAttributesService;
 import org.springframework.stereotype.Service;
 
