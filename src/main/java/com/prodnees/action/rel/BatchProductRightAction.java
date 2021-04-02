@@ -1,7 +1,7 @@
 package com.prodnees.action.rel;
 
 import com.prodnees.domain.rels.BatchProductRight;
-import com.prodnees.dto.BatchProductRightDto;
+import com.prodnees.dto.batchproduct.BatchProductRightDto;
 import com.prodnees.model.BatchProductRightModel;
 
 import java.util.List;

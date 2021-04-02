@@ -6,7 +6,7 @@ import com.prodnees.domain.rels.Associates;
 import com.prodnees.domain.user.TempPasswordInfo;
 import com.prodnees.domain.user.User;
 import com.prodnees.domain.user.UserAttributes;
-import com.prodnees.dto.UserRegistrationDto;
+import com.prodnees.dto.user.UserRegistrationDto;
 import com.prodnees.model.AssociateModel;
 import com.prodnees.model.UserModel;
 import com.prodnees.service.UserAttributesService;

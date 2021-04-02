@@ -2,6 +2,7 @@ package com.prodnees.controller;
 
 import com.prodnees.action.EventAction;
 import com.prodnees.action.rel.BatchProductRightAction;
+import com.prodnees.dto.EventDto;
 import com.prodnees.filter.RequestValidator;
 import com.prodnees.web.response.LocalResponse;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -39,7 +41,7 @@ public class EventController {
     }
 
     @PostMapping("/event")
-    public ResponseEntity<?> save(@Validated @RequestBody Object dto,
+    public ResponseEntity<?> save(@Validated @RequestBody EventDto dto,
                                   HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
         return LocalResponse.configure();

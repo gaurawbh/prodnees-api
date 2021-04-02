@@ -5,7 +5,7 @@ import com.prodnees.action.UserAction;
 import com.prodnees.dao.ForgotPasswordInfoDao;
 import com.prodnees.dao.TempPasswordInfoDao;
 import com.prodnees.domain.user.User;
-import com.prodnees.dto.AuthDto;
+import com.prodnees.dto.user.AuthDto;
 import com.prodnees.model.AuthResponse;
 import com.prodnees.service.LoginUserDetailsService;
 import com.prodnees.service.jwt.JwtService;

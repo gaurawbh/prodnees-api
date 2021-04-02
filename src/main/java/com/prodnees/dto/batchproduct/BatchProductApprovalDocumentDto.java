@@ -1,4 +1,4 @@
-package com.prodnees.dto;
+package com.prodnees.dto.batchproduct;
 
 import com.prodnees.config.constants.LocalConstants;
 import javax.validation.constraints.Email;
