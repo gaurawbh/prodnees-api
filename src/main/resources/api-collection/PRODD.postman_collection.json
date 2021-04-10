@@ -1,0 +1,722 @@
+{
+	"info": {
+		"_postman_id": "a012cdea-18da-4480-87ab-df40f47f467c",
+		"name": "PRODD",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Batch Product",
+			"item": [
+				{
+					"name": "Batch Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":12312,\r\n    \"productId\":4,\r\n    \"name\":\"Candy Batch123\",\r\n    \"description\":\"this batch must product mroe than 3 buckets of candies for me\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/secure/batch-product",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"secure",
+								"batch-product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Batch Products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/secure/batch-products?id=3",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"secure",
+								"batch-products"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BatchProduct Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/secure/batch-products/status?status=IN_PROGRESS&id=15",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"secure",
+								"batch-products",
+								"status"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "IN_PROGRESS"
+								},
+								{
+									"key": "id",
+									"value": "15"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Batch Products by Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/secure/batch-products/status?status=INITIAL",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"secure",
+								"batch-products",
+								"status"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "INITIAL"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 122,\r\n    \"name\": \"Dodgy Candy\",\r\n    \"description\": \"Dodgy candy that can be sold to people which will only make them want more and more\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/secure/product",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"secure",
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/secure/products",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"secure",
+								"products"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/secure/user",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"secure",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Associates",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/secure/associates",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"secure",
+								"associates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Associates Invite",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"inviteeEmail\":\"g90_shah@yahoo.co.uk\",\r\n    \"inviteeFirstName\":\"Shoumya\",\r\n    \"inviteeLastName\":\"Shah\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/secure/associate-invitation",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"secure",
+								"associate-invitation"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "g90_shah@yahoo.co.uk",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Temp Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\":\"kalimayaphass\",\r\n    \"repeatPassword\":\"kalimayaphass\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/secure/user/temp-password",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"secure",
+								"user",
+								"temp-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sec Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"oldPassword\":\"kalimayaphass\",\r\n    \"newPassword\":\"kalimayapass\",\r\n    \"repeatNewPassword\":\"kalimayapass\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/secure/user/password",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"secure",
+								"user",
+								"password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Signup",
+			"item": [
+				{
+					"name": "Signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Gaurav\",\r\n    \"lastName\": \"Shah\",\r\n    \"email\": \"g09.shah@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/user/signup",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"user",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/user/forgot-password?email=g09.shah@gmail.com",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"user",
+								"forgot-password"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "g09.shah@gmail.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Temp Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"kalimayapass\",\r\n    \"repeatPassword\": \"kalimayapass\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/secure/user/temp-password",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"secure",
+								"user",
+								"temp-password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Document",
+			"item": [
+				{
+					"name": "Document",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "document one",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/guarav.shah/Desktop/my docs/2%/Effective Java Invoice.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{local}}/secure/document",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"secure",
+								"document"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Load Document File",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/pdf",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{local}}/secure/document/load?id=2",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"secure",
+								"document",
+								"load"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						},
+						"description": "Postman cannot visualise PDF files. this can only be done in browser. Since this is a secure URL, this might be only possible to test when front end work is complete for this feature. "
+					},
+					"response": []
+				},
+				{
+					"name": "Download Document File",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/secure/document/download?id=2",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"secure",
+								"document",
+								"download"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Document Download Example ",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/document-download-example?id=2",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"document-download-example"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download Document Example",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/document-download-example?id=2",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"document-download-example"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "State",
+			"item": []
+		},
+		{
+			"name": "Authenticate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"login\",function(){\r",
+							"    const jwt = pm.response.json().AuthResponses[0].jwt;\r",
+							"\r",
+							"            pm.environment.set(\"token\",jwt);\r",
+							"\r",
+							"    pm.environment.set(\"userId\", userId); \r",
+							"})"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"g09.shah@gmail.com\",\r\n    \"password\":\"kalimayapass\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/authenticate",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"authenticate"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
