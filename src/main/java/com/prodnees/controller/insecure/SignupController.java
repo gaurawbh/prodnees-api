@@ -3,7 +3,7 @@ package com.prodnees.controller.insecure;
 import com.prodnees.action.AuthAction;
 import com.prodnees.action.UserAction;
 import com.prodnees.config.constants.APIErrors;
-import com.prodnees.dto.UserRegistrationDto;
+import com.prodnees.dto.user.UserRegistrationDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;

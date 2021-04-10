@@ -1,7 +1,7 @@
 package com.prodnees.action;
 
 import com.prodnees.domain.user.User;
-import com.prodnees.dto.UserRegistrationDto;
+import com.prodnees.dto.user.UserRegistrationDto;
 import com.prodnees.model.AssociateModel;
 import com.prodnees.model.UserModel;
 import java.util.List;

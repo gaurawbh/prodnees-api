@@ -9,7 +9,7 @@ import com.prodnees.domain.rels.Associates;
 import com.prodnees.domain.user.User;
 import com.prodnees.dto.AssociateInvitationActionDto;
 import com.prodnees.dto.AssociateInvitationDto;
-import com.prodnees.dto.UserRegistrationDto;
+import com.prodnees.dto.user.UserRegistrationDto;
 import com.prodnees.filter.RequestValidator;
 import com.prodnees.model.AssociateModel;
 import com.prodnees.model.UserModel;

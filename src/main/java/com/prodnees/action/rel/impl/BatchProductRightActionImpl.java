@@ -5,7 +5,7 @@ import com.prodnees.domain.batchproduct.BatchProduct;
 import com.prodnees.domain.rels.BatchProductRight;
 import com.prodnees.domain.user.User;
 import com.prodnees.domain.user.UserAttributes;
-import com.prodnees.dto.BatchProductRightDto;
+import com.prodnees.dto.batchproduct.BatchProductRightDto;
 import com.prodnees.model.BatchProductRightModel;
 import com.prodnees.model.UserModel;
 import com.prodnees.service.BatchProductService;
