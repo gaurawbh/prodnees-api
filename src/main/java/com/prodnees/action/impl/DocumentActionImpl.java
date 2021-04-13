@@ -24,6 +24,26 @@ public class DocumentActionImpl implements DocumentAction {
         this.documentRightService = documentRightService;
     }
 
+    /**
+     * Does not build with userId and ObjectRightType
+     *
+     * @param document
+     * @return
+     */
+    public static DocumentModel entityToModel(Document document) {
+        return new DocumentModel()
+                .setId(document.getId())
+                .setName(document.getName())
+                .setDocumentUrl(MvcUriComponentsBuilder.fromController(DocumentController.class)
+                        .path("document/load")
+                        .queryParam("id", document.getId())
+                        .toUriString())
+                .setDocumentDownloadUrl(MvcUriComponentsBuilder.fromController(DocumentController.class)
+                        .path("document/download")
+                        .queryParam("id", document.getId())
+                        .toUriString());
+    }
+
     @Override
     public DocumentModel save(Document document) {
         return entityToModel(documentService.save(document));
@@ -60,26 +80,6 @@ public class DocumentActionImpl implements DocumentAction {
     @Override
     public void deleteById(int id) {
         documentService.deleteById(id);
-    }
-
-    /**
-     * Does not build with userId and ObjectRightType
-     *
-     * @param document
-     * @return
-     */
-    public static DocumentModel entityToModel(Document document) {
-        return new DocumentModel()
-                .setId(document.getId())
-                .setName(document.getName())
-                .setDocumentUrl(MvcUriComponentsBuilder.fromController(DocumentController.class)
-                        .path("document/load")
-                        .queryParam("id", document.getId())
-                        .toUriString())
-                .setDocumentDownloadUrl(MvcUriComponentsBuilder.fromController(DocumentController.class)
-                        .path("document/download")
-                        .queryParam("id", document.getId())
-                        .toUriString());
     }
 
     /**

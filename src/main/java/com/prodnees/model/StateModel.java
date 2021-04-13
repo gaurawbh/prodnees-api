@@ -10,13 +10,13 @@ import java.util.List;
  * <p> Final State [A Batch Production Has Completed]</p>
  */
 public class StateModel {
+    List<StateApprovalDocumentModel> approvalDocuments;
+    List<EventModel> eventModelList;
+    List<RawProductModel> rawProductModelList;
     private int id;
     private int batchProductId;
     private String name;
     private String description;
-    List<StateApprovalDocumentModel> approvalDocuments;
-    List<EventModel> eventModelList;
-    List<RawProductModel> rawProductModelList;
     private StateStatus status;
     private int lastStateId;
     private int nextStateId;

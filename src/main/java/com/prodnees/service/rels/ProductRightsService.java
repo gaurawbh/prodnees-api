@@ -1,7 +1,6 @@
 package com.prodnees.service.rels;
 
 import com.prodnees.domain.rels.ProductRight;
-
 import java.util.List;
 import java.util.Optional;
 

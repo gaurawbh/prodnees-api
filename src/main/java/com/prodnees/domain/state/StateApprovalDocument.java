@@ -15,7 +15,6 @@ public class StateApprovalDocument {
     private int id;
     private int stateId;
     private int documentId;
-    private String name;
     @Enumerated(EnumType.STRING)
     private ApprovalDocumentState state;
     private int approverId;
@@ -75,12 +74,4 @@ public class StateApprovalDocument {
         return this;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public StateApprovalDocument setName(String name) {
-        this.name = name;
-        return this;
-    }
 }

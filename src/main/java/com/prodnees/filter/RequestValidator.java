@@ -7,6 +7,8 @@ public interface RequestValidator {
 
     boolean isValidPhoneNumber(String username);
 
+    boolean isValidEmail(String email);
+
     int extractUserId(HttpServletRequest request);
 
     String extractUserEmail(HttpServletRequest request);

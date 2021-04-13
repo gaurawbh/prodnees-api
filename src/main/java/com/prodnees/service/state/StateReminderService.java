@@ -18,4 +18,6 @@ public interface StateReminderService {
     void deleteById(int id);
 
     void deleteAllByStateId(int stateId);
+
+    List<StateReminder> getAllBySender(String senderEmail);
 }

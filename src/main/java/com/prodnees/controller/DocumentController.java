@@ -46,10 +46,10 @@ import static com.prodnees.web.response.LocalResponse.configure;
 @Transactional
 public class DocumentController {
 
-    Logger localLogger = LoggerFactory.getLogger(this.getClass());
     private final RequestValidator requestValidator;
     private final DocumentAction documentAction;
     private final DocumentRightAction documentRightAction;
+    Logger localLogger = LoggerFactory.getLogger(this.getClass());
 
     public DocumentController(RequestValidator requestValidator,
                               DocumentAction documentAction,

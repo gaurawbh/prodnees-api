@@ -4,7 +4,6 @@ import com.prodnees.dao.rels.AssociatesDao;
 import com.prodnees.domain.rels.Associates;
 import com.prodnees.service.rels.AssociatesService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 

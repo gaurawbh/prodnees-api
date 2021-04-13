@@ -2,7 +2,6 @@ package com.prodnees.web.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.prodnees.config.constants.APIErrors;
-
 import java.time.LocalDateTime;
 
 public class ErrorResponse {

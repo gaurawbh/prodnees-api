@@ -1,4 +1,4 @@
 package com.prodnees.web.exception;
 
-public class NeesUnknownException extends RuntimeException{
+public class NeesUnknownException extends RuntimeException {
 }

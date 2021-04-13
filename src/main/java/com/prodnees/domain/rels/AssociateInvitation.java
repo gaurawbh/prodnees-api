@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Entity
 @IdClass(AssociateInvitationId.class)
-public class AssociateInvitation{
+public class AssociateInvitation {
 
     @Id
     private int invitorId;

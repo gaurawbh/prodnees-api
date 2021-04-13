@@ -18,7 +18,7 @@ public class StateReminderServiceImpl implements StateReminderService {
 
     @Override
     public Optional<StateReminder> findById(int id) {
-         return stateReminderDao.findById(id);
+        return stateReminderDao.findById(id);
     }
 
     @Override
@@ -44,5 +44,10 @@ public class StateReminderServiceImpl implements StateReminderService {
     @Override
     public void deleteAllByStateId(int stateId) {
         stateReminderDao.deleteAllByStateId(stateId);
+    }
+
+    @Override
+    public List<StateReminder> getAllBySender(String senderEmail) {
+        return stateReminderDao.getAllBySender(senderEmail);
     }
 }

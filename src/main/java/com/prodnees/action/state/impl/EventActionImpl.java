@@ -5,6 +5,7 @@ import com.prodnees.domain.state.Event;
 import com.prodnees.service.state.EventService;
 import org.springframework.stereotype.Service;
 import java.util.List;
+
 @Service
 public class EventActionImpl implements EventAction {
     private final EventService eventService;

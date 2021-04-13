@@ -8,7 +8,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
-
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
@@ -64,6 +63,7 @@ public class LocalEmailServiceImpl implements LocalEmailService {
      * <p>para_1</p>
      * <p>para_2</p>
      * <p>sender</p>
+     *
      * @param to
      * @param subject
      * @param templateModel

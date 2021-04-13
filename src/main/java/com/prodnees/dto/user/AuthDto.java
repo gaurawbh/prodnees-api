@@ -22,13 +22,13 @@ public class AuthDto {
         return email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public AuthDto setEmail(String email) {
         this.email = email;
         return this;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public AuthDto setPassword(String password) {

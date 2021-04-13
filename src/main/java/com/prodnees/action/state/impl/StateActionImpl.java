@@ -14,6 +14,7 @@ import com.prodnees.model.StateApprovalDocumentModel;
 import com.prodnees.model.StateModel;
 import com.prodnees.service.DocumentService;
 import com.prodnees.service.batchproduct.RawProductService;
+import com.prodnees.service.rels.BatchProductRightService;
 import com.prodnees.service.rels.StateApprovalDocumentService;
 import com.prodnees.service.state.EventService;
 import com.prodnees.service.state.StateService;
@@ -32,22 +33,47 @@ public class StateActionImpl implements StateAction {
     private final EventService eventService;
     private final RawProductService rawProductService;
     private final DocumentService documentService;
+    private final BatchProductRightService batchProductRightService;
+
 
     public StateActionImpl(StateService stateService,
                            StateApprovalDocumentService stateApprovalDocumentService,
                            EventService eventService,
                            RawProductService rawProductService,
-                           DocumentService documentService) {
+                           DocumentService documentService,
+                           BatchProductRightService batchProductRightService) {
         this.stateService = stateService;
         this.stateApprovalDocumentService = stateApprovalDocumentService;
         this.eventService = eventService;
         this.rawProductService = rawProductService;
         this.documentService = documentService;
+        this.batchProductRightService = batchProductRightService;
     }
 
     @Override
     public boolean existsByBatchProductId(int batchProductId) {
         return stateService.existsByBatchProductId(batchProductId);
+    }
+
+    @Override
+    public boolean hasStateEditorRights(int id, int editorId) {
+        Optional<State> stateOptional = findById(id);
+        if (stateOptional.isEmpty()) {
+            return false;
+        } else {
+            return batchProductRightService.hasBatchProductEditorRights(stateOptional.get().getBatchProductId(), editorId);
+        }
+
+    }
+
+    @Override
+    public boolean hasStateReaderRights(int id, int readerId) {
+        Optional<State> stateOptional = findById(id);
+        if (stateOptional.isEmpty()) {
+            return false;
+        } else {
+            return batchProductRightService.hasBatchProductReaderRights(stateOptional.get().getBatchProductId(), readerId);
+        }
     }
 
     @Override
@@ -147,7 +173,7 @@ public class StateActionImpl implements StateAction {
 
         return new StateApprovalDocumentModel()
                 .setId(stateApprovalDocument.getId())
-                .setName(stateApprovalDocument.getName())
+                .setName(document.getName())
                 .setDocumentId(stateApprovalDocument.getDocumentId())
                 .setApproverId(stateApprovalDocument.getApproverId())
                 .setApproverEmail(stateApprovalDocument.getApproverEmail())

@@ -3,6 +3,7 @@ package com.prodnees.service.batchproduct;
 import com.prodnees.domain.batchproduct.BatchProduct;
 import com.prodnees.domain.enums.BatchProductStatus;
 import java.util.List;
+
 public interface BatchProductService {
 
     BatchProduct save(BatchProduct batchProduct);

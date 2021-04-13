@@ -27,13 +27,12 @@ import java.util.Optional;
 
 @Service
 public class ProductRightActionImpl implements ProductRightAction {
-    Logger localLogger = LoggerFactory.getLogger(this.getClass());
-
     private final ProductRightsService productRightsService;
     private final LocalEmailService localEmailService;
     private final UserService userService;
     private final UserAttributesService userAttributesService;
     private final ProductService productService;
+    Logger localLogger = LoggerFactory.getLogger(this.getClass());
 
     public ProductRightActionImpl(ProductRightsService productRightsService,
                                   LocalEmailService localEmailService,

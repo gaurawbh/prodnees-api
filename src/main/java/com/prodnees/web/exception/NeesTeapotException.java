@@ -1,4 +1,4 @@
 package com.prodnees.web.exception;
 
-public class NeesTeapotException extends RuntimeException{
+public class NeesTeapotException extends RuntimeException {
 }

@@ -1,10 +1,9 @@
 package com.prodnees.service.jwt;
 
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Date;
 
-public interface JwtService{
+public interface JwtService {
 
     String generateToken(UserDetails userDetails);
 

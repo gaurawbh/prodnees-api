@@ -30,5 +30,4 @@ public interface UserAction {
     List<AssociateModel> getAllAssociates(int adminId);
 
 
-
 }

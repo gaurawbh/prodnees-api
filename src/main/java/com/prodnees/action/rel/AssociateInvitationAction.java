@@ -1,7 +1,6 @@
 package com.prodnees.action.rel;
 
 import com.prodnees.domain.rels.AssociateInvitation;
-
 import java.util.List;
 import java.util.Optional;
 

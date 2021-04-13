@@ -12,4 +12,6 @@ public interface StateReminderDao extends JpaRepository<StateReminder, Integer> 
     List<StateReminder> getAllByStateIdAndStateStatus(int stateId, StateStatus stateStatus);
 
     void deleteAllByStateId(int stateId);
+
+    List<StateReminder> getAllBySender(String senderEmail);
 }

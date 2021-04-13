@@ -6,6 +6,7 @@ import com.prodnees.service.rels.DocumentRightService;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class DocumentRightServiceImpl implements DocumentRightService {
 
@@ -27,7 +28,7 @@ public class DocumentRightServiceImpl implements DocumentRightService {
 
     @Override
     public boolean existsByDocumentIdAndUserId(int documentId, int userId) {
-            return documentRightDao.existsByDocumentIdAndUserId(documentId, userId);
+        return documentRightDao.existsByDocumentIdAndUserId(documentId, userId);
     }
 
     @Override

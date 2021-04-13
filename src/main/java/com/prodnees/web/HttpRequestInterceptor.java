@@ -5,9 +5,9 @@ import com.prodnees.web.exception.NeesForbiddenException;
 import com.prodnees.web.exception.NeesNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 @Service
 public class HttpRequestInterceptor implements HandlerInterceptor {
 

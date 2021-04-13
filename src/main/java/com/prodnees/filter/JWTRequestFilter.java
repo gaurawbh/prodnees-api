@@ -24,12 +24,11 @@ public class JWTRequestFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION = "Authorization";
     private static final String BEARER_PREFIX = "Bearer ";
-    Logger localLogger = LoggerFactory.getLogger(this.getClass());
-
     private final LoginUserDetailsService loginUserDetailsService;
     private final UserService userService;
     private final JwtService jwtService;
     private final BlockedJwtDao blockedJwtDao;
+    Logger localLogger = LoggerFactory.getLogger(this.getClass());
 
     public JWTRequestFilter(LoginUserDetailsService loginUserDetailsService,
                             UserService userService, JwtService jwtService,

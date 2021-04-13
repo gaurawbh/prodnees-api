@@ -28,13 +28,12 @@ import java.util.stream.Collectors;
 
 @Service
 public class BatchProductRightActionImpl implements BatchProductRightAction {
-    Logger localLogger = LoggerFactory.getLogger(this.getClass());
-
     private final BatchProductRightService batchProductRightService;
     private final UserService userService;
     private final UserAttributesService userAttributesService;
     private final BatchProductService batchProductService;
     private final LocalEmailService localEmailService;
+    Logger localLogger = LoggerFactory.getLogger(this.getClass());
 
     public BatchProductRightActionImpl(BatchProductRightService batchProductRightService,
                                        UserService userService,

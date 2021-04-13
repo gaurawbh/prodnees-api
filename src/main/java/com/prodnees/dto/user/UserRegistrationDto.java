@@ -1,7 +1,6 @@
 package com.prodnees.dto.user;
 
 import com.prodnees.config.constants.LocalConstants;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
@@ -15,9 +14,17 @@ public class UserRegistrationDto {
     @Email(regexp = LocalConstants.EMAIL_REGEX, message = "invalid email format")
     private String email;
 
+    public String getFirstName() {
+        return firstName;
+    }
+
     public UserRegistrationDto setFirstName(String firstName) {
         this.firstName = firstName;
         return this;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     public UserRegistrationDto setLastName(String lastName) {
@@ -25,21 +32,13 @@ public class UserRegistrationDto {
         return this;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     public UserRegistrationDto setEmail(String email) {
         this.email = email;
         return this;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
 }

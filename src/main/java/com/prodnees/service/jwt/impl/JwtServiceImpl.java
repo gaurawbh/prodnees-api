@@ -94,6 +94,7 @@ public class JwtServiceImpl implements JwtService {
         Jws<Claims> jws = extractJws(token);
         return (boolean) jws.getBody().get(ClaimFields.IS_TEMPORARY_PASSWORD);
     }
+
     @Override
     public boolean isValidTail(String username, String jwt) {
         String tail = extractTail(jwt);

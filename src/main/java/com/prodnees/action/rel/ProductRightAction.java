@@ -3,7 +3,6 @@ package com.prodnees.action.rel;
 import com.prodnees.domain.rels.ProductRight;
 import com.prodnees.dto.ProductRightDto;
 import com.prodnees.model.ProductRightModel;
-
 import java.util.List;
 import java.util.Optional;
 

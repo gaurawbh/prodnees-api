@@ -15,19 +15,20 @@ public class RequestValidatorImpl implements RequestValidator {
         this.jwtService = jwtService;
     }
 
-
+    @Override
     public boolean isValidPhoneNumber(String phoneNumber) {
         if (phoneNumber == null) {
             return false;
         }
         try {
             Long.parseLong(phoneNumber);
-            return isOfValidLength(phoneNumber);
+            return phoneNumber.length() == 10;
         } catch (Exception e) {
             return false;
         }
     }
 
+    @Override
     public int extractUserId(HttpServletRequest request) {
         return jwtService.extractUserId(extractToken(request));
     }
@@ -37,16 +38,13 @@ public class RequestValidatorImpl implements RequestValidator {
         return jwtService.extractUsername(extractToken(request));
     }
 
-
+    @Override
     public String extractToken(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
         return authorizationHeader.substring(7);
     }
 
-    private boolean isOfValidLength(String phoneNumber) {
-        return phoneNumber.length() > 6;
-    }
-
+    @Override
     public LocalDateTime extractTokenExpiryDatetime(HttpServletRequest request) {
         Date date = jwtService.extractTokenExpiryDatetime(extractToken(request));
         Jsr310JpaConverters.LocalDateTimeConverter localDateTimeConverter = new Jsr310JpaConverters.LocalDateTimeConverter();
@@ -79,6 +77,8 @@ public class RequestValidatorImpl implements RequestValidator {
      * @param email
      * @return boolean
      */
+
+    @Override
     public boolean isValidEmail(String email) {
         String regex = "^[\\w-_.+]*[\\w-_.]@([\\w]+\\.)+[\\w]+[\\w]$";
         return email.matches(regex);

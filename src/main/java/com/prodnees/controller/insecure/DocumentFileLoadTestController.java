@@ -31,10 +31,10 @@ import java.io.InputStream;
 @Transactional
 public class DocumentFileLoadTestController {
 
-    Logger localLogger = LoggerFactory.getLogger(this.getClass());
     private final RequestValidator requestValidator;
     private final DocumentService documentService;
     private final DocumentRightService documentRightService;
+    Logger localLogger = LoggerFactory.getLogger(this.getClass());
 
     public DocumentFileLoadTestController(RequestValidator requestValidator, DocumentService documentService, DocumentRightService documentRightService) {
         this.requestValidator = requestValidator;

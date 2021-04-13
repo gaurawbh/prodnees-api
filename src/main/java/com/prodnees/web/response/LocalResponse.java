@@ -8,12 +8,11 @@ import java.util.List;
 import java.util.Map;
 
 public class LocalResponse {
-    private LocalResponse() {
-    }
-
     private static final String ERROR = "error";
     private static final String MESSAGE = "message";
     private static final String DATA = "data";
+    private LocalResponse() {
+    }
 
     public static ResponseEntity<?> configure(Object object, String message) {
         Map<String, Object> objectMap = new HashMap<>();
@@ -62,8 +61,7 @@ public class LocalResponse {
         } else if (object instanceof String) {
             objectMap.put(MESSAGE, object);
         } else {
-            objectList.add(object);
-            objectMap.put(DATA, objectList);
+            objectMap.put(DATA, object);
         }
 
     }

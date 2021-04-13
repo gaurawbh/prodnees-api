@@ -10,6 +10,24 @@ public interface StateAction {
 
     boolean existsByBatchProductId(int batchProductId);
 
+    /**
+     * A user will have the same {@link com.prodnees.domain.rels.BatchProductRight} to a State as the {@link com.prodnees.domain.batchproduct.BatchProduct} the State belongs to
+     *
+     * @param batchProductId
+     * @param editorId
+     * @return
+     */
+    boolean hasStateEditorRights(int id, int editorId);
+
+    /**
+     * A user will have the same {@link com.prodnees.domain.rels.BatchProductRight} to a State as the {@link com.prodnees.domain.batchproduct.BatchProduct} the State belongs to
+     *
+     * @param batchProductId
+     * @param readerId
+     * @return
+     */
+    boolean hasStateReaderRights(int id, int readerId);
+
     boolean existsById(int id);
 
     StateModel save(State state);

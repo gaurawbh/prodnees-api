@@ -8,23 +8,6 @@ public class NeesNotFoundException extends RuntimeException {
     private String message;
     private int code;
 
-    @Override
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
     public NeesNotFoundException() {
 
         this.message = APIErrors.OBJECT_NOT_FOUND.getMessage();
@@ -46,5 +29,22 @@ public class NeesNotFoundException extends RuntimeException {
 
         this.message = constants.getMessage();
         this.code = constants.getCode();
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
     }
 }

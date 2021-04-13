@@ -7,6 +7,14 @@ public class NeesForbiddenException extends RuntimeException {
     private String message;
     private int code;
 
+    public NeesForbiddenException() {
+    }
+
+    public NeesForbiddenException(APIErrors constants) {
+        this.message = constants.getMessage();
+        this.code = constants.getCode();
+    }
+
     @Override
     public String getMessage() {
         return message;
@@ -22,14 +30,6 @@ public class NeesForbiddenException extends RuntimeException {
 
     public void setCode(int code) {
         this.code = code;
-    }
-
-    public NeesForbiddenException() {
-    }
-
-    public NeesForbiddenException(APIErrors constants) {
-        this.message = constants.getMessage();
-        this.code = constants.getCode();
     }
 
 }

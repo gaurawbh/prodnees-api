@@ -17,7 +17,6 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 import java.sql.SQLException;
@@ -25,7 +24,6 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
 import static com.prodnees.config.constants.APIErrors.ACCESS_DENIED;
 
 @ControllerAdvice

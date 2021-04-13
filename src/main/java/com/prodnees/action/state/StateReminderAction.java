@@ -13,6 +13,8 @@ public interface StateReminderAction {
 
     List<StateReminder> getAllByStateId(int stateId);
 
+    List<StateReminder> getAllBySender(String senderEmail);
+
     List<StateReminder> getAllByStateIdAndStateStatus(int stateId, StateStatus stateStatus);
 
     void deleteById(int id);

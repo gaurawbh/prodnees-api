@@ -45,6 +45,11 @@ public class StateReminderActionImpl implements StateReminderAction {
     }
 
     @Override
+    public List<StateReminder> getAllBySender(String senderEmail) {
+        return stateReminderService.getAllBySender(senderEmail);
+    }
+
+    @Override
     public List<StateReminder> getAllByStateIdAndStateStatus(int stateId, StateStatus stateStatus) {
         return stateReminderService.getAllByStateIdAndStateStatus(stateId, stateStatus);
     }
