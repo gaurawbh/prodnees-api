@@ -1,5 +1,6 @@
 package com.prodnees.model;
 
+import com.prodnees.domain.enums.StateStatus;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ public class StateModel {
     List<StateApprovalDocumentModel> approvalDocuments;
     List<EventModel> eventModelList;
     List<RawProductModel> rawProductModelList;
-    private boolean complete;
+    private StateStatus status;
     private int lastStateId;
     private int nextStateId;
     private boolean initialState;
@@ -85,12 +86,12 @@ public class StateModel {
         return this;
     }
 
-    public boolean isComplete() {
-        return complete;
+    public StateStatus getStatus() {
+        return status;
     }
 
-    public StateModel setComplete(boolean complete) {
-        this.complete = complete;
+    public StateModel setStatus(StateStatus status) {
+        this.status = status;
         return this;
     }
 

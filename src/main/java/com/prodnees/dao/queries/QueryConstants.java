@@ -1,6 +1,6 @@
 package com.prodnees.dao.queries;
 
-import com.prodnees.dao.BatchProductDao;
+import com.prodnees.dao.batchproduct.BatchProductDao;
 
 /**
  * Naming convention:

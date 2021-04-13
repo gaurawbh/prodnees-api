@@ -1,10 +1,10 @@
 package com.prodnees.controller;
 
 import com.prodnees.action.UserAction;
-import com.prodnees.dao.BlockedJwtDao;
-import com.prodnees.dao.ForgotPasswordInfoDao;
-import com.prodnees.dao.TempPasswordInfoDao;
-import com.prodnees.domain.BlockedJwt;
+import com.prodnees.dao.user.BlockedJwtDao;
+import com.prodnees.dao.user.ForgotPasswordInfoDao;
+import com.prodnees.dao.user.TempPasswordInfoDao;
+import com.prodnees.domain.user.BlockedJwt;
 import com.prodnees.domain.user.User;
 import com.prodnees.domain.user.UserAttributes;
 import com.prodnees.dto.user.SecPasswordDto;
@@ -12,7 +12,7 @@ import com.prodnees.dto.user.TempPasswordDto;
 import com.prodnees.dto.user.UserAttributesDto;
 import com.prodnees.filter.RequestValidator;
 import com.prodnees.model.UserModel;
-import com.prodnees.service.UserAttributesService;
+import com.prodnees.service.user.UserAttributesService;
 import com.prodnees.util.ValidatorUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

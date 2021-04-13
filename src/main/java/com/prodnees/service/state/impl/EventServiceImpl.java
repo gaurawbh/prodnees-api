@@ -1,0 +1,46 @@
+package com.prodnees.service.state.impl;
+
+import com.prodnees.dao.state.EventDao;
+import com.prodnees.domain.state.Event;
+import com.prodnees.service.state.EventService;
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+@Service
+public class EventServiceImpl implements EventService {
+    private final EventDao eventDao;
+
+    public EventServiceImpl(EventDao eventDao) {
+        this.eventDao = eventDao;
+    }
+
+    @Override
+    public boolean existsByBatchProductId(int batchProductId) {
+        return eventDao.existsByBatchProductId(batchProductId);
+    }
+
+    @Override
+    public Event save(Event event) {
+        return eventDao.save(event);
+    }
+
+    @Override
+    public Event getById(int id) {
+        return eventDao.getById(id);
+    }
+
+    @Override
+    public List<Event> getAllByBatchProductId(int batchProductId) {
+        return eventDao.getAllByBatchProductId(batchProductId);
+    }
+
+    @Override
+    public List<Event> getAllByStateId(int stateId) {
+        return eventDao.getAllByStateId(stateId);
+    }
+
+    @Override
+    public Event getByBatchProductIdAndName(int batchProductId, String name) {
+        return eventDao.getByBatchProductIdAndName(batchProductId, name);
+    }
+}

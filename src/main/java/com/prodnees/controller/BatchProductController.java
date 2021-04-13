@@ -1,10 +1,10 @@
 package com.prodnees.controller;
 
 import com.prodnees.action.BatchProductAction;
-import com.prodnees.action.EventAction;
-import com.prodnees.action.StateAction;
 import com.prodnees.action.rel.BatchProductRightAction;
 import com.prodnees.action.rel.DocumentRightAction;
+import com.prodnees.action.state.EventAction;
+import com.prodnees.action.state.StateAction;
 import com.prodnees.config.constants.APIErrors;
 import com.prodnees.domain.batchproduct.BatchProduct;
 import com.prodnees.domain.batchproduct.BatchProductApprovalDocument;

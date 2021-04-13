@@ -1,11 +1,11 @@
 package com.prodnees.service.jwt.impl;
 
 import com.prodnees.config.constants.TimeConstants;
-import com.prodnees.dao.UserDao;
+import com.prodnees.dao.user.UserDao;
 import com.prodnees.domain.user.User;
-import com.prodnees.service.JwtTailService;
 import com.prodnees.service.jwt.ClaimFields;
 import com.prodnees.service.jwt.JwtService;
+import com.prodnees.service.user.JwtTailService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;

@@ -2,13 +2,13 @@ package com.prodnees.controller.insecure;
 
 import com.prodnees.action.AuthAction;
 import com.prodnees.action.UserAction;
-import com.prodnees.dao.ForgotPasswordInfoDao;
-import com.prodnees.dao.TempPasswordInfoDao;
+import com.prodnees.dao.user.ForgotPasswordInfoDao;
+import com.prodnees.dao.user.TempPasswordInfoDao;
 import com.prodnees.domain.user.User;
 import com.prodnees.dto.user.AuthDto;
 import com.prodnees.model.AuthResponse;
-import com.prodnees.service.LoginUserDetailsService;
 import com.prodnees.service.jwt.JwtService;
+import com.prodnees.service.user.LoginUserDetailsService;
 import com.prodnees.web.exception.NeesBadCredentialException;
 import com.prodnees.web.exception.NeesForbiddenException;
 import com.prodnees.web.response.LocalResponse;

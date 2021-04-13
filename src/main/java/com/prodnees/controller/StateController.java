@@ -1,14 +1,15 @@
 package com.prodnees.controller;
 
 import com.prodnees.action.BatchProductAction;
-import com.prodnees.action.EventAction;
-import com.prodnees.action.StateAction;
+import com.prodnees.action.state.EventAction;
+import com.prodnees.action.state.StateAction;
 import com.prodnees.config.constants.APIErrors;
-import com.prodnees.domain.Event;
-import com.prodnees.domain.State;
 import com.prodnees.domain.batchproduct.BatchProduct;
 import com.prodnees.domain.enums.BatchProductStatus;
-import com.prodnees.dto.StateDto;
+import com.prodnees.domain.enums.StateStatus;
+import com.prodnees.domain.state.Event;
+import com.prodnees.domain.state.State;
+import com.prodnees.dto.state.StateDto;
 import com.prodnees.filter.RequestValidator;
 import com.prodnees.model.StateModel;
 import com.prodnees.service.rels.BatchProductRightService;
@@ -162,14 +163,14 @@ public class StateController {
             LocalAssert.isTrue(batchProductRightService.hasBatchProductEditorRights(state.getBatchProductId(), userId), APIErrors.BATCH_PRODUCT_NOT_FOUND);
             if (stateAction.existsById(state.getLastStateId())) {
                 State lastState = stateAction.getById(state.getLastStateId());
-                LocalAssert.isTrue(lastState.isComplete(), String.format("State [ id: %d, name: %s ] must be complete before you can mark this State as complete", lastState.getId(), lastState.getName()));
+                LocalAssert.isTrue(lastState.getStatus().equals(StateStatus.COMPLETE), String.format("State [ id: %d, name: %s ] must be complete before you can mark this State as complete", lastState.getId(), lastState.getName()));
             }
             if (!state.isInitialState() && !stateAction.existsById(state.getLastStateId())) {
                 throw new NeesInfoException("This is a Dangling State [ State which is neither the initial state or has the last State attached to it ] which cannot be marked as complete. ");
             }
             List<Event> eventList = eventAction.getAllByStateId(state.getId());
             eventList.forEach(event -> LocalAssert.isTrue(event.isComplete(), "This state has events that are not complete. Complete all events before marking this State as Complete"));
-            state.setComplete(true);
+            state.setStatus(StateStatus.COMPLETE);
             if (state.isFinalState()) {
                 BatchProduct batchProduct = batchProductAction.getById(state.getBatchProductId());
                 batchProductAction.save(batchProduct.setStatus(BatchProductStatus.COMPLETE));

@@ -1,10 +1,10 @@
 package com.prodnees.filter;
 
 import com.prodnees.config.constants.APIErrors;
-import com.prodnees.dao.BlockedJwtDao;
-import com.prodnees.service.LoginUserDetailsService;
-import com.prodnees.service.UserService;
+import com.prodnees.dao.user.BlockedJwtDao;
 import com.prodnees.service.jwt.JwtService;
+import com.prodnees.service.user.LoginUserDetailsService;
+import com.prodnees.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

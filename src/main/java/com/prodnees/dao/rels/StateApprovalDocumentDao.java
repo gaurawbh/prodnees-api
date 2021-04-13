@@ -1,6 +1,6 @@
 package com.prodnees.dao.rels;
 
-import com.prodnees.domain.StateApprovalDocument;
+import com.prodnees.domain.state.StateApprovalDocument;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;

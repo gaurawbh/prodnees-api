@@ -1,7 +1,7 @@
 package com.prodnees.config;
 
 import com.prodnees.filter.JWTRequestFilter;
-import com.prodnees.service.LoginUserDetailsService;
+import com.prodnees.service.user.LoginUserDetailsService;
 import com.prodnees.web.JwtAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

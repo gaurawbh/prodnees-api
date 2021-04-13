@@ -1,6 +1,6 @@
 package com.prodnees.service.rels;
 
-import com.prodnees.domain.StateApprovalDocument;
+import com.prodnees.domain.state.StateApprovalDocument;
 import java.util.List;
 import java.util.Optional;
 
