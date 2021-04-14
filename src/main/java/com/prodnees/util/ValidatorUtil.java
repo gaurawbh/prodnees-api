@@ -17,8 +17,12 @@ public abstract class ValidatorUtil {
         return isNullOrBlank(str) ? altStr : str;
     }
 
-    public static Integer ifValidIntegerOrElse(Integer integer, @Positive(message = "altInteger must be a positive number") Integer altInteger) {
-        return integer > 0 ? integer : altInteger;
+    public static int ifValidIntOrElse(int i, @Positive(message = "altI must be a positive number") int altI) {
+        return i > 0 ? i : altI;
+    }
+
+    public static Integer ifValidIntegerOrElse(Integer integer, Integer altInteger) {
+        return integer != null ? integer : altInteger;
     }
 
     public static LocalDate ifValidLocalDateOrElse(LocalDate localDate, LocalDate altLocalDate) {

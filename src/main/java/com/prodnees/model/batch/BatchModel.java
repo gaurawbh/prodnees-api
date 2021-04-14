@@ -1,7 +1,10 @@
-package com.prodnees.model;
+package com.prodnees.model.batch;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.prodnees.domain.enums.BatchStatus;
+import com.prodnees.model.ProductModel;
+import com.prodnees.model.state.StateApprovalDocumentModel;
+import com.prodnees.model.state.StateModel;
 import java.time.LocalDate;
 import java.util.List;
 

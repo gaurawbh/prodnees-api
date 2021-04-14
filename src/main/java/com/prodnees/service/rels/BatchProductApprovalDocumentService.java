@@ -1,17 +1,17 @@
 package com.prodnees.service.rels;
 
-import com.prodnees.domain.batchproduct.BatchProductApprovalDocument;
+import com.prodnees.domain.batch.BatchApprovalDocument;
 import java.util.List;
 import java.util.Optional;
 
 public interface BatchProductApprovalDocumentService {
 
-    BatchProductApprovalDocument save(BatchProductApprovalDocument batchProductApprovalDocument);
+    BatchApprovalDocument save(BatchApprovalDocument batchApprovalDocument);
 
-    Optional<BatchProductApprovalDocument> findByBatchProductIdAndApprovalDocumentId(int batchProductId, int approvalDocumentId);
+    Optional<BatchApprovalDocument> findByBatchProductIdAndApprovalDocumentId(int batchProductId, int approvalDocumentId);
 
-    List<BatchProductApprovalDocument> getAllByBatchProductId(int batchProductId);
+    List<BatchApprovalDocument> getAllByBatchProductId(int batchProductId);
 
-    List<BatchProductApprovalDocument> getAllByApprovalDocumentId(int approvalDocumentId);
+    List<BatchApprovalDocument> getAllByApprovalDocumentId(int approvalDocumentId);
 
 }

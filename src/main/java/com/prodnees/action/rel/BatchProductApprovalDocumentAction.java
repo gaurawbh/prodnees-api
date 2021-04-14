@@ -1,17 +1,17 @@
 package com.prodnees.action.rel;
 
-import com.prodnees.domain.batchproduct.BatchProductApprovalDocument;
-import com.prodnees.model.StateApprovalDocumentModel;
+import com.prodnees.domain.batch.BatchApprovalDocument;
+import com.prodnees.model.state.StateApprovalDocumentModel;
 import java.util.List;
 import java.util.Optional;
 
 public interface BatchProductApprovalDocumentAction {
-    StateApprovalDocumentModel save(BatchProductApprovalDocument batchProductApprovalDocument);
+    StateApprovalDocumentModel save(BatchApprovalDocument batchApprovalDocument);
 
-    Optional<BatchProductApprovalDocument> findByBatchProductIdAndApprovalDocumentId(int batchProductId, int approvalDocumentId);
+    Optional<BatchApprovalDocument> findByBatchProductIdAndApprovalDocumentId(int batchProductId, int approvalDocumentId);
 
-    List<BatchProductApprovalDocument> getAllByBatchProductId(int batchProductId);
+    List<BatchApprovalDocument> getAllByBatchProductId(int batchProductId);
 
-    List<BatchProductApprovalDocument> getAllByApprovalDocumentId(int approvalDocumentId);
+    List<BatchApprovalDocument> getAllByApprovalDocumentId(int approvalDocumentId);
 
 }

@@ -1,13 +1,13 @@
 package com.prodnees.action.rel.impl;
 
 import com.prodnees.action.rel.BatchRightAction;
-import com.prodnees.domain.batchproduct.Batch;
+import com.prodnees.domain.batch.Batch;
 import com.prodnees.domain.rels.BatchRight;
 import com.prodnees.domain.user.User;
 import com.prodnees.domain.user.UserAttributes;
 import com.prodnees.dto.batch.BatchRightDto;
-import com.prodnees.model.BatchRightModel;
-import com.prodnees.model.UserModel;
+import com.prodnees.model.batch.BatchRightModel;
+import com.prodnees.model.user.UserModel;
 import com.prodnees.service.batch.BatchService;
 import com.prodnees.service.email.EmailPlaceHolders;
 import com.prodnees.service.email.LocalEmailService;

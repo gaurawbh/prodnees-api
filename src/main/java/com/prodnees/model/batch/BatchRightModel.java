@@ -1,7 +1,8 @@
-package com.prodnees.model;
+package com.prodnees.model.batch;
 
-import com.prodnees.domain.batchproduct.Batch;
+import com.prodnees.domain.batch.Batch;
 import com.prodnees.domain.enums.ObjectRightType;
+import com.prodnees.model.user.UserModel;
 
 public class BatchRightModel {
 

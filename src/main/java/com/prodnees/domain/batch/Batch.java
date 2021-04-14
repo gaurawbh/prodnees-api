@@ -1,6 +1,8 @@
-package com.prodnees.domain.batchproduct;
+package com.prodnees.domain.batch;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.prodnees.domain.enums.BatchStatus;
+import com.prodnees.util.FormatUtil;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -18,6 +20,7 @@ public class Batch {
     private String description;
     @Enumerated(EnumType.STRING)
     private BatchStatus status;
+    @JsonFormat(pattern = FormatUtil.DATE)
     private LocalDate createdDate;
 
     public int getId() {

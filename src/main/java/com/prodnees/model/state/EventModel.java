@@ -1,4 +1,4 @@
-package com.prodnees.model;
+package com.prodnees.model.state;
 
 public class EventModel {
 

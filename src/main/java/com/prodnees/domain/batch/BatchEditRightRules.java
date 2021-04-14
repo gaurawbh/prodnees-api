@@ -1,6 +1,6 @@
-package com.prodnees.domain.batchproduct;
+package com.prodnees.domain.batch;
 
-public class BatchProductEditRightRules {
+public class BatchEditRightRules {
     private int userId;
     private boolean canDeleteStates;
     private boolean canDeleteEvents;

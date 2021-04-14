@@ -1,4 +1,4 @@
-package com.prodnees.domain.batchproduct;
+package com.prodnees.domain.batch;
 
 import com.prodnees.domain.enums.ApprovalDocumentState;
 import javax.persistence.Entity;
@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class BatchProductApprovalDocument {
+public class BatchApprovalDocument {
     @Id
     @GeneratedValue
     private int id;
@@ -20,7 +20,7 @@ public class BatchProductApprovalDocument {
         return approverEmail;
     }
 
-    public BatchProductApprovalDocument setApproverEmail(String approverEmail) {
+    public BatchApprovalDocument setApproverEmail(String approverEmail) {
         this.approverEmail = approverEmail;
         return this;
     }
@@ -29,7 +29,7 @@ public class BatchProductApprovalDocument {
         return id;
     }
 
-    public BatchProductApprovalDocument setId(int id) {
+    public BatchApprovalDocument setId(int id) {
         this.id = id;
         return this;
     }
@@ -38,7 +38,7 @@ public class BatchProductApprovalDocument {
         return batchProductId;
     }
 
-    public BatchProductApprovalDocument setBatchProductId(int eventId) {
+    public BatchApprovalDocument setBatchProductId(int eventId) {
         this.batchProductId = eventId;
         return this;
     }
@@ -47,7 +47,7 @@ public class BatchProductApprovalDocument {
         return documentId;
     }
 
-    public BatchProductApprovalDocument setDocumentId(int documentId) {
+    public BatchApprovalDocument setDocumentId(int documentId) {
         this.documentId = documentId;
         return this;
     }
@@ -56,7 +56,7 @@ public class BatchProductApprovalDocument {
         return state;
     }
 
-    public BatchProductApprovalDocument setState(ApprovalDocumentState state) {
+    public BatchApprovalDocument setState(ApprovalDocumentState state) {
         this.state = state;
         return this;
     }
@@ -65,7 +65,7 @@ public class BatchProductApprovalDocument {
         return approverId;
     }
 
-    public BatchProductApprovalDocument setApproverId(int approverId) {
+    public BatchApprovalDocument setApproverId(int approverId) {
         this.approverId = approverId;
         return this;
     }

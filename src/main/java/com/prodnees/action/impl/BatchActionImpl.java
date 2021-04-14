@@ -1,10 +1,11 @@
 package com.prodnees.action.impl;
 
 import com.prodnees.action.BatchAction;
-import com.prodnees.domain.batchproduct.Batch;
+import com.prodnees.domain.batch.Batch;
 import com.prodnees.domain.enums.BatchStatus;
-import com.prodnees.model.BatchModel;
 import com.prodnees.model.ProductModel;
+import com.prodnees.model.batch.BatchListModel;
+import com.prodnees.model.batch.BatchModel;
 import com.prodnees.service.batch.BatchService;
 import com.prodnees.service.batch.ProductService;
 import com.prodnees.service.rels.BatchRightService;
@@ -79,6 +80,19 @@ public class BatchActionImpl implements BatchAction {
     public List<Batch> getAllByIds(Iterable<Integer> ids) {
         List<Batch> batchList = batchService.getAllByIds(ids);
         return batchList;
+    }
+
+    @Override
+    public BatchListModel getListModelByIds(Iterable<Integer> ids) {
+        List<Batch> batchList = batchService.getAllByIds(ids);
+        return new BatchListModel()
+                .setBatches(batchList)
+                .setCount(batchList.size())
+                .setOpen((int) batchList.stream().filter(batch -> batch.getStatus().equals(BatchStatus.OPEN)).count())
+                .setInProgress((int) batchList.stream().filter(batch -> batch.getStatus().equals(BatchStatus.IN_PROGRESS)).count())
+                .setComplete((int) batchList.stream().filter(batch -> batch.getStatus().equals(BatchStatus.COMPLETE)).count())
+                .setSuspended((int) batchList.stream().filter(batch -> batch.getStatus().equals(BatchStatus.SUSPENDED)).count());
+
     }
 
     @Override

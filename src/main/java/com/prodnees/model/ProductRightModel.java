@@ -1,6 +1,7 @@
 package com.prodnees.model;
 
 import com.prodnees.domain.enums.ObjectRightType;
+import com.prodnees.model.user.UserModel;
 
 public class ProductRightModel {
 

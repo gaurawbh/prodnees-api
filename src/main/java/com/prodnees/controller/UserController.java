@@ -11,7 +11,7 @@ import com.prodnees.dto.user.SecPasswordDto;
 import com.prodnees.dto.user.TempPasswordDto;
 import com.prodnees.dto.user.UserAttributesDto;
 import com.prodnees.filter.RequestValidator;
-import com.prodnees.model.UserModel;
+import com.prodnees.model.user.UserModel;
 import com.prodnees.service.user.UserAttributesService;
 import com.prodnees.util.ValidatorUtil;
 import org.springframework.http.ResponseEntity;

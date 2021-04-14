@@ -6,7 +6,7 @@ import com.prodnees.dao.user.ForgotPasswordInfoDao;
 import com.prodnees.dao.user.TempPasswordInfoDao;
 import com.prodnees.domain.user.User;
 import com.prodnees.dto.user.AuthDto;
-import com.prodnees.model.AuthResponse;
+import com.prodnees.model.user.AuthResponse;
 import com.prodnees.service.jwt.JwtService;
 import com.prodnees.service.user.LoginUserDetailsService;
 import com.prodnees.web.exception.NeesBadCredentialException;

@@ -6,8 +6,8 @@ import com.prodnees.action.rel.DocumentRightAction;
 import com.prodnees.action.state.EventAction;
 import com.prodnees.action.state.StateAction;
 import com.prodnees.config.constants.APIErrors;
-import com.prodnees.domain.batchproduct.Batch;
-import com.prodnees.domain.batchproduct.BatchProductApprovalDocument;
+import com.prodnees.domain.batch.Batch;
+import com.prodnees.domain.batch.BatchApprovalDocument;
 import com.prodnees.domain.enums.ApprovalDocumentState;
 import com.prodnees.domain.enums.BatchStatus;
 import com.prodnees.domain.enums.ObjectRightType;
@@ -18,7 +18,7 @@ import com.prodnees.dto.batch.BatchDto;
 import com.prodnees.dto.batch.BatchProductApprovalDocumentDto;
 import com.prodnees.dto.batch.BatchRightDto;
 import com.prodnees.filter.RequestValidator;
-import com.prodnees.model.BatchModel;
+import com.prodnees.model.batch.BatchModel;
 import com.prodnees.service.rels.AssociatesService;
 import com.prodnees.service.rels.BatchProductApprovalDocumentService;
 import com.prodnees.util.LocalAssert;
@@ -98,7 +98,7 @@ public class BatchController {
         int userId = requestValidator.extractUserId(servletRequest);
         dto.setId(0);
         Batch batch = MapperUtil.getDozer().map(dto, Batch.class);
-        batch.setCreatedDate(LocalDate.now()).setStatus(BatchStatus.INITIAL);
+        batch.setCreatedDate(LocalDate.now()).setStatus(BatchStatus.OPEN);
         BatchModel batchModel = batchAction.save(batch);
         batchRightAction.save(new BatchRight()
                 .setUserId(userId)
@@ -129,7 +129,7 @@ public class BatchController {
                     .stream()
                     .map(BatchRight::getBatchProductId)
                     .collect(Collectors.toList());
-            atomicReference.set(batchAction.getAllByIds(batchIds));
+            atomicReference.set(batchAction.getListModelByIds(batchIds));
         });
         return configure(atomicReference.get());
     }
@@ -178,13 +178,13 @@ public class BatchController {
         switch (newStatus) {
             case SUSPENDED:
             case COMPLETE:
-                return currentStatus == BatchStatus.INITIAL
+                return currentStatus == BatchStatus.OPEN
                         || currentStatus == BatchStatus.IN_PROGRESS;
-            case INITIAL:
+            case OPEN:
                 return currentStatus == BatchStatus.IN_PROGRESS;
             case IN_PROGRESS:
                 return currentStatus == BatchStatus.COMPLETE
-                        || currentStatus == BatchStatus.INITIAL;
+                        || currentStatus == BatchStatus.OPEN;
             default:
                 return false;
         }
@@ -327,14 +327,14 @@ public class BatchController {
         LocalAssert.isTrue(associatesOptional.isPresent(), "approver must be an associate.");
         LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(dto.getDocumentId(), userId), "document not found");
         LocalAssert.isTrue(batchRightAction.hasBatchEditorRights(dto.getBatchProductId(), userId), OBJECT_NOT_FOUND);
-        BatchProductApprovalDocument batchProductApprovalDocument = new BatchProductApprovalDocument()
+        BatchApprovalDocument batchApprovalDocument = new BatchApprovalDocument()
                 .setBatchProductId(dto.getBatchProductId())
                 .setDocumentId(dto.getDocumentId())
                 .setApproverId(associatesOptional.get().getAssociateId())
                 .setApproverEmail(associatesOptional.get().getAssociateEmail())
                 .setState(ApprovalDocumentState.OPEN);
 
-        batchProductApprovalDocumentService.save(batchProductApprovalDocument);
+        batchProductApprovalDocumentService.save(batchApprovalDocument);
         DocumentRight documentRight = new DocumentRight()
                 .setUserId(associatesOptional.get().getAssociateId())
                 .setDocumentId(dto.getDocumentId())

@@ -7,7 +7,7 @@ import com.prodnees.domain.user.UserAttributes;
 import com.prodnees.dto.ProductRightDto;
 import com.prodnees.model.ProductModel;
 import com.prodnees.model.ProductRightModel;
-import com.prodnees.model.UserModel;
+import com.prodnees.model.user.UserModel;
 import com.prodnees.service.batch.ProductService;
 import com.prodnees.service.email.EmailPlaceHolders;
 import com.prodnees.service.email.LocalEmailService;

@@ -1,10 +1,10 @@
 package com.prodnees.action.state;
 
-import com.prodnees.domain.batchproduct.Batch;
+import com.prodnees.domain.batch.Batch;
 import com.prodnees.domain.enums.StateStatus;
 import com.prodnees.domain.rels.BatchRight;
 import com.prodnees.domain.state.State;
-import com.prodnees.model.StateModel;
+import com.prodnees.model.state.StateModel;
 import java.util.List;
 import java.util.Optional;
 

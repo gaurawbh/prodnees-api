@@ -1,4 +1,4 @@
-package com.prodnees.model;
+package com.prodnees.model.state;
 
 import com.prodnees.domain.enums.ApprovalDocumentState;
 

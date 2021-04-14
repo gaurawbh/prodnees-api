@@ -1,7 +1,7 @@
 package com.prodnees.dao.batchproduct;
 
 import com.prodnees.dao.queries.QueryConstants;
-import com.prodnees.domain.batchproduct.Batch;
+import com.prodnees.domain.batch.Batch;
 import com.prodnees.domain.enums.BatchStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

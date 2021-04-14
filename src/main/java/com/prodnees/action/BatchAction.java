@@ -1,8 +1,9 @@
 package com.prodnees.action;
 
-import com.prodnees.domain.batchproduct.Batch;
+import com.prodnees.domain.batch.Batch;
 import com.prodnees.domain.enums.BatchStatus;
-import com.prodnees.model.BatchModel;
+import com.prodnees.model.batch.BatchListModel;
+import com.prodnees.model.batch.BatchModel;
 import java.util.List;
 
 public interface BatchAction {
@@ -24,6 +25,8 @@ public interface BatchAction {
     List<Batch> getAllByProductId(int productId);
 
     List<Batch> getAllByIds(Iterable<Integer> ids);
+
+    BatchListModel getListModelByIds(Iterable<Integer> ids);
 
     void deleteById(int id);
 }

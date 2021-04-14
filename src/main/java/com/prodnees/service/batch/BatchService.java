@@ -1,6 +1,6 @@
 package com.prodnees.service.batch;
 
-import com.prodnees.domain.batchproduct.Batch;
+import com.prodnees.domain.batch.Batch;
 import com.prodnees.domain.enums.BatchStatus;
 import java.util.List;
 

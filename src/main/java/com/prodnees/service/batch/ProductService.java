@@ -1,6 +1,6 @@
 package com.prodnees.service.batch;
 
-import com.prodnees.domain.batchproduct.Product;
+import com.prodnees.domain.batch.Product;
 import java.util.List;
 
 public interface ProductService {

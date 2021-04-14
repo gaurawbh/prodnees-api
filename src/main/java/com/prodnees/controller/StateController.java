@@ -5,7 +5,7 @@ import com.prodnees.action.state.EventAction;
 import com.prodnees.action.state.StateAction;
 import com.prodnees.action.state.StateReminderAction;
 import com.prodnees.config.constants.APIErrors;
-import com.prodnees.domain.batchproduct.Batch;
+import com.prodnees.domain.batch.Batch;
 import com.prodnees.domain.enums.BatchStatus;
 import com.prodnees.domain.enums.StateStatus;
 import com.prodnees.domain.state.Event;
@@ -13,7 +13,7 @@ import com.prodnees.domain.state.State;
 import com.prodnees.domain.state.StateReminder;
 import com.prodnees.dto.state.StateDto;
 import com.prodnees.filter.RequestValidator;
-import com.prodnees.model.StateModel;
+import com.prodnees.model.state.StateModel;
 import com.prodnees.service.rels.BatchRightService;
 import com.prodnees.util.LocalAssert;
 import com.prodnees.util.MapperUtil;
@@ -32,11 +32,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
-
 import static com.prodnees.web.response.LocalResponse.configure;
 
 @RestController

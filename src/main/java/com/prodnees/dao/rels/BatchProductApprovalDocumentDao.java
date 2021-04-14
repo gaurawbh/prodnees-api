@@ -1,15 +1,15 @@
 package com.prodnees.dao.rels;
 
-import com.prodnees.domain.batchproduct.BatchProductApprovalDocument;
+import com.prodnees.domain.batch.BatchApprovalDocument;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface BatchProductApprovalDocumentDao extends JpaRepository<BatchProductApprovalDocument, Integer> {
-    Optional<BatchProductApprovalDocument> findByBatchProductIdAndDocumentId(int batchProductId, int approvalDocumentId);
+public interface BatchProductApprovalDocumentDao extends JpaRepository<BatchApprovalDocument, Integer> {
+    Optional<BatchApprovalDocument> findByBatchProductIdAndDocumentId(int batchProductId, int approvalDocumentId);
 
-    List<BatchProductApprovalDocument> getAllByBatchProductId(int batchProductId);
+    List<BatchApprovalDocument> getAllByBatchProductId(int batchProductId);
 
-    List<BatchProductApprovalDocument> getAllByDocumentId(int approvalDocumentId);
+    List<BatchApprovalDocument> getAllByDocumentId(int approvalDocumentId);
 
 }

@@ -1,6 +1,7 @@
 package com.prodnees.domain.state;
 
 import com.prodnees.domain.enums.StateStatus;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -19,6 +20,7 @@ public class State {
     @GeneratedValue
     private int id;
     private int batchId;
+    @Column(name = "indx")
     private int index;
     private String name;
     private String description;

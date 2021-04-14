@@ -1,19 +1,20 @@
-package com.prodnees.model;
+package com.prodnees.model.user;
 
-public class AssociateModel {
+public class UserModel {
     private int id;
     private String email;
+    private String role;
+    private boolean enabled;
     private String firstName;
     private String lastName;
     private String phoneNumber;
     private String address;
-    private boolean isAssociate;
 
     public int getId() {
         return id;
     }
 
-    public AssociateModel setId(int id) {
+    public UserModel setId(int id) {
         this.id = id;
         return this;
     }
@@ -22,8 +23,26 @@ public class AssociateModel {
         return email;
     }
 
-    public AssociateModel setEmail(String email) {
+    public UserModel setEmail(String email) {
         this.email = email;
+        return this;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public UserModel setRole(String role) {
+        this.role = role;
+        return this;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public UserModel setEnabled(boolean enabled) {
+        this.enabled = enabled;
         return this;
     }
 
@@ -31,7 +50,7 @@ public class AssociateModel {
         return firstName;
     }
 
-    public AssociateModel setFirstName(String firstName) {
+    public UserModel setFirstName(String firstName) {
         this.firstName = firstName;
         return this;
     }
@@ -40,7 +59,7 @@ public class AssociateModel {
         return lastName;
     }
 
-    public AssociateModel setLastName(String lastName) {
+    public UserModel setLastName(String lastName) {
         this.lastName = lastName;
         return this;
     }
@@ -49,7 +68,7 @@ public class AssociateModel {
         return phoneNumber;
     }
 
-    public AssociateModel setPhoneNumber(String phoneNumber) {
+    public UserModel setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
         return this;
     }
@@ -58,17 +77,8 @@ public class AssociateModel {
         return address;
     }
 
-    public AssociateModel setAddress(String address) {
+    public UserModel setAddress(String address) {
         this.address = address;
-        return this;
-    }
-
-    public boolean isAssociate() {
-        return isAssociate;
-    }
-
-    public AssociateModel setAssociate(boolean associate) {
-        this.isAssociate = associate;
         return this;
     }
 }

@@ -4,7 +4,7 @@ import com.prodnees.action.UserAction;
 import com.prodnees.action.rel.ProductRightAction;
 import com.prodnees.config.constants.APIErrors;
 import com.prodnees.controller.insecure.SignupController;
-import com.prodnees.domain.batchproduct.Product;
+import com.prodnees.domain.batch.Product;
 import com.prodnees.domain.enums.ObjectRightType;
 import com.prodnees.domain.rels.ProductRight;
 import com.prodnees.dto.ProductDto;
