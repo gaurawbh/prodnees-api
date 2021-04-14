@@ -9,12 +9,9 @@ public class StateDto {
     @Positive(message = "batchProductId is a required field must be a positive number")
     private int batchProductId;
     @NotBlank(message = "name cannot be null or blank")
+    private int index;
     private String name;
     private String description;
-    private int lastStateId;
-    private int nextStateId;
-    private boolean initialState;
-    private boolean finalState;
 
     public int getId() {
         return id;
@@ -31,6 +28,15 @@ public class StateDto {
 
     public StateDto setBatchProductId(int batchProductId) {
         this.batchProductId = batchProductId;
+        return this;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public StateDto setIndex(int index) {
+        this.index = index;
         return this;
     }
 
@@ -52,39 +58,4 @@ public class StateDto {
         return this;
     }
 
-    public int getLastStateId() {
-        return lastStateId;
-    }
-
-    public StateDto setLastStateId(int lastStateId) {
-        this.lastStateId = lastStateId;
-        return this;
-    }
-
-    public int getNextStateId() {
-        return nextStateId;
-    }
-
-    public StateDto setNextStateId(int nextStateId) {
-        this.nextStateId = nextStateId;
-        return this;
-    }
-
-    public boolean isInitialState() {
-        return initialState;
-    }
-
-    public StateDto setInitialState(boolean initialState) {
-        this.initialState = initialState;
-        return this;
-    }
-
-    public boolean isFinalState() {
-        return finalState;
-    }
-
-    public StateDto setFinalState(boolean finalState) {
-        this.finalState = finalState;
-        return this;
-    }
 }

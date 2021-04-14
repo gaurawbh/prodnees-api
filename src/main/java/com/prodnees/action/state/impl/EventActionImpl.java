@@ -15,8 +15,8 @@ public class EventActionImpl implements EventAction {
     }
 
     @Override
-    public boolean existsByBatchProductId(int batchProductId) {
-        return eventService.existsByBatchProductId(batchProductId);
+    public boolean existsByBatchId(int batchId) {
+        return eventService.existsByBatchId(batchId);
     }
 
     @Override
@@ -30,8 +30,8 @@ public class EventActionImpl implements EventAction {
     }
 
     @Override
-    public List<Event> getAllByBatchProductId(int batchProductId) {
-        return eventService.getAllByBatchProductId(batchProductId);
+    public List<Event> getAllByBatchId(int batchId) {
+        return eventService.getAllByBatchId(batchId);
     }
 
     @Override
@@ -39,8 +39,4 @@ public class EventActionImpl implements EventAction {
         return eventService.getAllByStateId(stateId);
     }
 
-    @Override
-    public Event getByBatchProductIdAndName(int batchProductId, String name) {
-        return eventService.getByBatchProductIdAndName(batchProductId, name);
-    }
-}
+   }

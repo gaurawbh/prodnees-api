@@ -47,16 +47,6 @@ public class StateServiceImpl implements StateService {
     }
 
     @Override
-    public List<State> getAllByBatchIdAndIndexGreaterThan(int batchId, int index) {
-        return stateDao.getAllByBatchIdAndIndexGreaterThan(batchId, index);
-    }
-
-    @Override
-    public List<State> getAllByBatchIdAndIndexLessThan(int batchId, int index) {
-        return stateDao.getAllByBatchIdAndIndexLessThan(batchId, index);
-    }
-
-    @Override
     public void deleteById(int id) {
         stateDao.deleteById(id);
     }
@@ -71,23 +61,4 @@ public class StateServiceImpl implements StateService {
         return stateDao.findById(id);
     }
 
-    @Override
-    public int countByBatchId(int batchId) {
-        return stateDao.countByBatchId(batchId);
-    }
-
-    @Override
-    public boolean existsByBatchIdAndIndex(int batchId, int i) {
-        return stateDao.existsByBatchIdAndIndex(batchId, i);
-    }
-
-    @Override
-    public State getByBatchIdAndIndex(int batchId, int i) {
-        return stateDao.getByBatchIdAndIndex(batchId, i);
-    }
-
-    @Override
-    public List<State> saveAll(List<State> stateList) {
-        return stateDao.saveAll(stateList);
-    }
 }

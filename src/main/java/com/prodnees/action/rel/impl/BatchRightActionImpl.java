@@ -11,7 +11,7 @@ import com.prodnees.model.UserModel;
 import com.prodnees.service.batchproduct.BatchService;
 import com.prodnees.service.email.EmailPlaceHolders;
 import com.prodnees.service.email.LocalEmailService;
-import com.prodnees.service.rels.BatchProductRightService;
+import com.prodnees.service.rels.BatchRightService;
 import com.prodnees.service.user.UserAttributesService;
 import com.prodnees.service.user.UserService;
 import org.slf4j.Logger;
@@ -28,19 +28,19 @@ import java.util.stream.Collectors;
 
 @Service
 public class BatchRightActionImpl implements BatchRightAction {
-    private final BatchProductRightService batchProductRightService;
+    private final BatchRightService batchRightService;
     private final UserService userService;
     private final UserAttributesService userAttributesService;
     private final BatchService batchService;
     private final LocalEmailService localEmailService;
     Logger localLogger = LoggerFactory.getLogger(this.getClass());
 
-    public BatchRightActionImpl(BatchProductRightService batchProductRightService,
+    public BatchRightActionImpl(BatchRightService batchRightService,
                                 UserService userService,
                                 UserAttributesService userAttributesService,
                                 BatchService batchService,
                                 LocalEmailService localEmailService) {
-        this.batchProductRightService = batchProductRightService;
+        this.batchRightService = batchRightService;
         this.userService = userService;
         this.userAttributesService = userAttributesService;
         this.batchService = batchService;
@@ -54,13 +54,13 @@ public class BatchRightActionImpl implements BatchRightAction {
         AtomicReference<BatchProductRightModel> atomicReference = new AtomicReference<>();
         batchProductRightOpt.ifPresentOrElse(batchProductRight -> {
             batchProductRight.setObjectRightsType(rightsDto.getObjectRightsType());
-            atomicReference.set(mapToModel(batchProductRightService.save(batchProductRight)));
+            atomicReference.set(mapToModel(batchRightService.save(batchProductRight)));
         }, () -> {
             BatchRight batchRight = new BatchRight()
                     .setUserId(user.getId())
                     .setBatchProductId(rightsDto.getBatchId())
                     .setObjectRightsType(rightsDto.getObjectRightsType());
-            atomicReference.set(mapToModel(batchProductRightService.save(batchRight)));
+            atomicReference.set(mapToModel(batchRightService.save(batchRight)));
         });
         sendNewBatchRightsEmail(rightsDto.getEmail());
         return atomicReference.get();
@@ -68,39 +68,39 @@ public class BatchRightActionImpl implements BatchRightAction {
 
     @Override
     public BatchRight save(BatchRight batchRight) {
-        return batchProductRightService.save(batchRight);
+        return batchRightService.save(batchRight);
     }
 
     @Override
     public Optional<BatchRight> findByBatchIdAndUserId(int batchProductId, int ownerId) {
-        return batchProductRightService.findByBatchProductIdAndUserId(batchProductId, ownerId);
+        return batchRightService.findByBatchIdAndUserId(batchProductId, ownerId);
     }
 
     @Override
     public List<BatchProductRightModel> getAllByBatchId(int batchProductId) {
-        List<BatchRight> batchRights = batchProductRightService.getAllByBatchProductId(batchProductId);
+        List<BatchRight> batchRights = batchRightService.getAllByBatchId(batchProductId);
         return batchRights.stream().map(this::mapToModel).collect(Collectors.toList());
     }
 
     @Override
     public List<BatchRight> getAllByOwnerId(int ownerId) {
-        return batchProductRightService.getAllByOwnerId(ownerId);
+        return batchRightService.getAllByOwnerId(ownerId);
     }
 
     @Override
     public List<BatchProductRightModel> getAllModelByUserId(int ownerId) {
-        List<BatchRight> batchRights = batchProductRightService.getAllByOwnerId(ownerId);
+        List<BatchRight> batchRights = batchRightService.getAllByOwnerId(ownerId);
         return batchRights.stream().map(this::mapToModel).collect(Collectors.toList());
     }
 
     @Override
     public boolean hasBatchEditorRights(int batchProductId, int editorId) {
-        return batchProductRightService.hasBatchProductEditorRights(batchProductId, editorId);
+        return batchRightService.hasBatchEditorRights(batchProductId, editorId);
     }
 
     @Override
     public boolean hasBatchReaderRights(int batchProductId, int readerId) {
-        return batchProductRightService.hasBatchProductReaderRights(batchProductId, readerId);
+        return batchRightService.hasBatchReaderRights(batchProductId, readerId);
     }
 
     private BatchProductRightModel mapToModel(BatchRight productRights) {
@@ -134,7 +134,7 @@ public class BatchRightActionImpl implements BatchRightAction {
 
     @Override
     public void deleteByBatchIdAndUserId(int batchProductId, int userId) {
-        batchProductRightService.deleteByBatchProductIdAndUserId(batchProductId, userId);
+        batchRightService.deleteByBatchIdAndUserId(batchProductId, userId);
 
     }
 }

@@ -14,7 +14,7 @@ import com.prodnees.domain.state.StateReminder;
 import com.prodnees.dto.state.StateDto;
 import com.prodnees.filter.RequestValidator;
 import com.prodnees.model.StateModel;
-import com.prodnees.service.rels.BatchProductRightService;
+import com.prodnees.service.rels.BatchRightService;
 import com.prodnees.util.LocalAssert;
 import com.prodnees.util.MapperUtil;
 import com.prodnees.web.exception.NeesNotFoundException;
@@ -42,20 +42,20 @@ import static com.prodnees.web.response.LocalResponse.configure;
 @Transactional
 public class StateController {
     private final RequestValidator requestValidator;
-    private final BatchProductRightService batchProductRightService;
+    private final BatchRightService batchRightService;
     private final EventAction eventAction;
     private final StateAction stateAction;
     private final BatchAction batchAction;
     private final StateReminderAction stateReminderAction;
 
     public StateController(RequestValidator requestValidator,
-                           BatchProductRightService batchProductRightService,
+                           BatchRightService batchRightService,
                            EventAction eventAction,
                            StateAction stateAction,
                            BatchAction batchAction,
                            StateReminderAction stateReminderAction) {
         this.requestValidator = requestValidator;
-        this.batchProductRightService = batchProductRightService;
+        this.batchRightService = batchRightService;
         this.eventAction = eventAction;
         this.stateAction = stateAction;
         this.batchAction = batchAction;
@@ -75,20 +75,9 @@ public class StateController {
     public ResponseEntity<?> save(@Validated @RequestBody StateDto dto,
                                   HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
-        LocalAssert.isTrue(batchProductRightService.hasBatchProductEditorRights(dto.getBatchProductId(), userId),
+        LocalAssert.isTrue(batchRightService.hasBatchEditorRights(dto.getBatchProductId(), userId),
                 APIErrors.BATCH_PRODUCT_NOT_FOUND);
         LocalAssert.isTrue(batchAction.existsByIdAndStatus(dto.getBatchProductId(), BatchStatus.COMPLETE), "you cannot add a State to a Batch Product that is marked as Complete");
-        if (dto.getNextStateId() > 0) {
-            LocalAssert.isFalse(dto.isFinalState(), "final state cannot have nextStateId");
-            Optional<State> stateOptional = stateAction.findById(dto.getNextStateId());
-            LocalAssert.isTrue(stateOptional.isPresent() && batchProductRightService.hasBatchProductEditorRights(stateOptional.get().getBatchId(), userId), "State with nextStateId not found");
-        }
-        if (dto.getLastStateId() > 0) {
-            LocalAssert.isFalse(dto.isInitialState(), "initial state cannot have lastStateId");
-            Optional<State> stateOptional = stateAction.findById(dto.getLastStateId());
-            LocalAssert.isTrue(stateOptional.isPresent() && batchProductRightService.hasBatchProductEditorRights(stateOptional.get().getBatchId(), userId), "State with nextStateId not found");
-        }
-
         dto.setId(0);
         State state = MapperUtil.getDozer().map(dto, State.class).setStatus(StateStatus.OPEN);
         return configure(stateAction.save(state));
@@ -119,8 +108,8 @@ public class StateController {
     @GetMapping("/states/batch-product")
     public ResponseEntity<?> getAllByBatchProductId(@RequestParam int batchProductId, HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
-        LocalAssert.isTrue(batchProductRightService.hasBatchProductReaderRights(batchProductId, userId), APIErrors.BATCH_PRODUCT_NOT_FOUND);
-        return configure(stateAction.getAllByBatchProductId(batchProductId));
+        LocalAssert.isTrue(batchRightService.hasBatchReaderRights(batchProductId, userId), APIErrors.BATCH_PRODUCT_NOT_FOUND);
+        return configure(stateAction.getAllByBatchId(batchProductId));
     }
 
 
@@ -146,6 +135,29 @@ public class StateController {
         return configure("state deleted successfully");
     }
 
+
+    /**
+     * A {@link State} to be marked complete must have its last State marked as complete unless it is an initial State
+     *
+     * @param id
+     * @param servletRequest
+     * @return
+     */
+    @PutMapping("/state/start")
+    public ResponseEntity<?> markStateStarted(@RequestParam int id, HttpServletRequest servletRequest) {
+        int userId = requestValidator.extractUserId(servletRequest);
+        Optional<State> stateOptional = stateAction.findById(id);
+        stateOptional.ifPresentOrElse(state -> {
+            LocalAssert.isTrue(stateAction.hasStateEditorRights(id, userId), APIErrors.BATCH_PRODUCT_NOT_FOUND);
+             state.setStatus(StateStatus.STARTED);
+            List<StateReminder> stateReminderList = stateReminderAction.getAllByStateIdAndStateStatus(id, StateStatus.STARTED);
+            stateReminderList.forEach(stateReminderAction::sendStateReminder);
+        }, () -> {
+            throw new NeesNotFoundException();
+        });
+        return LocalResponse.configure();
+    }
+
     /**
      * A {@link State} to be marked complete must have its last State marked as complete unless it is an initial State
      *
@@ -162,7 +174,7 @@ public class StateController {
             List<Event> eventList = eventAction.getAllByStateId(state.getId());
             eventList.forEach(event -> LocalAssert.isTrue(event.isComplete(), "This state has events that are not complete. Complete all events before marking this State as Complete"));
             state.setStatus(StateStatus.COMPLETE);
-            List<StateReminder> stateReminderList = stateReminderAction.getAllByStateId(id);
+            List<StateReminder> stateReminderList = stateReminderAction.getAllByStateIdAndStateStatus(id, StateStatus.COMPLETE);
             stateReminderList.forEach(stateReminderAction::sendStateReminder);
         }, () -> {
             throw new NeesNotFoundException();

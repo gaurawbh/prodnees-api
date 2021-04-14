@@ -19,21 +19,9 @@ public interface StateService {
 
     List<State> getAllByBatchIdAndStatus(int batchId, StateStatus status);
 
-    List<State> getAllByBatchIdAndIndexGreaterThan(int batchId, int index);
-
-    List<State> getAllByBatchIdAndIndexLessThan(int batchId, int index);
-
     void deleteById(int id);
 
     boolean existsById(int id);
 
     Optional<State> findById(int id);
-
-    int countByBatchId(int batchId);
-
-    boolean existsByBatchIdAndIndex(int batchId, int i);
-
-    State getByBatchIdAndIndex(int batchId, int i);
-
-    List<State> saveAll(List<State> stateList);
 }

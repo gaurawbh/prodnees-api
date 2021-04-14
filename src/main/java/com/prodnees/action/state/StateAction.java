@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface StateAction {
 
-    boolean existsByBatchProductId(int batchProductId);
+    boolean existsByBatchId(int batchId);
 
     /**
      * A user will have the same {@link BatchRight} to a State as the {@link Batch} the State belongs to
@@ -42,9 +42,9 @@ public interface StateAction {
 
     State getByName(String name);
 
-    List<StateModel> getAllByBatchProductId(int batchProductId);
+    List<StateModel> getAllByBatchId(int batchId);
 
-    List<State> getAllByBatchProductIdAndStatus(int batchProductId, StateStatus status);
+    List<State> getAllByBatchIdAndStatus(int batchId, StateStatus status);
 
     /**
      * Deleting a {@link State} should connect its head State and it tail State.

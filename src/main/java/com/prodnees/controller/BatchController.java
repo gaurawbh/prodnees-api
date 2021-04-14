@@ -97,7 +97,7 @@ public class BatchController {
      * @return
      */
 
-    @PostMapping("/batch-product")
+    @PostMapping("/batch")
     public ResponseEntity<?> saveBatchProduct(@Validated @RequestBody BatchDto dto,
                                               HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
@@ -120,7 +120,7 @@ public class BatchController {
      * @param servletRequest
      * @return
      */
-    @GetMapping("/batch-products")
+    @GetMapping("/batches")
     public ResponseEntity<?> getBatchProducts(@RequestParam Optional<Integer> id,
                                               HttpServletRequest servletRequest) {
         int ownerId = requestValidator.extractUserId(servletRequest);
@@ -146,7 +146,7 @@ public class BatchController {
      * @param servletRequest
      * @return list of {@link BatchProductModel} that belongs to the User and by {@link BatchStatus}
      */
-    @GetMapping("/batch-products/status")
+    @GetMapping("/batches/status")
     public ResponseEntity<?> getAllByStatus(@RequestParam BatchStatus status,
                                             HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
@@ -161,7 +161,7 @@ public class BatchController {
      * @param servletRequest
      * @return
      */
-    @PutMapping("/batch-products/status")
+    @PutMapping("/batches/status")
     public ResponseEntity<?> updateStatus(@RequestParam BatchStatus status,
                                           @RequestParam int id,
                                           HttpServletRequest servletRequest) {
@@ -207,7 +207,7 @@ public class BatchController {
      * @param servletRequest
      * @return
      */
-    @PutMapping("/batch-product")
+    @PutMapping("/batch")
     public ResponseEntity<?> updateBatchProduct(@Validated @RequestBody BatchDto dto,
                                                 HttpServletRequest servletRequest) {
         int editorId = requestValidator.extractUserId(servletRequest);
@@ -228,15 +228,15 @@ public class BatchController {
      * @param servletRequest
      * @return
      */
-    @DeleteMapping("/batch-product")
+    @DeleteMapping("/batch")
     public ResponseEntity<?> deleteBatchProduct(@RequestParam int id,
                                                 HttpServletRequest servletRequest) {
         int ownerId = requestValidator.extractUserId(servletRequest);
         Optional<BatchRight> batchProductRightsOptional = batchRightAction.findByBatchIdAndUserId(id, ownerId);
         batchProductRightsOptional.ifPresentOrElse(batchProductRights -> {
             Assert.isTrue(batchProductRights.getObjectRightsType().equals(ObjectRightType.OWNER), ACCESS_DENIED.getMessage());
-            Assert.isTrue(!stateAction.existsByBatchProductId(id), REFERENCED_OBJECT.getMessage());
-            Assert.isTrue(eventAction.existsByBatchProductId(id), REFERENCED_OBJECT.getMessage());
+            Assert.isTrue(!stateAction.existsByBatchId(id), REFERENCED_OBJECT.getMessage());
+            Assert.isTrue(eventAction.existsByBatchId(id), REFERENCED_OBJECT.getMessage());
             batchAction.deleteById(id);
         }, () -> {
             throw new NeesNotFoundException();
@@ -253,7 +253,7 @@ public class BatchController {
      * @param servletRequest
      * @return
      */
-    @PutMapping("/batch-product-right")
+    @PutMapping("/batch-right")
     public ResponseEntity<?> saveBatchProductRight(@Validated @RequestBody BatchRightDto dto,
                                                    HttpServletRequest servletRequest) {
         int adminId = requestValidator.extractUserId(servletRequest);
@@ -276,7 +276,7 @@ public class BatchController {
      * @param servletRequest
      * @return
      */
-    @GetMapping("/batch-product-right/{rightOf}")
+    @GetMapping("/batch-right/{rightOf}")
     public ResponseEntity<?> getBatchProductRight(@PathVariable String rightOf,
                                                   @RequestParam Optional<Integer> batchProductId,
                                                   HttpServletRequest servletRequest) {
@@ -303,7 +303,7 @@ public class BatchController {
      * @param servletRequest
      * @return
      */
-    @DeleteMapping("/batch-product-right")
+    @DeleteMapping("/batch-right")
     public ResponseEntity<?> deleteBatchProductRights(@RequestParam int batchProductId, int userId,
                                                       HttpServletRequest servletRequest) {
         int adminId = requestValidator.extractUserId(servletRequest);
@@ -327,7 +327,7 @@ public class BatchController {
      * @param servletRequest
      * @return
      */
-    @PostMapping("/batch-product/approval-document")
+    @PostMapping("/batch/approval-document")
     public ResponseEntity<?> addApprovalDocument(@RequestBody @Validated BatchProductApprovalDocumentDto dto,
                                                  HttpServletRequest servletRequest) {
 

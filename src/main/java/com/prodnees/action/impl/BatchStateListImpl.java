@@ -79,10 +79,9 @@ public class BatchStateListImpl implements BatchStateList {
     }
 
     @Override
-    public boolean add(State state) {
+    public State add(State state) {
         state.setIndex(size(state.getBatchId()));
-        stateDao.save(state);
-        return true;
+       return stateDao.save(state);
     }
 
     @Override

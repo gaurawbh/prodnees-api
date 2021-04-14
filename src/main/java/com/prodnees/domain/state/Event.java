@@ -9,7 +9,7 @@ public class Event {
     @Id
     @GeneratedValue
     private int id;
-    private int batchProductId;
+    private int batchId;
     private int stateId;
     private String name;
     private String description;
@@ -24,12 +24,12 @@ public class Event {
         return this;
     }
 
-    public int getBatchProductId() {
-        return batchProductId;
+    public int getBatchId() {
+        return batchId;
     }
 
-    public Event setBatchProductId(int batchProductId) {
-        this.batchProductId = batchProductId;
+    public Event setBatchId(int batchProductId) {
+        this.batchId = batchProductId;
         return this;
     }
 

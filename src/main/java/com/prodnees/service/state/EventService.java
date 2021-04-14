@@ -5,17 +5,17 @@ import java.util.List;
 
 public interface EventService {
 
-    boolean existsByBatchProductId(int batchProductId);
+    boolean existsByBatchId(int batchId);
 
     Event save(Event event);
 
     Event getById(int id);
 
-    List<Event> getAllByBatchProductId(int batchProductId);
+    List<Event> getAllByBatchId(int batchId);
 
     List<Event> getAllByStateId(int stateId);
 
-    Event getByBatchProductIdAndName(int batchProductId, String name);
+    Event getByBatchIdAndName(int batchId, String name);
 
 
 }

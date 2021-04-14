@@ -24,7 +24,7 @@ public interface BatchStateList {
 
     boolean hasNext(int batchId, int index);
 
-    boolean add(State state);
+    State add(State state);
 
     boolean add(State state, int index);
 
