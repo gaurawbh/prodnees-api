@@ -80,7 +80,7 @@ public class BatchStateListImpl implements BatchStateList {
 
     @Override
     public State add(State state) {
-        if (state.getIndex() <= 0) {
+        if (state.getIndex() >= 0) {
             return add(state, state.getIndex());
         } else {
             state.setIndex(size(state.getBatchId()));

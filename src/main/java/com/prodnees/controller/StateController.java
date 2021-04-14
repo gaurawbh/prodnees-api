@@ -32,9 +32,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
+
 import static com.prodnees.web.response.LocalResponse.configure;
 
 @RestController
@@ -80,7 +82,7 @@ public class StateController {
                 APIErrors.BATCH_NOT_FOUND);
         LocalAssert.isTrue(batchAction.existsByIdAndStatus(dto.getBatchId(), BatchStatus.COMPLETE), "you cannot add a State to a Batch Product that is marked as Complete");
         dto.setId(0).
-                setIndex(ValidatorUtil.ifValidIntegerOrElse(dto.getIndex(), 0));
+                setIndex(ValidatorUtil.ifValidIntegerOrElse(dto.getIndex(), -1));
         State state = MapperUtil.getDozer().map(dto, State.class).setStatus(StateStatus.OPEN);
         return configure(stateAction.save(state));
     }
