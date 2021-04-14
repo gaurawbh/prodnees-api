@@ -18,15 +18,12 @@ public class State {
     @Id
     @GeneratedValue
     private int id;
-    private int batchProductId;
+    private int batchId;
+    private int index;
     private String name;
     private String description;
     @Enumerated(EnumType.STRING)
     private StateStatus status;
-    private int lastStateId;
-    private int nextStateId;
-    private boolean initialState;
-    private boolean finalState;
 
     public int getId() {
         return id;
@@ -37,12 +34,21 @@ public class State {
         return this;
     }
 
-    public int getBatchProductId() {
-        return batchProductId;
+    public int getBatchId() {
+        return batchId;
     }
 
-    public State setBatchProductId(int batchProductId) {
-        this.batchProductId = batchProductId;
+    public State setBatchId(int batchProductId) {
+        this.batchId = batchProductId;
+        return this;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public State setIndex(int index) {
+        this.index = index;
         return this;
     }
 
@@ -73,39 +79,4 @@ public class State {
         return this;
     }
 
-    public int getLastStateId() {
-        return lastStateId;
-    }
-
-    public State setLastStateId(int lastStateId) {
-        this.lastStateId = lastStateId;
-        return this;
-    }
-
-    public int getNextStateId() {
-        return nextStateId;
-    }
-
-    public State setNextStateId(int nextStateId) {
-        this.nextStateId = nextStateId;
-        return this;
-    }
-
-    public boolean isInitialState() {
-        return initialState;
-    }
-
-    public State setInitialState(boolean initialState) {
-        this.initialState = initialState;
-        return this;
-    }
-
-    public boolean isFinalState() {
-        return finalState;
-    }
-
-    public State setFinalState(boolean finalState) {
-        this.finalState = finalState;
-        return this;
-    }
 }

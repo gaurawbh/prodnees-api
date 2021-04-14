@@ -1,12 +1,12 @@
 package com.prodnees.controller;
 
-import com.prodnees.action.BatchProductAction;
+import com.prodnees.action.BatchAction;
 import com.prodnees.action.state.EventAction;
 import com.prodnees.action.state.StateAction;
 import com.prodnees.action.state.StateReminderAction;
 import com.prodnees.config.constants.APIErrors;
-import com.prodnees.domain.batchproduct.BatchProduct;
-import com.prodnees.domain.enums.BatchProductStatus;
+import com.prodnees.domain.batchproduct.Batch;
+import com.prodnees.domain.enums.BatchStatus;
 import com.prodnees.domain.enums.StateStatus;
 import com.prodnees.domain.state.Event;
 import com.prodnees.domain.state.State;
@@ -17,7 +17,6 @@ import com.prodnees.model.StateModel;
 import com.prodnees.service.rels.BatchProductRightService;
 import com.prodnees.util.LocalAssert;
 import com.prodnees.util.MapperUtil;
-import com.prodnees.web.exception.NeesInfoException;
 import com.prodnees.web.exception.NeesNotFoundException;
 import com.prodnees.web.response.LocalResponse;
 import org.springframework.http.ResponseEntity;
@@ -46,25 +45,25 @@ public class StateController {
     private final BatchProductRightService batchProductRightService;
     private final EventAction eventAction;
     private final StateAction stateAction;
-    private final BatchProductAction batchProductAction;
+    private final BatchAction batchAction;
     private final StateReminderAction stateReminderAction;
 
     public StateController(RequestValidator requestValidator,
                            BatchProductRightService batchProductRightService,
                            EventAction eventAction,
                            StateAction stateAction,
-                           BatchProductAction batchProductAction,
+                           BatchAction batchAction,
                            StateReminderAction stateReminderAction) {
         this.requestValidator = requestValidator;
         this.batchProductRightService = batchProductRightService;
         this.eventAction = eventAction;
         this.stateAction = stateAction;
-        this.batchProductAction = batchProductAction;
+        this.batchAction = batchAction;
         this.stateReminderAction = stateReminderAction;
     }
 
     /**
-     * Rules to Adding new  {@link State} to a {@link BatchProduct}
+     * Rules to Adding new  {@link State} to a {@link Batch}
      * <p>if {@link State} #nextStateId > 0, the {@link State} can not be the finalState</p>
      * <p>if  {@link State} #lastStateId > 0,  the {@link State} must not be the initialState</p>
      *
@@ -78,16 +77,16 @@ public class StateController {
         int userId = requestValidator.extractUserId(servletRequest);
         LocalAssert.isTrue(batchProductRightService.hasBatchProductEditorRights(dto.getBatchProductId(), userId),
                 APIErrors.BATCH_PRODUCT_NOT_FOUND);
-        LocalAssert.isTrue(batchProductAction.existsByIdAndStatus(dto.getBatchProductId(), BatchProductStatus.COMPLETE), "you cannot add a State to a Batch Product that is marked as Complete");
+        LocalAssert.isTrue(batchAction.existsByIdAndStatus(dto.getBatchProductId(), BatchStatus.COMPLETE), "you cannot add a State to a Batch Product that is marked as Complete");
         if (dto.getNextStateId() > 0) {
             LocalAssert.isFalse(dto.isFinalState(), "final state cannot have nextStateId");
             Optional<State> stateOptional = stateAction.findById(dto.getNextStateId());
-            LocalAssert.isTrue(stateOptional.isPresent() && batchProductRightService.hasBatchProductEditorRights(stateOptional.get().getBatchProductId(), userId), "State with nextStateId not found");
+            LocalAssert.isTrue(stateOptional.isPresent() && batchProductRightService.hasBatchProductEditorRights(stateOptional.get().getBatchId(), userId), "State with nextStateId not found");
         }
         if (dto.getLastStateId() > 0) {
             LocalAssert.isFalse(dto.isInitialState(), "initial state cannot have lastStateId");
             Optional<State> stateOptional = stateAction.findById(dto.getLastStateId());
-            LocalAssert.isTrue(stateOptional.isPresent() && batchProductRightService.hasBatchProductEditorRights(stateOptional.get().getBatchProductId(), userId), "State with nextStateId not found");
+            LocalAssert.isTrue(stateOptional.isPresent() && batchProductRightService.hasBatchProductEditorRights(stateOptional.get().getBatchId(), userId), "State with nextStateId not found");
         }
 
         dto.setId(0);
@@ -111,7 +110,7 @@ public class StateController {
     }
 
     /**
-     * Returns the List of {@link StateModel} by {@link BatchProduct} #id
+     * Returns the List of {@link StateModel} by {@link Batch} #id
      *
      * @param batchProductId
      * @param servletRequest
@@ -160,20 +159,9 @@ public class StateController {
         Optional<State> stateOptional = stateAction.findById(id);
         stateOptional.ifPresentOrElse(state -> {
             LocalAssert.isTrue(stateAction.hasStateEditorRights(id, userId), APIErrors.BATCH_PRODUCT_NOT_FOUND);
-            if (stateAction.existsById(state.getLastStateId())) {
-                State lastState = stateAction.getById(state.getLastStateId());
-                LocalAssert.isTrue(lastState.getStatus().equals(StateStatus.COMPLETE), String.format("State [ id: %d, name: %s ] must be complete before you can mark this State as complete", lastState.getId(), lastState.getName()));
-            }
-            if (!state.isInitialState() && !stateAction.existsById(state.getLastStateId())) {
-                throw new NeesInfoException("This is a Dangling State [ State which is neither the initial state or has the last State attached to it ] which cannot be marked as complete. ");
-            }
             List<Event> eventList = eventAction.getAllByStateId(state.getId());
             eventList.forEach(event -> LocalAssert.isTrue(event.isComplete(), "This state has events that are not complete. Complete all events before marking this State as Complete"));
             state.setStatus(StateStatus.COMPLETE);
-            if (state.isFinalState()) {
-                BatchProduct batchProduct = batchProductAction.getById(state.getBatchProductId());
-                batchProductAction.save(batchProduct.setStatus(BatchProductStatus.COMPLETE));
-            }
             List<StateReminder> stateReminderList = stateReminderAction.getAllByStateId(id);
             stateReminderList.forEach(stateReminderAction::sendStateReminder);
         }, () -> {

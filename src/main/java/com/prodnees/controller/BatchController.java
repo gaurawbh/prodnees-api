@@ -1,22 +1,23 @@
 package com.prodnees.controller;
 
-import com.prodnees.action.BatchProductAction;
-import com.prodnees.action.rel.BatchProductRightAction;
+import com.prodnees.action.BatchAction;
+import com.prodnees.action.rel.BatchRightAction;
 import com.prodnees.action.rel.DocumentRightAction;
 import com.prodnees.action.state.EventAction;
 import com.prodnees.action.state.StateAction;
 import com.prodnees.config.constants.APIErrors;
-import com.prodnees.domain.batchproduct.BatchProduct;
+import com.prodnees.domain.batchproduct.Batch;
 import com.prodnees.domain.batchproduct.BatchProductApprovalDocument;
 import com.prodnees.domain.enums.ApprovalDocumentState;
-import com.prodnees.domain.enums.BatchProductStatus;
+import com.prodnees.domain.enums.BatchStatus;
 import com.prodnees.domain.enums.ObjectRightType;
 import com.prodnees.domain.rels.Associates;
-import com.prodnees.domain.rels.BatchProductRight;
+import com.prodnees.domain.rels.BatchRight;
 import com.prodnees.domain.rels.DocumentRight;
+import com.prodnees.domain.state.State;
+import com.prodnees.dto.batchproduct.BatchDto;
 import com.prodnees.dto.batchproduct.BatchProductApprovalDocumentDto;
-import com.prodnees.dto.batchproduct.BatchProductDto;
-import com.prodnees.dto.batchproduct.BatchProductRightDto;
+import com.prodnees.dto.batchproduct.BatchRightDto;
 import com.prodnees.filter.RequestValidator;
 import com.prodnees.model.BatchProductModel;
 import com.prodnees.service.rels.AssociatesService;
@@ -42,6 +43,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -56,27 +60,27 @@ import static com.prodnees.web.response.LocalResponse.configure;
 @RequestMapping("/secure/")
 @CrossOrigin
 @Transactional
-public class BatchProductController {
+public class BatchController {
     private final RequestValidator requestValidator;
-    private final BatchProductAction batchProductAction;
-    private final BatchProductRightAction batchProductRightAction;
+    private final BatchAction batchAction;
+    private final BatchRightAction batchRightAction;
     private final StateAction stateAction;
     private final EventAction eventAction;
     private final AssociatesService associatesService;
     private final DocumentRightAction documentRightAction;
     private final BatchProductApprovalDocumentService batchProductApprovalDocumentService;
 
-    public BatchProductController(RequestValidator requestValidator,
-                                  BatchProductAction batchProductAction,
-                                  BatchProductRightAction batchProductRightAction,
-                                  StateAction stateAction,
-                                  EventAction eventAction,
-                                  AssociatesService associatesService,
-                                  DocumentRightAction documentRightAction,
-                                  BatchProductApprovalDocumentService batchProductApprovalDocumentService) {
+    public BatchController(RequestValidator requestValidator,
+                           BatchAction batchAction,
+                           BatchRightAction batchRightAction,
+                           StateAction stateAction,
+                           EventAction eventAction,
+                           AssociatesService associatesService,
+                           DocumentRightAction documentRightAction,
+                           BatchProductApprovalDocumentService batchProductApprovalDocumentService) {
         this.requestValidator = requestValidator;
-        this.batchProductAction = batchProductAction;
-        this.batchProductRightAction = batchProductRightAction;
+        this.batchAction = batchAction;
+        this.batchRightAction = batchRightAction;
         this.stateAction = stateAction;
         this.eventAction = eventAction;
         this.associatesService = associatesService;
@@ -94,14 +98,14 @@ public class BatchProductController {
      */
 
     @PostMapping("/batch-product")
-    public ResponseEntity<?> saveBatchProduct(@Validated @RequestBody BatchProductDto dto,
+    public ResponseEntity<?> saveBatchProduct(@Validated @RequestBody BatchDto dto,
                                               HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
         dto.setId(0);
-        BatchProduct batchProduct = MapperUtil.getDozer().map(dto, BatchProduct.class);
-        batchProduct.setCreatedDate(LocalDate.now()).setStatus(BatchProductStatus.INITIAL);
-        BatchProductModel batchProductModel = batchProductAction.save(batchProduct);
-        batchProductRightAction.save(new BatchProductRight()
+        Batch batch = MapperUtil.getDozer().map(dto, Batch.class);
+        batch.setCreatedDate(LocalDate.now()).setStatus(BatchStatus.INITIAL);
+        BatchProductModel batchProductModel = batchAction.save(batch);
+        batchRightAction.save(new BatchRight()
                 .setUserId(userId)
                 .setBatchProductId(batchProductModel.getId())
                 .setObjectRightsType(ObjectRightType.OWNER));
@@ -120,72 +124,74 @@ public class BatchProductController {
     public ResponseEntity<?> getBatchProducts(@RequestParam Optional<Integer> id,
                                               HttpServletRequest servletRequest) {
         int ownerId = requestValidator.extractUserId(servletRequest);
+        Iterable<State> stateIterable = new ArrayList<>();
+        List<State> stateList = new LinkedList<>();
         AtomicReference<Object> atomicReference = new AtomicReference<>();
         id.ifPresentOrElse(integer -> {
-            Optional<BatchProductRight> batchProductRights = batchProductRightAction.findByBatchProductIdAndUserId(integer, ownerId);
+            Optional<BatchRight> batchProductRights = batchRightAction.findByBatchIdAndUserId(integer, ownerId);
             Assert.isTrue(batchProductRights.isPresent(), OBJECT_NOT_FOUND.getMessage());
-            atomicReference.set(batchProductAction.getModelById(batchProductRights.get().getBatchProductId()));
+            atomicReference.set(batchAction.getModelById(batchProductRights.get().getBatchProductId()));
         }, () -> {
-            Iterable<Integer> batchProductIds = batchProductRightAction.getAllByOwnerId(ownerId)
+            Iterable<Integer> batchProductIds = batchRightAction.getAllByOwnerId(ownerId)
                     .stream()
-                    .map(BatchProductRight::getBatchProductId)
+                    .map(BatchRight::getBatchProductId)
                     .collect(Collectors.toList());
-            atomicReference.set(batchProductAction.getAllByIds(batchProductIds));
+            atomicReference.set(batchAction.getAllByIds(batchProductIds));
         });
         return configure(atomicReference.get());
     }
 
     /**
-     * @param status         of {@link BatchProduct}
+     * @param status         of {@link Batch}
      * @param servletRequest
-     * @return list of {@link BatchProductModel} that belongs to the User and by {@link BatchProductStatus}
+     * @return list of {@link BatchProductModel} that belongs to the User and by {@link BatchStatus}
      */
     @GetMapping("/batch-products/status")
-    public ResponseEntity<?> getAllByStatus(@RequestParam BatchProductStatus status,
+    public ResponseEntity<?> getAllByStatus(@RequestParam BatchStatus status,
                                             HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
-        return configure(batchProductAction.getAllByUserIdAndStatus(userId, status));
+        return configure(batchAction.getAllByUserIdAndStatus(userId, status));
     }
 
     /**
-     * Update {@link BatchProduct} -> {@link BatchProductStatus}
+     * Update {@link Batch} -> {@link BatchStatus}
      *
-     * @param status         of {@link BatchProduct}
-     * @param id             of {@link BatchProduct}
+     * @param status         of {@link Batch}
+     * @param id             of {@link Batch}
      * @param servletRequest
      * @return
      */
     @PutMapping("/batch-products/status")
-    public ResponseEntity<?> updateStatus(@RequestParam BatchProductStatus status,
+    public ResponseEntity<?> updateStatus(@RequestParam BatchStatus status,
                                           @RequestParam int id,
                                           HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
-        LocalAssert.isTrue(batchProductRightAction.hasBatchProductEditorRights(id, userId), UPDATE_DENIED);
-        BatchProduct batchProduct = batchProductAction.getById(id);
-        LocalAssert.isTrue(isValidBatchProductStatusUpdate(batchProduct.getStatus(), status), "invalid status for the Batch Product");
-        batchProduct.setStatus(status);
-        return LocalResponse.configure(batchProductAction.save(batchProduct));
+        LocalAssert.isTrue(batchRightAction.hasBatchEditorRights(id, userId), UPDATE_DENIED);
+        Batch batch = batchAction.getById(id);
+        LocalAssert.isTrue(isValidBatchProductStatusUpdate(batch.getStatus(), status), "invalid status for the Batch Product");
+        batch.setStatus(status);
+        return LocalResponse.configure(batchAction.save(batch));
     }
 
     /**
-     * Check if the new {@link BatchProductStatus} of a  {@link BatchProduct} is valid
+     * Check if the new {@link BatchStatus} of a  {@link Batch} is valid
      *
      * @param currentStatus
      * @param newStatus
      * @return
      */
 
-    boolean isValidBatchProductStatusUpdate(BatchProductStatus currentStatus, BatchProductStatus newStatus) {
+    boolean isValidBatchProductStatusUpdate(BatchStatus currentStatus, BatchStatus newStatus) {
         switch (newStatus) {
             case SUSPENDED:
             case COMPLETE:
-                return currentStatus == BatchProductStatus.INITIAL
-                        || currentStatus == BatchProductStatus.IN_PROGRESS;
+                return currentStatus == BatchStatus.INITIAL
+                        || currentStatus == BatchStatus.IN_PROGRESS;
             case INITIAL:
-                return currentStatus == BatchProductStatus.IN_PROGRESS;
+                return currentStatus == BatchStatus.IN_PROGRESS;
             case IN_PROGRESS:
-                return currentStatus == BatchProductStatus.COMPLETE
-                        || currentStatus == BatchProductStatus.INITIAL;
+                return currentStatus == BatchStatus.COMPLETE
+                        || currentStatus == BatchStatus.INITIAL;
             default:
                 return false;
         }
@@ -202,16 +208,16 @@ public class BatchProductController {
      * @return
      */
     @PutMapping("/batch-product")
-    public ResponseEntity<?> updateBatchProduct(@Validated @RequestBody BatchProductDto dto,
+    public ResponseEntity<?> updateBatchProduct(@Validated @RequestBody BatchDto dto,
                                                 HttpServletRequest servletRequest) {
         int editorId = requestValidator.extractUserId(servletRequest);
-        Assert.isTrue(batchProductAction.existsById(dto.getId()), OBJECT_NOT_FOUND.getMessage());
-        Assert.isTrue(batchProductRightAction.hasBatchProductEditorRights(dto.getId(), editorId), OBJECT_NOT_FOUND.getMessage());
-        BatchProduct batchProduct = batchProductAction.getById(dto.getId());
-        batchProduct.setName(dto.getName())
-                .setDescription(ValidatorUtil.ifValidStringOrElse(dto.getDescription(), batchProduct.getDescription()));
+        Assert.isTrue(batchAction.existsById(dto.getId()), OBJECT_NOT_FOUND.getMessage());
+        Assert.isTrue(batchRightAction.hasBatchEditorRights(dto.getId(), editorId), OBJECT_NOT_FOUND.getMessage());
+        Batch batch = batchAction.getById(dto.getId());
+        batch.setName(dto.getName())
+                .setDescription(ValidatorUtil.ifValidStringOrElse(dto.getDescription(), batch.getDescription()));
 
-        return configure(batchProductAction.save(batchProduct));
+        return configure(batchAction.save(batch));
     }
 
     /**
@@ -226,12 +232,12 @@ public class BatchProductController {
     public ResponseEntity<?> deleteBatchProduct(@RequestParam int id,
                                                 HttpServletRequest servletRequest) {
         int ownerId = requestValidator.extractUserId(servletRequest);
-        Optional<BatchProductRight> batchProductRightsOptional = batchProductRightAction.findByBatchProductIdAndUserId(id, ownerId);
+        Optional<BatchRight> batchProductRightsOptional = batchRightAction.findByBatchIdAndUserId(id, ownerId);
         batchProductRightsOptional.ifPresentOrElse(batchProductRights -> {
             Assert.isTrue(batchProductRights.getObjectRightsType().equals(ObjectRightType.OWNER), ACCESS_DENIED.getMessage());
             Assert.isTrue(!stateAction.existsByBatchProductId(id), REFERENCED_OBJECT.getMessage());
             Assert.isTrue(eventAction.existsByBatchProductId(id), REFERENCED_OBJECT.getMessage());
-            batchProductAction.deleteById(id);
+            batchAction.deleteById(id);
         }, () -> {
             throw new NeesNotFoundException();
         });
@@ -239,31 +245,31 @@ public class BatchProductController {
     }
 
     /**
-     * <p>Save the {@link BatchProductRight}</p>
+     * <p>Save the {@link BatchRight}</p>
      * <p>Send email to the user for getting the rights</p>
-     * <i>Only associates can be given {@link BatchProductRight}</i>
+     * <i>Only associates can be given {@link BatchRight}</i>
      *
      * @param dto
      * @param servletRequest
      * @return
      */
     @PutMapping("/batch-product-right")
-    public ResponseEntity<?> saveBatchProductRight(@Validated @RequestBody BatchProductRightDto dto,
+    public ResponseEntity<?> saveBatchProductRight(@Validated @RequestBody BatchRightDto dto,
                                                    HttpServletRequest servletRequest) {
         int adminId = requestValidator.extractUserId(servletRequest);
         Assert.isTrue(dto.getObjectRightsType() != ObjectRightType.OWNER, "you can only assign an editor or a  viewer");
         Assert.isTrue(associatesService.existsByAdminIdAndAssociateEmail(adminId, dto.getEmail()), APIErrors.ASSOCIATES_ONLY.getMessage());
-        Optional<BatchProductRight> batchProductRightsOpt = batchProductRightAction.findByBatchProductIdAndUserId(dto.getBatchProductId(), adminId);
+        Optional<BatchRight> batchProductRightsOpt = batchRightAction.findByBatchIdAndUserId(dto.getBatchId(), adminId);
         Assert.isTrue(batchProductRightsOpt.isPresent() && batchProductRightsOpt.get().getObjectRightsType().equals(ObjectRightType.OWNER),
                 "only owners can invite others to admin their batch product or update the rights");
-        return configure(batchProductRightAction.save(dto));
+        return configure(batchRightAction.save(dto));
     }
 
     /**
      * if rightOf path is product,
-     * <i>return {@link java.util.List} of {@link BatchProductRight} by batchProductId</i>
+     * <i>return {@link java.util.List} of {@link BatchRight} by batchProductId</i>
      * <p>if rightOf path is user,</p>
-     * <i>return {@link java.util.List} of {@link BatchProductRight} by userId</i>
+     * <i>return {@link java.util.List} of {@link BatchRight} by userId</i>
      *
      * @param rightOf
      * @param batchProductId
@@ -278,10 +284,10 @@ public class BatchProductController {
         switch (rightOf) {
             case "batch-product":
                 LocalAssert.isTrue(batchProductId.isPresent(), "batchProductId must be provided for batch-product rights");
-                LocalAssert.isTrue(batchProductRightAction.hasBatchProductReaderRights(batchProductId.get(), userId), BATCH_PRODUCT_NOT_FOUND);
-                return configure(batchProductRightAction.getAllByBatchProductId(batchProductId.get()));
+                LocalAssert.isTrue(batchRightAction.hasBatchReaderRights(batchProductId.get(), userId), BATCH_PRODUCT_NOT_FOUND);
+                return configure(batchRightAction.getAllByBatchId(batchProductId.get()));
             case "user":
-                return configure(batchProductRightAction.getAllModelByUserId(userId));
+                return configure(batchRightAction.getAllModelByUserId(userId));
             default:
                 throw new NeesNotFoundException(String.format("no handler found for %s", servletRequest.getRequestURI()), 99);
         }
@@ -302,13 +308,13 @@ public class BatchProductController {
                                                       HttpServletRequest servletRequest) {
         int adminId = requestValidator.extractUserId(servletRequest);
         Assert.isTrue(userId != adminId, "you cannot delete your own batch product rights");
-        Optional<BatchProductRight> adminBatchProductRightOpt = batchProductRightAction.findByBatchProductIdAndUserId(batchProductId, adminId);// check you have permission, you are an owner
+        Optional<BatchRight> adminBatchProductRightOpt = batchRightAction.findByBatchIdAndUserId(batchProductId, adminId);// check you have permission, you are an owner
         Assert.isTrue(adminBatchProductRightOpt.isPresent() && adminBatchProductRightOpt.get().getObjectRightsType() == ObjectRightType.OWNER,
                 UPDATE_DENIED.getMessage());
-        Optional<BatchProductRight> userBatchProductRightOpt = batchProductRightAction.findByBatchProductIdAndUserId(batchProductId, userId); // check the other user is not the owner
+        Optional<BatchRight> userBatchProductRightOpt = batchRightAction.findByBatchIdAndUserId(batchProductId, userId); // check the other user is not the owner
         Assert.isTrue(userBatchProductRightOpt.isPresent() && userBatchProductRightOpt.get().getObjectRightsType() != ObjectRightType.OWNER,
                 "you cannot remove another owner's batch product rights");
-        batchProductRightAction.deleteByBatchProductIdAndUserId(batchProductId, userId);
+        batchRightAction.deleteByBatchIdAndUserId(batchProductId, userId);
         return configure();
     }
 
@@ -329,7 +335,7 @@ public class BatchProductController {
         Optional<Associates> associatesOptional = associatesService.findByAdminIdAndAssociateEmail(userId, dto.getApproverEmail());
         LocalAssert.isTrue(associatesOptional.isPresent(), "approver must be an associate.");
         LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(dto.getDocumentId(), userId), "document not found");
-        LocalAssert.isTrue(batchProductRightAction.hasBatchProductEditorRights(dto.getBatchProductId(), userId), OBJECT_NOT_FOUND);
+        LocalAssert.isTrue(batchRightAction.hasBatchEditorRights(dto.getBatchProductId(), userId), OBJECT_NOT_FOUND);
         BatchProductApprovalDocument batchProductApprovalDocument = new BatchProductApprovalDocument()
                 .setBatchProductId(dto.getBatchProductId())
                 .setDocumentId(dto.getDocumentId())

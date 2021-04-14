@@ -1,5 +1,5 @@
 package com.prodnees.domain.enums;
 
-public enum BatchProductStatus {
+public enum BatchStatus {
     INITIAL, IN_PROGRESS, COMPLETE, SUSPENDED
 }

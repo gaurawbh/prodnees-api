@@ -2,7 +2,7 @@ package com.prodnees.service.rels.impl;
 
 import com.prodnees.dao.rels.BatchProductRightsDao;
 import com.prodnees.domain.enums.ObjectRightType;
-import com.prodnees.domain.rels.BatchProductRight;
+import com.prodnees.domain.rels.BatchRight;
 import com.prodnees.service.rels.BatchProductRightService;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -17,22 +17,22 @@ public class BatchProductRightServiceImpl implements BatchProductRightService {
     }
 
     @Override
-    public BatchProductRight save(BatchProductRight batchProductRight) {
-        return batchProductRightsDao.save(batchProductRight);
+    public BatchRight save(BatchRight batchRight) {
+        return batchProductRightsDao.save(batchRight);
     }
 
     @Override
-    public Optional<BatchProductRight> findByBatchProductIdAndUserId(int batchProductId, int ownerId) {
+    public Optional<BatchRight> findByBatchProductIdAndUserId(int batchProductId, int ownerId) {
         return batchProductRightsDao.findByBatchProductIdAndUserId(batchProductId, ownerId);
     }
 
     @Override
-    public List<BatchProductRight> getAllByBatchProductId(int batchProductId) {
+    public List<BatchRight> getAllByBatchProductId(int batchProductId) {
         return batchProductRightsDao.getAllByBatchProductId(batchProductId);
     }
 
     @Override
-    public List<BatchProductRight> getAllByOwnerId(int ownerId) {
+    public List<BatchRight> getAllByOwnerId(int ownerId) {
         return batchProductRightsDao.getAllByUserId(ownerId);
     }
 

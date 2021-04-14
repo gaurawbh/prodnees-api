@@ -11,9 +11,25 @@ public interface StateDao extends JpaRepository<State, Integer> {
 
     State getByName(String name);
 
-    List<State> getAllByBatchProductId(int batchProductId);
+    State getByBatchIdAndIndex(int batchId, int index);
 
-    List<State> getAllByBatchProductIdAndStatus(int batchProductId, StateStatus status);
+    List<State> getAllByBatchId(int batchId);
 
-    boolean existsByBatchProductId(int batchProductId);
+    List<State> getAllByBatchIdAndStatus(int batchId, StateStatus status);
+
+    List<State> getAllByBatchIdAndIndexGreaterThan(int batchId, int index);
+
+    List<State> getAllByBatchIdAndIndexStartingWith(int batchId, int index);
+
+    List<State> getAllByBatchIdAndIndexLessThan(int batchId, int index);
+
+    boolean existsByBatchId(int batchId);
+
+    int countByBatchId(int batchId);
+
+    boolean existsByBatchIdAndIndex(int batchId, int i);
+
+    void deleteAllByBatchId(int batchId);
+
+    void deleteByBatchIdAndIndex(int batchId, int index);
 }

@@ -1,6 +1,6 @@
 package com.prodnees.domain.batchproduct;
 
-import com.prodnees.domain.enums.BatchProductStatus;
+import com.prodnees.domain.enums.BatchStatus;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import java.time.LocalDate;
 
 @Entity
-public class BatchProduct {
+public class Batch {
     @Id
     @GeneratedValue
     private int id;
@@ -17,14 +17,14 @@ public class BatchProduct {
     private String name;
     private String description;
     @Enumerated(EnumType.STRING)
-    private BatchProductStatus status;
+    private BatchStatus status;
     private LocalDate createdDate;
 
     public int getId() {
         return id;
     }
 
-    public BatchProduct setId(int id) {
+    public Batch setId(int id) {
         this.id = id;
         return this;
     }
@@ -33,7 +33,7 @@ public class BatchProduct {
         return productId;
     }
 
-    public BatchProduct setProductId(int productId) {
+    public Batch setProductId(int productId) {
         this.productId = productId;
         return this;
     }
@@ -42,7 +42,7 @@ public class BatchProduct {
         return name;
     }
 
-    public BatchProduct setName(String name) {
+    public Batch setName(String name) {
         this.name = name;
         return this;
     }
@@ -51,17 +51,17 @@ public class BatchProduct {
         return description;
     }
 
-    public BatchProduct setDescription(String description) {
+    public Batch setDescription(String description) {
         this.description = description;
         return this;
     }
 
-    public BatchProductStatus getStatus() {
+    public BatchStatus getStatus() {
         return status;
     }
 
-    public BatchProduct setStatus(BatchProductStatus batchProductStatus) {
-        this.status = batchProductStatus;
+    public Batch setStatus(BatchStatus batchStatus) {
+        this.status = batchStatus;
         return this;
     }
 
@@ -69,7 +69,7 @@ public class BatchProduct {
         return createdDate;
     }
 
-    public BatchProduct setCreatedDate(LocalDate createDate) {
+    public Batch setCreatedDate(LocalDate createDate) {
         this.createdDate = createDate;
         return this;
     }

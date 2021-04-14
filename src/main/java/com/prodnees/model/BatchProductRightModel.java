@@ -1,20 +1,20 @@
 package com.prodnees.model;
 
-import com.prodnees.domain.batchproduct.BatchProduct;
+import com.prodnees.domain.batchproduct.Batch;
 import com.prodnees.domain.enums.ObjectRightType;
 
 public class BatchProductRightModel {
 
-    private BatchProduct batchProduct;
+    private Batch batch;
     private UserModel userModel;
     private ObjectRightType objectRightType;
 
-    public BatchProduct getBatchProduct() {
-        return batchProduct;
+    public Batch getBatchProduct() {
+        return batch;
     }
 
-    public BatchProductRightModel setBatchProduct(BatchProduct batchProduct) {
-        this.batchProduct = batchProduct;
+    public BatchProductRightModel setBatchProduct(Batch batch) {
+        this.batch = batch;
         return this;
     }
 

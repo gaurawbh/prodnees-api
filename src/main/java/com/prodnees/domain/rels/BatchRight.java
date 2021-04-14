@@ -1,15 +1,15 @@
 package com.prodnees.domain.rels;
 
 import com.prodnees.domain.enums.ObjectRightType;
-import com.prodnees.domain.rels.id.BatchProductRightId;
+import com.prodnees.domain.rels.id.BatchRightId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import java.io.Serializable;
 
 @Entity
-@IdClass(BatchProductRightId.class)
-public class BatchProductRight implements Serializable {
+@IdClass(BatchRightId.class)
+public class BatchRight implements Serializable {
     @Id
     private int batchProductId;
     @Id
@@ -20,7 +20,7 @@ public class BatchProductRight implements Serializable {
         return batchProductId;
     }
 
-    public BatchProductRight setBatchProductId(int batchProductId) {
+    public BatchRight setBatchProductId(int batchProductId) {
         this.batchProductId = batchProductId;
         return this;
     }
@@ -29,7 +29,7 @@ public class BatchProductRight implements Serializable {
         return userId;
     }
 
-    public BatchProductRight setUserId(int ownerId) {
+    public BatchRight setUserId(int ownerId) {
         this.userId = ownerId;
         return this;
     }
@@ -38,7 +38,7 @@ public class BatchProductRight implements Serializable {
         return objectRightType;
     }
 
-    public BatchProductRight setObjectRightsType(ObjectRightType objectRightType) {
+    public BatchRight setObjectRightsType(ObjectRightType objectRightType) {
         this.objectRightType = objectRightType;
         return this;
     }

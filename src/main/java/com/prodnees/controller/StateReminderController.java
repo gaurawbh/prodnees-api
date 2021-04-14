@@ -1,6 +1,6 @@
 package com.prodnees.controller;
 
-import com.prodnees.action.rel.BatchProductRightAction;
+import com.prodnees.action.rel.BatchRightAction;
 import com.prodnees.action.state.StateAction;
 import com.prodnees.action.state.StateReminderAction;
 import com.prodnees.config.constants.APIErrors;
@@ -36,16 +36,16 @@ public class StateReminderController {
     private final RequestValidator requestValidator;
     private final StateReminderAction stateReminderAction;
     private final StateAction stateAction;
-    private final BatchProductRightAction batchProductRightAction;
+    private final BatchRightAction batchRightAction;
 
     public StateReminderController(RequestValidator requestValidator,
                                    StateReminderAction stateReminderAction,
                                    StateAction stateAction,
-                                   BatchProductRightAction batchProductRightAction) {
+                                   BatchRightAction batchRightAction) {
         this.requestValidator = requestValidator;
         this.stateReminderAction = stateReminderAction;
         this.stateAction = stateAction;
-        this.batchProductRightAction = batchProductRightAction;
+        this.batchRightAction = batchRightAction;
     }
 
     @PostMapping("/state-reminder")

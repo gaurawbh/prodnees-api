@@ -3,7 +3,7 @@ package com.prodnees.dto.batchproduct;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
-public class BatchProductDto {
+public class BatchDto {
 
     private int id;
     @Positive(message = "productId is a required field must be a positive number")
@@ -16,7 +16,7 @@ public class BatchProductDto {
         return id;
     }
 
-    public BatchProductDto setId(int id) {
+    public BatchDto setId(int id) {
         this.id = id;
         return this;
     }
@@ -25,7 +25,7 @@ public class BatchProductDto {
         return productId;
     }
 
-    public BatchProductDto setProductId(int productId) {
+    public BatchDto setProductId(int productId) {
         this.productId = productId;
         return this;
     }
@@ -34,7 +34,7 @@ public class BatchProductDto {
         return name;
     }
 
-    public BatchProductDto setName(String name) {
+    public BatchDto setName(String name) {
         this.name = name;
         return this;
     }
@@ -43,7 +43,7 @@ public class BatchProductDto {
         return description;
     }
 
-    public BatchProductDto setDescription(String description) {
+    public BatchDto setDescription(String description) {
         this.description = description;
         return this;
     }

@@ -1,12 +1,12 @@
 package com.prodnees.dao.queries;
 
-import com.prodnees.dao.batchproduct.BatchProductDao;
+import com.prodnees.dao.batchproduct.BatchDao;
 
 /**
  * Naming convention:
  * <p>variable name should start with DAO class name it is being called from</p>
  * <p>ie</p>
- * <p>{@link QueryConstants#BATCH_PRODUCT_DAO_GET_ALL_BY_USER_ID_AND_STATUS} is being called from {@link BatchProductDao} so the variable name starts with: </p>
+ * <p>{@link QueryConstants#BATCH_PRODUCT_DAO_GET_ALL_BY_USER_ID_AND_STATUS} is being called from {@link BatchDao} so the variable name starts with: </p>
  * <i> BATCH_PRODUCT_DAO </i>
  */
 public class QueryConstants {

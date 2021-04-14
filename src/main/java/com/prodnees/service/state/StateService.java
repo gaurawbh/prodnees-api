@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface StateService {
 
-    boolean existsByBatchProductId(int batchProductId);
+    boolean existsByBatchId(int batchId);
 
     State save(State state);
 
@@ -15,13 +15,25 @@ public interface StateService {
 
     State getByName(String name);
 
-    List<State> getAllByBatchProductId(int batchProductId);
+    List<State> getAllByBatchId(int batchId);
 
-    List<State> getAllByBatchProductIdAndStatus(int batchProductId, StateStatus status);
+    List<State> getAllByBatchIdAndStatus(int batchId, StateStatus status);
+
+    List<State> getAllByBatchIdAndIndexGreaterThan(int batchId, int index);
+
+    List<State> getAllByBatchIdAndIndexLessThan(int batchId, int index);
 
     void deleteById(int id);
 
     boolean existsById(int id);
 
     Optional<State> findById(int id);
+
+    int countByBatchId(int batchId);
+
+    boolean existsByBatchIdAndIndex(int batchId, int i);
+
+    State getByBatchIdAndIndex(int batchId, int i);
+
+    List<State> saveAll(List<State> stateList);
 }

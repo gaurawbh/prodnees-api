@@ -1,5 +1,6 @@
 package com.prodnees.action.state.impl;
 
+import com.prodnees.action.BatchStateList;
 import com.prodnees.action.state.StateAction;
 import com.prodnees.controller.DocumentController;
 import com.prodnees.domain.Document;
@@ -34,6 +35,7 @@ public class StateActionImpl implements StateAction {
     private final RawProductService rawProductService;
     private final DocumentService documentService;
     private final BatchProductRightService batchProductRightService;
+    private final BatchStateList batchStateList;
 
 
     public StateActionImpl(StateService stateService,
@@ -41,18 +43,20 @@ public class StateActionImpl implements StateAction {
                            EventService eventService,
                            RawProductService rawProductService,
                            DocumentService documentService,
-                           BatchProductRightService batchProductRightService) {
+                           BatchProductRightService batchProductRightService,
+                           BatchStateList batchStateList) {
         this.stateService = stateService;
         this.stateApprovalDocumentService = stateApprovalDocumentService;
         this.eventService = eventService;
         this.rawProductService = rawProductService;
         this.documentService = documentService;
         this.batchProductRightService = batchProductRightService;
+        this.batchStateList = batchStateList;
     }
 
     @Override
     public boolean existsByBatchProductId(int batchProductId) {
-        return stateService.existsByBatchProductId(batchProductId);
+        return stateService.existsByBatchId(batchProductId);
     }
 
     @Override
@@ -61,7 +65,7 @@ public class StateActionImpl implements StateAction {
         if (stateOptional.isEmpty()) {
             return false;
         } else {
-            return batchProductRightService.hasBatchProductEditorRights(stateOptional.get().getBatchProductId(), editorId);
+            return batchProductRightService.hasBatchProductEditorRights(stateOptional.get().getBatchId(), editorId);
         }
 
     }
@@ -72,7 +76,7 @@ public class StateActionImpl implements StateAction {
         if (stateOptional.isEmpty()) {
             return false;
         } else {
-            return batchProductRightService.hasBatchProductReaderRights(stateOptional.get().getBatchProductId(), readerId);
+            return batchProductRightService.hasBatchProductReaderRights(stateOptional.get().getBatchId(), readerId);
         }
     }
 
@@ -117,7 +121,7 @@ public class StateActionImpl implements StateAction {
 
     @Override
     public List<StateModel> getAllByBatchProductId(int batchProductId) {
-        List<State> stateList = stateService.getAllByBatchProductId(batchProductId);
+        List<State> stateList = stateService.getAllByBatchId(batchProductId);
         List<StateModel> stateModelList = new ArrayList<>();
         stateList.forEach(state -> stateModelList.add(entityToModel(state)));
         return stateModelList;
@@ -125,21 +129,13 @@ public class StateActionImpl implements StateAction {
 
     @Override
     public List<State> getAllByBatchProductIdAndStatus(int batchProductId, StateStatus status) {
-        return stateService.getAllByBatchProductIdAndStatus(batchProductId, status);
+        return stateService.getAllByBatchIdAndStatus(batchProductId, status);
     }
 
     @Override
     public void deleteById(int id) {
         State state = stateService.getById(id);
-        Optional<State> tailStateOpt = Optional.ofNullable(stateService.getById(state.getLastStateId()));
-        Optional<State> headStateOpt = Optional.ofNullable(stateService.getById(state.getNextStateId()));
-        if (tailStateOpt.isPresent() && headStateOpt.isPresent()) {
-            tailStateOpt.get().setNextStateId(headStateOpt.get().getId());
-            stateService.save(tailStateOpt.get());
-            headStateOpt.get().setLastStateId(tailStateOpt.get().getId());
-            stateService.save(headStateOpt.get());
-        }
-        stateService.deleteById(id);
+        batchStateList.remove(state);
     }
 
     private StateModel entityToModel(State state) {
@@ -154,17 +150,13 @@ public class StateActionImpl implements StateAction {
         List<RawProductModel> rawProductModelList = new ArrayList<>();
         rawProductList.forEach(rawProduct -> rawProductModelList.add(entityToModel(rawProduct)));
         stateModel.setId(state.getId())
-                .setBatchProductId(state.getBatchProductId())
+                .setBatchProductId(state.getBatchId())
                 .setName(state.getName())
                 .setDescription(state.getDescription())
                 .setApprovalDocuments(stateApprovalDocumentModelList)
                 .setEventModelList(eventModelList)
                 .setRawProductModelList(rawProductModelList)
-                .setStatus(state.getStatus())
-                .setLastStateId(state.getLastStateId())
-                .setNextStateId(state.getNextStateId())
-                .setInitialState(state.isInitialState())
-                .setFinalState(state.isFinalState());
+                .setStatus(state.getStatus());
         return stateModel;
     }
 

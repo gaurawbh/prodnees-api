@@ -1,6 +1,8 @@
 package com.prodnees.action.state;
 
+import com.prodnees.domain.batchproduct.Batch;
 import com.prodnees.domain.enums.StateStatus;
+import com.prodnees.domain.rels.BatchRight;
 import com.prodnees.domain.state.State;
 import com.prodnees.model.StateModel;
 import java.util.List;
@@ -11,7 +13,7 @@ public interface StateAction {
     boolean existsByBatchProductId(int batchProductId);
 
     /**
-     * A user will have the same {@link com.prodnees.domain.rels.BatchProductRight} to a State as the {@link com.prodnees.domain.batchproduct.BatchProduct} the State belongs to
+     * A user will have the same {@link BatchRight} to a State as the {@link Batch} the State belongs to
      *
      * @param batchProductId
      * @param editorId
@@ -20,7 +22,7 @@ public interface StateAction {
     boolean hasStateEditorRights(int id, int editorId);
 
     /**
-     * A user will have the same {@link com.prodnees.domain.rels.BatchProductRight} to a State as the {@link com.prodnees.domain.batchproduct.BatchProduct} the State belongs to
+     * A user will have the same {@link BatchRight} to a State as the {@link Batch} the State belongs to
      *
      * @param batchProductId
      * @param readerId

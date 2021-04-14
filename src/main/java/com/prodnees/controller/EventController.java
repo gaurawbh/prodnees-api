@@ -1,6 +1,6 @@
 package com.prodnees.controller;
 
-import com.prodnees.action.rel.BatchProductRightAction;
+import com.prodnees.action.rel.BatchRightAction;
 import com.prodnees.action.state.EventAction;
 import com.prodnees.dto.state.EventDto;
 import com.prodnees.filter.RequestValidator;
@@ -29,14 +29,14 @@ public class EventController {
 
     private final RequestValidator requestValidator;
     private final EventAction eventAction;
-    private final BatchProductRightAction batchProductRightAction;
+    private final BatchRightAction batchRightAction;
 
     public EventController(RequestValidator requestValidator,
 
-                           EventAction eventAction, BatchProductRightAction batchProductRightAction) {
+                           EventAction eventAction, BatchRightAction batchRightAction) {
         this.requestValidator = requestValidator;
         this.eventAction = eventAction;
-        this.batchProductRightAction = batchProductRightAction;
+        this.batchRightAction = batchRightAction;
     }
 
     @PostMapping("/event")

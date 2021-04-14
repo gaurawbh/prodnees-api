@@ -1,7 +1,7 @@
 package com.prodnees.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.prodnees.domain.enums.BatchProductStatus;
+import com.prodnees.domain.enums.BatchStatus;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class BatchProductModel {
     private String description;
     private List<StateModel> stateModelList;
     private StateApprovalDocumentModel stateApprovalDocumentModel;
-    private BatchProductStatus status;
+    private BatchStatus status;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdDate;
 
@@ -73,11 +73,11 @@ public class BatchProductModel {
         return this;
     }
 
-    public BatchProductStatus getStatus() {
+    public BatchStatus getStatus() {
         return status;
     }
 
-    public BatchProductModel setStatus(BatchProductStatus status) {
+    public BatchProductModel setStatus(BatchStatus status) {
         this.status = status;
         return this;
     }

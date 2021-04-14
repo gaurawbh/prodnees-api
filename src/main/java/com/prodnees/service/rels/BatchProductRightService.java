@@ -1,17 +1,17 @@
 package com.prodnees.service.rels;
 
-import com.prodnees.domain.rels.BatchProductRight;
+import com.prodnees.domain.rels.BatchRight;
 import java.util.List;
 import java.util.Optional;
 
 public interface BatchProductRightService {
-    BatchProductRight save(BatchProductRight batchProductRight);
+    BatchRight save(BatchRight batchRight);
 
-    Optional<BatchProductRight> findByBatchProductIdAndUserId(int batchProductId, int ownerId);
+    Optional<BatchRight> findByBatchProductIdAndUserId(int batchProductId, int ownerId);
 
-    List<BatchProductRight> getAllByBatchProductId(int batchProductId);
+    List<BatchRight> getAllByBatchProductId(int batchProductId);
 
-    List<BatchProductRight> getAllByOwnerId(int ownerId);
+    List<BatchRight> getAllByOwnerId(int ownerId);
 
     boolean hasBatchProductEditorRights(int batchProductId, int editorId);
 

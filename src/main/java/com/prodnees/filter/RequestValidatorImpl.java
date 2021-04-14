@@ -3,6 +3,8 @@ package com.prodnees.filter;
 import com.prodnees.service.jwt.JwtService;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -31,6 +33,17 @@ public class RequestValidatorImpl implements RequestValidator {
     @Override
     public int extractUserId(HttpServletRequest request) {
         return jwtService.extractUserId(extractToken(request));
+    }
+
+    @Override
+    public int extractUserId() throws IllegalAccessException {
+        HttpServletRequest servletRequest = getServletRequest();
+        try {
+            servletRequest.getHeader("Authorization");
+        } catch (NullPointerException e) {
+            throw new IllegalAccessException("no user logged in");
+        }
+        return extractUserId(servletRequest);
     }
 
     @Override
@@ -84,6 +97,9 @@ public class RequestValidatorImpl implements RequestValidator {
         return email.matches(regex);
     }
 
+    protected HttpServletRequest getServletRequest() {
+        return ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+    }
 }
 
 

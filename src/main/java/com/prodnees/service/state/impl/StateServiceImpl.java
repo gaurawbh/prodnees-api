@@ -17,8 +17,8 @@ public class StateServiceImpl implements StateService {
     }
 
     @Override
-    public boolean existsByBatchProductId(int batchProductId) {
-        return stateDao.existsByBatchProductId(batchProductId);
+    public boolean existsByBatchId(int batchProductId) {
+        return stateDao.existsByBatchId(batchProductId);
     }
 
     @Override
@@ -37,13 +37,23 @@ public class StateServiceImpl implements StateService {
     }
 
     @Override
-    public List<State> getAllByBatchProductId(int batchProductId) {
-        return stateDao.getAllByBatchProductId(batchProductId);
+    public List<State> getAllByBatchId(int batchProductId) {
+        return stateDao.getAllByBatchId(batchProductId);
     }
 
     @Override
-    public List<State> getAllByBatchProductIdAndStatus(int batchProductId, StateStatus status) {
-        return stateDao.getAllByBatchProductIdAndStatus(batchProductId, status);
+    public List<State> getAllByBatchIdAndStatus(int batchProductId, StateStatus status) {
+        return stateDao.getAllByBatchIdAndStatus(batchProductId, status);
+    }
+
+    @Override
+    public List<State> getAllByBatchIdAndIndexGreaterThan(int batchId, int index) {
+        return stateDao.getAllByBatchIdAndIndexGreaterThan(batchId, index);
+    }
+
+    @Override
+    public List<State> getAllByBatchIdAndIndexLessThan(int batchId, int index) {
+        return stateDao.getAllByBatchIdAndIndexLessThan(batchId, index);
     }
 
     @Override
@@ -59,5 +69,25 @@ public class StateServiceImpl implements StateService {
     @Override
     public Optional<State> findById(int id) {
         return stateDao.findById(id);
+    }
+
+    @Override
+    public int countByBatchId(int batchId) {
+        return stateDao.countByBatchId(batchId);
+    }
+
+    @Override
+    public boolean existsByBatchIdAndIndex(int batchId, int i) {
+        return stateDao.existsByBatchIdAndIndex(batchId, i);
+    }
+
+    @Override
+    public State getByBatchIdAndIndex(int batchId, int i) {
+        return stateDao.getByBatchIdAndIndex(batchId, i);
+    }
+
+    @Override
+    public List<State> saveAll(List<State> stateList) {
+        return stateDao.saveAll(stateList);
     }
 }

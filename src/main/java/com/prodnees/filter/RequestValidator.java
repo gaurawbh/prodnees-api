@@ -11,6 +11,8 @@ public interface RequestValidator {
 
     int extractUserId(HttpServletRequest request);
 
+    int extractUserId() throws IllegalAccessException;
+
     String extractUserEmail(HttpServletRequest request);
 
     String extractToken(HttpServletRequest request);

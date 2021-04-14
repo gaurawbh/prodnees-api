@@ -6,20 +6,20 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
-public class BatchProductRightDto {
+public class BatchRightDto {
     @Positive(message = "batchProductId is a required field must be a positive number")
-    private int batchProductId;
+    private int batchId;
     @NotBlank(message = "email cannot be blank")
     @Email(regexp = LocalConstants.EMAIL_REGEX, message = "invalid email format")
     private String email;
     private ObjectRightType objectRightType;
 
-    public int getBatchProductId() {
-        return batchProductId;
+    public int getBatchId() {
+        return batchId;
     }
 
-    public BatchProductRightDto setBatchProductId(int batchProductId) {
-        this.batchProductId = batchProductId;
+    public BatchRightDto setBatchId(int batchId) {
+        this.batchId = batchId;
         return this;
     }
 
@@ -27,7 +27,7 @@ public class BatchProductRightDto {
         return email;
     }
 
-    public BatchProductRightDto setEmail(String email) {
+    public BatchRightDto setEmail(String email) {
         this.email = email;
         return this;
     }
@@ -36,7 +36,7 @@ public class BatchProductRightDto {
         return objectRightType;
     }
 
-    public BatchProductRightDto setObjectRightsType(ObjectRightType objectRightType) {
+    public BatchRightDto setObjectRightsType(ObjectRightType objectRightType) {
         this.objectRightType = objectRightType;
         return this;
     }
