@@ -32,8 +32,8 @@ public class BatchRightServiceImpl implements BatchRightService {
     }
 
     @Override
-    public List<BatchRight> getAllByOwnerId(int ownerId) {
-        return batchProductRightsDao.getAllByUserId(ownerId);
+    public List<BatchRight> getAllByUserId(int userId) {
+        return batchProductRightsDao.getAllByUserId(userId);
     }
 
     /**

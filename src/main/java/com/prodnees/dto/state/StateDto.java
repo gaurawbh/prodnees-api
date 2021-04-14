@@ -1,15 +1,13 @@
 package com.prodnees.dto.state;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
 public class StateDto {
 
     private int id;
-    @Positive(message = "batchProductId is a required field must be a positive number")
-    private int batchProductId;
-    @NotBlank(message = "name cannot be null or blank")
-    private int index;
+    @Positive(message = "batchId is a required field must be a positive number")
+    private int batchId;
+    private Integer index;
     private String name;
     private String description;
 
@@ -22,20 +20,20 @@ public class StateDto {
         return this;
     }
 
-    public int getBatchProductId() {
-        return batchProductId;
+    public int getBatchId() {
+        return batchId;
     }
 
-    public StateDto setBatchProductId(int batchProductId) {
-        this.batchProductId = batchProductId;
+    public StateDto setBatchId(int batchId) {
+        this.batchId = batchId;
         return this;
     }
 
-    public int getIndex() {
+    public Integer getIndex() {
         return index;
     }
 
-    public StateDto setIndex(int index) {
+    public StateDto setIndex(Integer index) {
         this.index = index;
         return this;
     }

@@ -95,6 +95,9 @@ public class StateActionImpl implements StateAction {
      */
     @Override
     public StateModel save(State state) {
+        if (state.getName().isBlank()) {
+            state.setName(String.format("State-%d-%d", state.getBatchId(), batchStateList.size(state.getBatchId())));
+        }
         return entityToModel(batchStateList.add(state));
     }
 

@@ -76,11 +76,9 @@ public class BatchActionImpl implements BatchAction {
     }
 
     @Override
-    public List<BatchModel> getAllByIds(Iterable<Integer> batchProductIds) {
-        List<Batch> batchList = batchService.getAllByIds(batchProductIds);
-        List<BatchModel> batchModelList = new ArrayList<>();
-        batchList.forEach(batchProduct -> batchModelList.add(mapToModel(batchProduct)));
-        return batchModelList;
+    public List<Batch> getAllByIds(Iterable<Integer> ids) {
+        List<Batch> batchList = batchService.getAllByIds(ids);
+        return batchList;
     }
 
     @Override

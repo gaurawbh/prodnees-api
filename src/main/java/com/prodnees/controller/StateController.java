@@ -17,6 +17,7 @@ import com.prodnees.model.StateModel;
 import com.prodnees.service.rels.BatchRightService;
 import com.prodnees.util.LocalAssert;
 import com.prodnees.util.MapperUtil;
+import com.prodnees.util.ValidatorUtil;
 import com.prodnees.web.exception.NeesNotFoundException;
 import com.prodnees.web.response.LocalResponse;
 import org.springframework.http.ResponseEntity;
@@ -75,10 +76,11 @@ public class StateController {
     public ResponseEntity<?> save(@Validated @RequestBody StateDto dto,
                                   HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
-        LocalAssert.isTrue(batchRightService.hasBatchEditorRights(dto.getBatchProductId(), userId),
+        LocalAssert.isTrue(batchRightService.hasBatchEditorRights(dto.getBatchId(), userId),
                 APIErrors.BATCH_NOT_FOUND);
-        LocalAssert.isTrue(batchAction.existsByIdAndStatus(dto.getBatchProductId(), BatchStatus.COMPLETE), "you cannot add a State to a Batch Product that is marked as Complete");
-        dto.setId(0);
+        LocalAssert.isTrue(batchAction.existsByIdAndStatus(dto.getBatchId(), BatchStatus.COMPLETE), "you cannot add a State to a Batch Product that is marked as Complete");
+        dto.setId(0).
+                setIndex(ValidatorUtil.ifValidIntegerOrElse(dto.getIndex(), 0));
         State state = MapperUtil.getDozer().map(dto, State.class).setStatus(StateStatus.OPEN);
         return configure(stateAction.save(state));
     }
@@ -101,29 +103,33 @@ public class StateController {
     /**
      * Returns the List of {@link StateModel} by {@link Batch} #id
      *
-     * @param batchProductId
+     * @param batchId
      * @param servletRequest
      * @return
      */
-    @GetMapping("/states/batch-product")
-    public ResponseEntity<?> getAllByBatchProductId(@RequestParam int batchProductId, HttpServletRequest servletRequest) {
+    @GetMapping("/states/batch")
+    public ResponseEntity<?> getAllByBatchProductId(@RequestParam int batchId, HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
-        LocalAssert.isTrue(batchRightService.hasBatchReaderRights(batchProductId, userId), APIErrors.BATCH_NOT_FOUND);
-        return configure(stateAction.getAllByBatchId(batchProductId));
+        LocalAssert.isTrue(batchRightService.hasBatchReaderRights(batchId, userId), APIErrors.BATCH_NOT_FOUND);
+        return configure(stateAction.getAllByBatchId(batchId));
     }
-
 
     /**
      * Check against the links.
      *
-     * @param obj
+     * @param dto
      * @param servletRequest
      * @return
      */
-    // TODO: 01/05/2021
     @PutMapping("/state")
-    public ResponseEntity<?> update(@Validated @RequestBody Object obj, HttpServletRequest servletRequest) {
+    public ResponseEntity<?> update(@Validated @RequestBody StateDto dto,
+                                    HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
+        LocalAssert.isTrue(stateAction.hasStateEditorRights(dto.getId(), userId), String.format("state with id: %d not found or not enough permission ", dto.getId()));
+        State state = stateAction.getById(dto.getId());
+        state.setName(ValidatorUtil.ifValidStringOrElse(dto.getName(), state.getName()))
+                .setDescription(ValidatorUtil.ifValidStringOrElse(dto.getDescription(), state.getDescription()));
+
         return configure();
     }
 
@@ -149,7 +155,7 @@ public class StateController {
         Optional<State> stateOptional = stateAction.findById(id);
         stateOptional.ifPresentOrElse(state -> {
             LocalAssert.isTrue(stateAction.hasStateEditorRights(id, userId), APIErrors.BATCH_NOT_FOUND);
-             state.setStatus(StateStatus.STARTED);
+            state.setStatus(StateStatus.STARTED);
             List<StateReminder> stateReminderList = stateReminderAction.getAllByStateIdAndStateStatus(id, StateStatus.STARTED);
             stateReminderList.forEach(stateReminderAction::sendStateReminder);
         }, () -> {

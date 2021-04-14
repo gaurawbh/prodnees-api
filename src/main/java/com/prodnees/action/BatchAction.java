@@ -23,7 +23,7 @@ public interface BatchAction {
 
     List<Batch> getAllByProductId(int productId);
 
-    List<BatchModel> getAllByIds(Iterable<Integer> batchProductIds);
+    List<Batch> getAllByIds(Iterable<Integer> ids);
 
     void deleteById(int id);
 }

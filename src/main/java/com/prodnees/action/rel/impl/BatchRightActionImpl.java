@@ -83,13 +83,13 @@ public class BatchRightActionImpl implements BatchRightAction {
     }
 
     @Override
-    public List<BatchRight> getAllByOwnerId(int ownerId) {
-        return batchRightService.getAllByOwnerId(ownerId);
+    public List<BatchRight> getAllByUserId(int ownerId) {
+        return batchRightService.getAllByUserId(ownerId);
     }
 
     @Override
     public List<BatchRightModel> getAllModelByUserId(int ownerId) {
-        List<BatchRight> batchRights = batchRightService.getAllByOwnerId(ownerId);
+        List<BatchRight> batchRights = batchRightService.getAllByUserId(ownerId);
         return batchRights.stream().map(this::mapToModel).collect(Collectors.toList());
     }
 

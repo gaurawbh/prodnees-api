@@ -16,7 +16,7 @@ public interface BatchRightAction {
 
     List<BatchRightModel> getAllByBatchId(int batchProductId);
 
-    List<BatchRight> getAllByOwnerId(int ownerId);
+    List<BatchRight> getAllByUserId(int ownerId);
 
     List<BatchRightModel> getAllModelByUserId(int ownerId);
 

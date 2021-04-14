@@ -11,7 +11,7 @@ public interface BatchRightService {
 
     List<BatchRight> getAllByBatchId(int batchId);
 
-    List<BatchRight> getAllByOwnerId(int ownerId);
+    List<BatchRight> getAllByUserId(int userId);
 
     boolean hasBatchEditorRights(int batchId, int editorId);
 

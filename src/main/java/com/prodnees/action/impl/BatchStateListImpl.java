@@ -80,12 +80,16 @@ public class BatchStateListImpl implements BatchStateList {
 
     @Override
     public State add(State state) {
-        state.setIndex(size(state.getBatchId()));
-       return stateDao.save(state);
+        if (state.getIndex() <= 0) {
+            return add(state, state.getIndex());
+        } else {
+            state.setIndex(size(state.getBatchId()));
+            return stateDao.save(state);
+        }
     }
 
     @Override
-    public boolean add(State state, int index) {
+    public State add(State state, int index) {
         int batchSize = size(state.getBatchId());
         if (index > batchSize) {
             throw new IndexOutOfBoundsException(String.format(STATE_INDEX_OUT_OF_BOUND, batchSize, index));
@@ -94,7 +98,7 @@ public class BatchStateListImpl implements BatchStateList {
         stateList.forEach(state1 -> state1.setIndex(state.getIndex() + 1));
         stateList.add(state);
         stateDao.saveAll(stateList);
-        return true;
+        return stateDao.getByBatchIdAndIndex(state.getBatchId(), index);
     }
 
     @Override

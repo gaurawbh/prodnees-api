@@ -26,7 +26,7 @@ public interface BatchStateList {
 
     State add(State state);
 
-    boolean add(State state, int index);
+    State add(State state, int index);
 
     void remove(State state);
 
