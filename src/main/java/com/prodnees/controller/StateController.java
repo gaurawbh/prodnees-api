@@ -76,7 +76,7 @@ public class StateController {
                                   HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
         LocalAssert.isTrue(batchRightService.hasBatchEditorRights(dto.getBatchProductId(), userId),
-                APIErrors.BATCH_PRODUCT_NOT_FOUND);
+                APIErrors.BATCH_NOT_FOUND);
         LocalAssert.isTrue(batchAction.existsByIdAndStatus(dto.getBatchProductId(), BatchStatus.COMPLETE), "you cannot add a State to a Batch Product that is marked as Complete");
         dto.setId(0);
         State state = MapperUtil.getDozer().map(dto, State.class).setStatus(StateStatus.OPEN);
@@ -93,7 +93,7 @@ public class StateController {
     @GetMapping("/states")
     public ResponseEntity<?> getById(@RequestParam int id, HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
-        LocalAssert.isTrue(stateAction.hasStateReaderRights(id, userId), APIErrors.BATCH_PRODUCT_NOT_FOUND);
+        LocalAssert.isTrue(stateAction.hasStateReaderRights(id, userId), APIErrors.BATCH_NOT_FOUND);
         StateModel stateModel = stateAction.getModelById(id);
         return configure(stateModel);
     }
@@ -108,7 +108,7 @@ public class StateController {
     @GetMapping("/states/batch-product")
     public ResponseEntity<?> getAllByBatchProductId(@RequestParam int batchProductId, HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
-        LocalAssert.isTrue(batchRightService.hasBatchReaderRights(batchProductId, userId), APIErrors.BATCH_PRODUCT_NOT_FOUND);
+        LocalAssert.isTrue(batchRightService.hasBatchReaderRights(batchProductId, userId), APIErrors.BATCH_NOT_FOUND);
         return configure(stateAction.getAllByBatchId(batchProductId));
     }
 
@@ -148,7 +148,7 @@ public class StateController {
         int userId = requestValidator.extractUserId(servletRequest);
         Optional<State> stateOptional = stateAction.findById(id);
         stateOptional.ifPresentOrElse(state -> {
-            LocalAssert.isTrue(stateAction.hasStateEditorRights(id, userId), APIErrors.BATCH_PRODUCT_NOT_FOUND);
+            LocalAssert.isTrue(stateAction.hasStateEditorRights(id, userId), APIErrors.BATCH_NOT_FOUND);
              state.setStatus(StateStatus.STARTED);
             List<StateReminder> stateReminderList = stateReminderAction.getAllByStateIdAndStateStatus(id, StateStatus.STARTED);
             stateReminderList.forEach(stateReminderAction::sendStateReminder);
@@ -170,7 +170,7 @@ public class StateController {
         int userId = requestValidator.extractUserId(servletRequest);
         Optional<State> stateOptional = stateAction.findById(id);
         stateOptional.ifPresentOrElse(state -> {
-            LocalAssert.isTrue(stateAction.hasStateEditorRights(id, userId), APIErrors.BATCH_PRODUCT_NOT_FOUND);
+            LocalAssert.isTrue(stateAction.hasStateEditorRights(id, userId), APIErrors.BATCH_NOT_FOUND);
             List<Event> eventList = eventAction.getAllByStateId(state.getId());
             eventList.forEach(event -> LocalAssert.isTrue(event.isComplete(), "This state has events that are not complete. Complete all events before marking this State as Complete"));
             state.setStatus(StateStatus.COMPLETE);

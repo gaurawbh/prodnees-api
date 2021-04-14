@@ -1,4 +1,4 @@
-package com.prodnees.dto.batchproduct;
+package com.prodnees.dto.batch;
 
 import com.prodnees.config.constants.LocalConstants;
 import com.prodnees.domain.enums.ObjectRightType;

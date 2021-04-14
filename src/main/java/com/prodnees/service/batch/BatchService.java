@@ -1,4 +1,4 @@
-package com.prodnees.service.batchproduct;
+package com.prodnees.service.batch;
 
 import com.prodnees.domain.batchproduct.Batch;
 import com.prodnees.domain.enums.BatchStatus;

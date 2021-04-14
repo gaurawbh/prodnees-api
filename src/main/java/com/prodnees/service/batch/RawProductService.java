@@ -1,4 +1,4 @@
-package com.prodnees.service.batchproduct;
+package com.prodnees.service.batch;
 
 import com.prodnees.domain.batchproduct.RawProduct;
 import java.util.List;

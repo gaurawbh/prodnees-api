@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * This is Product that is being Manufactured
  */
-public class BatchProductModel {
+public class BatchModel {
     private int id;
     private ProductModel productModel;
     private String name;
@@ -23,7 +23,7 @@ public class BatchProductModel {
         return id;
     }
 
-    public BatchProductModel setId(int id) {
+    public BatchModel setId(int id) {
         this.id = id;
         return this;
     }
@@ -32,7 +32,7 @@ public class BatchProductModel {
         return productModel;
     }
 
-    public BatchProductModel setProductModel(ProductModel productModel) {
+    public BatchModel setProductModel(ProductModel productModel) {
         this.productModel = productModel;
         return this;
     }
@@ -41,7 +41,7 @@ public class BatchProductModel {
         return stateModelList;
     }
 
-    public BatchProductModel setStateModelList(List<StateModel> stateModelList) {
+    public BatchModel setStateModelList(List<StateModel> stateModelList) {
         this.stateModelList = stateModelList;
         return this;
     }
@@ -50,7 +50,7 @@ public class BatchProductModel {
         return stateApprovalDocumentModel;
     }
 
-    public BatchProductModel setApprovalDocumentModel(StateApprovalDocumentModel stateApprovalDocumentModel) {
+    public BatchModel setApprovalDocumentModel(StateApprovalDocumentModel stateApprovalDocumentModel) {
         this.stateApprovalDocumentModel = stateApprovalDocumentModel;
         return this;
     }
@@ -59,7 +59,7 @@ public class BatchProductModel {
         return name;
     }
 
-    public BatchProductModel setName(String name) {
+    public BatchModel setName(String name) {
         this.name = name;
         return this;
     }
@@ -68,7 +68,7 @@ public class BatchProductModel {
         return description;
     }
 
-    public BatchProductModel setDescription(String description) {
+    public BatchModel setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -77,7 +77,7 @@ public class BatchProductModel {
         return status;
     }
 
-    public BatchProductModel setStatus(BatchStatus status) {
+    public BatchModel setStatus(BatchStatus status) {
         this.status = status;
         return this;
     }
@@ -86,7 +86,7 @@ public class BatchProductModel {
         return createdDate;
     }
 
-    public BatchProductModel setCreatedDate(LocalDate createdDate) {
+    public BatchModel setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
         return this;
     }

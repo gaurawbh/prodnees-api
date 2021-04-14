@@ -10,7 +10,7 @@ import com.prodnees.domain.rels.ProductRight;
 import com.prodnees.dto.ProductDto;
 import com.prodnees.dto.ProductRightDto;
 import com.prodnees.filter.RequestValidator;
-import com.prodnees.service.batchproduct.ProductService;
+import com.prodnees.service.batch.ProductService;
 import com.prodnees.service.rels.AssociatesService;
 import com.prodnees.util.MapperUtil;
 import com.prodnees.util.ValidatorUtil;

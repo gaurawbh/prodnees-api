@@ -1,4 +1,4 @@
-package com.prodnees.dto.batchproduct;
+package com.prodnees.dto.batch;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;

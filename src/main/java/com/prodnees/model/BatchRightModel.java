@@ -3,7 +3,7 @@ package com.prodnees.model;
 import com.prodnees.domain.batchproduct.Batch;
 import com.prodnees.domain.enums.ObjectRightType;
 
-public class BatchProductRightModel {
+public class BatchRightModel {
 
     private Batch batch;
     private UserModel userModel;
@@ -13,7 +13,7 @@ public class BatchProductRightModel {
         return batch;
     }
 
-    public BatchProductRightModel setBatchProduct(Batch batch) {
+    public BatchRightModel setBatchProduct(Batch batch) {
         this.batch = batch;
         return this;
     }
@@ -22,7 +22,7 @@ public class BatchProductRightModel {
         return userModel;
     }
 
-    public BatchProductRightModel setUserModel(UserModel userModel) {
+    public BatchRightModel setUserModel(UserModel userModel) {
         this.userModel = userModel;
         return this;
     }
@@ -31,7 +31,7 @@ public class BatchProductRightModel {
         return objectRightType;
     }
 
-    public BatchProductRightModel setObjectRightsType(ObjectRightType objectRightType) {
+    public BatchRightModel setObjectRightsType(ObjectRightType objectRightType) {
         this.objectRightType = objectRightType;
         return this;
     }

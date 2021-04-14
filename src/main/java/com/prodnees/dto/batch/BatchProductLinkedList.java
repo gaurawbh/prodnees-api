@@ -1,4 +1,4 @@
-package com.prodnees.dto.batchproduct;
+package com.prodnees.dto.batch;
 
 public class BatchProductLinkedList {
     private int id;

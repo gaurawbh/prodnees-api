@@ -14,7 +14,7 @@ import com.prodnees.model.RawProductModel;
 import com.prodnees.model.StateApprovalDocumentModel;
 import com.prodnees.model.StateModel;
 import com.prodnees.service.DocumentService;
-import com.prodnees.service.batchproduct.RawProductService;
+import com.prodnees.service.batch.RawProductService;
 import com.prodnees.service.rels.BatchRightService;
 import com.prodnees.service.rels.StateApprovalDocumentService;
 import com.prodnees.service.state.EventService;
@@ -149,7 +149,7 @@ public class StateActionImpl implements StateAction {
         List<RawProductModel> rawProductModelList = new ArrayList<>();
         rawProductList.forEach(rawProduct -> rawProductModelList.add(entityToModel(rawProduct)));
         stateModel.setId(state.getId())
-                .setBatchProductId(state.getBatchId())
+                .setBatchId(state.getBatchId())
                 .setName(state.getName())
                 .setDescription(state.getDescription())
                 .setApprovalDocuments(stateApprovalDocumentModelList)

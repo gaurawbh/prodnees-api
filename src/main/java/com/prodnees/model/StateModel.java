@@ -14,14 +14,11 @@ public class StateModel {
     List<EventModel> eventModelList;
     List<RawProductModel> rawProductModelList;
     private int id;
-    private int batchProductId;
+    private int batchId;
+    private int index;
     private String name;
     private String description;
     private StateStatus status;
-    private int lastStateId;
-    private int nextStateId;
-    private boolean initialState;
-    private boolean finalState;
 
     public int getId() {
         return id;
@@ -32,12 +29,21 @@ public class StateModel {
         return this;
     }
 
-    public int getBatchProductId() {
-        return batchProductId;
+    public int getBatchId() {
+        return batchId;
     }
 
-    public StateModel setBatchProductId(int batchProductId) {
-        this.batchProductId = batchProductId;
+    public StateModel setBatchId(int batchId) {
+        this.batchId = batchId;
+        return this;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public StateModel setIndex(int index) {
+        this.index = index;
         return this;
     }
 
@@ -95,39 +101,4 @@ public class StateModel {
         return this;
     }
 
-    public int getLastStateId() {
-        return lastStateId;
-    }
-
-    public StateModel setLastStateId(int lastStateId) {
-        this.lastStateId = lastStateId;
-        return this;
-    }
-
-    public int getNextStateId() {
-        return nextStateId;
-    }
-
-    public StateModel setNextStateId(int nextStateId) {
-        this.nextStateId = nextStateId;
-        return this;
-    }
-
-    public boolean isInitialState() {
-        return initialState;
-    }
-
-    public StateModel setInitialState(boolean initialState) {
-        this.initialState = initialState;
-        return this;
-    }
-
-    public boolean isFinalState() {
-        return finalState;
-    }
-
-    public StateModel setFinalState(boolean finalState) {
-        this.finalState = finalState;
-        return this;
-    }
 }

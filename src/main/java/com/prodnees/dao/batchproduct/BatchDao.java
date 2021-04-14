@@ -14,7 +14,7 @@ public interface BatchDao extends JpaRepository<Batch, Integer> {
 
     List<Batch> getAllByProductId(int productId);
 
-    @Query(nativeQuery = true, value = QueryConstants.BATCH_PRODUCT_DAO_GET_ALL_BY_USER_ID_AND_STATUS)
+    @Query(nativeQuery = true, value = QueryConstants.BATCH_DAO_GET_ALL_BY_USER_ID_AND_STATUS)
     List<Batch> getAllByUserIdAndStatus(int userId, String status);
 
 }

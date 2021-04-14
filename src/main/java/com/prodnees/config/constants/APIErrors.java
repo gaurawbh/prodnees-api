@@ -23,7 +23,7 @@ public enum APIErrors {
     INVALID_JWT_TOKEN(30, "invalid or missing token"),
     PROTECTED_URL(31, "attempt to access the protected url"),
     TEMP_PASSWORD_UNCHANGED(32, "user cannot access the app without changing the temp password, /secure/user/temp-password"),
-    BATCH_PRODUCT_NOT_FOUND(33, "batch product not found"),
+    BATCH_NOT_FOUND(33, "batch product not found"),
     INVALID_REQUEST_BODY(41, "invalid request body"),
     OBJECT_NOT_FOUND(42, "object does not exist"),
     REFERENCED_OBJECT(43, "object cannot be deleted, the object is in use(referenced by another object)"),

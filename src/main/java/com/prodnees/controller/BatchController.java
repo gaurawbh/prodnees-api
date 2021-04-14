@@ -15,11 +15,11 @@ import com.prodnees.domain.rels.Associates;
 import com.prodnees.domain.rels.BatchRight;
 import com.prodnees.domain.rels.DocumentRight;
 import com.prodnees.domain.state.State;
-import com.prodnees.dto.batchproduct.BatchDto;
-import com.prodnees.dto.batchproduct.BatchProductApprovalDocumentDto;
-import com.prodnees.dto.batchproduct.BatchRightDto;
+import com.prodnees.dto.batch.BatchDto;
+import com.prodnees.dto.batch.BatchProductApprovalDocumentDto;
+import com.prodnees.dto.batch.BatchRightDto;
 import com.prodnees.filter.RequestValidator;
-import com.prodnees.model.BatchProductModel;
+import com.prodnees.model.BatchModel;
 import com.prodnees.service.rels.AssociatesService;
 import com.prodnees.service.rels.BatchProductApprovalDocumentService;
 import com.prodnees.util.LocalAssert;
@@ -50,7 +50,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import static com.prodnees.config.constants.APIErrors.ACCESS_DENIED;
-import static com.prodnees.config.constants.APIErrors.BATCH_PRODUCT_NOT_FOUND;
+import static com.prodnees.config.constants.APIErrors.BATCH_NOT_FOUND;
 import static com.prodnees.config.constants.APIErrors.OBJECT_NOT_FOUND;
 import static com.prodnees.config.constants.APIErrors.REFERENCED_OBJECT;
 import static com.prodnees.config.constants.APIErrors.UPDATE_DENIED;
@@ -104,17 +104,17 @@ public class BatchController {
         dto.setId(0);
         Batch batch = MapperUtil.getDozer().map(dto, Batch.class);
         batch.setCreatedDate(LocalDate.now()).setStatus(BatchStatus.INITIAL);
-        BatchProductModel batchProductModel = batchAction.save(batch);
+        BatchModel batchModel = batchAction.save(batch);
         batchRightAction.save(new BatchRight()
                 .setUserId(userId)
-                .setBatchProductId(batchProductModel.getId())
+                .setBatchProductId(batchModel.getId())
                 .setObjectRightsType(ObjectRightType.OWNER));
-        return configure(batchProductModel);
+        return configure(batchModel);
     }
 
     /**
-     * returns {@link BatchProductModel} by it's id if id is provided
-     * <p>returns list of {@link BatchProductModel}</p> that belongs to a user if id is not provided
+     * returns {@link BatchModel} by it's id if id is provided
+     * <p>returns list of {@link BatchModel}</p> that belongs to a user if id is not provided
      *
      * @param id
      * @param servletRequest
@@ -144,7 +144,7 @@ public class BatchController {
     /**
      * @param status         of {@link Batch}
      * @param servletRequest
-     * @return list of {@link BatchProductModel} that belongs to the User and by {@link BatchStatus}
+     * @return list of {@link BatchModel} that belongs to the User and by {@link BatchStatus}
      */
     @GetMapping("/batches/status")
     public ResponseEntity<?> getAllByStatus(@RequestParam BatchStatus status,
@@ -284,7 +284,7 @@ public class BatchController {
         switch (rightOf) {
             case "batch-product":
                 LocalAssert.isTrue(batchProductId.isPresent(), "batchProductId must be provided for batch-product rights");
-                LocalAssert.isTrue(batchRightAction.hasBatchReaderRights(batchProductId.get(), userId), BATCH_PRODUCT_NOT_FOUND);
+                LocalAssert.isTrue(batchRightAction.hasBatchReaderRights(batchProductId.get(), userId), BATCH_NOT_FOUND);
                 return configure(batchRightAction.getAllByBatchId(batchProductId.get()));
             case "user":
                 return configure(batchRightAction.getAllModelByUserId(userId));
