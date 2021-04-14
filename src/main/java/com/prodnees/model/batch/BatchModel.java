@@ -2,6 +2,7 @@ package com.prodnees.model.batch;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.prodnees.domain.enums.BatchStatus;
+import com.prodnees.domain.enums.ObjectRightType;
 import com.prodnees.model.ProductModel;
 import com.prodnees.model.state.StateApprovalDocumentModel;
 import com.prodnees.model.state.StateModel;
@@ -19,6 +20,7 @@ public class BatchModel {
     private List<StateModel> stateModelList;
     private StateApprovalDocumentModel stateApprovalDocumentModel;
     private BatchStatus status;
+    private ObjectRightType rightType;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdDate;
 
@@ -28,6 +30,24 @@ public class BatchModel {
 
     public BatchModel setId(int id) {
         this.id = id;
+        return this;
+    }
+
+    public StateApprovalDocumentModel getStateApprovalDocumentModel() {
+        return stateApprovalDocumentModel;
+    }
+
+    public BatchModel setStateApprovalDocumentModel(StateApprovalDocumentModel stateApprovalDocumentModel) {
+        this.stateApprovalDocumentModel = stateApprovalDocumentModel;
+        return this;
+    }
+
+    public ObjectRightType getRightType() {
+        return rightType;
+    }
+
+    public BatchModel setRightType(ObjectRightType rightType) {
+        this.rightType = rightType;
         return this;
     }
 

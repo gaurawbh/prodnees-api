@@ -24,7 +24,7 @@ public interface StateAction {
     /**
      * A user will have the same {@link BatchRight} to a State as the {@link Batch} the State belongs to
      *
-     * @param batchProductId
+     * @param id
      * @param readerId
      * @return
      */
