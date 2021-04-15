@@ -43,7 +43,7 @@ public class StageServiceImpl implements StageService {
 
     @Override
     public List<Stage> getAllByBatchIdAndState(int batchProductId, StageState state) {
-        return stageDao.getAllByBatchIdAndStatus(batchProductId, state);
+        return stageDao.getAllByBatchIdAndState(batchProductId, state);
     }
 
     @Override

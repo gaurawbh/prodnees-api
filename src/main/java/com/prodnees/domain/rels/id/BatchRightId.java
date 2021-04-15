@@ -4,23 +4,23 @@ import java.io.Serializable;
 
 
 public class BatchRightId implements Serializable {
-    private int batchProductId;
+    private int batchId;
     private int userId;
 
     public BatchRightId() {
     }
 
-    public BatchRightId(int batchProductId, int userId) {
-        this.batchProductId = batchProductId;
+    public BatchRightId(int batchId, int userId) {
+        this.batchId = batchId;
         this.userId = userId;
     }
 
     public int getBatchId() {
-        return batchProductId;
+        return batchId;
     }
 
     public BatchRightId setBatchId(int batchProductId) {
-        this.batchProductId = batchProductId;
+        this.batchId = batchProductId;
         return this;
     }
 

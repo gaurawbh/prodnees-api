@@ -15,7 +15,7 @@ public interface StageDao extends JpaRepository<Stage, Integer> {
 
     List<Stage> getAllByBatchId(int batchId);
 
-    List<Stage> getAllByBatchIdAndStatus(int batchId, StageState status);
+    List<Stage> getAllByBatchIdAndState(int batchId, StageState state);
 
     List<Stage> getAllByBatchIdAndIndexGreaterThan(int batchId, int index);
 
