@@ -10,7 +10,7 @@ public class Event {
     @GeneratedValue
     private int id;
     private int batchId;
-    private int stateId;
+    private int stageId;
     private String name;
     private String description;
     private boolean complete;
@@ -33,12 +33,12 @@ public class Event {
         return this;
     }
 
-    public int getStateId() {
-        return stateId;
+    public int getStageId() {
+        return stageId;
     }
 
-    public Event setStateId(int stateId) {
-        this.stateId = stateId;
+    public Event setStageId(int stateId) {
+        this.stageId = stateId;
         return this;
     }
 

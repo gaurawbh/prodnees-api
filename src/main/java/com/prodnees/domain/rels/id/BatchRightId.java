@@ -15,11 +15,11 @@ public class BatchRightId implements Serializable {
         this.userId = userId;
     }
 
-    public int getBatchProductId() {
+    public int getBatchId() {
         return batchProductId;
     }
 
-    public BatchRightId setBatchProductId(int batchProductId) {
+    public BatchRightId setBatchId(int batchProductId) {
         this.batchProductId = batchProductId;
         return this;
     }

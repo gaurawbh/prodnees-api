@@ -4,7 +4,7 @@ import com.prodnees.action.DocumentAction;
 import com.prodnees.action.rel.DocumentRightAction;
 import com.prodnees.config.constants.APIErrors;
 import com.prodnees.domain.Document;
-import com.prodnees.domain.enums.ObjectRightType;
+import com.prodnees.domain.enums.ObjectRight;
 import com.prodnees.domain.rels.DocumentRight;
 import com.prodnees.dto.DocumentDto;
 import com.prodnees.filter.RequestValidator;
@@ -73,7 +73,7 @@ public class DocumentController {
             DocumentRight documentRight = new DocumentRight()
                     .setUserId(userId)
                     .setDocumentId(documentModel.getId())
-                    .setDocumentRightsType(ObjectRightType.OWNER);
+                    .setDocumentRightsType(ObjectRight.OWNER);
             documentRightAction.save(documentRight);
         } catch (IOException e) {
             e.printStackTrace();
@@ -106,7 +106,7 @@ public class DocumentController {
     }
 
     /**
-     * Only {@link ObjectRightType#OWNER} can delete a document.
+     * Only {@link ObjectRight#OWNER} can delete a document.
      * <p>A document cannot be deleted if it is referenced by an {@link ApprovalDocument}</p>
      *
      * @param id
@@ -119,7 +119,7 @@ public class DocumentController {
         int userId = requestValidator.extractUserId(servletRequest);
         Optional<DocumentRight> documentRightOptional = documentRightAction.findByDocumentIdAndUserId(id, userId);
         documentRightOptional.ifPresentOrElse(documentRight -> {
-            LocalAssert.isTrue(documentRight.getDocumentRightsType() == ObjectRightType.OWNER, APIErrors.UPDATE_DENIED);
+            LocalAssert.isTrue(documentRight.getDocumentRightsType() == ObjectRight.OWNER, APIErrors.UPDATE_DENIED);
             documentAction.deleteById(id);
         }, () -> {
             throw new NeesNotFoundException();

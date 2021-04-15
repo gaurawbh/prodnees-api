@@ -1,7 +1,7 @@
 package com.prodnees.domain.rels;
 
 
-import com.prodnees.domain.enums.ObjectRightType;
+import com.prodnees.domain.enums.ObjectRight;
 import com.prodnees.domain.rels.id.DocumentRightId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,15 +15,15 @@ public class DocumentRight implements Serializable {
     private int userId;
     @Id
     private int documentId;
-    private ObjectRightType objectRightType;
+    private ObjectRight objectRight;
 
     public DocumentRight() {
     }
 
-    public DocumentRight(int userId, int documentId, ObjectRightType objectRightType) {
+    public DocumentRight(int userId, int documentId, ObjectRight objectRight) {
         this.userId = userId;
         this.documentId = documentId;
-        this.objectRightType = objectRightType;
+        this.objectRight = objectRight;
     }
 
     public int getUserId() {
@@ -44,12 +44,12 @@ public class DocumentRight implements Serializable {
         return this;
     }
 
-    public ObjectRightType getDocumentRightsType() {
-        return objectRightType;
+    public ObjectRight getDocumentRightsType() {
+        return objectRight;
     }
 
-    public DocumentRight setDocumentRightsType(ObjectRightType objectRightType) {
-        this.objectRightType = objectRightType;
+    public DocumentRight setDocumentRightsType(ObjectRight objectRight) {
+        this.objectRight = objectRight;
         return this;
     }
 }

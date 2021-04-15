@@ -10,7 +10,7 @@ public interface EventDao extends JpaRepository<Event, Integer> {
 
     List<Event> getAllByBatchId(int batchId);
 
-    List<Event> getAllByStateId(int stateId);
+    List<Event> getAllByStageId(int stageId);
 
     Event getByBatchIdAndName(int batchId, String name);
 

@@ -10,7 +10,7 @@ public class BatchApprovalDocument {
     @Id
     @GeneratedValue
     private int id;
-    private int batchProductId;
+    private int batchId;
     private int documentId;
     private ApprovalDocumentState state;
     private int approverId;
@@ -34,12 +34,12 @@ public class BatchApprovalDocument {
         return this;
     }
 
-    public int getBatchProductId() {
-        return batchProductId;
+    public int getBatchId() {
+        return batchId;
     }
 
-    public BatchApprovalDocument setBatchProductId(int eventId) {
-        this.batchProductId = eventId;
+    public BatchApprovalDocument setBatchId(int eventId) {
+        this.batchId = eventId;
         return this;
     }
 

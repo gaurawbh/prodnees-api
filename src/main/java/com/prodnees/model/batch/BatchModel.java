@@ -1,11 +1,11 @@
 package com.prodnees.model.batch;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.prodnees.domain.enums.BatchStatus;
-import com.prodnees.domain.enums.ObjectRightType;
+import com.prodnees.domain.enums.BatchState;
+import com.prodnees.domain.enums.ObjectRight;
 import com.prodnees.model.ProductModel;
-import com.prodnees.model.state.StateApprovalDocumentModel;
-import com.prodnees.model.state.StateModel;
+import com.prodnees.model.state.StageApprovalDocumentModel;
+import com.prodnees.model.state.StageModel;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -17,10 +17,10 @@ public class BatchModel {
     private ProductModel productModel;
     private String name;
     private String description;
-    private List<StateModel> stateModelList;
-    private StateApprovalDocumentModel stateApprovalDocumentModel;
-    private BatchStatus status;
-    private ObjectRightType rightType;
+    private List<StageModel> stageModelList;
+    private StageApprovalDocumentModel stageApprovalDocumentModel;
+    private BatchState status;
+    private ObjectRight rightType;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdDate;
 
@@ -33,20 +33,20 @@ public class BatchModel {
         return this;
     }
 
-    public StateApprovalDocumentModel getStateApprovalDocumentModel() {
-        return stateApprovalDocumentModel;
+    public StageApprovalDocumentModel getStateApprovalDocumentModel() {
+        return stageApprovalDocumentModel;
     }
 
-    public BatchModel setStateApprovalDocumentModel(StateApprovalDocumentModel stateApprovalDocumentModel) {
-        this.stateApprovalDocumentModel = stateApprovalDocumentModel;
+    public BatchModel setStateApprovalDocumentModel(StageApprovalDocumentModel stageApprovalDocumentModel) {
+        this.stageApprovalDocumentModel = stageApprovalDocumentModel;
         return this;
     }
 
-    public ObjectRightType getRightType() {
+    public ObjectRight getRightType() {
         return rightType;
     }
 
-    public BatchModel setRightType(ObjectRightType rightType) {
+    public BatchModel setRightType(ObjectRight rightType) {
         this.rightType = rightType;
         return this;
     }
@@ -60,21 +60,21 @@ public class BatchModel {
         return this;
     }
 
-    public List<StateModel> getStateModelList() {
-        return stateModelList;
+    public List<StageModel> getStateModelList() {
+        return stageModelList;
     }
 
-    public BatchModel setStateModelList(List<StateModel> stateModelList) {
-        this.stateModelList = stateModelList;
+    public BatchModel setStateModelList(List<StageModel> stageModelList) {
+        this.stageModelList = stageModelList;
         return this;
     }
 
-    public StateApprovalDocumentModel getApprovalDocumentModel() {
-        return stateApprovalDocumentModel;
+    public StageApprovalDocumentModel getApprovalDocumentModel() {
+        return stageApprovalDocumentModel;
     }
 
-    public BatchModel setApprovalDocumentModel(StateApprovalDocumentModel stateApprovalDocumentModel) {
-        this.stateApprovalDocumentModel = stateApprovalDocumentModel;
+    public BatchModel setApprovalDocumentModel(StageApprovalDocumentModel stageApprovalDocumentModel) {
+        this.stageApprovalDocumentModel = stageApprovalDocumentModel;
         return this;
     }
 
@@ -96,11 +96,11 @@ public class BatchModel {
         return this;
     }
 
-    public BatchStatus getStatus() {
+    public BatchState getStatus() {
         return status;
     }
 
-    public BatchModel setStatus(BatchStatus status) {
+    public BatchModel setStatus(BatchState status) {
         this.status = status;
         return this;
     }

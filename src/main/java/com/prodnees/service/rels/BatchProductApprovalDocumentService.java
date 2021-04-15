@@ -8,9 +8,9 @@ public interface BatchProductApprovalDocumentService {
 
     BatchApprovalDocument save(BatchApprovalDocument batchApprovalDocument);
 
-    Optional<BatchApprovalDocument> findByBatchProductIdAndApprovalDocumentId(int batchProductId, int approvalDocumentId);
+    Optional<BatchApprovalDocument> findByBatchIdAndApprovalDocumentId(int batchId, int approvalDocumentId);
 
-    List<BatchApprovalDocument> getAllByBatchProductId(int batchProductId);
+    List<BatchApprovalDocument> getAllByBatchId(int batchId);
 
     List<BatchApprovalDocument> getAllByApprovalDocumentId(int approvalDocumentId);
 

@@ -1,7 +1,7 @@
 package com.prodnees.action;
 
 import com.prodnees.domain.batch.Batch;
-import com.prodnees.domain.enums.BatchStatus;
+import com.prodnees.domain.enums.BatchState;
 import com.prodnees.model.batch.BatchListModel;
 import com.prodnees.model.batch.BatchModel;
 import java.util.List;
@@ -10,11 +10,11 @@ public interface BatchAction {
 
     boolean existsById(int id);
 
-    boolean existsByIdAndStatus(int id, BatchStatus status);
+    boolean existsByIdAndState(int id, BatchState state);
 
     boolean isEditable(int id);
 
-    List<BatchModel> getAllByUserIdAndStatus(int userId, BatchStatus status);
+    List<BatchModel> getAllByUserIdAndState(int userId, BatchState state);
 
     BatchModel save(Batch batch);
 

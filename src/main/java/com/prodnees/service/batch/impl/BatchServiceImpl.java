@@ -2,7 +2,7 @@ package com.prodnees.service.batch.impl;
 
 import com.prodnees.dao.batchproduct.BatchDao;
 import com.prodnees.domain.batch.Batch;
-import com.prodnees.domain.enums.BatchStatus;
+import com.prodnees.domain.enums.BatchState;
 import com.prodnees.service.batch.BatchService;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -46,12 +46,12 @@ public class BatchServiceImpl implements BatchService {
     }
 
     @Override
-    public boolean existsByIdAndStatus(int id, BatchStatus status) {
-        return batchDao.existsByIdAndStatus(id, status);
+    public boolean existsByIdAndState(int id, BatchState state) {
+        return batchDao.existsByIdAndState(id, state);
     }
 
     @Override
-    public List<Batch> getAllByUserIdAndStatus(int userId, BatchStatus status) {
-        return batchDao.getAllByUserIdAndStatus(userId, status.name());
+    public List<Batch> getAllByUserIdAndState(int userId, BatchState state) {
+        return batchDao.getAllByUserIdAndState(userId, state.name());
     }
 }

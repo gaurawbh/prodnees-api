@@ -1,7 +1,7 @@
 package com.prodnees.service.rels.impl;
 
-import com.prodnees.dao.rels.BatchProductRightsDao;
-import com.prodnees.domain.enums.ObjectRightType;
+import com.prodnees.dao.rels.BatchRightsDao;
+import com.prodnees.domain.enums.ObjectRight;
 import com.prodnees.domain.rels.BatchRight;
 import com.prodnees.service.rels.BatchRightService;
 import org.springframework.stereotype.Service;
@@ -10,30 +10,30 @@ import java.util.Optional;
 
 @Service
 public class BatchRightServiceImpl implements BatchRightService {
-    private final BatchProductRightsDao batchProductRightsDao;
+    private final BatchRightsDao batchRightsDao;
 
-    public BatchRightServiceImpl(BatchProductRightsDao batchProductRightsDao) {
-        this.batchProductRightsDao = batchProductRightsDao;
+    public BatchRightServiceImpl(BatchRightsDao batchRightsDao) {
+        this.batchRightsDao = batchRightsDao;
     }
 
     @Override
     public BatchRight save(BatchRight batchRight) {
-        return batchProductRightsDao.save(batchRight);
+        return batchRightsDao.save(batchRight);
     }
 
     @Override
     public Optional<BatchRight> findByBatchIdAndUserId(int batchProductId, int ownerId) {
-        return batchProductRightsDao.findByBatchProductIdAndUserId(batchProductId, ownerId);
+        return batchRightsDao.findByBatchIdAndUserId(batchProductId, ownerId);
     }
 
     @Override
     public List<BatchRight> getAllByBatchId(int batchProductId) {
-        return batchProductRightsDao.getAllByBatchProductId(batchProductId);
+        return batchRightsDao.getAllByBatchId(batchProductId);
     }
 
     @Override
     public List<BatchRight> getAllByUserId(int userId) {
-        return batchProductRightsDao.getAllByUserId(userId);
+        return batchRightsDao.getAllByUserId(userId);
     }
 
     /**
@@ -46,8 +46,8 @@ public class BatchRightServiceImpl implements BatchRightService {
      */
     @Override
     public boolean hasBatchEditorRights(int batchProductId, int editorId) {
-        return batchProductRightsDao.existsByBatchProductIdAndUserIdAndObjectRightType(batchProductId, editorId, ObjectRightType.OWNER)
-                || batchProductRightsDao.existsByBatchProductIdAndUserIdAndObjectRightType(batchProductId, editorId, ObjectRightType.EDITOR);
+        return batchRightsDao.existsByBatchIdAndUserIdAndObjectRight(batchProductId, editorId, ObjectRight.OWNER)
+                || batchRightsDao.existsByBatchIdAndUserIdAndObjectRight(batchProductId, editorId, ObjectRight.EDITOR);
     }
 
     /**
@@ -60,11 +60,11 @@ public class BatchRightServiceImpl implements BatchRightService {
      */
     @Override
     public boolean hasBatchReaderRights(int batchProductId, int readerId) {
-        return batchProductRightsDao.existsByBatchProductIdAndUserId(batchProductId, readerId);
+        return batchRightsDao.existsByBatchIdAndUserId(batchProductId, readerId);
     }
 
     @Override
     public void deleteByBatchIdAndUserId(int batchProductId, int userId) {
-        batchProductRightsDao.deleteByBatchProductIdAndUserId(batchProductId, userId);
+        batchRightsDao.deleteByBatchIdAndUserId(batchProductId, userId);
     }
 }

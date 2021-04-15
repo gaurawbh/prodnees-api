@@ -1,14 +1,14 @@
 package com.prodnees.model.batch;
 
 import com.prodnees.domain.batch.Batch;
-import com.prodnees.domain.enums.ObjectRightType;
+import com.prodnees.domain.enums.ObjectRight;
 import com.prodnees.model.user.UserModel;
 
 public class BatchRightModel {
 
     private Batch batch;
     private UserModel userModel;
-    private ObjectRightType objectRightType;
+    private ObjectRight objectRight;
 
     public Batch getBatchProduct() {
         return batch;
@@ -28,12 +28,12 @@ public class BatchRightModel {
         return this;
     }
 
-    public ObjectRightType getObjectRightsType() {
-        return objectRightType;
+    public ObjectRight getObjectRightsType() {
+        return objectRight;
     }
 
-    public BatchRightModel setObjectRightsType(ObjectRightType objectRightType) {
-        this.objectRightType = objectRightType;
+    public BatchRightModel setObjectRightsType(ObjectRight objectRight) {
+        this.objectRight = objectRight;
         return this;
     }
 }

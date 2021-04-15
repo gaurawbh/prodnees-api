@@ -1,26 +1,26 @@
 package com.prodnees.model.batch;
 
-import com.prodnees.model.state.StateApprovalDocumentModel;
+import com.prodnees.model.state.StageApprovalDocumentModel;
 
 public class BatchApprovalDocumentModel {
-    private int batchProductId;
-    private StateApprovalDocumentModel stateApprovalDocumentModel;
+    private int batchId;
+    private StageApprovalDocumentModel stageApprovalDocumentModel;
 
-    public StateApprovalDocumentModel getApprovalDocumentModel() {
-        return stateApprovalDocumentModel;
+    public StageApprovalDocumentModel getApprovalDocumentModel() {
+        return stageApprovalDocumentModel;
     }
 
-    public BatchApprovalDocumentModel setApprovalDocumentModel(StateApprovalDocumentModel stateApprovalDocumentModel) {
-        this.stateApprovalDocumentModel = stateApprovalDocumentModel;
+    public BatchApprovalDocumentModel setApprovalDocumentModel(StageApprovalDocumentModel stageApprovalDocumentModel) {
+        this.stageApprovalDocumentModel = stageApprovalDocumentModel;
         return this;
     }
 
-    public int getBatchProductId() {
-        return batchProductId;
+    public int getBatchId() {
+        return batchId;
     }
 
-    public BatchApprovalDocumentModel setBatchProductId(int batchProductId) {
-        this.batchProductId = batchProductId;
+    public BatchApprovalDocumentModel setBatchId(int batchId) {
+        this.batchId = batchId;
         return this;
     }
 }

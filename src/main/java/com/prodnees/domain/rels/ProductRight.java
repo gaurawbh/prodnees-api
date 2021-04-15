@@ -1,6 +1,6 @@
 package com.prodnees.domain.rels;
 
-import com.prodnees.domain.enums.ObjectRightType;
+import com.prodnees.domain.enums.ObjectRight;
 import com.prodnees.domain.rels.id.ProductRightId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,7 +14,7 @@ public class ProductRight implements Serializable {
     private int productId;
     @Id
     private int userId;
-    private ObjectRightType objectRightType;
+    private ObjectRight objectRight;
 
     public int getProductId() {
         return productId;
@@ -34,12 +34,12 @@ public class ProductRight implements Serializable {
         return this;
     }
 
-    public ObjectRightType getObjectRightsType() {
-        return objectRightType;
+    public ObjectRight getObjectRightsType() {
+        return objectRight;
     }
 
-    public ProductRight setObjectRightsType(ObjectRightType objectRightType) {
-        this.objectRightType = objectRightType;
+    public ProductRight setObjectRightsType(ObjectRight objectRight) {
+        this.objectRight = objectRight;
         return this;
     }
 }

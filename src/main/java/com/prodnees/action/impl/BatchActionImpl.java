@@ -2,7 +2,7 @@ package com.prodnees.action.impl;
 
 import com.prodnees.action.BatchAction;
 import com.prodnees.domain.batch.Batch;
-import com.prodnees.domain.enums.BatchStatus;
+import com.prodnees.domain.enums.BatchState;
 import com.prodnees.filter.RequestValidator;
 import com.prodnees.model.ProductModel;
 import com.prodnees.model.batch.BatchListModel;
@@ -13,7 +13,6 @@ import com.prodnees.service.rels.BatchRightService;
 import com.prodnees.service.rels.ProductRightsService;
 import com.prodnees.util.MapperUtil;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,18 +42,18 @@ public class BatchActionImpl implements BatchAction {
     }
 
     @Override
-    public boolean existsByIdAndStatus(int id, BatchStatus status) {
-        return batchService.existsByIdAndStatus(id, status);
+    public boolean existsByIdAndState(int id, BatchState state) {
+        return batchService.existsByIdAndState(id, state);
     }
 
     @Override
     public boolean isEditable(int id) {
-        return existsByIdAndStatus(id, BatchStatus.COMPLETE) || existsByIdAndStatus(id, BatchStatus.SUSPENDED);
+        return existsByIdAndState(id, BatchState.COMPLETE) || existsByIdAndState(id, BatchState.SUSPENDED);
     }
 
     @Override
-    public List<BatchModel> getAllByUserIdAndStatus(int userId, BatchStatus status) {
-        List<Batch> batchList = batchService.getAllByUserIdAndStatus(userId, status);
+    public List<BatchModel> getAllByUserIdAndState(int userId, BatchState state) {
+        List<Batch> batchList = batchService.getAllByUserIdAndState(userId, state);
         List<BatchModel> batchModelList = new ArrayList<>();
         batchList.forEach(batchProduct -> batchModelList.add(mapToModel(batchProduct)));
         return batchModelList;
@@ -92,10 +91,10 @@ public class BatchActionImpl implements BatchAction {
         return new BatchListModel()
                 .setBatches(batchList)
                 .setCount(batchList.size())
-                .setOpen((int) batchList.stream().filter(batch -> batch.getStatus().equals(BatchStatus.OPEN)).count())
-                .setInProgress((int) batchList.stream().filter(batch -> batch.getStatus().equals(BatchStatus.IN_PROGRESS)).count())
-                .setComplete((int) batchList.stream().filter(batch -> batch.getStatus().equals(BatchStatus.COMPLETE)).count())
-                .setSuspended((int) batchList.stream().filter(batch -> batch.getStatus().equals(BatchStatus.SUSPENDED)).count());
+                .setOpen((int) batchList.stream().filter(batch -> batch.getState().equals(BatchState.OPEN)).count())
+                .setInProgress((int) batchList.stream().filter(batch -> batch.getState().equals(BatchState.IN_PROGRESS)).count())
+                .setComplete((int) batchList.stream().filter(batch -> batch.getState().equals(BatchState.COMPLETE)).count())
+                .setSuspended((int) batchList.stream().filter(batch -> batch.getState().equals(BatchState.SUSPENDED)).count());
 
     }
 
@@ -117,7 +116,7 @@ public class BatchActionImpl implements BatchAction {
                 .setName(batch.getName())
                 .setProductModel(productModel)
                 .setApprovalDocumentModel(null)
-                .setStatus(batch.getStatus())
+                .setStatus(batch.getState())
                 .setDescription(batch.getDescription())
                 .setCreatedDate(batch.getCreatedDate());
         return model;

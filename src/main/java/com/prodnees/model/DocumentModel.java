@@ -1,6 +1,6 @@
 package com.prodnees.model;
 
-import com.prodnees.domain.enums.ObjectRightType;
+import com.prodnees.domain.enums.ObjectRight;
 
 public class DocumentModel {
 
@@ -8,7 +8,7 @@ public class DocumentModel {
     private String name;
     private String documentUrl;
     private String documentDownloadUrl;
-    private ObjectRightType objectRightType;
+    private ObjectRight objectRight;
 
     public int getId() {
         return id;
@@ -46,12 +46,12 @@ public class DocumentModel {
         return this;
     }
 
-    public ObjectRightType getObjectRightType() {
-        return objectRightType;
+    public ObjectRight getObjectRightType() {
+        return objectRight;
     }
 
-    public DocumentModel setObjectRightType(ObjectRightType objectRightType) {
-        this.objectRightType = objectRightType;
+    public DocumentModel setObjectRightType(ObjectRight objectRight) {
+        this.objectRight = objectRight;
         return this;
     }
 }

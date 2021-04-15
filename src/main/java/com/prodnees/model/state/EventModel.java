@@ -3,8 +3,8 @@ package com.prodnees.model.state;
 public class EventModel {
 
     private int id;
-    private int batchProductId;
-    private int stateId;
+    private int batchId;
+    private int stageId;
     private String name;
     private String description;
     private boolean complete;
@@ -18,21 +18,21 @@ public class EventModel {
         return this;
     }
 
-    public int getBatchProductId() {
-        return batchProductId;
+    public int getBatchId() {
+        return batchId;
     }
 
-    public EventModel setBatchProductId(int batchProductId) {
-        this.batchProductId = batchProductId;
+    public EventModel setBatchId(int batchId) {
+        this.batchId = batchId;
         return this;
     }
 
-    public int getStateId() {
-        return stateId;
+    public int getStageId() {
+        return stageId;
     }
 
-    public EventModel setStateId(int stateId) {
-        this.stateId = stateId;
+    public EventModel setStageId(int stageId) {
+        this.stageId = stageId;
         return this;
     }
 

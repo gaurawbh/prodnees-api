@@ -11,5 +11,5 @@ public interface RawProductService {
 
     RawProduct getByName(String name);
 
-    List<RawProduct> getAllByStateId(int id);
+    List<RawProduct> getAllByStageId(int id);
 }

@@ -1,12 +1,12 @@
 package com.prodnees.controller;
 
 import com.prodnees.action.rel.BatchRightAction;
-import com.prodnees.action.state.StateAction;
-import com.prodnees.action.state.StateReminderAction;
+import com.prodnees.action.stage.StageAction;
+import com.prodnees.action.stage.StageReminderAction;
 import com.prodnees.config.constants.APIErrors;
-import com.prodnees.domain.enums.StateStatus;
-import com.prodnees.domain.state.StateReminder;
-import com.prodnees.dto.state.StateReminderDto;
+import com.prodnees.domain.enums.StageState;
+import com.prodnees.domain.state.StageReminder;
+import com.prodnees.dto.state.StageReminderDto;
 import com.prodnees.filter.RequestValidator;
 import com.prodnees.util.LocalAssert;
 import com.prodnees.util.MapperUtil;
@@ -34,38 +34,38 @@ import static com.prodnees.web.response.LocalResponse.configure;
 @RequestMapping("/secure/")
 public class StateReminderController {
     private final RequestValidator requestValidator;
-    private final StateReminderAction stateReminderAction;
-    private final StateAction stateAction;
+    private final StageReminderAction stageReminderAction;
+    private final StageAction stageAction;
     private final BatchRightAction batchRightAction;
 
     public StateReminderController(RequestValidator requestValidator,
-                                   StateReminderAction stateReminderAction,
-                                   StateAction stateAction,
+                                   StageReminderAction stageReminderAction,
+                                   StageAction stageAction,
                                    BatchRightAction batchRightAction) {
         this.requestValidator = requestValidator;
-        this.stateReminderAction = stateReminderAction;
-        this.stateAction = stateAction;
+        this.stageReminderAction = stageReminderAction;
+        this.stageAction = stageAction;
         this.batchRightAction = batchRightAction;
     }
 
     @PostMapping("/state-reminder")
-    public ResponseEntity<?> save(@Validated @RequestBody StateReminderDto dto,
+    public ResponseEntity<?> save(@Validated @RequestBody StageReminderDto dto,
                                   HttpServletRequest servletRequest) {
         int editorId = requestValidator.extractUserId(servletRequest);
         String sender = requestValidator.extractUserEmail(servletRequest);
-        LocalAssert.isTrue(stateAction.hasStateEditorRights(dto.getStateId(), editorId),
+        LocalAssert.isTrue(stageAction.hasStageEditorRights(dto.getStateId(), editorId),
                 String.format("state with id: %d not found or you do not have editor right to the batch product the state belongs to.", dto.getStateId()));
 
-        LocalAssert.isTrue(dto.getStateStatus().equals(StateStatus.STARTED) || dto.getStateStatus().equals(StateStatus.COMPLETE),
-                String.format("state reminder can only be set for state status %s or %s", StateStatus.STARTED.name(), StateStatus.COMPLETE.name()));
+        LocalAssert.isTrue(dto.getStateStatus().equals(StageState.IN_PROGRESS) || dto.getStateStatus().equals(StageState.COMPLETE),
+                String.format("state reminder can only be set for state status %s or %s", StageState.IN_PROGRESS.name(), StageState.COMPLETE.name()));
         for (String email : dto.getRecipientEmails()) {
             LocalAssert.isTrue(requestValidator.isValidEmail(email), String.format("Invalid email format for %s", email));
         }
-        StateReminder stateReminder = MapperUtil.getDozer().map(dto, StateReminder.class);
-        stateReminder.setRecipients(String.join(", ", dto.getRecipientEmails()))
+        StageReminder stageReminder = MapperUtil.getDozer().map(dto, StageReminder.class);
+        stageReminder.setRecipients(String.join(", ", dto.getRecipientEmails()))
                 .setSender(sender)
                 .setSent(false);
-        return configure(stateReminderAction.save(stateReminder));
+        return configure(stageReminderAction.save(stageReminder));
     }
 
     //todo for batchProductId
@@ -80,20 +80,20 @@ public class StateReminderController {
         AtomicReference<Object> atomicReference = new AtomicReference<>();
 
         if (id.isPresent()) {
-            Optional<StateReminder> stateReminderOptional = stateReminderAction.findById(id.get());
+            Optional<StageReminder> stateReminderOptional = stageReminderAction.findById(id.get());
             stateReminderOptional.ifPresentOrElse(stateReminder -> {
-                LocalAssert.isTrue(stateAction.hasStateReaderRights(stateReminder.getStateId(), userId), APIErrors.OBJECT_NOT_FOUND);
+                LocalAssert.isTrue(stageAction.hasStageReaderRights(stateReminder.getStageId(), userId), APIErrors.OBJECT_NOT_FOUND);
                 atomicReference.set(stateReminder);
             }, () -> {
                 throw new NeesNotFoundException();
             });
             return configure(atomicReference.get());
         } else if (stateId.isPresent()) {
-            LocalAssert.isTrue(stateAction.hasStateReaderRights(stateId.get(), userId), APIErrors.OBJECT_NOT_FOUND);
-            atomicReference.set(stateReminderAction.getAllByStateId(stateId.get()));
+            LocalAssert.isTrue(stageAction.hasStageReaderRights(stateId.get(), userId), APIErrors.OBJECT_NOT_FOUND);
+            atomicReference.set(stageReminderAction.getAllByStageId(stateId.get()));
             return configure(atomicReference.get());
         } else {
-            return configure(stateReminderAction.getAllBySender(userEmail));
+            return configure(stageReminderAction.getAllBySender(userEmail));
         }
     }
 
@@ -108,12 +108,12 @@ public class StateReminderController {
     public ResponseEntity<?> delete(@RequestParam int id,
                                     HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
-        Optional<StateReminder> stateReminderOptional = stateReminderAction.findById(id);
+        Optional<StageReminder> stateReminderOptional = stageReminderAction.findById(id);
         stateReminderOptional.ifPresentOrElse(stateReminder -> {
-            LocalAssert.isTrue(stateAction.hasStateEditorRights(stateReminder.getStateId(), userId),
-                    String.format("you do not have enough rights to the state with id: %d the state reminder belongs to", stateReminder.getStateId()));
+            LocalAssert.isTrue(stageAction.hasStageEditorRights(stateReminder.getStageId(), userId),
+                    String.format("you do not have enough rights to the state with id: %d the state reminder belongs to", stateReminder.getStageId()));
             LocalAssert.isFalse(stateReminder.isSent(), "state reminder is already sent and cannot be deleted");
-            stateReminderAction.deleteById(id);
+            stageReminderAction.deleteById(id);
         }, () -> {
             throw new NeesNotFoundException();
         });

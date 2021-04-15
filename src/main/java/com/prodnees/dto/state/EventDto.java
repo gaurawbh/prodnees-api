@@ -7,9 +7,9 @@ public class EventDto {
 
     private int id;
     @Positive(message = "batchProductId must be positive")
-    private int batchProductId;
+    private int batchId;
     @Positive(message = "stateId must be positive")
-    private int stateId;
+    private int stageId;
     @NotBlank(message = "name cannot be null or blank")
     private String name;
     private String description;
@@ -23,21 +23,21 @@ public class EventDto {
         return this;
     }
 
-    public int getBatchProductId() {
-        return batchProductId;
+    public int getBatchId() {
+        return batchId;
     }
 
-    public EventDto setBatchProductId(int batchProductId) {
-        this.batchProductId = batchProductId;
+    public EventDto setBatchId(int batchId) {
+        this.batchId = batchId;
         return this;
     }
 
-    public int getStateId() {
-        return stateId;
+    public int getStageId() {
+        return stageId;
     }
 
-    public EventDto setStateId(int stateId) {
-        this.stateId = stateId;
+    public EventDto setStageId(int stageId) {
+        this.stageId = stageId;
         return this;
     }
 

@@ -12,6 +12,6 @@ public interface RawProductDao extends JpaRepository<RawProduct, Integer> {
 
     RawProduct getByName(String name);
 
-    @Query(nativeQuery = true, value = QueryConstants.RAW_PRODUCT_DAO_GET_ALL_BY_STATE_ID)
-    List<RawProduct> getAllByStateId(int id);
+    @Query(nativeQuery = true, value = QueryConstants.RAW_PRODUCT_DAO_GET_ALL_BY_STAGE_ID)
+    List<RawProduct> getAllByStageId(int id);
 }

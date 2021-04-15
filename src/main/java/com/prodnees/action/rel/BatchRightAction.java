@@ -12,19 +12,19 @@ public interface BatchRightAction {
 
     BatchRight save(BatchRight batchRight);
 
-    Optional<BatchRight> findByBatchIdAndUserId(int batchProductId, int ownerId);
+    Optional<BatchRight> findByBatchIdAndUserId(int batchId, int ownerId);
 
-    List<BatchRightModel> getAllByBatchId(int batchProductId);
+    List<BatchRightModel> getAllByBatchId(int batchId);
 
     List<BatchRight> getAllByUserId(int ownerId);
 
     List<BatchRightModel> getAllModelByUserId(int ownerId);
 
-    boolean hasBatchEditorRights(int batchProductId, int editorId);
+    boolean hasBatchEditorRights(int batchId, int editorId);
 
-    boolean hasBatchReaderRights(int batchProductId, int readerId);
+    boolean hasBatchReaderRights(int batchId, int readerId);
 
     boolean sendNewBatchRightsEmail(String email);
 
-    void deleteByBatchIdAndUserId(int batchProductId, int userId);
+    void deleteByBatchIdAndUserId(int batchId, int userId);
 }

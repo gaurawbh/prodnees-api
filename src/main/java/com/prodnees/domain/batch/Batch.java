@@ -1,7 +1,7 @@
 package com.prodnees.domain.batch;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.prodnees.domain.enums.BatchStatus;
+import com.prodnees.domain.enums.BatchState;
 import com.prodnees.util.FormatUtil;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -19,7 +19,7 @@ public class Batch {
     private String name;
     private String description;
     @Enumerated(EnumType.STRING)
-    private BatchStatus status;
+    private BatchState state;
     @JsonFormat(pattern = FormatUtil.DATE)
     private LocalDate createdDate;
 
@@ -59,12 +59,12 @@ public class Batch {
         return this;
     }
 
-    public BatchStatus getStatus() {
-        return status;
+    public BatchState getState() {
+        return state;
     }
 
-    public Batch setStatus(BatchStatus batchStatus) {
-        this.status = batchStatus;
+    public Batch setState(BatchState batchState) {
+        this.state = batchState;
         return this;
     }
 

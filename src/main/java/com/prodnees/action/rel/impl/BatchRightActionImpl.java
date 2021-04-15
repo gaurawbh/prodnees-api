@@ -58,7 +58,7 @@ public class BatchRightActionImpl implements BatchRightAction {
         }, () -> {
             BatchRight batchRight = new BatchRight()
                     .setUserId(user.getId())
-                    .setBatchProductId(rightsDto.getBatchId())
+                    .setBatchId(rightsDto.getBatchId())
                     .setObjectRightsType(rightsDto.getObjectRightsType());
             atomicReference.set(mapToModel(batchRightService.save(batchRight)));
         });
@@ -72,13 +72,13 @@ public class BatchRightActionImpl implements BatchRightAction {
     }
 
     @Override
-    public Optional<BatchRight> findByBatchIdAndUserId(int batchProductId, int ownerId) {
-        return batchRightService.findByBatchIdAndUserId(batchProductId, ownerId);
+    public Optional<BatchRight> findByBatchIdAndUserId(int batchId, int ownerId) {
+        return batchRightService.findByBatchIdAndUserId(batchId, ownerId);
     }
 
     @Override
-    public List<BatchRightModel> getAllByBatchId(int batchProductId) {
-        List<BatchRight> batchRights = batchRightService.getAllByBatchId(batchProductId);
+    public List<BatchRightModel> getAllByBatchId(int batchId) {
+        List<BatchRight> batchRights = batchRightService.getAllByBatchId(batchId);
         return batchRights.stream().map(this::mapToModel).collect(Collectors.toList());
     }
 
@@ -94,18 +94,18 @@ public class BatchRightActionImpl implements BatchRightAction {
     }
 
     @Override
-    public boolean hasBatchEditorRights(int batchProductId, int editorId) {
-        return batchRightService.hasBatchEditorRights(batchProductId, editorId);
+    public boolean hasBatchEditorRights(int batchId, int editorId) {
+        return batchRightService.hasBatchEditorRights(batchId, editorId);
     }
 
     @Override
-    public boolean hasBatchReaderRights(int batchProductId, int readerId) {
-        return batchRightService.hasBatchReaderRights(batchProductId, readerId);
+    public boolean hasBatchReaderRights(int batchId, int readerId) {
+        return batchRightService.hasBatchReaderRights(batchId, readerId);
     }
 
     private BatchRightModel mapToModel(BatchRight productRights) {
         BatchRightModel model = new BatchRightModel();
-        Batch batch = batchService.getById(productRights.getBatchProductId());
+        Batch batch = batchService.getById(productRights.getBatchId());
         UserAttributes userAttributes = userAttributesService.getByUserId(productRights.getUserId());
         return model.setBatchProduct(batch)
                 .setUserModel(new UserModel().setId(userAttributes.getUserId())
@@ -133,8 +133,8 @@ public class BatchRightActionImpl implements BatchRightAction {
     }
 
     @Override
-    public void deleteByBatchIdAndUserId(int batchProductId, int userId) {
-        batchRightService.deleteByBatchIdAndUserId(batchProductId, userId);
+    public void deleteByBatchIdAndUserId(int batchId, int userId) {
+        batchRightService.deleteByBatchIdAndUserId(batchId, userId);
 
     }
 }

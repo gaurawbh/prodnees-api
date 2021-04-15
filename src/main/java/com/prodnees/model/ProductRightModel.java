@@ -1,13 +1,13 @@
 package com.prodnees.model;
 
-import com.prodnees.domain.enums.ObjectRightType;
+import com.prodnees.domain.enums.ObjectRight;
 import com.prodnees.model.user.UserModel;
 
 public class ProductRightModel {
 
     private ProductModel productModel;
     private UserModel userModel;
-    private ObjectRightType objectRightType;
+    private ObjectRight objectRight;
 
     public ProductModel getProductModel() {
         return productModel;
@@ -27,12 +27,12 @@ public class ProductRightModel {
         return this;
     }
 
-    public ObjectRightType getObjectRightsType() {
-        return objectRightType;
+    public ObjectRight getObjectRightsType() {
+        return objectRight;
     }
 
-    public ProductRightModel setObjectRightsType(ObjectRightType objectRightType) {
-        this.objectRightType = objectRightType;
+    public ProductRightModel setObjectRightsType(ObjectRight objectRight) {
+        this.objectRight = objectRight;
         return this;
     }
 }

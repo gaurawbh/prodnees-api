@@ -1,11 +1,11 @@
 package com.prodnees.model;
 
-import com.prodnees.domain.enums.ObjectRightType;
+import com.prodnees.domain.enums.ObjectRight;
 
 public class DocumentRightModel {
     private int userId;
     private DocumentModel documentModel;
-    private ObjectRightType objectRightType;
+    private ObjectRight objectRight;
 
     public int getUserId() {
         return userId;
@@ -25,12 +25,12 @@ public class DocumentRightModel {
         return this;
     }
 
-    public ObjectRightType getObjectRightType() {
-        return objectRightType;
+    public ObjectRight getObjectRightType() {
+        return objectRight;
     }
 
-    public DocumentRightModel setObjectRightType(ObjectRightType objectRightType) {
-        this.objectRightType = objectRightType;
+    public DocumentRightModel setObjectRightType(ObjectRight objectRight) {
+        this.objectRight = objectRight;
         return this;
     }
 }

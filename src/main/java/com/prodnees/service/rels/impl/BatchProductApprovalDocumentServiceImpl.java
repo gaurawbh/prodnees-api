@@ -1,6 +1,6 @@
 package com.prodnees.service.rels.impl;
 
-import com.prodnees.dao.rels.BatchProductApprovalDocumentDao;
+import com.prodnees.dao.rels.BatchApprovalDocumentDao;
 import com.prodnees.domain.batch.BatchApprovalDocument;
 import com.prodnees.service.rels.BatchProductApprovalDocumentService;
 import org.springframework.stereotype.Service;
@@ -9,29 +9,29 @@ import java.util.Optional;
 
 @Service
 public class BatchProductApprovalDocumentServiceImpl implements BatchProductApprovalDocumentService {
-    private final BatchProductApprovalDocumentDao batchProductApprovalDocumentDao;
+    private final BatchApprovalDocumentDao batchApprovalDocumentDao;
 
-    public BatchProductApprovalDocumentServiceImpl(BatchProductApprovalDocumentDao batchProductApprovalDocumentDao) {
-        this.batchProductApprovalDocumentDao = batchProductApprovalDocumentDao;
+    public BatchProductApprovalDocumentServiceImpl(BatchApprovalDocumentDao batchApprovalDocumentDao) {
+        this.batchApprovalDocumentDao = batchApprovalDocumentDao;
     }
 
     @Override
     public BatchApprovalDocument save(BatchApprovalDocument batchApprovalDocument) {
-        return batchProductApprovalDocumentDao.save(batchApprovalDocument);
+        return batchApprovalDocumentDao.save(batchApprovalDocument);
     }
 
     @Override
-    public Optional<BatchApprovalDocument> findByBatchProductIdAndApprovalDocumentId(int batchProductId, int approvalDocumentId) {
-        return batchProductApprovalDocumentDao.findByBatchProductIdAndDocumentId(batchProductId, approvalDocumentId);
+    public Optional<BatchApprovalDocument> findByBatchIdAndApprovalDocumentId(int batchId, int approvalDocumentId) {
+        return batchApprovalDocumentDao.findByBatchIdAndDocumentId(batchId, approvalDocumentId);
     }
 
     @Override
-    public List<BatchApprovalDocument> getAllByBatchProductId(int batchProductId) {
-        return batchProductApprovalDocumentDao.getAllByBatchProductId(batchProductId);
+    public List<BatchApprovalDocument> getAllByBatchId(int batchId) {
+        return batchApprovalDocumentDao.getAllByBatchId(batchId);
     }
 
     @Override
     public List<BatchApprovalDocument> getAllByApprovalDocumentId(int approvalDocumentId) {
-        return batchProductApprovalDocumentDao.getAllByDocumentId(approvalDocumentId);
+        return batchApprovalDocumentDao.getAllByDocumentId(approvalDocumentId);
     }
 }

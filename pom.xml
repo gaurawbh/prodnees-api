@@ -12,7 +12,7 @@
     <artifactId>prodnees</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>prodnees-api</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Production batch tracking app</description>
     <properties>
         <java.version>11</java.version>
     </properties>

@@ -1,7 +1,7 @@
 package com.prodnees.dto;
 
 import com.prodnees.config.constants.LocalConstants;
-import com.prodnees.domain.enums.ObjectRightType;
+import com.prodnees.domain.enums.ObjectRight;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
@@ -12,7 +12,7 @@ public class ProductRightDto {
     @NotBlank(message = "email cannot be blank")
     @Email(regexp = LocalConstants.EMAIL_REGEX, message = "invalid email format")
     private String email;
-    private ObjectRightType objectRightType;
+    private ObjectRight objectRight;
 
     public int getProductId() {
         return productId;
@@ -32,12 +32,12 @@ public class ProductRightDto {
         return this;
     }
 
-    public ObjectRightType getObjectRightsType() {
-        return objectRightType;
+    public ObjectRight getObjectRightsType() {
+        return objectRight;
     }
 
-    public ProductRightDto setObjectRightsType(ObjectRightType objectRightType) {
-        this.objectRightType = objectRightType;
+    public ProductRightDto setObjectRightsType(ObjectRight objectRight) {
+        this.objectRight = objectRight;
         return this;
     }
 }

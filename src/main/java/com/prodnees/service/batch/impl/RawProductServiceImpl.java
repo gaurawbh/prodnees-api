@@ -31,7 +31,7 @@ public class RawProductServiceImpl implements RawProductService {
     }
 
     @Override
-    public List<RawProduct> getAllByStateId(int id) {
-        return rawProductDao.getAllByStateId(id);
+    public List<RawProduct> getAllByStageId(int id) {
+        return rawProductDao.getAllByStageId(id);
     }
 }

@@ -1,7 +1,7 @@
 package com.prodnees.service.batch;
 
 import com.prodnees.domain.batch.Batch;
-import com.prodnees.domain.enums.BatchStatus;
+import com.prodnees.domain.enums.BatchState;
 import java.util.List;
 
 public interface BatchService {
@@ -18,7 +18,7 @@ public interface BatchService {
 
     void deleteById(int id);
 
-    boolean existsByIdAndStatus(int id, BatchStatus status);
+    boolean existsByIdAndState(int id, BatchState state);
 
-    List<Batch> getAllByUserIdAndStatus(int userId, BatchStatus status);
+    List<Batch> getAllByUserIdAndState(int userId, BatchState state);
 }
