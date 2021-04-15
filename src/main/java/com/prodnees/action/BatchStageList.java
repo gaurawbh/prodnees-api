@@ -1,6 +1,6 @@
 package com.prodnees.action;
 
-import com.prodnees.domain.state.Stage;
+import com.prodnees.domain.stage.Stage;
 import java.util.List;
 
 /**

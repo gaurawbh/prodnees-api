@@ -135,56 +135,56 @@ public class BatchController {
     }
 
     /**
-     * @param status         of {@link Batch}
+     * @param state         of {@link Batch}
      * @param servletRequest
      * @return list of {@link BatchModel} that belongs to the User and by {@link BatchState}
      */
-    @GetMapping("/batches/status")
-    public ResponseEntity<?> getAllByStatus(@RequestParam BatchState status,
+    @GetMapping("/batches/state")
+    public ResponseEntity<?> getAllByStatus(@RequestParam BatchState state,
                                             HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
-        return configure(batchAction.getAllByUserIdAndState(userId, status));
+        return configure(batchAction.getAllByUserIdAndState(userId, state));
     }
 
     /**
      * Update {@link Batch} -> {@link BatchState}
      *
-     * @param status         of {@link Batch}
+     * @param state         of {@link Batch}
      * @param id             of {@link Batch}
      * @param servletRequest
      * @return
      */
-    @PutMapping("/batches/status")
-    public ResponseEntity<?> updateStatus(@RequestParam BatchState status,
+    @PutMapping("/batches/state")
+    public ResponseEntity<?> updateStatus(@RequestParam BatchState state,
                                           @RequestParam int id,
                                           HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
         LocalAssert.isTrue(batchRightAction.hasBatchEditorRights(id, userId), UPDATE_DENIED);
         Batch batch = batchAction.getById(id);
-        LocalAssert.isTrue(isValidBatchProductStatusUpdate(batch.getState(), status), "invalid status for the Batch Product");
-        batch.setState(status);
+        LocalAssert.isTrue(isValidBatchStateUpdate(batch.getState(), state), "invalid state for the Batch");
+        batch.setState(state);
         return LocalResponse.configure(batchAction.save(batch));
     }
 
     /**
      * Check if the new {@link BatchState} of a  {@link Batch} is valid
      *
-     * @param currentStatus
-     * @param newStatus
+     * @param currentState
+     * @param newState
      * @return
      */
 
-    boolean isValidBatchProductStatusUpdate(BatchState currentStatus, BatchState newStatus) {
-        switch (newStatus) {
+    boolean isValidBatchStateUpdate(BatchState currentState, BatchState newState) {
+        switch (newState) {
             case SUSPENDED:
             case COMPLETE:
-                return currentStatus == BatchState.OPEN
-                        || currentStatus == BatchState.IN_PROGRESS;
+                return currentState == BatchState.OPEN
+                        || currentState == BatchState.IN_PROGRESS;
             case OPEN:
-                return currentStatus == BatchState.IN_PROGRESS;
+                return currentState == BatchState.IN_PROGRESS;
             case IN_PROGRESS:
-                return currentStatus == BatchState.COMPLETE
-                        || currentStatus == BatchState.OPEN;
+                return currentState == BatchState.COMPLETE
+                        || currentState == BatchState.OPEN;
             default:
                 return false;
         }

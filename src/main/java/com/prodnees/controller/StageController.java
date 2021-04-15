@@ -8,10 +8,10 @@ import com.prodnees.config.constants.APIErrors;
 import com.prodnees.domain.batch.Batch;
 import com.prodnees.domain.enums.BatchState;
 import com.prodnees.domain.enums.StageState;
-import com.prodnees.domain.state.Event;
-import com.prodnees.domain.state.Stage;
-import com.prodnees.domain.state.StageReminder;
-import com.prodnees.dto.state.StageDto;
+import com.prodnees.domain.stage.Event;
+import com.prodnees.domain.stage.Stage;
+import com.prodnees.domain.stage.StageReminder;
+import com.prodnees.dto.stage.StageDto;
 import com.prodnees.filter.RequestValidator;
 import com.prodnees.model.state.StageModel;
 import com.prodnees.service.rels.BatchRightService;
@@ -41,7 +41,7 @@ import static com.prodnees.web.response.LocalResponse.configure;
 @RequestMapping("/secure")
 @CrossOrigin
 @Transactional
-public class StateController {
+public class StageController {
     private final RequestValidator requestValidator;
     private final BatchRightService batchRightService;
     private final EventAction eventAction;
@@ -49,7 +49,7 @@ public class StateController {
     private final BatchAction batchAction;
     private final StageReminderAction stageReminderAction;
 
-    public StateController(RequestValidator requestValidator,
+    public StageController(RequestValidator requestValidator,
                            BatchRightService batchRightService,
                            EventAction eventAction,
                            StageAction stageAction,
@@ -65,23 +65,21 @@ public class StateController {
 
     /**
      * Rules to Adding new  {@link Stage} to a {@link Batch}
-     * <p>if {@link Stage} #nextStateId > 0, the {@link Stage} can not be the finalState</p>
-     * <p>if  {@link Stage} #lastStateId > 0,  the {@link Stage} must not be the initialState</p>
      *
      * @param dto
      * @param servletRequest
      * @return
      */
-    @PostMapping("/state")
+    @PostMapping("/stage")
     public ResponseEntity<?> save(@Validated @RequestBody StageDto dto,
                                   HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
         LocalAssert.isTrue(batchRightService.hasBatchEditorRights(dto.getBatchId(), userId),
                 APIErrors.BATCH_NOT_FOUND);
-        LocalAssert.isTrue(batchAction.existsByIdAndState(dto.getBatchId(), BatchState.COMPLETE), "you cannot add a State to a Batch Product that is marked as Complete");
+        LocalAssert.isTrue(batchAction.existsByIdAndState(dto.getBatchId(), BatchState.COMPLETE), "you cannot add a Stage to a Batch that is marked as Complete");
         dto.setId(0).
                 setIndex(ValidatorUtil.ifValidIntegerOrElse(dto.getIndex(), -1));
-        Stage stage = MapperUtil.getDozer().map(dto, Stage.class).setStatus(StageState.OPEN);
+        Stage stage = MapperUtil.getDozer().map(dto, Stage.class).setState(StageState.OPEN);
         return configure(stageAction.save(stage));
     }
 
@@ -92,7 +90,7 @@ public class StateController {
      * @param servletRequest
      * @return
      */
-    @GetMapping("/states")
+    @GetMapping("/stages")
     public ResponseEntity<?> getById(@RequestParam int id, HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
         LocalAssert.isTrue(stageAction.hasStageReaderRights(id, userId), APIErrors.BATCH_NOT_FOUND);
@@ -107,7 +105,7 @@ public class StateController {
      * @param servletRequest
      * @return
      */
-    @GetMapping("/states/batch")
+    @GetMapping("/stages/batch")
     public ResponseEntity<?> getAllByBatchProductId(@RequestParam int batchId, HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
         LocalAssert.isTrue(batchRightService.hasBatchReaderRights(batchId, userId), APIErrors.BATCH_NOT_FOUND);
@@ -121,11 +119,11 @@ public class StateController {
      * @param servletRequest
      * @return
      */
-    @PutMapping("/state")
+    @PutMapping("/stage")
     public ResponseEntity<?> update(@Validated @RequestBody StageDto dto,
                                     HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
-        LocalAssert.isTrue(stageAction.hasStageEditorRights(dto.getId(), userId), String.format("state with id: %d not found or not enough permission ", dto.getId()));
+        LocalAssert.isTrue(stageAction.hasStageEditorRights(dto.getId(), userId), String.format("stage with id: %d not found or not enough permission ", dto.getId()));
         Stage stage = stageAction.getById(dto.getId());
         stage.setName(ValidatorUtil.ifValidStringOrElse(dto.getName(), stage.getName()))
                 .setDescription(ValidatorUtil.ifValidStringOrElse(dto.getDescription(), stage.getDescription()));
@@ -133,12 +131,12 @@ public class StateController {
         return configure();
     }
 
-    @DeleteMapping("/state")
+    @DeleteMapping("/stage")
     public ResponseEntity<?> delete(@RequestParam int id, HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
-        LocalAssert.isTrue(stageAction.hasStageEditorRights(id, userId), String.format("state not found with id: %d", id));
+        LocalAssert.isTrue(stageAction.hasStageEditorRights(id, userId), String.format("stage not found with id: %d", id));
         stageAction.deleteById(id);
-        return configure("state deleted successfully");
+        return configure("stage deleted successfully");
     }
 
 
@@ -149,15 +147,15 @@ public class StateController {
      * @param servletRequest
      * @return
      */
-    @PutMapping("/state/start")
-    public ResponseEntity<?> markStateStarted(@RequestParam int id, HttpServletRequest servletRequest) {
+    @PutMapping("/stage/start")
+    public ResponseEntity<?> markStageStarted(@RequestParam int id, HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
-        Optional<Stage> stateOptional = stageAction.findById(id);
-        stateOptional.ifPresentOrElse(state -> {
+        Optional<Stage> stageOptional = stageAction.findById(id);
+        stageOptional.ifPresentOrElse(stage -> {
             LocalAssert.isTrue(stageAction.hasStageEditorRights(id, userId), APIErrors.BATCH_NOT_FOUND);
-            state.setStatus(StageState.IN_PROGRESS);
+            stage.setState(StageState.IN_PROGRESS);
             List<StageReminder> stageReminderList = stageReminderAction.getAllByStageIdAndStageState(id, StageState.IN_PROGRESS);
-            stageReminderList.forEach(stageReminderAction::sendStateReminder);
+            stageReminderList.forEach(stageReminderAction::sendStageReminder);
         }, () -> {
             throw new NeesNotFoundException();
         });
@@ -171,17 +169,17 @@ public class StateController {
      * @param servletRequest
      * @return
      */
-    @PutMapping("/state/complete")
-    public ResponseEntity<?> markStateComplete(@RequestParam int id, HttpServletRequest servletRequest) {
+    @PutMapping("/stage/complete")
+    public ResponseEntity<?> markStageComplete(@RequestParam int id, HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId(servletRequest);
-        Optional<Stage> stateOptional = stageAction.findById(id);
-        stateOptional.ifPresentOrElse(state -> {
+        Optional<Stage> stageOptional = stageAction.findById(id);
+        stageOptional.ifPresentOrElse(stage -> {
             LocalAssert.isTrue(stageAction.hasStageEditorRights(id, userId), APIErrors.BATCH_NOT_FOUND);
-            List<Event> eventList = eventAction.getAllByStageId(state.getId());
-            eventList.forEach(event -> LocalAssert.isTrue(event.isComplete(), "This state has events that are not complete. Complete all events before marking this State as Complete"));
-            state.setStatus(StageState.COMPLETE);
+            List<Event> eventList = eventAction.getAllByStageId(stage.getId());
+            eventList.forEach(event -> LocalAssert.isTrue(event.isComplete(), "This stage has events that are not complete. Complete all events before marking this State as Complete"));
+            stage.setState(StageState.COMPLETE);
             List<StageReminder> stageReminderList = stageReminderAction.getAllByStageIdAndStageState(id, StageState.COMPLETE);
-            stageReminderList.forEach(stageReminderAction::sendStateReminder);
+            stageReminderList.forEach(stageReminderAction::sendStageReminder);
         }, () -> {
             throw new NeesNotFoundException();
         });

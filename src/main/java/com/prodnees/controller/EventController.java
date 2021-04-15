@@ -2,7 +2,7 @@ package com.prodnees.controller;
 
 import com.prodnees.action.rel.BatchRightAction;
 import com.prodnees.action.stage.EventAction;
-import com.prodnees.dto.state.EventDto;
+import com.prodnees.dto.stage.EventDto;
 import com.prodnees.filter.RequestValidator;
 import com.prodnees.web.response.LocalResponse;
 import org.springframework.http.ResponseEntity;

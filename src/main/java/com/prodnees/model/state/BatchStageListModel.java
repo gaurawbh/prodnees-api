@@ -1,6 +1,6 @@
 package com.prodnees.model.state;
 
-import com.prodnees.domain.state.Stage;
+import com.prodnees.domain.stage.Stage;
 import java.util.List;
 
 public class BatchStageListModel {

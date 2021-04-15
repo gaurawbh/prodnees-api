@@ -6,9 +6,9 @@ import com.prodnees.controller.DocumentController;
 import com.prodnees.domain.Document;
 import com.prodnees.domain.batch.RawProduct;
 import com.prodnees.domain.enums.StageState;
-import com.prodnees.domain.state.Event;
-import com.prodnees.domain.state.Stage;
-import com.prodnees.domain.state.StageApprovalDocument;
+import com.prodnees.domain.stage.Event;
+import com.prodnees.domain.stage.Stage;
+import com.prodnees.domain.stage.StageApprovalDocument;
 import com.prodnees.model.RawProductModel;
 import com.prodnees.model.state.EventModel;
 import com.prodnees.model.state.StageApprovalDocumentModel;
@@ -159,7 +159,7 @@ public class StageActionImpl implements StageAction {
                 .setApprovalDocuments(stageApprovalDocumentModelList)
                 .setEventModelList(eventModelList)
                 .setRawProductModelList(rawProductModelList)
-                .setStatus(stage.getStatus());
+                .setStatus(stage.getState());
         return stageModel;
     }
 

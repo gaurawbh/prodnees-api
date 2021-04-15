@@ -1,6 +1,6 @@
 package com.prodnees.action.stage;
 
-import com.prodnees.domain.state.Event;
+import com.prodnees.domain.stage.Event;
 import java.util.List;
 
 public interface EventAction {

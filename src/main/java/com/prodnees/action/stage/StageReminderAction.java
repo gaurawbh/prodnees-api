@@ -1,7 +1,7 @@
 package com.prodnees.action.stage;
 
 import com.prodnees.domain.enums.StageState;
-import com.prodnees.domain.state.StageReminder;
+import com.prodnees.domain.stage.StageReminder;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,5 +21,5 @@ public interface StageReminderAction {
 
     void deleteAllByStageId(int stageId);
 
-    void sendStateReminder(StageReminder stageReminder);
+    void sendStageReminder(StageReminder stageReminder);
 }

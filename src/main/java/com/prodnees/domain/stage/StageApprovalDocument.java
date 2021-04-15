@@ -1,4 +1,4 @@
-package com.prodnees.domain.state;
+package com.prodnees.domain.stage;
 
 import com.prodnees.domain.enums.ApprovalDocumentState;
 import javax.persistence.Entity;

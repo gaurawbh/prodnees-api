@@ -1,7 +1,7 @@
-package com.prodnees.dao.state;
+package com.prodnees.dao.stage;
 
 import com.prodnees.domain.enums.StageState;
-import com.prodnees.domain.state.Stage;
+import com.prodnees.domain.stage.Stage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 

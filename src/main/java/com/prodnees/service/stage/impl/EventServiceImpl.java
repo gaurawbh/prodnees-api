@@ -1,7 +1,7 @@
 package com.prodnees.service.stage.impl;
 
-import com.prodnees.dao.state.EventDao;
-import com.prodnees.domain.state.Event;
+import com.prodnees.dao.stage.EventDao;
+import com.prodnees.domain.stage.Event;
 import com.prodnees.service.stage.EventService;
 import org.springframework.stereotype.Service;
 import java.util.List;

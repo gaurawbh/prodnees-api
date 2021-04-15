@@ -107,7 +107,7 @@ public class DocumentController {
 
     /**
      * Only {@link ObjectRight#OWNER} can delete a document.
-     * <p>A document cannot be deleted if it is referenced by an {@link ApprovalDocument}</p>
+     * <p>A document cannot be deleted if it is referenced by an {@link com.prodnees.domain.stage.StageApprovalDocument}</p>
      *
      * @param id
      * @param servletRequest

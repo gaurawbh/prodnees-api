@@ -1,4 +1,4 @@
-package com.prodnees.domain.state;
+package com.prodnees.domain.stage;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

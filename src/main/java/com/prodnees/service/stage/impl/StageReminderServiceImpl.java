@@ -1,8 +1,8 @@
 package com.prodnees.service.stage.impl;
 
-import com.prodnees.dao.state.StageReminderDao;
+import com.prodnees.dao.stage.StageReminderDao;
 import com.prodnees.domain.enums.StageState;
-import com.prodnees.domain.state.StageReminder;
+import com.prodnees.domain.stage.StageReminder;
 import com.prodnees.service.stage.StageReminderService;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -27,13 +27,13 @@ public class StageReminderServiceImpl implements StageReminderService {
     }
 
     @Override
-    public List<StageReminder> getAllByStageId(int stateId) {
-        return stageReminderDao.getAllByStageId(stateId);
+    public List<StageReminder> getAllByStageId(int stageId) {
+        return stageReminderDao.getAllByStageId(stageId);
     }
 
     @Override
-    public List<StageReminder> getAllByStageIdAndStateState(int stateId, StageState stageState) {
-        return stageReminderDao.getAllByStageIdAndStageState(stateId, stageState);
+    public List<StageReminder> getAllByStageIdAndStateState(int stageId, StageState stageState) {
+        return stageReminderDao.getAllByStageIdAndStageState(stageId, stageState);
     }
 
     @Override

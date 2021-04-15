@@ -1,4 +1,4 @@
-package com.prodnees.domain.state;
+package com.prodnees.domain.stage;
 
 import com.prodnees.domain.enums.StageState;
 import javax.persistence.Column;
@@ -25,7 +25,7 @@ public class Stage {
     private String name;
     private String description;
     @Enumerated(EnumType.STRING)
-    private StageState status;
+    private StageState state;
 
     public int getId() {
         return id;
@@ -72,12 +72,12 @@ public class Stage {
         return this;
     }
 
-    public StageState getStatus() {
-        return status;
+    public StageState getState() {
+        return state;
     }
 
-    public Stage setStatus(StageState status) {
-        this.status = status;
+    public Stage setState(StageState status) {
+        this.state = status;
         return this;
     }
 

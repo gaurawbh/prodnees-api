@@ -1,6 +1,6 @@
-package com.prodnees.dao.state;
+package com.prodnees.dao.stage;
 
-import com.prodnees.domain.state.Event;
+import com.prodnees.domain.stage.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 

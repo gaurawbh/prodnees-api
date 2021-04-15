@@ -1,4 +1,4 @@
-package com.prodnees.dto.state;
+package com.prodnees.dto.stage;
 
 import com.prodnees.domain.enums.StageState;
 import javax.validation.constraints.NotEmpty;
@@ -8,7 +8,7 @@ import javax.validation.constraints.Positive;
 public class StageReminderDto {
     private int id;
     @Positive(message = "stateId must be a positive number")
-    private int stateId;
+    private int stageId;
     @NotNull(message = "stageState is a required field")
     private StageState stageState; // on what state status, should this reminder be sent out
     @NotEmpty(message = "recipientEmails must have at least one element")
@@ -25,20 +25,20 @@ public class StageReminderDto {
         return this;
     }
 
-    public int getStateId() {
-        return stateId;
+    public int getStageId() {
+        return stageId;
     }
 
-    public StageReminderDto setStateId(int stateId) {
-        this.stateId = stateId;
+    public StageReminderDto setStageId(int stageId) {
+        this.stageId = stageId;
         return this;
     }
 
-    public StageState getStateStatus() {
+    public StageState getStageState() {
         return stageState;
     }
 
-    public StageReminderDto setStateStatus(StageState stageState) {
+    public StageReminderDto setStageState(StageState stageState) {
         this.stageState = stageState;
         return this;
     }

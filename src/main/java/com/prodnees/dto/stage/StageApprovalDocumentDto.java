@@ -1,4 +1,4 @@
-package com.prodnees.dto.state;
+package com.prodnees.dto.stage;
 
 public class StageApprovalDocumentDto {
     private int stageId;

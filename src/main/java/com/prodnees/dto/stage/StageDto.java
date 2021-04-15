@@ -1,16 +1,13 @@
-package com.prodnees.dto.state;
+package com.prodnees.dto.stage;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
-public class EventDto {
+public class StageDto {
 
     private int id;
-    @Positive(message = "batchProductId must be positive")
+    @Positive(message = "batchId is a required field must be a positive number")
     private int batchId;
-    @Positive(message = "stateId must be positive")
-    private int stageId;
-    @NotBlank(message = "name cannot be null or blank")
+    private Integer index;
     private String name;
     private String description;
 
@@ -18,7 +15,7 @@ public class EventDto {
         return id;
     }
 
-    public EventDto setId(int id) {
+    public StageDto setId(int id) {
         this.id = id;
         return this;
     }
@@ -27,17 +24,17 @@ public class EventDto {
         return batchId;
     }
 
-    public EventDto setBatchId(int batchId) {
+    public StageDto setBatchId(int batchId) {
         this.batchId = batchId;
         return this;
     }
 
-    public int getStageId() {
-        return stageId;
+    public Integer getIndex() {
+        return index;
     }
 
-    public EventDto setStageId(int stageId) {
-        this.stageId = stageId;
+    public StageDto setIndex(Integer index) {
+        this.index = index;
         return this;
     }
 
@@ -45,7 +42,7 @@ public class EventDto {
         return name;
     }
 
-    public EventDto setName(String name) {
+    public StageDto setName(String name) {
         this.name = name;
         return this;
     }
@@ -54,7 +51,7 @@ public class EventDto {
         return description;
     }
 
-    public EventDto setDescription(String description) {
+    public StageDto setDescription(String description) {
         this.description = description;
         return this;
     }

@@ -1,7 +1,7 @@
 package com.prodnees.service.stage;
 
 import com.prodnees.domain.enums.StageState;
-import com.prodnees.domain.state.Stage;
+import com.prodnees.domain.stage.Stage;
 import java.util.List;
 import java.util.Optional;
 

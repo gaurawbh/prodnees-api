@@ -1,7 +1,7 @@
 package com.prodnees.service.stage;
 
 import com.prodnees.domain.enums.StageState;
-import com.prodnees.domain.state.StageReminder;
+import com.prodnees.domain.stage.StageReminder;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,7 +11,7 @@ public interface StageReminderService {
 
     StageReminder save(StageReminder stageReminder);
 
-    List<StageReminder> getAllByStageId(int stateId);
+    List<StageReminder> getAllByStageId(int stageId);
 
     List<StageReminder> getAllByStageIdAndStateState(int stageId, StageState stageState);
 

@@ -2,7 +2,7 @@ package com.prodnees.action.stage.impl;
 
 import com.prodnees.action.stage.StageReminderAction;
 import com.prodnees.domain.enums.StageState;
-import com.prodnees.domain.state.StageReminder;
+import com.prodnees.domain.stage.StageReminder;
 import com.prodnees.service.email.EmailPlaceHolders;
 import com.prodnees.service.email.LocalEmailService;
 import com.prodnees.service.stage.StageReminderService;
@@ -66,7 +66,7 @@ public class StageReminderActionImpl implements StageReminderAction {
     }
 
     @Override
-    public void sendStateReminder(StageReminder stageReminder) {
+    public void sendStageReminder(StageReminder stageReminder) {
         String[] emails = stageReminder.getRecipients().split(",");
         for (String email : emails) {
             Map<String, Object> stateReminderMail = new HashMap<>();
