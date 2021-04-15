@@ -153,6 +153,7 @@ public class StateActionImpl implements StateAction {
         rawProductList.forEach(rawProduct -> rawProductModelList.add(entityToModel(rawProduct)));
         stateModel.setId(state.getId())
                 .setBatchId(state.getBatchId())
+                .setIndex(state.getIndex())
                 .setName(state.getName())
                 .setDescription(state.getDescription())
                 .setApprovalDocuments(stateApprovalDocumentModelList)
