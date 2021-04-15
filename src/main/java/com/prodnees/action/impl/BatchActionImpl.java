@@ -3,6 +3,7 @@ package com.prodnees.action.impl;
 import com.prodnees.action.BatchAction;
 import com.prodnees.domain.batch.Batch;
 import com.prodnees.domain.enums.BatchStatus;
+import com.prodnees.filter.RequestValidator;
 import com.prodnees.model.ProductModel;
 import com.prodnees.model.batch.BatchListModel;
 import com.prodnees.model.batch.BatchModel;
@@ -12,6 +13,7 @@ import com.prodnees.service.rels.BatchRightService;
 import com.prodnees.service.rels.ProductRightsService;
 import com.prodnees.util.MapperUtil;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,15 +24,17 @@ public class BatchActionImpl implements BatchAction {
     private final ProductRightsService productRightsService;
     private final BatchRightService batchRightService;
     private final ProductService productService;
+    private final RequestValidator requestValidator;
 
     public BatchActionImpl(BatchService batchService,
                            ProductRightsService productRightsService,
                            BatchRightService batchRightService,
-                           ProductService productService) {
+                           ProductService productService, RequestValidator requestValidator) {
         this.batchService = batchService;
         this.productRightsService = productRightsService;
         this.batchRightService = batchRightService;
         this.productService = productService;
+        this.requestValidator = requestValidator;
     }
 
     @Override
@@ -103,6 +107,12 @@ public class BatchActionImpl implements BatchAction {
     BatchModel mapToModel(Batch batch) {
         BatchModel model = new BatchModel();
         ProductModel productModel = MapperUtil.getDozer().map(productService.getById(batch.getProductId()), ProductModel.class);
+        try {
+            int userId = requestValidator.extractUserId();
+            model.setRightType(batchRightService.findByBatchIdAndUserId(batch.getId(), userId).get().getObjectRightsType());
+        } catch (IllegalAccessException | NullPointerException ignored) {
+
+        }
         model.setId(batch.getId())
                 .setName(batch.getName())
                 .setProductModel(productModel)
