@@ -2,14 +2,14 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo "Entered the pre-build phase"
+      - echo "Entered the pre-build phase of NeePos api"
   build:
     commands:
-      - echo "Entered build phase"
+      - echo "Entered build phase of NeesPos api"
       - mvn clean install
   post_build:
     commands:
-      - echo "Entered the post-build phase"
+      - echo "Entered the post-build phase of NeesPos api"
 artifacts:
   files:
     - target/*.jar
