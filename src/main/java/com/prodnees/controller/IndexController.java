@@ -11,6 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class IndexController {
     @GetMapping("/")
     public ResponseEntity<?> index() {
-        return LocalResponse.configure("index test code deploye please work final");
+        return LocalResponse.configure("what the fuck man");
     }
 }
