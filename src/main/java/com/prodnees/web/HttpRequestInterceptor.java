@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 public class HttpRequestInterceptor implements HandlerInterceptor {
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response,
+                             Object handler) {
 
         if (response.getStatus() == HttpServletResponse.SC_UNAUTHORIZED) {
             throw new NeesNotFoundException(APIErrors.INVALID_JWT_TOKEN);

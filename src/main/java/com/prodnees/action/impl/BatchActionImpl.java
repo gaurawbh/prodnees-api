@@ -10,7 +10,6 @@ import com.prodnees.model.batch.BatchModel;
 import com.prodnees.service.batch.BatchService;
 import com.prodnees.service.batch.ProductService;
 import com.prodnees.service.rels.BatchRightService;
-import com.prodnees.service.rels.ProductRightsService;
 import com.prodnees.util.MapperUtil;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -20,17 +19,15 @@ import java.util.List;
 public class BatchActionImpl implements BatchAction {
 
     private final BatchService batchService;
-    private final ProductRightsService productRightsService;
     private final BatchRightService batchRightService;
     private final ProductService productService;
     private final RequestValidator requestValidator;
 
     public BatchActionImpl(BatchService batchService,
-                           ProductRightsService productRightsService,
                            BatchRightService batchRightService,
-                           ProductService productService, RequestValidator requestValidator) {
+                           ProductService productService,
+                           RequestValidator requestValidator) {
         this.batchService = batchService;
-        this.productRightsService = productRightsService;
         this.batchRightService = batchRightService;
         this.productService = productService;
         this.requestValidator = requestValidator;
@@ -81,8 +78,7 @@ public class BatchActionImpl implements BatchAction {
 
     @Override
     public List<Batch> getAllByIds(Iterable<Integer> ids) {
-        List<Batch> batchList = batchService.getAllByIds(ids);
-        return batchList;
+        return batchService.getAllByIds(ids);
     }
 
     @Override

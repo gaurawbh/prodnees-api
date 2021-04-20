@@ -41,7 +41,9 @@ public class JWTRequestFilter extends OncePerRequestFilter {
 
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
         String username = null;
         String jwt = "";
@@ -49,7 +51,6 @@ public class JWTRequestFilter extends OncePerRequestFilter {
             jwt = authorizationHeader.substring(7);
             try {
                 username = jwtService.extractUsername(jwt);
-//                localLogger.info(String.format("%s - %s", request.getRequestURI(), request.getMethod()));
                 boolean tempPassword = jwtService.hasUsedTempPassword(jwt);
                 if (tempPassword) {
                     checkChangePasswordUrl(request, response);

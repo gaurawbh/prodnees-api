@@ -1,6 +1,5 @@
 package com.prodnees.controller;
 
-import com.prodnees.action.rel.BatchRightAction;
 import com.prodnees.action.stage.StageAction;
 import com.prodnees.action.stage.StageReminderAction;
 import com.prodnees.config.constants.APIErrors;
@@ -23,9 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 import static com.prodnees.web.response.LocalResponse.configure;
 
 @RestController
@@ -36,21 +33,17 @@ public class StageReminderController {
     private final RequestValidator requestValidator;
     private final StageReminderAction stageReminderAction;
     private final StageAction stageAction;
-    private final BatchRightAction batchRightAction;
 
     public StageReminderController(RequestValidator requestValidator,
                                    StageReminderAction stageReminderAction,
-                                   StageAction stageAction,
-                                   BatchRightAction batchRightAction) {
+                                   StageAction stageAction) {
         this.requestValidator = requestValidator;
         this.stageReminderAction = stageReminderAction;
         this.stageAction = stageAction;
-        this.batchRightAction = batchRightAction;
     }
 
     @PostMapping("/stage-reminder")
-    public ResponseEntity<?> save(@Validated @RequestBody StageReminderDto dto,
-                                  HttpServletRequest servletRequest) {
+    public ResponseEntity<?> save(@Validated @RequestBody StageReminderDto dto) {
         int editorId = requestValidator.extractUserId();
         String sender = requestValidator.extractUserEmail();
         LocalAssert.isTrue(stageAction.hasStageEditorRights(dto.getStageId(), editorId),
@@ -72,51 +65,36 @@ public class StageReminderController {
     @GetMapping("/stage-reminders")
     public ResponseEntity<?> get(@RequestParam Optional<Integer> id,
                                  @RequestParam Optional<Integer> stageId,
-                                 @RequestParam Optional<Integer> batchId,
-                                 HttpServletRequest servletRequest) {
+                                 @RequestParam Optional<Integer> batchId) {
         int userId = requestValidator.extractUserId();
         String userEmail = requestValidator.extractUserEmail();
 
-        AtomicReference<Object> atomicReference = new AtomicReference<>();
-
         if (id.isPresent()) {
-            Optional<StageReminder> stageReminderOptional = stageReminderAction.findById(id.get());
-            stageReminderOptional.ifPresentOrElse(stageReminder -> {
-                LocalAssert.isTrue(stageAction.hasStageReaderRights(stageReminder.getStageId(), userId), APIErrors.OBJECT_NOT_FOUND);
-                atomicReference.set(stageReminder);
-            }, () -> {
-                throw new NeesNotFoundException();
-            });
-            return configure(atomicReference.get());
+            StageReminder stageReminder = stageReminderAction.findById(id.get()).orElseThrow(NeesNotFoundException::new);
+            LocalAssert.isTrue(stageAction.hasStageReaderRights(stageReminder.getStageId(), userId), APIErrors.OBJECT_NOT_FOUND);
+            return configure(stageReminder);
         } else if (stageId.isPresent()) {
             LocalAssert.isTrue(stageAction.hasStageReaderRights(stageId.get(), userId), APIErrors.OBJECT_NOT_FOUND);
-            atomicReference.set(stageReminderAction.getAllByStageId(stageId.get()));
-            return configure(atomicReference.get());
+            return configure(stageReminderAction.getAllByStageId(stageId.get()));
         } else {
             return configure(stageReminderAction.getAllBySender(userEmail));
         }
     }
 
     @PutMapping("/stage-reminder")
-    public ResponseEntity<?> update(@Validated @RequestBody Object obj,
-                                    HttpServletRequest servletRequest) {
+    public ResponseEntity<?> update(@Validated @RequestBody Object obj) {
         int userId = requestValidator.extractUserId();
         return configure();
     }
 
     @DeleteMapping("/stage-reminder")
-    public ResponseEntity<?> delete(@RequestParam int id,
-                                    HttpServletRequest servletRequest) {
+    public ResponseEntity<?> delete(@RequestParam int id) {
         int userId = requestValidator.extractUserId();
-        Optional<StageReminder> stageReminderOptional = stageReminderAction.findById(id);
-        stageReminderOptional.ifPresentOrElse(stageReminder -> {
-            LocalAssert.isTrue(stageAction.hasStageEditorRights(stageReminder.getStageId(), userId),
-                    String.format("you do not have enough rights to the stage with id: %d the stage reminder belongs to", stageReminder.getStageId()));
-            LocalAssert.isFalse(stageReminder.isSent(), "stage reminder is already sent and cannot be deleted");
-            stageReminderAction.deleteById(id);
-        }, () -> {
-            throw new NeesNotFoundException();
-        });
+        StageReminder stageReminder = stageReminderAction.findById(id).orElseThrow(NeesNotFoundException::new);
+        LocalAssert.isTrue(stageAction.hasStageEditorRights(stageReminder.getStageId(), userId),
+                String.format("you do not have enough rights to the stage with id: %d the stage reminder belongs to", stageReminder.getStageId()));
+        LocalAssert.isFalse(stageReminder.isSent(), "stage reminder is already sent and cannot be deleted");
+        stageReminderAction.deleteById(id);
         return configure("successfully deleted stage reminder");
     }
 

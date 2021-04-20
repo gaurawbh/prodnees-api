@@ -83,26 +83,18 @@ public class DocumentController {
     }
 
     /**
-     * Only {@link Document#name} can be updated of a Document
+     * Only {@link Document} #name can be updated of a Document
      *
      * @param dto
-     * @param servletRequest
      * @return
      */
     @PutMapping("/document")
-    public ResponseEntity<?> update(@Validated @RequestBody DocumentDto dto,
-                                    HttpServletRequest servletRequest) {
+    public ResponseEntity<?> update(@Validated @RequestBody DocumentDto dto) {
         int userId = requestValidator.extractUserId();
-        Optional<DocumentRight> documentRightOptional = documentRightAction.findByDocumentIdAndUserId(dto.getId(), userId);
-        AtomicReference<DocumentModel> documentModelAtomicReference = new AtomicReference<>();
-        documentRightOptional.ifPresentOrElse(documentRight -> {
-            LocalAssert.isTrue(documentRightAction.hasEditRights(documentRight), APIErrors.UPDATE_DENIED);
-            Document document = documentAction.getById(dto.getId());
-            documentModelAtomicReference.set(documentAction.save(document.setName(dto.getName())));
-        }, () -> {
-            throw new NeesNotFoundException();
-        });
-        return configure(documentModelAtomicReference.get());
+        DocumentRight documentRight = documentRightAction.findByDocumentIdAndUserId(dto.getId(), userId).orElseThrow(NeesNotFoundException::new);
+        LocalAssert.isTrue(documentRightAction.hasEditRights(documentRight), APIErrors.UPDATE_DENIED);
+        Document document = documentAction.getById(dto.getId()).setName(dto.getName());
+        return configure(document);
     }
 
     /**
@@ -110,20 +102,16 @@ public class DocumentController {
      * <p>A document cannot be deleted if it is referenced by an {@link com.prodnees.domain.stage.StageApprovalDocument}</p>
      *
      * @param id
-     * @param servletRequest
      * @return
      */
     @DeleteMapping("/document")
-    public ResponseEntity<?> delete(@RequestParam int id, HttpServletRequest servletRequest) {
+    public ResponseEntity<?> delete(@RequestParam int id) {
 
         int userId = requestValidator.extractUserId();
-        Optional<DocumentRight> documentRightOptional = documentRightAction.findByDocumentIdAndUserId(id, userId);
-        documentRightOptional.ifPresentOrElse(documentRight -> {
-            LocalAssert.isTrue(documentRight.getDocumentRightsType() == ObjectRight.OWNER, APIErrors.UPDATE_DENIED);
-            documentAction.deleteById(id);
-        }, () -> {
-            throw new NeesNotFoundException();
-        });
+        DocumentRight documentRight = documentRightAction.findByDocumentIdAndUserId(id, userId)
+                .orElseThrow(NeesNotFoundException::new);
+        LocalAssert.isTrue(documentRight.getDocumentRightsType() == ObjectRight.OWNER, APIErrors.UPDATE_DENIED);
+        documentAction.deleteById(id);
         return configure();
     }
 
@@ -132,12 +120,10 @@ public class DocumentController {
      * <p>Returns a list of {@link DocumentModel} the current user has access to if id is not present</p>
      *
      * @param id
-     * @param servletRequest
      * @return
      */
     @GetMapping("/documents")
-    public ResponseEntity<?> get(@RequestParam Optional<Integer> id,
-                                 HttpServletRequest servletRequest) {
+    public ResponseEntity<?> get(@RequestParam Optional<Integer> id) {
         int userId = requestValidator.extractUserId();
         AtomicReference<Object> atomicReference = new AtomicReference<>();
         id.ifPresentOrElse(integer -> {
@@ -150,7 +136,6 @@ public class DocumentController {
 
     @GetMapping(value = "/document/load", produces = MediaType.APPLICATION_PDF_VALUE)
     public void loadDocumentFile(@RequestParam int id,
-                                 HttpServletRequest servletRequest,
                                  HttpServletResponse servletResponse) {
         int userId = requestValidator.extractUserId();
         LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(id, userId), APIErrors.OBJECT_NOT_FOUND);
@@ -164,9 +149,7 @@ public class DocumentController {
     }
 
     @GetMapping("/document/download")
-    public ResponseEntity<?> downloadDocumentFile(@RequestParam int id,
-                                                  HttpServletRequest servletRequest,
-                                                  HttpServletResponse servletResponse) {
+    public ResponseEntity<?> downloadDocumentFile(@RequestParam int id) {
         int userId = requestValidator.extractUserId();
         LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(id, userId),
                 APIErrors.OBJECT_NOT_FOUND);

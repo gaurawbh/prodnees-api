@@ -135,7 +135,7 @@ public class BatchController {
     }
 
     /**
-     * @param state         of {@link Batch}
+     * @param state          of {@link Batch}
      * @param servletRequest
      * @return list of {@link BatchModel} that belongs to the User and by {@link BatchState}
      */
@@ -149,7 +149,7 @@ public class BatchController {
     /**
      * Update {@link Batch} -> {@link BatchState}
      *
-     * @param state         of {@link Batch}
+     * @param state          of {@link Batch}
      * @param id             of {@link Batch}
      * @param servletRequest
      * @return
@@ -218,20 +218,14 @@ public class BatchController {
      * <p>check the Batch Product does not have any States or Events associated with it</p>
      *
      * @param id
-     * @param servletRequest
      * @return
      */
     @DeleteMapping("/batch")
-    public ResponseEntity<?> deleteBatch(@RequestParam int id,
-                                         HttpServletRequest servletRequest) {
+    public ResponseEntity<?> deleteBatch(@RequestParam int id) {
         int ownerId = requestValidator.extractUserId();
-        Optional<BatchRight> batchRightOptional = batchRightAction.findByBatchIdAndUserId(id, ownerId);
-        batchRightOptional.ifPresentOrElse(batchRight -> {
-            Assert.isTrue(batchRight.getObjectRightsType().equals(ObjectRight.OWNER), ACCESS_DENIED.getMessage());
-            batchAction.deleteById(id);
-        }, () -> {
-            throw new NeesNotFoundException();
-        });
+        BatchRight batchRight = batchRightAction.findByBatchIdAndUserId(id, ownerId).orElseThrow(NeesNotFoundException::new);
+        Assert.isTrue(batchRight.getObjectRightsType().equals(ObjectRight.OWNER), ACCESS_DENIED.getMessage());
+        batchAction.deleteById(id);
         return configure();
     }
 

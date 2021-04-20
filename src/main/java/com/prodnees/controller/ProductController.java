@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -65,8 +64,7 @@ public class ProductController {
     }
 
     @PostMapping("/product")
-    public ResponseEntity<?> save(@Validated @RequestBody ProductDto dto,
-                                  HttpServletRequest servletRequest) {
+    public ResponseEntity<?> save(@Validated @RequestBody ProductDto dto) {
         dto.setId(0);
         int ownerId = requestValidator.extractUserId();
         Product product = MapperUtil.getDozer().map(dto, Product.class);
@@ -79,8 +77,7 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<?> get(@RequestParam Optional<Integer> id,
-                                 HttpServletRequest servletRequest) {
+    public ResponseEntity<?> get(@RequestParam Optional<Integer> id) {
         int userId = requestValidator.extractUserId();
         AtomicReference<Object> atomicReference = new AtomicReference<>();
         id.ifPresentOrElse(integer -> {
@@ -96,35 +93,25 @@ public class ProductController {
 
 
     @PutMapping("/product")
-    public ResponseEntity<?> update(@Validated @RequestBody ProductDto dto,
-                                    HttpServletRequest servletRequest) {
+    public ResponseEntity<?> update(@Validated @RequestBody ProductDto dto) {
         int userId = requestValidator.extractUserId();
-        Optional<ProductRight> batchProductRightsOpt = productRightAction.findByProductIdAndUserId(dto.getId(), userId);
-        AtomicReference<Product> productAtomicReference = new AtomicReference<>();
-        batchProductRightsOpt.ifPresentOrElse(productRights -> {
-            Assert.isTrue(productRights.getObjectRightsType().equals(ObjectRight.OWNER), UPDATE_DENIED.getMessage());
-            Product product = productService.getById(dto.getId());
-            product.setName(dto.getName())
-                    .setDescription(ValidatorUtil.ifValidStringOrElse(dto.getDescription(), product.getDescription()));
-            productAtomicReference.set(productService.save(product));
-        }, () -> {
-            throw new NeesNotFoundException();
-        });
-        return configure(productAtomicReference.get());
+        ProductRight productRights = productRightAction.findByProductIdAndUserId(dto.getId(), userId)
+                .orElseThrow(NeesNotFoundException::new);
+        Assert.isTrue(productRights.getObjectRightsType().equals(ObjectRight.OWNER), UPDATE_DENIED.getMessage());
+        Product product = productService.getById(dto.getId());
+        product.setName(dto.getName())
+                .setDescription(ValidatorUtil.ifValidStringOrElse(dto.getDescription(), product.getDescription()));
+        return configure(productService.save(product));
     }
 
     @DeleteMapping("/product")
-    public ResponseEntity<?> delete(@RequestParam int id,
-                                    HttpServletRequest servletRequest) {
+    public ResponseEntity<?> delete(@RequestParam int id) {
         int userId = requestValidator.extractUserId();
-        Optional<ProductRight> batchProductRightsOpt = productRightAction.findByProductIdAndUserId(id, userId);
-        batchProductRightsOpt.ifPresentOrElse(productRights -> {
-            Assert.isTrue(productRights.getObjectRightsType().equals(ObjectRight.OWNER), ACCESS_DENIED.getMessage());
-            productService.deleteById(productRights.getProductId());
-        }, () -> {
-            throw new NeesNotFoundException();
-        });
-        return configure();
+        ProductRight productRights = productRightAction.findByProductIdAndUserId(id, userId)
+                .orElseThrow(NeesNotFoundException::new);
+        Assert.isTrue(productRights.getObjectRightsType().equals(ObjectRight.OWNER), ACCESS_DENIED.getMessage());
+        productService.deleteById(productRights.getProductId());
+        return configure("successfully deleted product");
     }
 
     /**
@@ -133,12 +120,10 @@ public class ProductController {
      * <i>Only associates can be given ProductRights</i>
      *
      * @param dto
-     * @param servletRequest
      * @return
      */
     @PostMapping("/product-rights")
-    public ResponseEntity<?> addProductRights(@Validated @RequestBody ProductRightDto dto,
-                                              HttpServletRequest servletRequest) {
+    public ResponseEntity<?> addProductRights(@Validated @RequestBody ProductRightDto dto) {
         int userId = requestValidator.extractUserId();
         Assert.isTrue(dto.getObjectRightsType() != ObjectRight.OWNER, "you can only assign an editor or a  viewer");
         Assert.isTrue(userAction.existsByEmail(dto.getEmail()),
@@ -158,12 +143,10 @@ public class ProductController {
      *
      * @param productId
      * @param userId
-     * @param servletRequest
      * @return
      */
     @DeleteMapping("/product-rights")
-    public ResponseEntity<?> deleteProductRights(@RequestParam int productId, @RequestParam int userId,
-                                                 HttpServletRequest servletRequest) {
+    public ResponseEntity<?> deleteProductRights(@RequestParam int productId, @RequestParam int userId) {
         int adminId = requestValidator.extractUserId();
         Assert.isTrue(userId != adminId, "you cannot delete your own product rights");
         Optional<ProductRight> adminProductRightOpt = productRightAction.findByProductIdAndUserId(productId, adminId);//check you have permission

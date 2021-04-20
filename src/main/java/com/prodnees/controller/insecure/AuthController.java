@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import javax.servlet.http.HttpServletRequest;
 import static com.prodnees.config.constants.APIErrors.EMAIL_NOT_FOUND;
 import static com.prodnees.config.constants.APIErrors.USER_NOT_ENABLED;
 
@@ -57,8 +56,7 @@ public class AuthController {
 
 
     @PostMapping("/authenticate")
-    public ResponseEntity<?> save(@Validated @RequestBody AuthDto authDto,
-                                  HttpServletRequest servletRequest) {
+    public ResponseEntity<?> save(@Validated @RequestBody AuthDto authDto) {
 
         Assert.isTrue(userAction.existsByEmail(authDto.getEmail()), String.format(EMAIL_NOT_FOUND.getMessage(), authDto.getEmail()));
         User user = userAction.getByEmail(authDto.getEmail());
@@ -80,7 +78,6 @@ public class AuthController {
             } catch (DisabledException disabledException) {
                 throw new NeesForbiddenException(USER_NOT_ENABLED);
             }
-
             final String jwt = jwtService.generateToken(userDetails, isTempPassword);
             authResponse.setJwt(jwt)
                     .setTempPassword(isTempPassword);
