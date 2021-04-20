@@ -109,7 +109,7 @@ public class BatchActionImpl implements BatchAction {
         try {
             int userId = requestValidator.extractUserId();
             model.setRightType(batchRightService.findByBatchIdAndUserId(batch.getId(), userId).get().getObjectRightsType());
-        } catch (IllegalAccessException | NullPointerException ignored) {
+        } catch (NullPointerException ignored) {
 
         }
         model.setId(batch.getId())

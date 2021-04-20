@@ -21,9 +21,9 @@ public class NeesBadRequestException extends RuntimeException {
         this.code = constants.getCode();
     }
 
-    public NeesBadRequestException(String message, int code) {
+    public NeesBadRequestException(String message) {
         this.message = message;
-        this.code = code;
+        this.code = 99;
     }
 
     @Override

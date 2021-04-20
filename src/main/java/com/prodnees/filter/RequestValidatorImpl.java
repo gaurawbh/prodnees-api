@@ -1,6 +1,7 @@
 package com.prodnees.filter;
 
 import com.prodnees.service.jwt.JwtService;
+import com.prodnees.util.LocalAssert;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -11,6 +12,7 @@ import java.util.Date;
 
 @Service
 public class RequestValidatorImpl implements RequestValidator {
+    private static final String HEADER_AUTHORIZATION = "Authorization";
     private final JwtService jwtService;
 
     public RequestValidatorImpl(JwtService jwtService) {
@@ -30,19 +32,14 @@ public class RequestValidatorImpl implements RequestValidator {
         }
     }
 
-    @Override
+//    @Override
     public int extractUserId(HttpServletRequest request) {
         return jwtService.extractUserId(extractToken(request));
     }
 
     @Override
-    public int extractUserId() throws IllegalAccessException {
-        HttpServletRequest servletRequest = getServletRequest();
-        try {
-            servletRequest.getHeader("Authorization");
-        } catch (NullPointerException e) {
-            throw new IllegalAccessException("no user logged in");
-        }
+    public int extractUserId(){
+        HttpServletRequest servletRequest = getSecureServletRequest();
         return extractUserId(servletRequest);
     }
 
@@ -52,8 +49,13 @@ public class RequestValidatorImpl implements RequestValidator {
     }
 
     @Override
+    public String extractUserEmail() {
+        return jwtService.extractUsername(extractToken(getSecureServletRequest()));
+    }
+
+    @Override
     public String extractToken(HttpServletRequest request) {
-        String authorizationHeader = request.getHeader("Authorization");
+        String authorizationHeader = request.getHeader(HEADER_AUTHORIZATION);
         return authorizationHeader.substring(7);
     }
 
@@ -97,9 +99,10 @@ public class RequestValidatorImpl implements RequestValidator {
         return email.matches(regex);
     }
 
-    protected HttpServletRequest getServletRequest() {
-        return ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-    }
-}
+    private HttpServletRequest getSecureServletRequest() {
+        HttpServletRequest servletRequest = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        LocalAssert.isTrue(servletRequest.getHeader(HEADER_AUTHORIZATION).contains("Bearer"), "trying to access secure servlet request without authenticating");
+        return servletRequest;
+    }}
 
 

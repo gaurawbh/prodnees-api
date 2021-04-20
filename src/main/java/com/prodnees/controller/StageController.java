@@ -73,7 +73,7 @@ public class StageController {
     @PostMapping("/stage")
     public ResponseEntity<?> save(@Validated @RequestBody StageDto dto,
                                   HttpServletRequest servletRequest) {
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         LocalAssert.isTrue(batchRightService.hasBatchEditorRights(dto.getBatchId(), userId),
                 APIErrors.BATCH_NOT_FOUND);
         LocalAssert.isTrue(batchAction.existsByIdAndState(dto.getBatchId(), BatchState.COMPLETE), "you cannot add a Stage to a Batch that is marked as Complete");
@@ -92,7 +92,7 @@ public class StageController {
      */
     @GetMapping("/stages")
     public ResponseEntity<?> getById(@RequestParam int id, HttpServletRequest servletRequest) {
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         LocalAssert.isTrue(stageAction.hasStageReaderRights(id, userId), APIErrors.BATCH_NOT_FOUND);
         StageModel stageModel = stageAction.getModelById(id);
         return configure(stageModel);
@@ -107,7 +107,7 @@ public class StageController {
      */
     @GetMapping("/stages/batch")
     public ResponseEntity<?> getAllByBatchProductId(@RequestParam int batchId, HttpServletRequest servletRequest) {
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         LocalAssert.isTrue(batchRightService.hasBatchReaderRights(batchId, userId), APIErrors.BATCH_NOT_FOUND);
         return configure(stageAction.getAllByBatchId(batchId));
     }
@@ -122,7 +122,7 @@ public class StageController {
     @PutMapping("/stage")
     public ResponseEntity<?> update(@Validated @RequestBody StageDto dto,
                                     HttpServletRequest servletRequest) {
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         LocalAssert.isTrue(stageAction.hasStageEditorRights(dto.getId(), userId), String.format("stage with id: %d not found or not enough permission ", dto.getId()));
         Stage stage = stageAction.getById(dto.getId());
         stage.setName(ValidatorUtil.ifValidStringOrElse(dto.getName(), stage.getName()))
@@ -133,7 +133,7 @@ public class StageController {
 
     @DeleteMapping("/stage")
     public ResponseEntity<?> delete(@RequestParam int id, HttpServletRequest servletRequest) {
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         LocalAssert.isTrue(stageAction.hasStageEditorRights(id, userId), String.format("stage not found with id: %d", id));
         stageAction.deleteById(id);
         return configure("stage deleted successfully");
@@ -149,7 +149,7 @@ public class StageController {
      */
     @PutMapping("/stage/start")
     public ResponseEntity<?> markStageStarted(@RequestParam int id, HttpServletRequest servletRequest) {
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         Optional<Stage> stageOptional = stageAction.findById(id);
         stageOptional.ifPresentOrElse(stage -> {
             LocalAssert.isTrue(stageAction.hasStageEditorRights(id, userId), APIErrors.BATCH_NOT_FOUND);
@@ -171,7 +171,7 @@ public class StageController {
      */
     @PutMapping("/stage/complete")
     public ResponseEntity<?> markStageComplete(@RequestParam int id, HttpServletRequest servletRequest) {
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         Optional<Stage> stageOptional = stageAction.findById(id);
         stageOptional.ifPresentOrElse(stage -> {
             LocalAssert.isTrue(stageAction.hasStageEditorRights(id, userId), APIErrors.BATCH_NOT_FOUND);

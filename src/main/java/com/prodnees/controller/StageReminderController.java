@@ -51,8 +51,8 @@ public class StageReminderController {
     @PostMapping("/stage-reminder")
     public ResponseEntity<?> save(@Validated @RequestBody StageReminderDto dto,
                                   HttpServletRequest servletRequest) {
-        int editorId = requestValidator.extractUserId(servletRequest);
-        String sender = requestValidator.extractUserEmail(servletRequest);
+        int editorId = requestValidator.extractUserId();
+        String sender = requestValidator.extractUserEmail();
         LocalAssert.isTrue(stageAction.hasStageEditorRights(dto.getStageId(), editorId),
                 String.format("stage with id: %d not found or you do not have editor right to the batch the stage belongs to.", dto.getStageId()));
 
@@ -74,8 +74,8 @@ public class StageReminderController {
                                  @RequestParam Optional<Integer> stageId,
                                  @RequestParam Optional<Integer> batchId,
                                  HttpServletRequest servletRequest) {
-        int userId = requestValidator.extractUserId(servletRequest);
-        String userEmail = requestValidator.extractUserEmail(servletRequest);
+        int userId = requestValidator.extractUserId();
+        String userEmail = requestValidator.extractUserEmail();
 
         AtomicReference<Object> atomicReference = new AtomicReference<>();
 
@@ -100,14 +100,14 @@ public class StageReminderController {
     @PutMapping("/stage-reminder")
     public ResponseEntity<?> update(@Validated @RequestBody Object obj,
                                     HttpServletRequest servletRequest) {
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         return configure();
     }
 
     @DeleteMapping("/stage-reminder")
     public ResponseEntity<?> delete(@RequestParam int id,
                                     HttpServletRequest servletRequest) {
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         Optional<StageReminder> stageReminderOptional = stageReminderAction.findById(id);
         stageReminderOptional.ifPresentOrElse(stageReminder -> {
             LocalAssert.isTrue(stageAction.hasStageEditorRights(stageReminder.getStageId(), userId),

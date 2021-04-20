@@ -73,7 +73,7 @@ public class AssociateController {
     public ResponseEntity<?> getAssociates(@RequestParam Optional<Integer> id,
                                            @RequestParam Optional<Integer> email,
                                            HttpServletRequest servletRequest) {
-        int adminId = requestValidator.extractUserId(servletRequest);
+        int adminId = requestValidator.extractUserId();
         AtomicReference<Object> modelAtomicReference = new AtomicReference<>();
         id.ifPresentOrElse(integer -> {
             Assert.isTrue(associatesService.findByAdminIdAndAssociateId(adminId, integer).isPresent(), APIErrors.USER_NOT_FOUND.getMessage());
@@ -96,7 +96,7 @@ public class AssociateController {
     public ResponseEntity<?> searchAssociate(@RequestParam String email,
                                              HttpServletRequest servletRequest) {
         Assert.isTrue(userAction.existsByEmail(email), APIErrors.USER_NOT_FOUND.getMessage());
-        int adminId = requestValidator.extractUserId(servletRequest);
+        int adminId = requestValidator.extractUserId();
         AtomicReference<Object> modelAtomicReference = new AtomicReference<>();
         Optional<Associates> associatesOptional = associatesService.findByAdminIdAndAssociateEmail(adminId, email);
         associatesOptional.ifPresentOrElse(
@@ -125,8 +125,8 @@ public class AssociateController {
     @PostMapping("/associate-invitation")
     public ResponseEntity<?> inviteAssociate(@Validated @RequestBody AssociateInvitationDto dto,
                                              HttpServletRequest servletRequest) {
-        String invitorEmail = requestValidator.extractUserEmail(servletRequest);
-        int invitorId = requestValidator.extractUserId(servletRequest);
+        String invitorEmail = requestValidator.extractUserEmail();
+        int invitorId = requestValidator.extractUserId();
         Optional<AssociateInvitation> associateInvitationOpt = associateInvitationAction.findByInvitorEmailAndInviteeEmail(invitorEmail, dto.getInviteeEmail());
         AtomicBoolean atomicBoolean = new AtomicBoolean(true);
         associateInvitationOpt.ifPresentOrElse(associateInvitation -> {
@@ -187,7 +187,7 @@ public class AssociateController {
     @GetMapping("/associates-invitations/{path}")
     public ResponseEntity<?> getInvitationListByyInvitor(@PathVariable String path,
                                                          HttpServletRequest servletRequest) throws NoHandlerFoundException {
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         switch (path) {
             case "invites":
                 return LocalResponse.configure(associateInvitationAction.getAllByInvitorId(userId));
@@ -209,7 +209,7 @@ public class AssociateController {
     @PutMapping("/associate-invitation/action")
     public ResponseEntity<?> actionInvitationRequest(@Validated @RequestBody AssociateInvitationActionDto dto,
                                                      HttpServletRequest servletRequest) {
-        String inviteeEmail = requestValidator.extractUserEmail(servletRequest);
+        String inviteeEmail = requestValidator.extractUserEmail();
         Optional<AssociateInvitation> associateInvitationOpt = associateInvitationAction.findByInvitorEmailAndInviteeEmail(dto.getInvitorEmail(), inviteeEmail);
         Assert.isTrue(associateInvitationOpt.isPresent(), OBJECT_NOT_FOUND.getMessage());
         associateInvitationOpt.get().setAccepted(dto.isAccept())
@@ -234,7 +234,7 @@ public class AssociateController {
     @DeleteMapping("/associate-invitation")
     public ResponseEntity<?> delete(@RequestParam String inviteeEmail,
                                     HttpServletRequest servletRequest) {
-        String invitorEmail = requestValidator.extractUserEmail(servletRequest);
+        String invitorEmail = requestValidator.extractUserEmail();
         Optional<AssociateInvitation> associateInvitationOpt = associateInvitationAction.findByInvitorEmailAndInviteeEmail(invitorEmail, inviteeEmail);
         Assert.isTrue(associateInvitationOpt.isPresent(), OBJECT_NOT_FOUND.getMessage());
         boolean isSuccess = associateInvitationAction.deleteByInvitorEmailAndInviteeEmail(invitorEmail, inviteeEmail);

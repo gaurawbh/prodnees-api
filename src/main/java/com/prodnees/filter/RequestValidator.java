@@ -9,11 +9,12 @@ public interface RequestValidator {
 
     boolean isValidEmail(String email);
 
-    int extractUserId(HttpServletRequest request);
+//    int extractUserId(HttpServletRequest request);
 
-    int extractUserId() throws IllegalAccessException;
+    int extractUserId();
 
     String extractUserEmail(HttpServletRequest request);
+    String extractUserEmail();
 
     String extractToken(HttpServletRequest request);
 

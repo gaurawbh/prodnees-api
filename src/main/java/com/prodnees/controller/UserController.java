@@ -63,7 +63,7 @@ public class UserController {
      */
     @GetMapping("/user")
     public ResponseEntity<?> getUser(HttpServletRequest servletRequest) {
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         return configure(userAction.getModelById(userId));
     }
 
@@ -80,7 +80,7 @@ public class UserController {
     public ResponseEntity<?> updatePassword(@Validated @RequestBody SecPasswordDto dto,
                                             HttpServletRequest servletRequest) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         User user = userAction.getById(userId);
         Assert.isTrue(passwordEncoder.matches(dto.getOldPassword(), user.getPassword()), "incorrect oldPassword, please try again");
         Assert.isTrue(dto.getNewPassword().equals(dto.getRepeatNewPassword()), "newPassword and repeatNewPassword do not match");
@@ -106,7 +106,7 @@ public class UserController {
     public ResponseEntity<?> updateTemporaryPassword(@Validated @RequestBody TempPasswordDto dto,
                                                      HttpServletRequest servletRequest) {
         Assert.isTrue(dto.getPassword().equals(dto.getRepeatPassword()), "password and repeatPassword do not match");
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         User user = userAction.getById(userId);
         boolean isValidRequest = tempPasswordInfoDao.existsByEmail(user.getEmail())
                 || forgotPasswordInfoDao.existsByEmail(user.getEmail());
@@ -127,7 +127,7 @@ public class UserController {
     @PutMapping("/user")
     public ResponseEntity<?> update(@Validated @RequestBody UserAttributesDto dto,
                                     HttpServletRequest servletRequest) {
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         UserAttributes userAttributes = userAttributesService.getByUserId(userId);
         userAttributes.setFirstName(dto.getFirstName())
                 .setLastName(dto.getLastName())

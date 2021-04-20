@@ -63,7 +63,7 @@ public class DocumentController {
     public ResponseEntity<?> save(@RequestParam MultipartFile file,
                                   String name,
                                   HttpServletRequest servletRequest) {
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         DocumentModel documentModel = new DocumentModel();
         try {
             Document document = new Document()
@@ -92,7 +92,7 @@ public class DocumentController {
     @PutMapping("/document")
     public ResponseEntity<?> update(@Validated @RequestBody DocumentDto dto,
                                     HttpServletRequest servletRequest) {
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         Optional<DocumentRight> documentRightOptional = documentRightAction.findByDocumentIdAndUserId(dto.getId(), userId);
         AtomicReference<DocumentModel> documentModelAtomicReference = new AtomicReference<>();
         documentRightOptional.ifPresentOrElse(documentRight -> {
@@ -116,7 +116,7 @@ public class DocumentController {
     @DeleteMapping("/document")
     public ResponseEntity<?> delete(@RequestParam int id, HttpServletRequest servletRequest) {
 
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         Optional<DocumentRight> documentRightOptional = documentRightAction.findByDocumentIdAndUserId(id, userId);
         documentRightOptional.ifPresentOrElse(documentRight -> {
             LocalAssert.isTrue(documentRight.getDocumentRightsType() == ObjectRight.OWNER, APIErrors.UPDATE_DENIED);
@@ -138,7 +138,7 @@ public class DocumentController {
     @GetMapping("/documents")
     public ResponseEntity<?> get(@RequestParam Optional<Integer> id,
                                  HttpServletRequest servletRequest) {
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         AtomicReference<Object> atomicReference = new AtomicReference<>();
         id.ifPresentOrElse(integer -> {
             LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(integer, userId), APIErrors.OBJECT_NOT_FOUND);
@@ -152,7 +152,7 @@ public class DocumentController {
     public void loadDocumentFile(@RequestParam int id,
                                  HttpServletRequest servletRequest,
                                  HttpServletResponse servletResponse) {
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(id, userId), APIErrors.OBJECT_NOT_FOUND);
         byte[] file = documentAction.getById(id).getFile();
         InputStream inputStream = new ByteArrayInputStream(file);
@@ -167,7 +167,7 @@ public class DocumentController {
     public ResponseEntity<?> downloadDocumentFile(@RequestParam int id,
                                                   HttpServletRequest servletRequest,
                                                   HttpServletResponse servletResponse) {
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(id, userId),
                 APIErrors.OBJECT_NOT_FOUND);
         Document document = documentAction.getById(id);

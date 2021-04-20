@@ -42,14 +42,14 @@ public class EventController {
     @PostMapping("/event")
     public ResponseEntity<?> save(@Validated @RequestBody EventDto dto,
                                   HttpServletRequest servletRequest) {
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         return LocalResponse.configure();
     }
 
     @GetMapping("/events")
     public ResponseEntity<?> get(@RequestParam Optional<Integer> id,
                                  HttpServletRequest servletRequest) {
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         AtomicReference<Object> atomicReference = new AtomicReference<>();
         id.ifPresentOrElse(integer -> {
         }, () -> {
@@ -59,14 +59,14 @@ public class EventController {
 
     @PutMapping("/event")
     public ResponseEntity<?> update(@Validated @RequestBody Object obj, HttpServletRequest servletRequest) {
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         return LocalResponse.configure();
     }
 
     @DeleteMapping("/event")
     public ResponseEntity<?> delete(@RequestParam int id,
                                     HttpServletRequest servletRequest) {
-        int userId = requestValidator.extractUserId(servletRequest);
+        int userId = requestValidator.extractUserId();
         return LocalResponse.configure();
     }
 }
