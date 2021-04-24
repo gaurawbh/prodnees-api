@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class ProdNeesApplication {
 
     @GetMapping(value = "/")
     public ResponseEntity<?> index(HttpServletRequest servletRequest) {
-        String dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd, hh:mm:ss"));
+        String dateTime = LocalDateTime.now(ZoneId.of("Asia/Kathmandu")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd, hh:mm:ss"));
         Map<String, Object> objectMap = new HashMap<>();
         String apiVersion = "0.1 beta";
         String ip = servletRequest.getHeader("X-Forwarded-For");
