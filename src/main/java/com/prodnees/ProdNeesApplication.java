@@ -1,11 +1,16 @@
 package com.prodnees;
 
-import com.prodnees.web.response.LocalResponse;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringBootApplication
 @RestController
@@ -15,9 +20,16 @@ public class ProdNeesApplication {
         SpringApplication.run(ProdNeesApplication.class, args);
     }
 
-    @GetMapping("/")
-    public ResponseEntity<?> index() {
-        return LocalResponse.configure("looks like finally its working");
-    }
+    @GetMapping(value = "/")
+    public ResponseEntity<?> index(HttpServletRequest servletRequest) {
+        String dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd, hh:mm:ss"));
+        Map<String, Object> objectMap = new HashMap<>();
+        String apiVersion = "0.1 beta";
+        String ip = servletRequest.getHeader("X-Forwarded-For");
+        objectMap.put("datetime", dateTime);
+        objectMap.put("version", apiVersion);
+        objectMap.put("ip", ip);
+        return ResponseEntity.ok().body(objectMap);
 
+    }
 }
