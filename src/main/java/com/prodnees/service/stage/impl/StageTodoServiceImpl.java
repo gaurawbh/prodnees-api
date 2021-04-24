@@ -50,4 +50,9 @@ public class StageTodoServiceImpl implements StageTodoService {
     public Optional<StageTodo> findById(int id) {
         return stageTodoDao.findById(id);
     }
+
+    @Override
+    public void deleteById(int id) {
+        stageTodoDao.deleteById(id);
+    }
 }

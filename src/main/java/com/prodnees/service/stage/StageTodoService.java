@@ -20,4 +20,6 @@ public interface StageTodoService {
     StageTodo getByBatchIdAndName(int batchId, String name);
 
     Optional<StageTodo> findById(int id);
+
+    void deleteById(int id);
 }

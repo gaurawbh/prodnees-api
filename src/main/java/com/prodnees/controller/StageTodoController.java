@@ -72,7 +72,6 @@ public class StageTodoController {
             LocalAssert.isTrue(batchRightAction.hasBatchReaderRights(stage.getBatchId(), readerId),
                     String.format("stage with stageId: %d not found or insufficient rights to view this Stage Todo.", stageId.get()));
             return configure(stageTodoAction.getAllByStageId(stageId.get()));
-
         }
     }
 
@@ -90,8 +89,12 @@ public class StageTodoController {
     @DeleteMapping("/stage-todo")
     public ResponseEntity<?> delete(@RequestParam int id,
                                     HttpServletRequest servletRequest) {
-        int userId = requestValidator.extractUserId();
-        return configure();
+        StageTodo stageTodo = stageTodoAction.findById(id).orElseThrow(NeesNotFoundException::new);
+        int editorId = requestValidator.extractUserId();
+        LocalAssert.isTrue(stageAction.hasStageEditorRights(stageTodo.getStageId(), editorId),
+                String.format("Stage Todo with id: %d not found or insufficient rights to delete this Stage Todo.", id));
+        stageTodoAction.deleteById(id);
+        return configure("successfully deleted Stage Todo with id: " + id);
     }
 
 

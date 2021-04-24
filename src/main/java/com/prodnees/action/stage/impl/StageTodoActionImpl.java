@@ -46,4 +46,9 @@ public class StageTodoActionImpl implements StageTodoAction {
         return stageTodoService.findById(id);
     }
 
+    @Override
+    public void deleteById(int id) {
+        stageTodoService.deleteById(id);
+    }
+
 }

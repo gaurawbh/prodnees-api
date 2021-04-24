@@ -18,4 +18,6 @@ public interface StageTodoAction {
     List<StageTodo> getAllByStageId(int stageId);
 
     Optional<StageTodo> findById(int id );
+
+    void deleteById(int id);
 }
