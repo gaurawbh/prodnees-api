@@ -30,7 +30,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
-@RequestMapping("/secure")
+//@RequestMapping("/secure")
 @CrossOrigin
 @Transactional
 public class StageTodoController {
