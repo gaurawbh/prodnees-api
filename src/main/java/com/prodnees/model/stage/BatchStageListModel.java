@@ -1,4 +1,4 @@
-package com.prodnees.model.state;
+package com.prodnees.model.stage;
 
 import com.prodnees.domain.stage.Stage;
 import java.util.List;

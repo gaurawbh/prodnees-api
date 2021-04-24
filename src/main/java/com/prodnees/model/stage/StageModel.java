@@ -1,4 +1,4 @@
-package com.prodnees.model.state;
+package com.prodnees.model.stage;
 
 import com.prodnees.domain.enums.StageState;
 import com.prodnees.model.RawProductModel;
@@ -12,14 +12,41 @@ import java.util.List;
  */
 public class StageModel {
     List<StageApprovalDocumentModel> approvalDocuments;
-    List<EventModel> eventModelList;
-    List<RawProductModel> rawProductModelList;
+    List<StageTodoModel> stageTodoList;
+    List<RawProductModel> rawProductList;
     private int id;
     private int batchId;
     private int index;
     private String name;
     private String description;
     private StageState status;
+
+    public List<StageApprovalDocumentModel> getApprovalDocuments() {
+        return approvalDocuments;
+    }
+
+    public StageModel setApprovalDocuments(List<StageApprovalDocumentModel> approvalDocuments) {
+        this.approvalDocuments = approvalDocuments;
+        return this;
+    }
+
+    public List<StageTodoModel> getStageTodoList() {
+        return stageTodoList;
+    }
+
+    public StageModel setStageTodoList(List<StageTodoModel> stageTodoList) {
+        this.stageTodoList = stageTodoList;
+        return this;
+    }
+
+    public List<RawProductModel> getRawProductList() {
+        return rawProductList;
+    }
+
+    public StageModel setRawProductList(List<RawProductModel> rawProductList) {
+        this.rawProductList = rawProductList;
+        return this;
+    }
 
     public int getId() {
         return id;
@@ -66,33 +93,6 @@ public class StageModel {
         return this;
     }
 
-    public List<StageApprovalDocumentModel> getApprovalDocuments() {
-        return approvalDocuments;
-    }
-
-    public StageModel setApprovalDocuments(List<StageApprovalDocumentModel> approvalDocuments) {
-        this.approvalDocuments = approvalDocuments;
-        return this;
-    }
-
-    public List<EventModel> getEventModelList() {
-        return eventModelList;
-    }
-
-    public StageModel setEventModelList(List<EventModel> eventModelList) {
-        this.eventModelList = eventModelList;
-        return this;
-    }
-
-    public List<RawProductModel> getRawProductModelList() {
-        return rawProductModelList;
-    }
-
-    public StageModel setRawProductModelList(List<RawProductModel> rawProductModelList) {
-        this.rawProductModelList = rawProductModelList;
-        return this;
-    }
-
     public StageState getStatus() {
         return status;
     }
@@ -101,5 +101,4 @@ public class StageModel {
         this.status = status;
         return this;
     }
-
 }

@@ -6,18 +6,18 @@ import com.prodnees.controller.DocumentController;
 import com.prodnees.domain.Document;
 import com.prodnees.domain.batch.RawProduct;
 import com.prodnees.domain.enums.StageState;
-import com.prodnees.domain.stage.Event;
+import com.prodnees.domain.stage.StageTodo;
 import com.prodnees.domain.stage.Stage;
 import com.prodnees.domain.stage.StageApprovalDocument;
 import com.prodnees.model.RawProductModel;
-import com.prodnees.model.state.EventModel;
-import com.prodnees.model.state.StageApprovalDocumentModel;
-import com.prodnees.model.state.StageModel;
+import com.prodnees.model.stage.StageTodoModel;
+import com.prodnees.model.stage.StageApprovalDocumentModel;
+import com.prodnees.model.stage.StageModel;
 import com.prodnees.service.DocumentService;
 import com.prodnees.service.batch.RawProductService;
 import com.prodnees.service.rels.BatchRightService;
 import com.prodnees.service.rels.StageApprovalDocumentService;
-import com.prodnees.service.stage.EventService;
+import com.prodnees.service.stage.StageTodoService;
 import com.prodnees.service.stage.StageService;
 import com.prodnees.util.MapperUtil;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class StageActionImpl implements StageAction {
 
     private final StageService stageService;
     private final StageApprovalDocumentService stageApprovalDocumentService;
-    private final EventService eventService;
+    private final StageTodoService stageTodoService;
     private final RawProductService rawProductService;
     private final DocumentService documentService;
     private final BatchRightService batchRightService;
@@ -40,14 +40,14 @@ public class StageActionImpl implements StageAction {
 
     public StageActionImpl(StageService stageService,
                            StageApprovalDocumentService stageApprovalDocumentService,
-                           EventService eventService,
+                           StageTodoService stageTodoService,
                            RawProductService rawProductService,
                            DocumentService documentService,
                            BatchRightService batchRightService,
                            BatchStageList batchStageList) {
         this.stageService = stageService;
         this.stageApprovalDocumentService = stageApprovalDocumentService;
-        this.eventService = eventService;
+        this.stageTodoService = stageTodoService;
         this.rawProductService = rawProductService;
         this.documentService = documentService;
         this.batchRightService = batchRightService;
@@ -143,12 +143,12 @@ public class StageActionImpl implements StageAction {
     private StageModel entityToModel(Stage stage) {
         StageModel stageModel = new StageModel();
         List<StageApprovalDocument> stageApprovalDocumentList = stageApprovalDocumentService.getAllByStageId(stage.getId());
-        List<Event> eventList = eventService.getAllByStageId(stage.getId());
+        List<StageTodo> stageTodoList = stageTodoService.getAllByStageId(stage.getId());
         List<RawProduct> rawProductList = rawProductService.getAllByStageId(stage.getId());
         List<StageApprovalDocumentModel> stageApprovalDocumentModelList = new ArrayList<>();
         stageApprovalDocumentList.forEach(stateApprovalDocument -> stageApprovalDocumentModelList.add(entityToModel(stateApprovalDocument)));
-        List<EventModel> eventModelList = new ArrayList<>();
-        eventList.forEach(event -> eventModelList.add(entityToModel(event)));
+        List<StageTodoModel> stageTodoModelList = new ArrayList<>();
+        stageTodoList.forEach(stageTodo -> stageTodoModelList.add(entityToModel(stageTodo)));
         List<RawProductModel> rawProductModelList = new ArrayList<>();
         rawProductList.forEach(rawProduct -> rawProductModelList.add(entityToModel(rawProduct)));
         stageModel.setId(stage.getId())
@@ -157,8 +157,8 @@ public class StageActionImpl implements StageAction {
                 .setName(stage.getName())
                 .setDescription(stage.getDescription())
                 .setApprovalDocuments(stageApprovalDocumentModelList)
-                .setEventModelList(eventModelList)
-                .setRawProductModelList(rawProductModelList)
+                .setStageTodoList(stageTodoModelList)
+                .setRawProductList(rawProductModelList)
                 .setStatus(stage.getState());
         return stageModel;
     }
@@ -184,8 +184,8 @@ public class StageActionImpl implements StageAction {
 
     }
 
-    private EventModel entityToModel(Event event) {
-        return MapperUtil.getDozer().map(event, EventModel.class);
+    private StageTodoModel entityToModel(StageTodo stageTodo) {
+        return MapperUtil.getDozer().map(stageTodo, StageTodoModel.class);
     }
 
     private RawProductModel entityToModel(RawProduct rawProduct) {

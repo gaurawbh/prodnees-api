@@ -38,8 +38,8 @@ public class BatchApprovalDocument {
         return batchId;
     }
 
-    public BatchApprovalDocument setBatchId(int eventId) {
-        this.batchId = eventId;
+    public BatchApprovalDocument setBatchId(int batchId) {
+        this.batchId = batchId;
         return this;
     }
 

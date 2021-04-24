@@ -1,6 +1,6 @@
 package com.prodnees.model.batch;
 
-import com.prodnees.model.state.StageApprovalDocumentModel;
+import com.prodnees.model.stage.StageApprovalDocumentModel;
 
 public class BatchApprovalDocumentModel {
     private int batchId;

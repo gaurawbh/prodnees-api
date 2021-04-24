@@ -1,13 +1,7 @@
-package com.prodnees.domain.stage;
+package com.prodnees.model.stage;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+public class StageTodoModel {
 
-@Entity
-public class Event {
-    @Id
-    @GeneratedValue
     private int id;
     private int batchId;
     private int stageId;
@@ -19,7 +13,7 @@ public class Event {
         return id;
     }
 
-    public Event setId(int id) {
+    public StageTodoModel setId(int id) {
         this.id = id;
         return this;
     }
@@ -28,8 +22,8 @@ public class Event {
         return batchId;
     }
 
-    public Event setBatchId(int batchProductId) {
-        this.batchId = batchProductId;
+    public StageTodoModel setBatchId(int batchId) {
+        this.batchId = batchId;
         return this;
     }
 
@@ -37,8 +31,8 @@ public class Event {
         return stageId;
     }
 
-    public Event setStageId(int stateId) {
-        this.stageId = stateId;
+    public StageTodoModel setStageId(int stageId) {
+        this.stageId = stageId;
         return this;
     }
 
@@ -46,7 +40,7 @@ public class Event {
         return name;
     }
 
-    public Event setName(String name) {
+    public StageTodoModel setName(String name) {
         this.name = name;
         return this;
     }
@@ -55,7 +49,7 @@ public class Event {
         return description;
     }
 
-    public Event setDescription(String description) {
+    public StageTodoModel setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -64,7 +58,7 @@ public class Event {
         return complete;
     }
 
-    public Event setComplete(boolean complete) {
+    public StageTodoModel setComplete(boolean complete) {
         this.complete = complete;
         return this;
     }

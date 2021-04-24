@@ -1,19 +1,19 @@
 package com.prodnees.controller;
 
 import com.prodnees.action.BatchAction;
-import com.prodnees.action.stage.EventAction;
+import com.prodnees.action.stage.StageTodoAction;
 import com.prodnees.action.stage.StageAction;
 import com.prodnees.action.stage.StageReminderAction;
 import com.prodnees.config.constants.APIErrors;
 import com.prodnees.domain.batch.Batch;
 import com.prodnees.domain.enums.BatchState;
 import com.prodnees.domain.enums.StageState;
-import com.prodnees.domain.stage.Event;
+import com.prodnees.domain.stage.StageTodo;
 import com.prodnees.domain.stage.Stage;
 import com.prodnees.domain.stage.StageReminder;
 import com.prodnees.dto.stage.StageDto;
 import com.prodnees.filter.RequestValidator;
-import com.prodnees.model.state.StageModel;
+import com.prodnees.model.stage.StageModel;
 import com.prodnees.service.rels.BatchRightService;
 import com.prodnees.util.LocalAssert;
 import com.prodnees.util.MapperUtil;
@@ -42,20 +42,20 @@ import static com.prodnees.web.response.LocalResponse.configure;
 public class StageController {
     private final RequestValidator requestValidator;
     private final BatchRightService batchRightService;
-    private final EventAction eventAction;
+    private final StageTodoAction stageTodoAction;
     private final StageAction stageAction;
     private final BatchAction batchAction;
     private final StageReminderAction stageReminderAction;
 
     public StageController(RequestValidator requestValidator,
                            BatchRightService batchRightService,
-                           EventAction eventAction,
+                           StageTodoAction stageTodoAction,
                            StageAction stageAction,
                            BatchAction batchAction,
                            StageReminderAction stageReminderAction) {
         this.requestValidator = requestValidator;
         this.batchRightService = batchRightService;
-        this.eventAction = eventAction;
+        this.stageTodoAction = stageTodoAction;
         this.stageAction = stageAction;
         this.batchAction = batchAction;
         this.stageReminderAction = stageReminderAction;
@@ -163,8 +163,8 @@ public class StageController {
                 .orElseThrow(NeesNotFoundException::new);
 
         LocalAssert.isTrue(stageAction.hasStageEditorRights(id, userId), APIErrors.BATCH_NOT_FOUND);
-        List<Event> eventList = eventAction.getAllByStageId(stage.getId());
-        eventList.forEach(event -> LocalAssert.isTrue(event.isComplete(), "This stage has events that are not complete. Complete all events before marking this State as Complete"));
+        List<StageTodo> stageTodoList = stageTodoAction.getAllByStageId(stage.getId());
+        stageTodoList.forEach(stageTodo -> LocalAssert.isTrue(stageTodo.isComplete(), "This stage has events that are not complete. Complete all events before marking this State as Complete"));
         stage.setState(StageState.COMPLETE);
         List<StageReminder> stageReminderList = stageReminderAction.getAllByStageIdAndStageState(id, StageState.COMPLETE);
         stageReminderList.forEach(stageReminderAction::sendStageReminder);

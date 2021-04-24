@@ -3,7 +3,7 @@ package com.prodnees.controller;
 import com.prodnees.action.BatchAction;
 import com.prodnees.action.rel.BatchRightAction;
 import com.prodnees.action.rel.DocumentRightAction;
-import com.prodnees.action.stage.EventAction;
+import com.prodnees.action.stage.StageTodoAction;
 import com.prodnees.action.stage.StageAction;
 import com.prodnees.config.constants.APIErrors;
 import com.prodnees.domain.batch.Batch;
@@ -60,7 +60,7 @@ public class BatchController {
     private final BatchAction batchAction;
     private final BatchRightAction batchRightAction;
     private final StageAction stageAction;
-    private final EventAction eventAction;
+    private final StageTodoAction stageTodoAction;
     private final AssociatesService associatesService;
     private final DocumentRightAction documentRightAction;
     private final BatchProductApprovalDocumentService batchProductApprovalDocumentService;
@@ -69,7 +69,7 @@ public class BatchController {
                            BatchAction batchAction,
                            BatchRightAction batchRightAction,
                            StageAction stageAction,
-                           EventAction eventAction,
+                           StageTodoAction stageTodoAction,
                            AssociatesService associatesService,
                            DocumentRightAction documentRightAction,
                            BatchProductApprovalDocumentService batchProductApprovalDocumentService) {
@@ -77,7 +77,7 @@ public class BatchController {
         this.batchAction = batchAction;
         this.batchRightAction = batchRightAction;
         this.stageAction = stageAction;
-        this.eventAction = eventAction;
+        this.stageTodoAction = stageTodoAction;
         this.associatesService = associatesService;
         this.documentRightAction = documentRightAction;
         this.batchProductApprovalDocumentService = batchProductApprovalDocumentService;
@@ -215,7 +215,7 @@ public class BatchController {
 
     /**
      * <p>check the user has {@link ObjectRight#OWNER} rights of the Batch Product</p>
-     * <p>check the Batch Product does not have any States or Events associated with it</p>
+     * <p>check the Batch Product does not have any States or {@link com.prodnees.domain.stage.StageTodo} associated with it</p>
      *
      * @param id
      * @return
