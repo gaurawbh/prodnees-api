@@ -1,7 +1,9 @@
 package com.prodnees.action.stage;
 
 import com.prodnees.domain.stage.StageTodo;
+
 import java.util.List;
+import java.util.Optional;
 
 public interface StageTodoAction {
 
@@ -15,4 +17,5 @@ public interface StageTodoAction {
 
     List<StageTodo> getAllByStageId(int stageId);
 
+    Optional<StageTodo> findById(int id );
 }

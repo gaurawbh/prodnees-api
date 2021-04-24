@@ -1,6 +1,7 @@
 package com.prodnees.model.batch;
 
 import com.prodnees.domain.batch.Batch;
+
 import java.util.List;
 
 public class BatchListModel {

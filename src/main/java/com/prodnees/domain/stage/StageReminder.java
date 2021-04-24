@@ -1,6 +1,7 @@
 package com.prodnees.domain.stage;
 
 import com.prodnees.domain.enums.StageState;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;

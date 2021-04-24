@@ -11,26 +11,19 @@ import com.prodnees.filter.RequestValidator;
 import com.prodnees.util.LocalAssert;
 import com.prodnees.util.MapperUtil;
 import com.prodnees.web.exception.NeesNotFoundException;
-import com.prodnees.web.response.LocalResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.prodnees.web.response.LocalResponse.configure;
+
 @RestController
-//@RequestMapping("/secure")
+@RequestMapping("/secure")
 @CrossOrigin
 @Transactional
 public class StageTodoController {
@@ -59,18 +52,28 @@ public class StageTodoController {
         StageTodo stageTodo = MapperUtil.getDozer().map(dto, StageTodo.class)
                 .setBatchId(stage.getBatchId())
                 .setComplete(false);
-        return LocalResponse.configure(stageTodoAction.save(stageTodo));
+        return configure(stageTodoAction.save(stageTodo));
     }
 
     @GetMapping("/stage-todos")
     public ResponseEntity<?> get(@RequestParam Optional<Integer> id,
-                                 HttpServletRequest servletRequest) {
-        int userId = requestValidator.extractUserId();
+                                 @RequestParam Optional<Integer> stageId) {
+        LocalAssert.isTrue(id.isPresent() || stageId.isPresent(), "either id or stageId must be present");
+        int readerId = requestValidator.extractUserId();
         AtomicReference<Object> atomicReference = new AtomicReference<>();
-        id.ifPresentOrElse(integer -> {
-        }, () -> {
-        });
-        return LocalResponse.configure();
+        if (id.isPresent()) {
+            StageTodo stageTodo = stageTodoAction.findById(id.get()).orElseThrow(NeesNotFoundException::new);
+            Stage stage = stageAction.findById(stageTodo.getStageId()).orElseThrow(NeesNotFoundException::new);
+            LocalAssert.isTrue(batchRightAction.hasBatchReaderRights(stage.getBatchId(), readerId),
+                    String.format("batch the stage belongs to not found or insufficient rights to view this Stage Todo with id %d", id.get()));
+            return configure(stageTodo);
+        } else {
+            Stage stage = stageAction.findById(stageId.get()).orElseThrow(NeesNotFoundException::new);
+            LocalAssert.isTrue(batchRightAction.hasBatchReaderRights(stage.getBatchId(), readerId),
+                    String.format("stage with stageId: %d not found or insufficient rights to view this Stage Todo.", stageId.get()));
+            return configure(stageTodoAction.getAllByStageId(stageId.get()));
+
+        }
     }
 
     @PutMapping("/stage-todo")
@@ -81,14 +84,14 @@ public class StageTodoController {
                 "you cannot edit contents of a completed Stage. Mark Stage incomplete and try this operation again");
         LocalAssert.isTrue(batchRightAction.hasBatchEditorRights(stage.getBatchId(), editorId),
                 "batch the stage belongs to not found or insufficient rights to add Stage Todo to the Stage");
-        return LocalResponse.configure();
+        return configure();
     }
 
     @DeleteMapping("/stage-todo")
     public ResponseEntity<?> delete(@RequestParam int id,
                                     HttpServletRequest servletRequest) {
         int userId = requestValidator.extractUserId();
-        return LocalResponse.configure();
+        return configure();
     }
 
 

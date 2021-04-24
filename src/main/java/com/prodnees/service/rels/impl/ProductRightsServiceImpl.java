@@ -4,6 +4,7 @@ import com.prodnees.dao.rels.ProductRightsDao;
 import com.prodnees.domain.rels.ProductRight;
 import com.prodnees.service.rels.ProductRightsService;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 

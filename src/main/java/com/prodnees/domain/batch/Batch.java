@@ -3,11 +3,8 @@ package com.prodnees.domain.batch;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.prodnees.domain.enums.BatchState;
 import com.prodnees.util.FormatUtil;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity

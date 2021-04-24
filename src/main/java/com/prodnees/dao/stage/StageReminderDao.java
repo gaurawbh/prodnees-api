@@ -3,6 +3,7 @@ package com.prodnees.dao.stage;
 import com.prodnees.domain.enums.StageState;
 import com.prodnees.domain.stage.StageReminder;
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.List;
 
 public interface StageReminderDao extends JpaRepository<StageReminder, Integer> {

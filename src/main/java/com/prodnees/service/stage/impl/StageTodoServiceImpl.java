@@ -4,7 +4,9 @@ import com.prodnees.dao.stage.StageTodoDao;
 import com.prodnees.domain.stage.StageTodo;
 import com.prodnees.service.stage.StageTodoService;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StageTodoServiceImpl implements StageTodoService {
@@ -42,5 +44,10 @@ public class StageTodoServiceImpl implements StageTodoService {
     @Override
     public StageTodo getByBatchIdAndName(int batchId, String name) {
         return stageTodoDao.getByBatchIdAndName(batchId, name);
+    }
+
+    @Override
+    public Optional<StageTodo> findById(int id) {
+        return stageTodoDao.findById(id);
     }
 }

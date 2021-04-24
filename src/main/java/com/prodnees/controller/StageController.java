@@ -1,16 +1,16 @@
 package com.prodnees.controller;
 
 import com.prodnees.action.BatchAction;
-import com.prodnees.action.stage.StageTodoAction;
 import com.prodnees.action.stage.StageAction;
 import com.prodnees.action.stage.StageReminderAction;
+import com.prodnees.action.stage.StageTodoAction;
 import com.prodnees.config.constants.APIErrors;
 import com.prodnees.domain.batch.Batch;
 import com.prodnees.domain.enums.BatchState;
 import com.prodnees.domain.enums.StageState;
-import com.prodnees.domain.stage.StageTodo;
 import com.prodnees.domain.stage.Stage;
 import com.prodnees.domain.stage.StageReminder;
+import com.prodnees.domain.stage.StageTodo;
 import com.prodnees.dto.stage.StageDto;
 import com.prodnees.filter.RequestValidator;
 import com.prodnees.model.stage.StageModel;
@@ -23,16 +23,10 @@ import com.prodnees.web.response.LocalResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+
 import static com.prodnees.web.response.LocalResponse.configure;
 
 @RestController

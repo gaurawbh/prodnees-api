@@ -4,6 +4,7 @@ import com.prodnees.dao.rels.AssociateInvitationDao;
 import com.prodnees.domain.rels.AssociateInvitation;
 import com.prodnees.service.rels.AssociateInvitationService;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 

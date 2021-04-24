@@ -1,6 +1,7 @@
 package com.prodnees.domain.batch;
 
 import com.prodnees.domain.enums.ApprovalDocumentState;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;

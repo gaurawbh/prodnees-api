@@ -5,6 +5,7 @@ import com.prodnees.domain.enums.ObjectRight;
 import com.prodnees.domain.rels.DocumentRight;
 import com.prodnees.service.rels.DocumentRightService;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 

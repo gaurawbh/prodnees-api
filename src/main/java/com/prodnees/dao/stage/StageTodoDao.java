@@ -2,6 +2,7 @@ package com.prodnees.dao.stage;
 
 import com.prodnees.domain.stage.StageTodo;
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.List;
 
 public interface StageTodoDao extends JpaRepository<StageTodo, Integer> {

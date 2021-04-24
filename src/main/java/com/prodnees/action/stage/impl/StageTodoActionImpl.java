@@ -4,7 +4,9 @@ import com.prodnees.action.stage.StageTodoAction;
 import com.prodnees.domain.stage.StageTodo;
 import com.prodnees.service.stage.StageTodoService;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StageTodoActionImpl implements StageTodoAction {
@@ -39,4 +41,9 @@ public class StageTodoActionImpl implements StageTodoAction {
         return stageTodoService.getAllByStageId(stageId);
     }
 
-   }
+    @Override
+    public Optional<StageTodo> findById(int id) {
+        return stageTodoService.findById(id);
+    }
+
+}
