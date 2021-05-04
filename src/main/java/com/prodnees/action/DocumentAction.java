@@ -2,6 +2,7 @@ package com.prodnees.action;
 
 import com.prodnees.domain.Document;
 import com.prodnees.model.DocumentModel;
+
 import java.util.List;
 
 public interface DocumentAction {

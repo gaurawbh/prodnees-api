@@ -1,6 +1,7 @@
 package com.prodnees.domain.batch;
 
 import com.prodnees.domain.enums.ApprovalDocumentState;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -38,8 +39,8 @@ public class BatchApprovalDocument {
         return batchId;
     }
 
-    public BatchApprovalDocument setBatchId(int eventId) {
-        this.batchId = eventId;
+    public BatchApprovalDocument setBatchId(int batchId) {
+        this.batchId = batchId;
         return this;
     }
 

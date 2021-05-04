@@ -2,6 +2,7 @@ package com.prodnees.domain.rels;
 
 import com.prodnees.domain.enums.ObjectRight;
 import com.prodnees.domain.rels.id.BatchRightId;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;

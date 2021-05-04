@@ -1,7 +1,8 @@
 package com.prodnees.action.rel;
 
 import com.prodnees.domain.batch.BatchApprovalDocument;
-import com.prodnees.model.state.StageApprovalDocumentModel;
+import com.prodnees.model.stage.StageApprovalDocumentModel;
+
 import java.util.List;
 import java.util.Optional;
 

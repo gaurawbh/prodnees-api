@@ -3,6 +3,7 @@ package com.prodnees.dao.rels;
 import com.prodnees.domain.enums.ObjectRight;
 import com.prodnees.domain.rels.BatchRight;
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.List;
 import java.util.Optional;
 

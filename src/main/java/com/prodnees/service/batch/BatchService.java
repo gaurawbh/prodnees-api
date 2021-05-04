@@ -2,6 +2,7 @@ package com.prodnees.service.batch;
 
 import com.prodnees.domain.batch.Batch;
 import com.prodnees.domain.enums.BatchState;
+
 import java.util.List;
 
 public interface BatchService {

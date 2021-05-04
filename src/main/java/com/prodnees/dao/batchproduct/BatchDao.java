@@ -5,6 +5,7 @@ import com.prodnees.domain.batch.Batch;
 import com.prodnees.domain.enums.BatchState;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
 import java.util.List;
 
 public interface BatchDao extends JpaRepository<Batch, Integer> {

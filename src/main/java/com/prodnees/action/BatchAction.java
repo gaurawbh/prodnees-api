@@ -4,6 +4,7 @@ import com.prodnees.domain.batch.Batch;
 import com.prodnees.domain.enums.BatchState;
 import com.prodnees.model.batch.BatchListModel;
 import com.prodnees.model.batch.BatchModel;
+
 import java.util.List;
 
 public interface BatchAction {

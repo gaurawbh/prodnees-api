@@ -46,8 +46,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/secure/super/**").hasRole("SUPER")
-                .antMatchers("/secure/admin/**").hasAnyRole("ADMIN", "SUPER")
                 .antMatchers("/secure/**").authenticated()
                 .antMatchers("/**").permitAll()
                 .and().exceptionHandling().accessDeniedHandler(new LocalAccessDeniedHandler()).authenticationEntryPoint(jwtAuthenticationEntryPoint)

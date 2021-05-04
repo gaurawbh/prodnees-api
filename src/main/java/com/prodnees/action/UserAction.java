@@ -4,6 +4,7 @@ import com.prodnees.domain.user.User;
 import com.prodnees.dto.user.UserRegistrationDto;
 import com.prodnees.model.user.AssociateModel;
 import com.prodnees.model.user.UserModel;
+
 import java.util.List;
 
 public interface UserAction {

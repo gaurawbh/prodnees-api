@@ -4,6 +4,7 @@ import com.prodnees.dao.queries.QueryConstants;
 import com.prodnees.domain.batch.RawProduct;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
 import java.util.List;
 
 public interface RawProductDao extends JpaRepository<RawProduct, Integer> {
