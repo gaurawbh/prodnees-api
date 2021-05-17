@@ -12,7 +12,7 @@ import com.prodnees.domain.stage.Stage;
 import com.prodnees.domain.stage.StageReminder;
 import com.prodnees.domain.stage.StageTodo;
 import com.prodnees.dto.stage.StageDto;
-import com.prodnees.filter.RequestValidator;
+import com.prodnees.filter.RequestContext;
 import com.prodnees.model.stage.StageModel;
 import com.prodnees.service.rels.BatchRightService;
 import com.prodnees.util.LocalAssert;
@@ -34,20 +34,17 @@ import static com.prodnees.web.response.LocalResponse.configure;
 @CrossOrigin
 @Transactional
 public class StageController {
-    private final RequestValidator requestValidator;
     private final BatchRightService batchRightService;
     private final StageTodoAction stageTodoAction;
     private final StageAction stageAction;
     private final BatchAction batchAction;
     private final StageReminderAction stageReminderAction;
 
-    public StageController(RequestValidator requestValidator,
-                           BatchRightService batchRightService,
+    public StageController(BatchRightService batchRightService,
                            StageTodoAction stageTodoAction,
                            StageAction stageAction,
                            BatchAction batchAction,
                            StageReminderAction stageReminderAction) {
-        this.requestValidator = requestValidator;
         this.batchRightService = batchRightService;
         this.stageTodoAction = stageTodoAction;
         this.stageAction = stageAction;
@@ -63,7 +60,7 @@ public class StageController {
      */
     @PostMapping("/stage")
     public ResponseEntity<?> save(@Validated @RequestBody StageDto dto) {
-        int userId = requestValidator.extractUserId();
+        int userId = RequestContext.getUserId();
         LocalAssert.isTrue(batchRightService.hasBatchEditorRights(dto.getBatchId(), userId),
                 APIErrors.BATCH_NOT_FOUND);
         LocalAssert.isTrue(batchAction.existsByIdAndState(dto.getBatchId(), BatchState.COMPLETE), "you cannot add a Stage to a Batch that is marked as Complete");
@@ -81,7 +78,7 @@ public class StageController {
      */
     @GetMapping("/stages")
     public ResponseEntity<?> getById(@RequestParam int id) {
-        int userId = requestValidator.extractUserId();
+        int userId = RequestContext.getUserId();
         LocalAssert.isTrue(stageAction.hasStageReaderRights(id, userId), APIErrors.BATCH_NOT_FOUND);
         StageModel stageModel = stageAction.getModelById(id);
         return configure(stageModel);
@@ -95,7 +92,7 @@ public class StageController {
      */
     @GetMapping("/stages/batch")
     public ResponseEntity<?> getAllByBatchProductId(@RequestParam int batchId) {
-        int userId = requestValidator.extractUserId();
+        int userId = RequestContext.getUserId();
         LocalAssert.isTrue(batchRightService.hasBatchReaderRights(batchId, userId), APIErrors.BATCH_NOT_FOUND);
         return configure(stageAction.getAllByBatchId(batchId));
     }
@@ -108,7 +105,7 @@ public class StageController {
      */
     @PutMapping("/stage")
     public ResponseEntity<?> update(@Validated @RequestBody StageDto dto) {
-        int userId = requestValidator.extractUserId();
+        int userId = RequestContext.getUserId();
         LocalAssert.isTrue(stageAction.hasStageEditorRights(dto.getId(), userId), String.format("stage with id: %d not found or not enough permission ", dto.getId()));
         Stage stage = stageAction.getById(dto.getId());
         stage.setName(ValidatorUtil.ifValidStringOrElse(dto.getName(), stage.getName()))
@@ -119,7 +116,7 @@ public class StageController {
 
     @DeleteMapping("/stage")
     public ResponseEntity<?> delete(@RequestParam int id) {
-        int userId = requestValidator.extractUserId();
+        int userId = RequestContext.getUserId();
         LocalAssert.isTrue(stageAction.hasStageEditorRights(id, userId), String.format("stage not found with id: %d", id));
         stageAction.deleteById(id);
         return configure("stage deleted successfully");
@@ -134,7 +131,7 @@ public class StageController {
      */
     @PutMapping("/stage/start")
     public ResponseEntity<?> markStageStarted(@RequestParam int id) {
-        int userId = requestValidator.extractUserId();
+        int userId = RequestContext.getUserId();
         Stage stage = stageAction.findById(id).orElseThrow(NeesNotFoundException::new);
         LocalAssert.isTrue(stageAction.hasStageEditorRights(id, userId), APIErrors.BATCH_NOT_FOUND);
         stage.setState(StageState.IN_PROGRESS);
@@ -152,7 +149,7 @@ public class StageController {
      */
     @PutMapping("/stage/complete")
     public ResponseEntity<?> markStageComplete(@RequestParam int id) {
-        int userId = requestValidator.extractUserId();
+        int userId = RequestContext.getUserId();
         Stage stage = stageAction.findById(id)
                 .orElseThrow(NeesNotFoundException::new);
 

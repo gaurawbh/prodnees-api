@@ -1,4 +1,4 @@
-package com.prodnees.model.user;
+package com.prodnees.auth;
 
 public class AuthResponse {
     private int userId;

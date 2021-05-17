@@ -1,4 +1,4 @@
-package com.prodnees.service.jwt;
+package com.prodnees.auth.jwt;
 
 import org.springframework.security.core.userdetails.UserDetails;
 

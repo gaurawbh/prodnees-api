@@ -1,4 +1,4 @@
-package com.prodnees.service.jwt;
+package com.prodnees.auth.jwt;
 
 public interface ClaimFields {
     String USER_ID = "userId";

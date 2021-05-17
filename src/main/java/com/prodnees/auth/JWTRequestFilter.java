@@ -1,9 +1,7 @@
-package com.prodnees.filter;
+package com.prodnees.auth;
 
+import com.prodnees.auth.jwt.JwtService;
 import com.prodnees.config.constants.APIErrors;
-import com.prodnees.dao.user.BlockedJwtDao;
-import com.prodnees.service.jwt.JwtService;
-import com.prodnees.service.user.LoginUserDetailsService;
 import com.prodnees.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

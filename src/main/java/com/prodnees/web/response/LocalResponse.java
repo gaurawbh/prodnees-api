@@ -12,6 +12,7 @@ public class LocalResponse {
     private static final String ERROR = "error";
     private static final String MESSAGE = "message";
     private static final String DATA = "data";
+
     private LocalResponse() {
     }
 

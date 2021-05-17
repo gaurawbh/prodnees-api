@@ -6,7 +6,7 @@ import com.prodnees.config.constants.APIErrors;
 import com.prodnees.domain.enums.StageState;
 import com.prodnees.domain.stage.StageReminder;
 import com.prodnees.dto.stage.StageReminderDto;
-import com.prodnees.filter.RequestValidator;
+import com.prodnees.filter.RequestContext;
 import com.prodnees.util.LocalAssert;
 import com.prodnees.util.MapperUtil;
 import com.prodnees.web.exception.NeesNotFoundException;
@@ -24,29 +24,26 @@ import static com.prodnees.web.response.LocalResponse.configure;
 @Transactional
 @RequestMapping("/secure/")
 public class StageReminderController {
-    private final RequestValidator requestValidator;
     private final StageReminderAction stageReminderAction;
     private final StageAction stageAction;
 
-    public StageReminderController(RequestValidator requestValidator,
-                                   StageReminderAction stageReminderAction,
+    public StageReminderController(StageReminderAction stageReminderAction,
                                    StageAction stageAction) {
-        this.requestValidator = requestValidator;
         this.stageReminderAction = stageReminderAction;
         this.stageAction = stageAction;
     }
 
     @PostMapping("/stage-reminder")
     public ResponseEntity<?> save(@Validated @RequestBody StageReminderDto dto) {
-        int editorId = requestValidator.extractUserId();
-        String sender = requestValidator.extractUserEmail();
+        int editorId = RequestContext.getUserId();
+        String sender = RequestContext.getUsername();
         LocalAssert.isTrue(stageAction.hasStageEditorRights(dto.getStageId(), editorId),
                 String.format("stage with id: %d not found or you do not have editor right to the batch the stage belongs to.", dto.getStageId()));
 
         LocalAssert.isTrue(dto.getStageState().equals(StageState.IN_PROGRESS) || dto.getStageState().equals(StageState.COMPLETE),
                 String.format("stage reminder can only be set for stage's state %s or %s", StageState.IN_PROGRESS.name(), StageState.COMPLETE.name()));
         for (String email : dto.getRecipientEmails()) {
-            LocalAssert.isTrue(requestValidator.isValidEmail(email), String.format("Invalid email format for %s", email));
+            LocalAssert.isTrue(RequestContext.isValidEmail(email), String.format("Invalid email format for %s", email));
         }
         StageReminder stageReminder = MapperUtil.getDozer().map(dto, StageReminder.class);
         stageReminder.setRecipients(String.join(", ", dto.getRecipientEmails()))
@@ -60,8 +57,8 @@ public class StageReminderController {
     public ResponseEntity<?> get(@RequestParam Optional<Integer> id,
                                  @RequestParam Optional<Integer> stageId,
                                  @RequestParam Optional<Integer> batchId) {
-        int userId = requestValidator.extractUserId();
-        String userEmail = requestValidator.extractUserEmail();
+        int userId = RequestContext.getUserId();
+        String userEmail = RequestContext.getUsername();
 
         if (id.isPresent()) {
             StageReminder stageReminder = stageReminderAction.findById(id.get()).orElseThrow(NeesNotFoundException::new);
@@ -77,13 +74,13 @@ public class StageReminderController {
 
     @PutMapping("/stage-reminder")
     public ResponseEntity<?> update(@Validated @RequestBody Object obj) {
-        int userId = requestValidator.extractUserId();
+        int userId = RequestContext.getUserId();
         return configure();
     }
 
     @DeleteMapping("/stage-reminder")
     public ResponseEntity<?> delete(@RequestParam int id) {
-        int userId = requestValidator.extractUserId();
+        int userId = RequestContext.getUserId();
         StageReminder stageReminder = stageReminderAction.findById(id).orElseThrow(NeesNotFoundException::new);
         LocalAssert.isTrue(stageAction.hasStageEditorRights(stageReminder.getStageId(), userId),
                 String.format("you do not have enough rights to the stage with id: %d the stage reminder belongs to", stageReminder.getStageId()));

@@ -4,12 +4,9 @@
  * anyone found doing so will be prosecuted by Gauri Baba.
  */
 
-package com.prodnees.service.user.impl;
+package com.prodnees.auth;
 
-import com.prodnees.dao.user.JwtTailDao;
-import com.prodnees.domain.user.JwtTail;
 import com.prodnees.domain.user.User;
-import com.prodnees.service.user.JwtTailService;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.stereotype.Service;
