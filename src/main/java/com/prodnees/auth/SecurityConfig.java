@@ -29,7 +29,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
 
-
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(loginUserDetailsService).passwordEncoder(getPasswordEncoder());
@@ -47,8 +46,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/secure/**").authenticated()
                 .antMatchers("/**").permitAll()
-                .and().exceptionHandling().accessDeniedHandler(new LocalAccessDeniedHandler()).authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .and().sessionManagement()
+                .and()
+                .exceptionHandling().accessDeniedHandler(new LocalAccessDeniedHandler())
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .and()
+                .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
