@@ -1,4 +1,4 @@
-package com.prodnees.service.user;
+package com.prodnees.auth;
 
 import com.prodnees.dao.user.UserDao;
 import org.springframework.security.core.userdetails.User;

@@ -14,6 +14,7 @@ public interface StageTodoDao extends JpaRepository<StageTodo, Integer> {
     List<StageTodo> getAllByStageId(int stageId);
 
     StageTodo getByBatchIdAndName(int batchId, String name);
+
     boolean existsByStageIdAndName(int stageId, String name);
 
     boolean existsByBatchId(int batchId);

@@ -3,7 +3,7 @@ package com.prodnees.action.impl;
 import com.prodnees.action.BatchAction;
 import com.prodnees.domain.batch.Batch;
 import com.prodnees.domain.enums.BatchState;
-import com.prodnees.filter.RequestValidator;
+import com.prodnees.filter.RequestContext;
 import com.prodnees.model.ProductModel;
 import com.prodnees.model.batch.BatchListModel;
 import com.prodnees.model.batch.BatchModel;
@@ -22,16 +22,13 @@ public class BatchActionImpl implements BatchAction {
     private final BatchService batchService;
     private final BatchRightService batchRightService;
     private final ProductService productService;
-    private final RequestValidator requestValidator;
 
     public BatchActionImpl(BatchService batchService,
                            BatchRightService batchRightService,
-                           ProductService productService,
-                           RequestValidator requestValidator) {
+                           ProductService productService) {
         this.batchService = batchService;
         this.batchRightService = batchRightService;
         this.productService = productService;
-        this.requestValidator = requestValidator;
     }
 
     @Override
@@ -104,7 +101,7 @@ public class BatchActionImpl implements BatchAction {
         BatchModel model = new BatchModel();
         ProductModel productModel = MapperUtil.getDozer().map(productService.getById(batch.getProductId()), ProductModel.class);
         try {
-            int userId = requestValidator.extractUserId();
+            int userId = RequestContext.getUserId();
             model.setRightType(batchRightService.findByBatchIdAndUserId(batch.getId(), userId).get().getObjectRightsType());
         } catch (NullPointerException ignored) {
 

@@ -4,9 +4,8 @@
  * anyone found doing so will be prosecuted by Gauri Baba.
  */
 
-package com.prodnees.service.user;
+package com.prodnees.auth;
 
-import com.prodnees.domain.user.JwtTail;
 import com.prodnees.domain.user.User;
 
 public interface JwtTailService {

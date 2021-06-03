@@ -1,4 +1,4 @@
-package com.prodnees.util;
+package com.prodnees.auth;
 
 import java.util.concurrent.ThreadLocalRandom;
 

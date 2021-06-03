@@ -1,4 +1,4 @@
-package com.prodnees.action;
+package com.prodnees.auth;
 
 public interface AuthAction {
 

@@ -1,4 +1,4 @@
-package com.prodnees.dto.user;
+package com.prodnees.auth;
 
 
 import javax.validation.constraints.NotBlank;

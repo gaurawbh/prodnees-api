@@ -1,4 +1,4 @@
-package com.prodnees.domain.user;
+package com.prodnees.auth;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

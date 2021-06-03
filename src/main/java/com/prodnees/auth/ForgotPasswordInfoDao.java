@@ -1,6 +1,5 @@
-package com.prodnees.dao.user;
+package com.prodnees.auth;
 
-import com.prodnees.domain.user.ForgotPasswordInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

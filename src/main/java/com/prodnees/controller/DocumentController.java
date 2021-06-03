@@ -7,7 +7,7 @@ import com.prodnees.domain.Document;
 import com.prodnees.domain.enums.ObjectRight;
 import com.prodnees.domain.rels.DocumentRight;
 import com.prodnees.dto.DocumentDto;
-import com.prodnees.filter.RequestValidator;
+import com.prodnees.filter.RequestContext;
 import com.prodnees.model.DocumentModel;
 import com.prodnees.util.LocalAssert;
 import com.prodnees.web.exception.NeesNotFoundException;
@@ -24,7 +24,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -40,24 +39,20 @@ import static com.prodnees.web.response.LocalResponse.configure;
 @Transactional
 public class DocumentController {
 
-    private final RequestValidator requestValidator;
     private final DocumentAction documentAction;
     private final DocumentRightAction documentRightAction;
     Logger localLogger = LoggerFactory.getLogger(this.getClass());
 
-    public DocumentController(RequestValidator requestValidator,
-                              DocumentAction documentAction,
+    public DocumentController(DocumentAction documentAction,
                               DocumentRightAction documentRightAction) {
-        this.requestValidator = requestValidator;
         this.documentAction = documentAction;
         this.documentRightAction = documentRightAction;
     }
 
     @PostMapping("/document")
     public ResponseEntity<?> save(@RequestParam MultipartFile file,
-                                  String name,
-                                  HttpServletRequest servletRequest) {
-        int userId = requestValidator.extractUserId();
+                                  String name) {
+        int userId = RequestContext.getUserId();
         DocumentModel documentModel = new DocumentModel();
         try {
             Document document = new Document()
@@ -84,7 +79,7 @@ public class DocumentController {
      */
     @PutMapping("/document")
     public ResponseEntity<?> update(@Validated @RequestBody DocumentDto dto) {
-        int userId = requestValidator.extractUserId();
+        int userId = RequestContext.getUserId();
         DocumentRight documentRight = documentRightAction.findByDocumentIdAndUserId(dto.getId(), userId).orElseThrow(NeesNotFoundException::new);
         LocalAssert.isTrue(documentRightAction.hasEditRights(documentRight), APIErrors.UPDATE_DENIED);
         Document document = documentAction.getById(dto.getId()).setName(dto.getName());
@@ -101,7 +96,7 @@ public class DocumentController {
     @DeleteMapping("/document")
     public ResponseEntity<?> delete(@RequestParam int id) {
 
-        int userId = requestValidator.extractUserId();
+        int userId = RequestContext.getUserId();
         DocumentRight documentRight = documentRightAction.findByDocumentIdAndUserId(id, userId)
                 .orElseThrow(NeesNotFoundException::new);
         LocalAssert.isTrue(documentRight.getDocumentRightsType() == ObjectRight.OWNER, APIErrors.UPDATE_DENIED);
@@ -118,7 +113,7 @@ public class DocumentController {
      */
     @GetMapping("/documents")
     public ResponseEntity<?> get(@RequestParam Optional<Integer> id) {
-        int userId = requestValidator.extractUserId();
+        int userId = RequestContext.getUserId();
         AtomicReference<Object> atomicReference = new AtomicReference<>();
         id.ifPresentOrElse(integer -> {
             LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(integer, userId), APIErrors.OBJECT_NOT_FOUND);
@@ -131,7 +126,7 @@ public class DocumentController {
     @GetMapping(value = "/document/load", produces = MediaType.APPLICATION_PDF_VALUE)
     public void loadDocumentFile(@RequestParam int id,
                                  HttpServletResponse servletResponse) {
-        int userId = requestValidator.extractUserId();
+        int userId = RequestContext.getUserId();
         LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(id, userId), APIErrors.OBJECT_NOT_FOUND);
         byte[] file = documentAction.getById(id).getFile();
         InputStream inputStream = new ByteArrayInputStream(file);
@@ -144,7 +139,7 @@ public class DocumentController {
 
     @GetMapping("/document/download")
     public ResponseEntity<?> downloadDocumentFile(@RequestParam int id) {
-        int userId = requestValidator.extractUserId();
+        int userId = RequestContext.getUserId();
         LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(id, userId),
                 APIErrors.OBJECT_NOT_FOUND);
         Document document = documentAction.getById(id);

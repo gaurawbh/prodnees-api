@@ -3,7 +3,7 @@ package com.prodnees.web.exception;
 
 import com.prodnees.config.constants.APIErrors;
 
-public class NeesNotFoundException extends RuntimeException{
+public class NeesNotFoundException extends RuntimeException {
 
     private String message;
     private int code;

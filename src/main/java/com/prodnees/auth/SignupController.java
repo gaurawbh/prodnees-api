@@ -1,6 +1,5 @@
-package com.prodnees.controller.insecure;
+package com.prodnees.auth;
 
-import com.prodnees.action.AuthAction;
 import com.prodnees.action.UserAction;
 import com.prodnees.config.constants.APIErrors;
 import com.prodnees.dto.user.UserRegistrationDto;
