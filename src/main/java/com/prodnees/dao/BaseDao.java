@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 
 import javax.sql.DataSource;
 import java.util.Map;
+
 @Configuration
 public abstract class BaseDao extends NamedParameterJdbcDaoSupport {
 

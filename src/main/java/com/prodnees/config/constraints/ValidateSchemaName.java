@@ -4,7 +4,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 public class ValidateSchemaName implements ConstraintValidator<SchemaName, String> {
-    private static final String ALPHA_NUMERIC = "^[a-zA-Z0-9_]+$";
+    private static final String VALID_SCHEMA_PATTERN = "^[a-zA-Z0-9_]+$";
 
     @Override
     public void initialize(SchemaName constraintAnnotation) {
@@ -16,6 +16,6 @@ public class ValidateSchemaName implements ConstraintValidator<SchemaName, Strin
         if (value == null) {
             return true;
         }
-        return value.matches(ALPHA_NUMERIC);
+        return value.matches(VALID_SCHEMA_PATTERN);
     }
 }

@@ -24,7 +24,7 @@ public class SchemaDaoImpl extends BaseDao implements SchemaDao {
     public void createSchemaTest(@SchemaName String schema) throws SQLException {
 //        getJdbcTemplate().execute(String.format("create schema %s", schema));
 
-        Resource resource1 = resourceLoader.getResource(String.format(DATA_RESOURCE_CLASSPATH, "newSchema.sql"));
+        Resource resource1 = resourceLoader.getResource(String.format(DATA_RESOURCE_CLASSPATH, "prodnees_schema.sql"));
         ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator(resource1);
 
         DataSource dataSource = getDataSource();
