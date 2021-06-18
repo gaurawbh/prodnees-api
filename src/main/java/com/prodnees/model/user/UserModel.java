@@ -1,9 +1,11 @@
 package com.prodnees.model.user;
 
+import com.prodnees.auth.domain.UserRole;
+
 public class UserModel {
     private int id;
     private String email;
-    private String role;
+    private UserRole role;
     private boolean enabled;
     private String firstName;
     private String lastName;
@@ -28,11 +30,11 @@ public class UserModel {
         return this;
     }
 
-    public String getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public UserModel setRole(String role) {
+    public UserModel setRole(UserRole role) {
         this.role = role;
         return this;
     }

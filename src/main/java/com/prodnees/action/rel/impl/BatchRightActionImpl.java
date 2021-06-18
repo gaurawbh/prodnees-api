@@ -1,9 +1,9 @@
 package com.prodnees.action.rel.impl;
 
 import com.prodnees.action.rel.BatchRightAction;
+import com.prodnees.auth.domain.User;
 import com.prodnees.domain.batch.Batch;
 import com.prodnees.domain.rels.BatchRight;
-import com.prodnees.domain.user.User;
 import com.prodnees.domain.user.UserAttributes;
 import com.prodnees.dto.batch.BatchRightDto;
 import com.prodnees.model.batch.BatchRightModel;

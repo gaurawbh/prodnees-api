@@ -1,8 +1,8 @@
 package com.prodnees.action.rel.impl;
 
 import com.prodnees.action.rel.ProductRightAction;
+import com.prodnees.auth.domain.User;
 import com.prodnees.domain.rels.ProductRight;
-import com.prodnees.domain.user.User;
 import com.prodnees.domain.user.UserAttributes;
 import com.prodnees.dto.ProductRightDto;
 import com.prodnees.model.ProductModel;

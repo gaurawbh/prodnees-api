@@ -1,9 +1,9 @@
 package com.prodnees.action.impl;
 
 import com.prodnees.action.BatchAction;
+import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.domain.batch.Batch;
 import com.prodnees.domain.enums.BatchState;
-import com.prodnees.filter.RequestContext;
 import com.prodnees.model.ProductModel;
 import com.prodnees.model.batch.BatchListModel;
 import com.prodnees.model.batch.BatchModel;

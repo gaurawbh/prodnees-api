@@ -1,6 +1,6 @@
 package com.prodnees.service.user;
 
-import com.prodnees.domain.user.User;
+import com.prodnees.auth.domain.User;
 
 public interface UserService {
 

@@ -1,16 +1,16 @@
 package com.prodnees.controller;
 
-import com.prodnees.action.UserAction;
 import com.prodnees.action.rel.AssociateInvitationAction;
+import com.prodnees.auth.domain.User;
+import com.prodnees.auth.filter.RequestContext;
+import com.prodnees.auth.service.UserAction;
 import com.prodnees.config.constants.APIErrors;
 import com.prodnees.domain.enums.InvitationAction;
 import com.prodnees.domain.rels.AssociateInvitation;
 import com.prodnees.domain.rels.Associates;
-import com.prodnees.domain.user.User;
 import com.prodnees.dto.AssociateInvitationActionDto;
 import com.prodnees.dto.AssociateInvitationDto;
 import com.prodnees.dto.user.UserRegistrationDto;
-import com.prodnees.filter.RequestContext;
 import com.prodnees.model.user.AssociateModel;
 import com.prodnees.model.user.UserModel;
 import com.prodnees.service.rels.AssociatesService;
@@ -20,7 +20,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;

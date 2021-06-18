@@ -5,7 +5,6 @@ public class NeesInfoException extends RuntimeException {
 
     public NeesInfoException(String message) {
         this.message = message;
-        int code = 99;
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.prodnees.action.rel.BatchRightAction;
 import com.prodnees.action.rel.DocumentRightAction;
 import com.prodnees.action.stage.StageAction;
 import com.prodnees.action.stage.StageTodoAction;
+import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.config.constants.APIErrors;
 import com.prodnees.domain.batch.Batch;
 import com.prodnees.domain.batch.BatchApprovalDocument;
@@ -17,7 +18,6 @@ import com.prodnees.domain.rels.DocumentRight;
 import com.prodnees.dto.batch.BatchApprovalDocumentDto;
 import com.prodnees.dto.batch.BatchDto;
 import com.prodnees.dto.batch.BatchRightDto;
-import com.prodnees.filter.RequestContext;
 import com.prodnees.model.batch.BatchModel;
 import com.prodnees.service.rels.AssociatesService;
 import com.prodnees.service.rels.BatchProductApprovalDocumentService;
@@ -30,7 +30,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
@@ -38,7 +47,10 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-import static com.prodnees.config.constants.APIErrors.*;
+import static com.prodnees.config.constants.APIErrors.ACCESS_DENIED;
+import static com.prodnees.config.constants.APIErrors.BATCH_NOT_FOUND;
+import static com.prodnees.config.constants.APIErrors.OBJECT_NOT_FOUND;
+import static com.prodnees.config.constants.APIErrors.UPDATE_DENIED;
 import static com.prodnees.web.response.LocalResponse.configure;
 
 @RestController

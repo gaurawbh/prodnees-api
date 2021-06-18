@@ -17,10 +17,4 @@ public interface TimeConstants {
     int ONE_WEEK = ONE_DAY * 7;
     int THIRTY_DAYS = ONE_DAY * 30;
 
-    interface Formats {
-        String DATE_TIME = "yyyy-MM-dd HH:mm:ss";
-        String DATE = "yyyy-MM-dd";
-        String TIME_FULL = "HH:mm:ss";
-        String TIME_HOURS_MINUTES = "HH:mm";
-    }
 }

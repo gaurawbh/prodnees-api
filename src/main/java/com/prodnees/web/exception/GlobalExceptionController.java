@@ -141,11 +141,6 @@ public final class GlobalExceptionController {
         return new ResponseEntity<>(new ErrorResponse(errorMessage.toString()), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(NeesTeapotException.class)
-    public ResponseEntity<?> exception(NeesTeapotException e) {
-        return new ResponseEntity<>(new ErrorResponse("i am a coffee pot disguised as a tea pot. sshhhh!!!"), HttpStatus.I_AM_A_TEAPOT);
-    }
-
 
     @ExceptionHandler(NeesInvalidRequestBodyException.class)
     public ResponseEntity<?> exception(NeesInvalidRequestBodyException e) {
