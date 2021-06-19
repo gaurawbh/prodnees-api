@@ -7,6 +7,7 @@ public class UserModel {
     private String email;
     private UserRole role;
     private boolean enabled;
+    private int companyId;
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -32,6 +33,15 @@ public class UserModel {
 
     public UserRole getRole() {
         return role;
+    }
+
+    public int getCompanyId() {
+        return companyId;
+    }
+
+    public UserModel setCompanyId(int companyId) {
+        this.companyId = companyId;
+        return this;
     }
 
     public UserModel setRole(UserRole role) {

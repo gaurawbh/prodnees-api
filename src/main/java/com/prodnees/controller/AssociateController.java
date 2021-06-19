@@ -10,7 +10,7 @@ import com.prodnees.domain.rels.AssociateInvitation;
 import com.prodnees.domain.rels.Associates;
 import com.prodnees.dto.AssociateInvitationActionDto;
 import com.prodnees.dto.AssociateInvitationDto;
-import com.prodnees.dto.user.UserRegistrationDto;
+import com.prodnees.dto.user.SignupDto;
 import com.prodnees.model.user.AssociateModel;
 import com.prodnees.model.user.UserModel;
 import com.prodnees.service.rels.AssociatesService;
@@ -136,7 +136,7 @@ public class AssociateController {
                 createNewAssociateInvitation(invitee, invitorId, invitorEmail, dto.getInvitorComment());
                 atomicBoolean.set(associateInvitationAction.sendInvitationIfUser(invitorEmail, dto.getInvitorComment(), invitee.getEmail(), true));
             }, () -> {
-                UserRegistrationDto registrationDto = new UserRegistrationDto()
+                SignupDto registrationDto = new SignupDto()
                         .setEmail(dto.getInviteeEmail())
                         .setFirstName(dto.getInviteeFirstName())
                         .setLastName(dto.getInviteeLastName());

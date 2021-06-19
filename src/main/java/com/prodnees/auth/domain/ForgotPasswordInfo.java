@@ -2,13 +2,18 @@ package com.prodnees.auth.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
+import static com.prodnees.auth.config.Table.Catalog.AUTH_TABLE;
+
 @Entity
+@Table(catalog = AUTH_TABLE)
 public class ForgotPasswordInfo {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String email;
     private String password;

@@ -6,7 +6,7 @@
 
 package com.prodnees.auth.domain;
 
-import com.prodnees.auth.config.CurrencyCode;
+import com.prodnees.config.constraints.CurrencyCode;
 import org.apache.tomcat.util.buf.StringUtils;
 
 import javax.persistence.Entity;
@@ -31,9 +31,8 @@ public class Company {
     private int id;
     @NotBlank(message = "name cannot be null or blank")
     private String name;
-    @Size(min = 10, message = "schemaInstance must be at least 10 characters long")
+    @Size(min = 5, message = "schemaInstance must be at least 5 characters long")
     private String schemaInstance;
-    private String companyPan;
     @CurrencyCode(message = "Invalid currency code")
     private String currency;
     private String country;
@@ -82,14 +81,6 @@ public class Company {
         return this;
     }
 
-    public String getCompanyPan() {
-        return companyPan;
-    }
-
-    public Company setCompanyPan(String companyPan) {
-        this.companyPan = companyPan;
-        return this;
-    }
 
     String sanitiseCompanyName(String name) {
         String[] nameList = name.split(" ");

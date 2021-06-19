@@ -12,6 +12,11 @@
       <option name="url" value="https://repo.maven.apache.org/maven2" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="nexus" />
+      <option name="name" value="nexus" />
+      <option name="url" value="https://nexus.vaultdev.com/nexus/content/groups/public" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="s3VeevaArtifactBuild" />
       <option name="name" value="s3VeevaArtifactBuild" />
       <option name="url" value="https://veevavault-vaultplatform-builds-vaultdevops.s3-us-west-2.amazonaws.com/platform/build/none" />
@@ -25,6 +30,11 @@
       <option name="id" value="s3MavenReleases" />
       <option name="name" value="s3MavenReleases" />
       <option name="url" value="https://vaultdevops-vaultplatform-maven-artifacts.s3-us-west-2.amazonaws.com/releases" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="central" />
+      <option name="url" value="https://nexuss3.vaultdev.com" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="jboss.community" />

@@ -1,14 +1,14 @@
 package com.prodnees.auth.service.impl;
 
-import com.prodnees.auth.OtpUtil;
 import com.prodnees.auth.dao.TempPasswordInfoDao;
 import com.prodnees.auth.domain.TempPasswordInfo;
 import com.prodnees.auth.domain.User;
 import com.prodnees.auth.domain.UserRole;
 import com.prodnees.auth.service.UserAction;
+import com.prodnees.auth.util.OtpUtil;
 import com.prodnees.domain.rels.Associates;
 import com.prodnees.domain.user.UserAttributes;
-import com.prodnees.dto.user.UserRegistrationDto;
+import com.prodnees.dto.user.SignupDto;
 import com.prodnees.model.user.AssociateModel;
 import com.prodnees.model.user.UserModel;
 import com.prodnees.service.email.EmailPlaceHolders;
@@ -64,7 +64,7 @@ public class UserActionImpl implements UserAction {
 
     @Override
     @Transactional
-    public UserModel save(UserRegistrationDto dto) {
+    public UserModel save(SignupDto dto) {
         String generatedPassword = OtpUtil.generateRandomOtp(6);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         User user = userService.save(new User()
@@ -143,16 +143,13 @@ public class UserActionImpl implements UserAction {
     }
 
     UserModel mapToUserModel(User user) {
-        UserAttributes attributes = userAttributesService.getByUserId(user.getId());
         UserModel model = new UserModel();
         return model.setId(user.getId())
                 .setEmail(user.getEmail())
                 .setRole(user.getRole())
                 .setEnabled(user.isEnabled())
-                .setFirstName(attributes.getFirstName())
-                .setLastName(attributes.getLastName())
-                .setPhoneNumber(attributes.getPhoneNumber())
-                .setAddress(attributes.getAddress());
+                .setFirstName(user.getFirstName())
+                .setLastName(user.getLastName());
     }
 
     AssociateModel mapToAssociateModel(User user) {

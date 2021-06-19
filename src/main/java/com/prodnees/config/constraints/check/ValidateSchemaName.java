@@ -1,4 +1,6 @@
-package com.prodnees.config.constraints;
+package com.prodnees.config.constraints.check;
+
+import com.prodnees.config.constraints.SchemaName;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

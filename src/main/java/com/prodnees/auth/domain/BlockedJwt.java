@@ -3,8 +3,12 @@ package com.prodnees.auth.domain;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
+
+import static com.prodnees.auth.config.Table.Catalog.AUTH_TABLE;
 
 @Entity
+@Table(catalog = AUTH_TABLE)
 public class BlockedJwt {
     @Id
     @GeneratedValue

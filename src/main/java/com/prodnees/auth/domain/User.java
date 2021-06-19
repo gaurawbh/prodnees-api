@@ -1,29 +1,38 @@
 package com.prodnees.auth.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
+
+import static com.prodnees.auth.config.Table.Catalog.AUTH_TABLE;
 
 /**
  * Application User Login Details
  */
 @Entity
+@Table(catalog = AUTH_TABLE)
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String email;
+    @JsonIgnore
     private String password;
+    @Enumerated(EnumType.STRING)
     private UserRole role;
     private boolean enabled;
-    private int company_id;
-    private String schema_instance;
-    private String first_name;
-    private String last_name;
+    private int companyId;
+    private String schemaInstance;
+    private String firstName;
+    private String lastName;
     @Enumerated(EnumType.STRING)
-    ApplicationRight application_right;
+    ApplicationRight applicationRight;
 
     public int getId() {
         return id;
@@ -70,48 +79,48 @@ public class User {
         return this;
     }
 
-    public int getCompany_id() {
-        return company_id;
+    public int getCompanyId() {
+        return companyId;
     }
 
-    public User setCompany_id(int company_id) {
-        this.company_id = company_id;
+    public User setCompanyId(int company_id) {
+        this.companyId = company_id;
         return this;
     }
 
-    public String getSchema_instance() {
-        return schema_instance;
+    public String getSchemaInstance() {
+        return schemaInstance;
     }
 
-    public User setSchema_instance(String schema_instance) {
-        this.schema_instance = schema_instance;
+    public User setSchemaInstance(String schema_instance) {
+        this.schemaInstance = schema_instance;
         return this;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public User setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public User setFirstName(String first_name) {
+        this.firstName = first_name;
         return this;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public User setLast_name(String last_name) {
-        this.last_name = last_name;
+    public User setLastName(String last_name) {
+        this.lastName = last_name;
         return this;
     }
 
-    public ApplicationRight getApplication_right() {
-        return application_right;
+    public ApplicationRight getApplicationRight() {
+        return applicationRight;
     }
 
-    public User setApplication_right(ApplicationRight application_right) {
-        this.application_right = application_right;
+    public User setApplicationRight(ApplicationRight application_right) {
+        this.applicationRight = application_right;
         return this;
     }
 }

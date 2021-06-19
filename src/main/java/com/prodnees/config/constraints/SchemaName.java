@@ -1,5 +1,7 @@
 package com.prodnees.config.constraints;
 
+import com.prodnees.config.constraints.check.ValidateSchemaName;
+
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;

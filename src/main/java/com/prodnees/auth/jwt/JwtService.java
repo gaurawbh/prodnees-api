@@ -17,6 +17,7 @@ public interface JwtService {
     String extractUserRole(String token);
 
     Date extractTokenExpiryDatetime(String token);
+    String extractSchemaInstance(String token);
 
     boolean hasUsedTempPassword(String token);
 

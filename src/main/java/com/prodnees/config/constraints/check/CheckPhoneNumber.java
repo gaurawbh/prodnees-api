@@ -4,15 +4,21 @@
  * anyone found doing so will be prosecuted by Gauri Baba.
  */
 
-package com.prodnees.auth.config;
+package com.prodnees.config.constraints.check;
+
+
+import com.prodnees.config.constraints.PhoneNumber;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class CheckCurrencyCode implements ConstraintValidator<CurrencyCode, String> {
+public class CheckPhoneNumber implements ConstraintValidator<PhoneNumber, String> {
+
+    private static final String PHONE_NUMBER = "^[0-9+]+$";
+
     @Override
-    public void initialize(CurrencyCode constraintAnnotation) {
-        ConstraintValidator.super.initialize(constraintAnnotation);
+    public void initialize(PhoneNumber constraintAnnotation) {
+
     }
 
     @Override
@@ -20,6 +26,6 @@ public class CheckCurrencyCode implements ConstraintValidator<CurrencyCode, Stri
         if (value == null) {
             return true;
         }
-        return NeesLocaleUtil.isValidCurrencyCode(value);
+        return value.matches(PHONE_NUMBER);
     }
 }

@@ -4,8 +4,10 @@
  * anyone found doing so will be prosecuted by Gauri Baba.
  */
 
-package com.prodnees.auth.config;
+package com.prodnees.config.constraints;
 
+
+import com.prodnees.config.constraints.check.CheckPhoneNumber;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -16,18 +18,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Checks if a String is a valid Currency code.
- * <i>{@link NeesLocaleUtil#isValidCurrencyCode(String)}</i>
+ * Checks if a String is a valid phone number.
  * <p>Null Value is considered valid</p>
  */
 @Target(ElementType.FIELD)
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = CheckCurrencyCode.class)
-public @interface CurrencyCode {
+@Constraint(validatedBy = CheckPhoneNumber.class)
+public @interface PhoneNumber {
 
-
-    String message() default "Invalid Currency Code";
+    String message() default "can only contain numbers and '+'";
 
     Class<?>[] groups() default {};
 

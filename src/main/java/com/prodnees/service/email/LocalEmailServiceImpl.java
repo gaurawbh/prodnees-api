@@ -52,7 +52,7 @@ public class LocalEmailServiceImpl implements LocalEmailService {
 
     @Override
     public String getSystemEmailAddress() {
-        return "support@neesum.com";
+        return "neesmanage@neesum.com";
     }
 
     /**

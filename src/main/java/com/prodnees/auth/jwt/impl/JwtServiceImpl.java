@@ -6,6 +6,7 @@ import com.prodnees.auth.jwt.ClaimFields;
 import com.prodnees.auth.jwt.JwtService;
 import com.prodnees.auth.service.JwtTailService;
 import com.prodnees.config.constants.TimeConstants;
+import com.prodnees.util.JWTUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -52,8 +53,10 @@ public class JwtServiceImpl implements JwtService {
 
         userDetails.put(ClaimFields.USER_ID, user.getId());
         userDetails.put(ClaimFields.ROLE, user.getRole());
+        userDetails.put(JWTUtil.ClaimFields.COMPANY_ID, user.getCompanyId());
         userDetails.put(ClaimFields.IS_TEMPORARY_PASSWORD, isTempPassword);
         userDetails.put(ClaimFields.TAIL, jwtTailService.generateAndUpdateNextTail(user));
+        userDetails.put(JWTUtil.ClaimFields.SCHEMA_INSTANCE, user.getSchemaInstance());
         int tokenValidity = TimeConstants.ONE_WEEK;
         return Jwts.builder()
                 .setClaims(claims)
@@ -90,6 +93,11 @@ public class JwtServiceImpl implements JwtService {
         return extractJws(token).getBody().getExpiration();
     }
 
+    @Override
+    public String extractSchemaInstance(String token) {
+        Jws<Claims> jws = extractJws(token);
+        return (String) jws.getBody().get(JWTUtil.ClaimFields.SCHEMA_INSTANCE);
+    }
     @Override
     public boolean hasUsedTempPassword(String token) {
         Jws<Claims> jws = extractJws(token);

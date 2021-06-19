@@ -10,10 +10,7 @@ import com.prodnees.auth.dto.TempPasswordDto;
 import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.auth.service.UserAction;
 import com.prodnees.domain.user.UserAttributes;
-import com.prodnees.dto.user.UserAttributesDto;
 import com.prodnees.model.user.UserModel;
-import com.prodnees.service.user.UserAttributesService;
-import com.prodnees.util.ValidatorUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,39 +25,33 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.prodnees.web.response.LocalResponse.configure;
 
+/**
+ * Should only use Entity and Dao classes from auth schema
+ * <i>No {@link UserAttributes}</i>
+ */
 
 @RestController
 @RequestMapping("/secure/")
 @CrossOrigin
 @Transactional
-public class UserController {
+public class AuthUserController {
 
     private final BlockedJwtDao blockedJwtDao;
     private final UserAction userAction;
     private final TempPasswordInfoDao tempPasswordInfoDao;
     private final ForgotPasswordInfoDao forgotPasswordInfoDao;
-    private final UserAttributesService userAttributesService;
 
-    public UserController(BlockedJwtDao blockedJwtDao,
-                          UserAction userAction,
-                          TempPasswordInfoDao tempPasswordInfoDao,
-                          ForgotPasswordInfoDao forgotPasswordInfoDao,
-                          UserAttributesService userAttributesService) {
+    public AuthUserController(BlockedJwtDao blockedJwtDao,
+                              UserAction userAction,
+                              TempPasswordInfoDao tempPasswordInfoDao,
+                              ForgotPasswordInfoDao forgotPasswordInfoDao) {
         this.blockedJwtDao = blockedJwtDao;
         this.userAction = userAction;
         this.tempPasswordInfoDao = tempPasswordInfoDao;
         this.forgotPasswordInfoDao = forgotPasswordInfoDao;
-        this.userAttributesService = userAttributesService;
     }
 
-    /**
-     * @return
-     */
-    @GetMapping("/user")
-    public ResponseEntity<?> getUser() {
-        int userId = RequestContext.getUserId();
-        return configure(userAction.getModelById(userId));
-    }
+
 
     /**
      * After the password has been changed:
@@ -116,17 +106,7 @@ public class UserController {
         return configure(userModel);
     }
 
-    @PutMapping("/user")
-    public ResponseEntity<?> update(@Validated @RequestBody UserAttributesDto dto) {
-        int userId = RequestContext.getUserId();
-        UserAttributes userAttributes = userAttributesService.getByUserId(userId);
-        userAttributes.setFirstName(dto.getFirstName())
-                .setLastName(dto.getLastName())
-                .setAddress(ValidatorUtil.ifValidStringOrElse(dto.getAddress(), userAttributes.getAddress()))
-                .setPhoneNumber(ValidatorUtil.ifValidStringOrElse(dto.getPhoneNumber(), userAttributes.getPhoneNumber()));
 
-        return configure(userAttributesService.save(userAttributes));
-    }
 
 
 }

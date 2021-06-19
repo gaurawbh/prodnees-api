@@ -13,7 +13,7 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 @Configuration
 @EnableWebMvc
 @ComponentScan("com.prodnees")
-public class MailConfig {
+public class ThymeleafConfig {
 
     @Bean
     @Primary

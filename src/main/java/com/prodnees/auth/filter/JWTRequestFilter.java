@@ -1,5 +1,6 @@
 package com.prodnees.auth.filter;
 
+import com.prodnees.auth.config.tenancy.TenantContext;
 import com.prodnees.auth.dao.BlockedJwtDao;
 import com.prodnees.auth.jwt.JwtService;
 import com.prodnees.auth.service.LoginUserDetailsService;
@@ -14,6 +15,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.annotation.Nonnull;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -43,8 +45,8 @@ public class JWTRequestFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+                                    @Nonnull HttpServletResponse response,
+                                    @Nonnull FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
         String username = null;
         String jwt = "";
@@ -73,6 +75,9 @@ public class JWTRequestFilter extends OncePerRequestFilter {
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            if (!jwtService.hasUsedTempPassword(jwt)) {
+                TenantContext.setCurrentTenant(jwtService.extractSchemaInstance(jwt));
+            }
         }
         filterChain.doFilter(request, response);
 

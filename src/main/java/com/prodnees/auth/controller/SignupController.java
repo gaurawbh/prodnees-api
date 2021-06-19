@@ -1,9 +1,9 @@
 package com.prodnees.auth.controller;
 
 import com.prodnees.auth.service.AuthAction;
+import com.prodnees.auth.service.SignupService;
 import com.prodnees.auth.service.UserAction;
-import com.prodnees.config.constants.APIErrors;
-import com.prodnees.dto.user.UserRegistrationDto;
+import com.prodnees.dto.user.SignupDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -20,15 +20,16 @@ import static com.prodnees.web.response.LocalResponse.configure;
 
 @RestController
 @CrossOrigin
-@Transactional
 public class SignupController {
     private final UserAction userAction;
     private final AuthAction authAction;
+    private final SignupService signupService;
 
     public SignupController(UserAction userAction,
-                            AuthAction authAction) {
+                            AuthAction authAction, SignupService signupService) {
         this.userAction = userAction;
         this.authAction = authAction;
+        this.signupService = signupService;
     }
 
     @GetMapping("/email-exists")
@@ -37,9 +38,9 @@ public class SignupController {
     }
 
     @PostMapping("/user/signup")
-    public ResponseEntity<?> save(@Validated @RequestBody UserRegistrationDto dto) {
-        Assert.isTrue(!userAction.existsByEmail(dto.getEmail()), APIErrors.EMAIL_TAKEN.getMessage());
-        return configure(userAction.save(dto));
+    @Transactional
+    public ResponseEntity<?> signup(@Validated @RequestBody SignupDto dto) {
+        return configure(signupService.signup(dto));
     }
 
     @PostMapping("/user/forgot-password")

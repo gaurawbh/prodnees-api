@@ -1,7 +1,7 @@
 package com.prodnees.auth.service;
 
 import com.prodnees.auth.domain.User;
-import com.prodnees.dto.user.UserRegistrationDto;
+import com.prodnees.dto.user.SignupDto;
 import com.prodnees.model.user.AssociateModel;
 import com.prodnees.model.user.UserModel;
 
@@ -12,7 +12,7 @@ public interface UserAction {
 
     boolean existsByEmail(String email);
 
-    UserModel save(UserRegistrationDto dto);
+    UserModel save(SignupDto dto);
 
     UserModel save(User user);
 

@@ -8,9 +8,13 @@ package com.prodnees.auth.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDate;
 
+import static com.prodnees.auth.config.Table.Catalog.AUTH_TABLE;
+
 @Entity
+@Table(catalog = AUTH_TABLE)
 public class JwtTail {
     @Id
     private int userId;
