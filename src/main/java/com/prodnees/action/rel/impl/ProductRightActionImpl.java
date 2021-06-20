@@ -2,10 +2,10 @@ package com.prodnees.action.rel.impl;
 
 import com.prodnees.action.rel.ProductRightAction;
 import com.prodnees.auth.domain.User;
+import com.prodnees.domain.batch.Product;
 import com.prodnees.domain.rels.ProductRight;
 import com.prodnees.domain.user.UserAttributes;
 import com.prodnees.dto.ProductRightDto;
-import com.prodnees.model.ProductModel;
 import com.prodnees.model.ProductRightModel;
 import com.prodnees.model.user.UserModel;
 import com.prodnees.service.batch.ProductService;
@@ -14,7 +14,6 @@ import com.prodnees.service.email.LocalEmailService;
 import com.prodnees.service.rels.ProductRightsService;
 import com.prodnees.service.user.UserAttributesService;
 import com.prodnees.service.user.UserService;
-import com.prodnees.util.MapperUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -84,11 +83,15 @@ public class ProductRightActionImpl implements ProductRightAction {
 
     public ProductRightModel mapToModel(ProductRight productRight) {
         ProductRightModel productRightModel = new ProductRightModel();
-        ProductModel productModel = MapperUtil.getDozer().map(productService.getById(productRight.getProductId()), ProductModel.class);
+        Product product = productService.getById(productRight.getProductId());
         UserAttributes userAttributes = userAttributesService.getByUserId(productRight.getUserId());
-        return productRightModel.setProductModel(productModel)
-                .setUserModel(new UserModel().setId(userAttributes.getUserId()).setEmail(userAttributes.getEmail()).setFirstName(userAttributes.getFirstName()).setLastName(userAttributes.getLastName()))
-                .setObjectRightsType(productRight.getObjectRightsType());
+        return productRightModel.setProduct(product)
+                .setUserModel(new UserModel()
+                        .setId(userAttributes.getUserId())
+                        .setEmail(userAttributes.getEmail())
+                        .setFirstName(userAttributes.getFirstName())
+                        .setLastName(userAttributes.getLastName()))
+                .setObjectRight(productRight.getObjectRightsType());
 
     }
 

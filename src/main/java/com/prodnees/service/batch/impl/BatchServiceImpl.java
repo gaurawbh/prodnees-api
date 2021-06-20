@@ -1,5 +1,6 @@
 package com.prodnees.service.batch.impl;
 
+import com.prodnees.auth.config.tenancy.CurrentTenantResolver;
 import com.prodnees.dao.batchproduct.BatchDao;
 import com.prodnees.domain.batch.Batch;
 import com.prodnees.domain.enums.BatchState;
@@ -7,6 +8,7 @@ import com.prodnees.service.batch.BatchService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BatchServiceImpl implements BatchService {
@@ -24,6 +26,11 @@ public class BatchServiceImpl implements BatchService {
     @Override
     public Batch getById(int id) {
         return batchDao.getById(id);
+    }
+
+    @Override
+    public Optional<Batch> findById(int id) {
+        return batchDao.findById(id);
     }
 
     @Override
@@ -54,5 +61,10 @@ public class BatchServiceImpl implements BatchService {
     @Override
     public List<Batch> getAllByUserIdAndState(int userId, BatchState state) {
         return batchDao.getAllByUserIdAndState(userId, state.name());
+    }
+
+    @Override
+    public int getNextId() {
+        return batchDao.getNextId(CurrentTenantResolver.getTenant(), "batch", "id");
     }
 }

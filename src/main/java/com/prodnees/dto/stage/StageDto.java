@@ -8,7 +8,6 @@ public class StageDto {
     @Positive(message = "batchId is a required field must be a positive number")
     private int batchId;
     private Integer index;
-    private String name;
     private String description;
 
     public int getId() {
@@ -35,15 +34,6 @@ public class StageDto {
 
     public StageDto setIndex(Integer index) {
         this.index = index;
-        return this;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public StageDto setName(String name) {
-        this.name = name;
         return this;
     }
 

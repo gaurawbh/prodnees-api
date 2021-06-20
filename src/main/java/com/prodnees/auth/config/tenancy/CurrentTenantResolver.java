@@ -16,8 +16,12 @@ public class CurrentTenantResolver implements CurrentTenantIdentifierResolver {
         return true;
     }
 
-    public static void setTenant(String tenantSchema){
+    public static void setTenant(String tenantSchema) {
         TenantContext.clear();
         TenantContext.setCurrentTenant(tenantSchema);
+    }
+
+    public static String getTenant() {
+        return TenantContext.getCurrentTenant();
     }
 }

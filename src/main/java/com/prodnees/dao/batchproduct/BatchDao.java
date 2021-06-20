@@ -18,4 +18,7 @@ public interface BatchDao extends JpaRepository<Batch, Integer> {
     @Query(nativeQuery = true, value = QueryConstants.BATCH_DAO_GET_ALL_BY_USER_ID_AND_STATE)
     List<Batch> getAllByUserIdAndState(int userId, String state);
 
+    @Query(nativeQuery = true, value = QueryConstants.GLOBAL_GET_NEXT_ID)
+    int getNextId(String tableSchema, String tableName, String columnName);
+
 }

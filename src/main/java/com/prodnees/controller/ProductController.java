@@ -64,7 +64,6 @@ public class ProductController {
 
     @PostMapping("/product")
     public ResponseEntity<?> save(@Validated @RequestBody ProductDto dto) {
-        dto.setId(0);
         int ownerId = RequestContext.getUserId();
         Product product = MapperUtil.getDozer().map(dto, Product.class);
         product = productService.save(product);

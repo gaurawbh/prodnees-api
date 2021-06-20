@@ -4,6 +4,7 @@ import com.prodnees.domain.batch.Batch;
 import com.prodnees.domain.enums.StageState;
 import com.prodnees.domain.rels.BatchRight;
 import com.prodnees.domain.stage.Stage;
+import com.prodnees.dto.stage.StageDto;
 import com.prodnees.model.stage.StageModel;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface StageAction {
     /**
      * A user will have the same {@link BatchRight} to a Stage as the {@link Batch} the Stage belongs to
      *
-     * @param batchId
+     * @param id
      * @param editorId
      * @return
      */
@@ -33,7 +34,7 @@ public interface StageAction {
 
     boolean existsById(int id);
 
-    StageModel save(Stage stage);
+    StageModel addNew(StageDto stage);
 
     Optional<Stage> findById(int id);
 

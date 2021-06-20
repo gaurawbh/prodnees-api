@@ -25,4 +25,7 @@ public interface StageService {
     boolean existsById(int id);
 
     Optional<Stage> findById(int id);
+
+    int getNextId();
+
 }

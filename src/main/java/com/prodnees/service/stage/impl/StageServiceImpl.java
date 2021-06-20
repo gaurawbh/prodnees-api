@@ -1,5 +1,6 @@
 package com.prodnees.service.stage.impl;
 
+import com.prodnees.auth.config.tenancy.CurrentTenantResolver;
 import com.prodnees.dao.stage.StageDao;
 import com.prodnees.domain.enums.StageState;
 import com.prodnees.domain.stage.Stage;
@@ -62,4 +63,8 @@ public class StageServiceImpl implements StageService {
         return stageDao.findById(id);
     }
 
+    @Override
+    public int getNextId() {
+        return stageDao.getNextId(CurrentTenantResolver.getTenant(), "stage", "id");
+    }
 }

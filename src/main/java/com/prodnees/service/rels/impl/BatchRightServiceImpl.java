@@ -41,14 +41,14 @@ public class BatchRightServiceImpl implements BatchRightService {
      * Check if a user has edit rights to a batch product.
      * <p>Only owners and editors have edit rights</p>
      *
-     * @param batchProductId
+     * @param batchId
      * @param editorId,      @alias userId
      * @return
      */
     @Override
-    public boolean hasBatchEditorRights(int batchProductId, int editorId) {
-        return batchRightsDao.existsByBatchIdAndUserIdAndObjectRight(batchProductId, editorId, ObjectRight.OWNER)
-                || batchRightsDao.existsByBatchIdAndUserIdAndObjectRight(batchProductId, editorId, ObjectRight.EDITOR);
+    public boolean hasBatchEditorRights(int batchId, int editorId) {
+        return batchRightsDao.existsByBatchIdAndUserIdAndObjectRight(batchId, editorId, ObjectRight.OWNER)
+                || batchRightsDao.existsByBatchIdAndUserIdAndObjectRight(batchId, editorId, ObjectRight.EDITOR);
     }
 
     /**

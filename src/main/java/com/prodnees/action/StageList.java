@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * All {@link com.prodnees.domain.rels.BatchRight} must be checked before using this class
  */
-public interface BatchStageList {
+public interface StageList {
 
     Stage getFirst(int batchId);
 
@@ -36,5 +36,7 @@ public interface BatchStageList {
     List<Stage> addAll(int batchId, List<Stage> stageList);
 
     boolean clear(int batchId);
+
+    int getNextId();
 
 }

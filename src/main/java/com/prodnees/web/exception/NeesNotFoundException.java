@@ -9,8 +9,12 @@ public class NeesNotFoundException extends RuntimeException {
     private int code;
 
     public NeesNotFoundException() {
-
         this.message = APIErrors.OBJECT_NOT_FOUND.getMessage();
+        this.code = APIErrors.OBJECT_NOT_FOUND.getCode();
+    }
+
+    public NeesNotFoundException(String message) {
+        this.message = message;
         this.code = APIErrors.OBJECT_NOT_FOUND.getCode();
     }
 

@@ -2,7 +2,11 @@ package com.prodnees.domain.stage;
 
 import com.prodnees.domain.enums.StageState;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 /**
  * Future Enhancements:
@@ -16,8 +20,7 @@ public class Stage {
     @GeneratedValue
     private int id;
     private int batchId;
-    @Column(name = "indx")
-    private int index;
+    private int indx; //index
     private String name;
     private String description;
     @Enumerated(EnumType.STRING)
@@ -41,12 +44,12 @@ public class Stage {
         return this;
     }
 
-    public int getIndex() {
-        return index;
+    public int getIndx() {
+        return indx;
     }
 
-    public Stage setIndex(int index) {
-        this.index = index;
+    public Stage setIndx(int index) {
+        this.indx = index;
         return this;
     }
 

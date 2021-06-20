@@ -1,7 +1,8 @@
 package com.prodnees.model.stage;
 
+import com.prodnees.domain.batch.RawProduct;
 import com.prodnees.domain.enums.StageState;
-import com.prodnees.model.RawProductModel;
+import com.prodnees.domain.stage.StageTodo;
 
 import java.util.List;
 
@@ -12,9 +13,9 @@ import java.util.List;
  * <p> Final State [A Batch Production Has Completed]</p>
  */
 public class StageModel {
-    List<StageApprovalDocumentModel> approvalDocuments;
-    List<StageTodoModel> stageTodoList;
-    List<RawProductModel> rawProductList;
+    List<StageApprovalDocumentModel> approvalDocumentList;
+    List<StageTodo> stageTodoList;
+    List<RawProduct> rawProductList;
     private int id;
     private int batchId;
     private int index;
@@ -22,29 +23,29 @@ public class StageModel {
     private String description;
     private StageState status;
 
-    public List<StageApprovalDocumentModel> getApprovalDocuments() {
-        return approvalDocuments;
+    public List<StageApprovalDocumentModel> getApprovalDocumentList() {
+        return approvalDocumentList;
     }
 
-    public StageModel setApprovalDocuments(List<StageApprovalDocumentModel> approvalDocuments) {
-        this.approvalDocuments = approvalDocuments;
+    public StageModel setApprovalDocumentList(List<StageApprovalDocumentModel> approvalDocumentList) {
+        this.approvalDocumentList = approvalDocumentList;
         return this;
     }
 
-    public List<StageTodoModel> getStageTodoList() {
+    public List<StageTodo> getStageTodoList() {
         return stageTodoList;
     }
 
-    public StageModel setStageTodoList(List<StageTodoModel> stageTodoList) {
+    public StageModel setStageTodoList(List<StageTodo> stageTodoList) {
         this.stageTodoList = stageTodoList;
         return this;
     }
 
-    public List<RawProductModel> getRawProductList() {
+    public List<RawProduct> getRawProductList() {
         return rawProductList;
     }
 
-    public StageModel setRawProductList(List<RawProductModel> rawProductList) {
+    public StageModel setRawProductList(List<RawProduct> rawProductList) {
         this.rawProductList = rawProductList;
         return this;
     }

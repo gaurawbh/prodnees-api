@@ -1,6 +1,6 @@
 package com.prodnees.action.stage.impl;
 
-import com.prodnees.action.BatchStageList;
+import com.prodnees.action.StageList;
 import com.prodnees.action.stage.StageAction;
 import com.prodnees.controller.DocumentController;
 import com.prodnees.domain.Document;
@@ -9,17 +9,16 @@ import com.prodnees.domain.enums.StageState;
 import com.prodnees.domain.stage.Stage;
 import com.prodnees.domain.stage.StageApprovalDocument;
 import com.prodnees.domain.stage.StageTodo;
-import com.prodnees.model.RawProductModel;
+import com.prodnees.dto.stage.StageDto;
 import com.prodnees.model.stage.StageApprovalDocumentModel;
 import com.prodnees.model.stage.StageModel;
-import com.prodnees.model.stage.StageTodoModel;
 import com.prodnees.service.DocumentService;
 import com.prodnees.service.batch.RawProductService;
 import com.prodnees.service.rels.BatchRightService;
 import com.prodnees.service.rels.StageApprovalDocumentService;
 import com.prodnees.service.stage.StageService;
 import com.prodnees.service.stage.StageTodoService;
-import com.prodnees.util.MapperUtil;
+import com.prodnees.util.ValidatorUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
@@ -36,7 +35,7 @@ public class StageActionImpl implements StageAction {
     private final RawProductService rawProductService;
     private final DocumentService documentService;
     private final BatchRightService batchRightService;
-    private final BatchStageList batchStageList;
+    private final StageList stageList;
 
 
     public StageActionImpl(StageService stageService,
@@ -45,14 +44,14 @@ public class StageActionImpl implements StageAction {
                            RawProductService rawProductService,
                            DocumentService documentService,
                            BatchRightService batchRightService,
-                           BatchStageList batchStageList) {
+                           StageList stageList) {
         this.stageService = stageService;
         this.stageApprovalDocumentService = stageApprovalDocumentService;
         this.stageTodoService = stageTodoService;
         this.rawProductService = rawProductService;
         this.documentService = documentService;
         this.batchRightService = batchRightService;
-        this.batchStageList = batchStageList;
+        this.stageList = stageList;
     }
 
     @Override
@@ -87,19 +86,22 @@ public class StageActionImpl implements StageAction {
     }
 
     /**
-     * State must be validated before calling save method
-     * <p>Last State Validated</p>
-     * <p>Next State Validated</p>
+     if no {@link Stage#getIndx()} is provided in the dto, it goes on top of the stack
      *
-     * @param stage
+     * @param dto
      * @return
      */
     @Override
-    public StageModel save(Stage stage) {
-        if (stage.getName().isBlank()) {
-            stage.setName(String.format("State-%d-%d", stage.getBatchId(), batchStageList.size(stage.getBatchId())));
-        }
-        return entityToModel(batchStageList.add(stage));
+    public StageModel addNew(StageDto dto) {
+        Stage stage = new Stage()
+                .setBatchId(dto.getBatchId())
+                .setIndx(ValidatorUtil.ifValidIntegerOrElse(dto.getIndex(), -1))
+                .setDescription(dto.getDescription())
+                .setState(StageState.OPEN);
+        int nextId = stageService.getNextId();
+        String batchName = "Stage-" + nextId;
+        stage.setName(batchName);
+        return entityToModel(stageList.add(stage));
     }
 
     @Override
@@ -138,7 +140,7 @@ public class StageActionImpl implements StageAction {
     @Override
     public void deleteById(int id) {
         Stage stage = stageService.getById(id);
-        batchStageList.remove(stage);
+        stageList.remove(stage);
     }
 
     private StageModel entityToModel(Stage stage) {
@@ -148,18 +150,14 @@ public class StageActionImpl implements StageAction {
         List<RawProduct> rawProductList = rawProductService.getAllByStageId(stage.getId());
         List<StageApprovalDocumentModel> stageApprovalDocumentModelList = new ArrayList<>();
         stageApprovalDocumentList.forEach(stateApprovalDocument -> stageApprovalDocumentModelList.add(entityToModel(stateApprovalDocument)));
-        List<StageTodoModel> stageTodoModelList = new ArrayList<>();
-        stageTodoList.forEach(stageTodo -> stageTodoModelList.add(entityToModel(stageTodo)));
-        List<RawProductModel> rawProductModelList = new ArrayList<>();
-        rawProductList.forEach(rawProduct -> rawProductModelList.add(entityToModel(rawProduct)));
         stageModel.setId(stage.getId())
                 .setBatchId(stage.getBatchId())
-                .setIndex(stage.getIndex())
+                .setIndex(stage.getIndx())
                 .setName(stage.getName())
                 .setDescription(stage.getDescription())
-                .setApprovalDocuments(stageApprovalDocumentModelList)
-                .setStageTodoList(stageTodoModelList)
-                .setRawProductList(rawProductModelList)
+                .setApprovalDocumentList(stageApprovalDocumentModelList)
+                .setStageTodoList(stageTodoList)
+                .setRawProductList(rawProductList)
                 .setStatus(stage.getState());
         return stageModel;
     }
@@ -185,12 +183,4 @@ public class StageActionImpl implements StageAction {
 
     }
 
-    private StageTodoModel entityToModel(StageTodo stageTodo) {
-        return MapperUtil.getDozer().map(stageTodo, StageTodoModel.class);
-    }
-
-    private RawProductModel entityToModel(RawProduct rawProduct) {
-        return MapperUtil.getDozer().map(rawProduct, RawProductModel.class);
-
-    }
 }

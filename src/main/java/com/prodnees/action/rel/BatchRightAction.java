@@ -5,7 +5,6 @@ import com.prodnees.dto.batch.BatchRightDto;
 import com.prodnees.model.batch.BatchRightModel;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface BatchRightAction {
 
@@ -13,7 +12,7 @@ public interface BatchRightAction {
 
     BatchRight save(BatchRight batchRight);
 
-    Optional<BatchRight> findByBatchIdAndUserId(int batchId, int ownerId);
+    BatchRight getByBatchIdAndUserId(int batchId, int ownerId);
 
     List<BatchRightModel> getAllByBatchId(int batchId);
 

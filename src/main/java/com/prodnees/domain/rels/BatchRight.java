@@ -35,11 +35,11 @@ public class BatchRight implements Serializable {
         return this;
     }
 
-    public ObjectRight getObjectRightsType() {
+    public ObjectRight getObjectRight() {
         return objectRight;
     }
 
-    public BatchRight setObjectRightsType(ObjectRight objectRight) {
+    public BatchRight setObjectRight(ObjectRight objectRight) {
         this.objectRight = objectRight;
         return this;
     }

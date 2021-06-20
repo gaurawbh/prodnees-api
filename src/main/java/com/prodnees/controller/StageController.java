@@ -16,7 +16,6 @@ import com.prodnees.dto.stage.StageDto;
 import com.prodnees.model.stage.StageModel;
 import com.prodnees.service.rels.BatchRightService;
 import com.prodnees.util.LocalAssert;
-import com.prodnees.util.MapperUtil;
 import com.prodnees.util.ValidatorUtil;
 import com.prodnees.web.exception.NeesNotFoundException;
 import com.prodnees.web.response.LocalResponse;
@@ -71,11 +70,11 @@ public class StageController {
         int userId = RequestContext.getUserId();
         LocalAssert.isTrue(batchRightService.hasBatchEditorRights(dto.getBatchId(), userId),
                 APIErrors.BATCH_NOT_FOUND);
-        LocalAssert.isTrue(batchAction.existsByIdAndState(dto.getBatchId(), BatchState.COMPLETE), "you cannot add a Stage to a Batch that is marked as Complete");
-        dto.setId(0).
-                setIndex(ValidatorUtil.ifValidIntegerOrElse(dto.getIndex(), -1));
-        Stage stage = MapperUtil.getDozer().map(dto, Stage.class).setState(StageState.OPEN);
-        return configure(stageAction.save(stage));
+        Batch batch = batchAction.getById(dto.getBatchId());
+        LocalAssert.isFalse(batch.getState().equals(BatchState.COMPLETE),
+                "you cannot add a Stage to a Batch that is marked as Complete");
+
+        return configure(stageAction.addNew(dto));
     }
 
     /**
@@ -114,10 +113,10 @@ public class StageController {
     @PutMapping("/stage")
     public ResponseEntity<?> update(@Validated @RequestBody StageDto dto) {
         int userId = RequestContext.getUserId();
-        LocalAssert.isTrue(stageAction.hasStageEditorRights(dto.getId(), userId), String.format("stage with id: %d not found or not enough permission ", dto.getId()));
+        LocalAssert.isTrue(stageAction.hasStageEditorRights(dto.getId(), userId),
+                String.format("stage with id: %d not found or not enough permission ", dto.getId()));
         Stage stage = stageAction.getById(dto.getId());
-        stage.setName(ValidatorUtil.ifValidStringOrElse(dto.getName(), stage.getName()))
-                .setDescription(ValidatorUtil.ifValidStringOrElse(dto.getDescription(), stage.getDescription()));
+        stage.setDescription(ValidatorUtil.ifValidStringOrElse(dto.getDescription(), stage.getDescription()));
 
         return configure();
     }

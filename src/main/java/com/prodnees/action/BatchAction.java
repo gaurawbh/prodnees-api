@@ -2,6 +2,7 @@ package com.prodnees.action;
 
 import com.prodnees.domain.batch.Batch;
 import com.prodnees.domain.enums.BatchState;
+import com.prodnees.dto.batch.BatchDto;
 import com.prodnees.model.batch.BatchListModel;
 import com.prodnees.model.batch.BatchModel;
 
@@ -15,9 +16,12 @@ public interface BatchAction {
 
     boolean isEditable(int id);
 
-    List<BatchModel> getAllByUserIdAndState(int userId, BatchState state);
+
+    List<BatchModel> getAllByState(BatchState state);
 
     BatchModel save(Batch batch);
+
+    BatchModel create(BatchDto dto);
 
     Batch getById(int id);
 

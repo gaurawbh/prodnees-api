@@ -39,4 +39,9 @@ public class ProductServiceImpl implements ProductService {
     public void deleteById(int id) {
         productDao.deleteById(id);
     }
+
+    @Override
+    public boolean existsById(int id) {
+        return productDao.existsById(id);
+    }
 }

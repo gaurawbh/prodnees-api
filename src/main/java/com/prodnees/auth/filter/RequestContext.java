@@ -77,8 +77,13 @@ public class RequestContext {
         return email.matches(regex);
     }
 
-    public static boolean isValidSuperAdminEmail(String email) {
-        return isValidEmail(email) && email.endsWith("@neesum.com");
+    public static void denySelfManagement(int userId) {
+        int adminId = getUserId();
+        LocalAssert.isFalse(userId == adminId, "self management not allowed");
+    }
+
+    public static void denySelfManagement(String email) {
+        LocalAssert.isFalse(email.equals(getUsername()), "self management not allowed");
     }
 
 }

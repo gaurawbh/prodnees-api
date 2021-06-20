@@ -15,4 +15,6 @@ public interface ProductService {
     List<Product> getAllByIds(Iterable<Integer> productIdIterable);
 
     void deleteById(int id);
+
+    boolean existsById(int id);
 }

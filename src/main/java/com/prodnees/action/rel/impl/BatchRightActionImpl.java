@@ -14,6 +14,7 @@ import com.prodnees.service.email.LocalEmailService;
 import com.prodnees.service.rels.BatchRightService;
 import com.prodnees.service.user.UserAttributesService;
 import com.prodnees.service.user.UserService;
+import com.prodnees.web.exception.NeesNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,20 +50,20 @@ public class BatchRightActionImpl implements BatchRightAction {
     @Override
     public BatchRightModel save(BatchRightDto rightsDto) {
         User user = userService.getByEmail(rightsDto.getEmail());
-        Optional<BatchRight> batchProductRightOpt = findByBatchIdAndUserId(rightsDto.getBatchId(), user.getId());
-        AtomicReference<BatchRightModel> atomicReference = new AtomicReference<>();
-        batchProductRightOpt.ifPresentOrElse(batchProductRight -> {
-            batchProductRight.setObjectRightsType(rightsDto.getObjectRightsType());
-            atomicReference.set(mapToModel(batchRightService.save(batchProductRight)));
-        }, () -> {
-            BatchRight batchRight = new BatchRight()
-                    .setUserId(user.getId())
-                    .setBatchId(rightsDto.getBatchId())
-                    .setObjectRightsType(rightsDto.getObjectRightsType());
-            atomicReference.set(mapToModel(batchRightService.save(batchRight)));
-        });
+        BatchRight batchRight = batchRightService.findByBatchIdAndUserId(rightsDto.getBatchId(), user.getId())
+                .orElseGet(() -> {
+                    BatchRight batchRightNew = new BatchRight()
+                            .setUserId(user.getId())
+                            .setBatchId(rightsDto.getBatchId())
+                            .setObjectRight(rightsDto.getObjectRightsType());
+
+                    return batchRightService.save(batchRightNew);
+                });
+
+        batchRight.setObjectRight(rightsDto.getObjectRightsType());
+
         sendNewBatchRightsEmail(rightsDto.getEmail());
-        return atomicReference.get();
+        return mapToModel(batchRight);
     }
 
     @Override
@@ -73,8 +72,9 @@ public class BatchRightActionImpl implements BatchRightAction {
     }
 
     @Override
-    public Optional<BatchRight> findByBatchIdAndUserId(int batchId, int ownerId) {
-        return batchRightService.findByBatchIdAndUserId(batchId, ownerId);
+    public BatchRight getByBatchIdAndUserId(int batchId, int ownerId) {
+        return batchRightService.findByBatchIdAndUserId(batchId, ownerId)
+                .orElseThrow(() -> new NeesNotFoundException(String.format("BatchRight with batchId: %d and userId: %d not found", batchId, ownerId)));
     }
 
     @Override
@@ -109,11 +109,11 @@ public class BatchRightActionImpl implements BatchRightAction {
         Batch batch = batchService.getById(productRights.getBatchId());
         UserAttributes userAttributes = userAttributesService.getByUserId(productRights.getUserId());
         return model.setBatchProduct(batch)
-                .setUserModel(new UserModel().setId(userAttributes.getUserId())
+                .setUser(new UserModel().setId(userAttributes.getUserId())
                         .setEmail(userAttributes.getEmail())
                         .setFirstName(userAttributes.getFirstName())
                         .setLastName(userAttributes.getLastName()))
-                .setObjectRightsType(productRights.getObjectRightsType());
+                .setObjectRightsType(productRights.getObjectRight());
 
     }
 

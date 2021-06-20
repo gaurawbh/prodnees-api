@@ -1,9 +1,9 @@
 package com.prodnees.model.batch;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.prodnees.domain.batch.Product;
 import com.prodnees.domain.enums.BatchState;
 import com.prodnees.domain.enums.ObjectRight;
-import com.prodnees.model.ProductModel;
 import com.prodnees.model.stage.StageApprovalDocumentModel;
 import com.prodnees.model.stage.StageModel;
 
@@ -15,11 +15,11 @@ import java.util.List;
  */
 public class BatchModel {
     private int id;
-    private ProductModel productModel;
+    private Product product;
     private String name;
     private String description;
-    private List<StageModel> stageModelList;
-    private StageApprovalDocumentModel stageApprovalDocumentModel;
+    private List<StageModel> stageList;
+    private StageApprovalDocumentModel stageApprovalDocument;
     private BatchState status;
     private ObjectRight rightType;
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -35,11 +35,11 @@ public class BatchModel {
     }
 
     public StageApprovalDocumentModel getStateApprovalDocumentModel() {
-        return stageApprovalDocumentModel;
+        return stageApprovalDocument;
     }
 
     public BatchModel setStateApprovalDocumentModel(StageApprovalDocumentModel stageApprovalDocumentModel) {
-        this.stageApprovalDocumentModel = stageApprovalDocumentModel;
+        this.stageApprovalDocument = stageApprovalDocumentModel;
         return this;
     }
 
@@ -52,30 +52,39 @@ public class BatchModel {
         return this;
     }
 
-    public ProductModel getProductModel() {
-        return productModel;
+    public Product getProduct() {
+        return product;
     }
 
-    public BatchModel setProductModel(ProductModel productModel) {
-        this.productModel = productModel;
+    public BatchModel setProduct(Product product) {
+        this.product = product;
+        return this;
+    }
+
+    public List<StageModel> getStageList() {
+        return stageList;
+    }
+
+    public BatchModel setStageList(List<StageModel> stageList) {
+        this.stageList = stageList;
         return this;
     }
 
     public List<StageModel> getStateModelList() {
-        return stageModelList;
+        return stageList;
     }
 
     public BatchModel setStateModelList(List<StageModel> stageModelList) {
-        this.stageModelList = stageModelList;
+        this.stageList = stageModelList;
         return this;
     }
 
-    public StageApprovalDocumentModel getApprovalDocumentModel() {
-        return stageApprovalDocumentModel;
+    public StageApprovalDocumentModel getStageApprovalDocument() {
+        return stageApprovalDocument;
     }
 
-    public BatchModel setApprovalDocumentModel(StageApprovalDocumentModel stageApprovalDocumentModel) {
-        this.stageApprovalDocumentModel = stageApprovalDocumentModel;
+    public BatchModel setStageApprovalDocument(StageApprovalDocumentModel stageApprovalDocument) {
+        this.stageApprovalDocument = stageApprovalDocument;
         return this;
     }
 

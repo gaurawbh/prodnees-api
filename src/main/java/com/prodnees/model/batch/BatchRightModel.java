@@ -7,7 +7,7 @@ import com.prodnees.model.user.UserModel;
 public class BatchRightModel {
 
     private Batch batch;
-    private UserModel userModel;
+    private UserModel user;
     private ObjectRight objectRight;
 
     public Batch getBatchProduct() {
@@ -19,12 +19,12 @@ public class BatchRightModel {
         return this;
     }
 
-    public UserModel getUserModel() {
-        return userModel;
+    public UserModel getUser() {
+        return user;
     }
 
-    public BatchRightModel setUserModel(UserModel userModel) {
-        this.userModel = userModel;
+    public BatchRightModel setUser(UserModel user) {
+        this.user = user;
         return this;
     }
 

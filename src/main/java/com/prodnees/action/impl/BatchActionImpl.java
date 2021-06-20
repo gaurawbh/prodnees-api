@@ -3,16 +3,22 @@ package com.prodnees.action.impl;
 import com.prodnees.action.BatchAction;
 import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.domain.batch.Batch;
+import com.prodnees.domain.batch.Product;
 import com.prodnees.domain.enums.BatchState;
-import com.prodnees.model.ProductModel;
+import com.prodnees.domain.enums.ObjectRight;
+import com.prodnees.domain.rels.BatchRight;
+import com.prodnees.dto.batch.BatchDto;
 import com.prodnees.model.batch.BatchListModel;
 import com.prodnees.model.batch.BatchModel;
 import com.prodnees.service.batch.BatchService;
 import com.prodnees.service.batch.ProductService;
 import com.prodnees.service.rels.BatchRightService;
+import com.prodnees.util.LocalAssert;
 import com.prodnees.util.MapperUtil;
+import com.prodnees.web.exception.NeesNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +53,9 @@ public class BatchActionImpl implements BatchAction {
     }
 
     @Override
-    public List<BatchModel> getAllByUserIdAndState(int userId, BatchState state) {
+    public List<BatchModel> getAllByState(BatchState state) {
+        int userId = RequestContext.getUserId();
+
         List<Batch> batchList = batchService.getAllByUserIdAndState(userId, state);
         List<BatchModel> batchModelList = new ArrayList<>();
         batchList.forEach(batchProduct -> batchModelList.add(mapToModel(batchProduct)));
@@ -60,8 +68,26 @@ public class BatchActionImpl implements BatchAction {
     }
 
     @Override
+    public BatchModel create(BatchDto dto) {
+        LocalAssert.isTrue(productService.existsById(dto.getProductId()), String.format("Product with id: %d not found", dto.getProductId()));
+        int userId = RequestContext.getUserId();
+        int nextId = batchService.getNextId();
+        String batchName = "Batch-" + nextId;
+
+        Batch batch = MapperUtil.getDozer().map(dto, Batch.class);
+        batch.setName(batchName).setCreatedDate(LocalDate.now()).setState(BatchState.OPEN);
+        batch = batchService.save(batch);
+        batchRightService.save(new BatchRight()
+                .setUserId(userId)
+                .setBatchId(batch.getId())
+                .setObjectRight(ObjectRight.OWNER));
+        return mapToModel(batch);
+    }
+
+    @Override
     public Batch getById(int id) {
-        return batchService.getById(id);
+        return batchService.findById(id)
+                .orElseThrow(() -> new NeesNotFoundException(String.format("Batch with id: %d not found", id)));
     }
 
     @Override
@@ -99,17 +125,14 @@ public class BatchActionImpl implements BatchAction {
 
     BatchModel mapToModel(Batch batch) {
         BatchModel model = new BatchModel();
-        ProductModel productModel = MapperUtil.getDozer().map(productService.getById(batch.getProductId()), ProductModel.class);
-        try {
-            int userId = RequestContext.getUserId();
-            model.setRightType(batchRightService.findByBatchIdAndUserId(batch.getId(), userId).get().getObjectRightsType());
-        } catch (NullPointerException ignored) {
+        Product product = productService.getById(batch.getProductId());
+        int userId = RequestContext.getUserId();
+        model.setRightType(batchRightService.findByBatchIdAndUserId(batch.getId(), userId).get().getObjectRight());
 
-        }
         model.setId(batch.getId())
                 .setName(batch.getName())
-                .setProductModel(productModel)
-                .setApprovalDocumentModel(null)
+                .setProduct(product)
+                .setStageApprovalDocument(null)
                 .setStatus(batch.getState())
                 .setDescription(batch.getDescription())
                 .setCreatedDate(batch.getCreatedDate());
