@@ -302,7 +302,7 @@ public class BatchController {
                 .setUserId(associatesOptional.get().getAssociateId())
                 .setDocumentId(dto.getDocumentId())
                 .setDocumentRightsType(ObjectRight.EDITOR);
-        documentRightAction.save(documentRight);
+        documentRightAction.addNew(documentRight);
 
         return configure();
 

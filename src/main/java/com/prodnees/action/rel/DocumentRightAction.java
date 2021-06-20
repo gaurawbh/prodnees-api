@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface DocumentRightAction {
 
-    DocumentRight save(DocumentRight documentRight);
+    DocumentRight addNew(DocumentRight documentRight);
 
     Optional<DocumentRight> findByDocumentIdAndUserId(int documentId, int userId);
 

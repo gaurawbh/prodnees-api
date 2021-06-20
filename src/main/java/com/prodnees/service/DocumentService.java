@@ -1,6 +1,8 @@
 package com.prodnees.service;
 
+import com.prodnees.dao.queries.QueryConstants;
 import com.prodnees.domain.Document;
+import org.springframework.data.jpa.repository.Query;
 
 public interface DocumentService {
 
@@ -15,4 +17,7 @@ public interface DocumentService {
     boolean existsById(int id);
 
     void deleteById(int id);
+
+    int getNextId();
+
 }
