@@ -17,11 +17,15 @@ public interface ProductRightAction {
 
     Optional<ProductRight> findByProductIdAndUserId(int productId, int userId);
 
+    ProductRight getByProductIdAndUserId(int productId, int userId);
+
     List<ProductRight> getAllByUserId(int userId);
 
     List<ProductRight> getAllByProductId(int productId);
 
     boolean sendNewProductRightsEmail(String email);
+
+    boolean hasProductEditorRight(int productId, int userId);
 
     void deleteByProductIdAndUserId(int productId, int userId);
 }

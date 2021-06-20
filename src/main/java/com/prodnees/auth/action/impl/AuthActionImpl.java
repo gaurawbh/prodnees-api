@@ -1,8 +1,8 @@
-package com.prodnees.auth.service.impl;
+package com.prodnees.auth.action.impl;
 
 import com.prodnees.auth.dao.ForgotPasswordInfoDao;
 import com.prodnees.auth.domain.ForgotPasswordInfo;
-import com.prodnees.auth.service.AuthAction;
+import com.prodnees.auth.action.AuthAction;
 import com.prodnees.auth.util.OtpUtil;
 import com.prodnees.service.email.EmailPlaceHolders;
 import com.prodnees.service.email.LocalEmailService;

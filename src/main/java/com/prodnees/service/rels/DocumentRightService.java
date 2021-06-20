@@ -15,4 +15,7 @@ public interface DocumentRightService {
     List<DocumentRight> getAllByDocumentId(int documentId);
 
     List<DocumentRight> getAllByUserId(int userId);
+
+    boolean hasEditRights(DocumentRight documentRight);
+
 }

@@ -1,6 +1,7 @@
 package com.prodnees.service.rels.impl;
 
 import com.prodnees.dao.rels.ProductRightsDao;
+import com.prodnees.domain.enums.ObjectRight;
 import com.prodnees.domain.rels.ProductRight;
 import com.prodnees.service.rels.ProductRightsService;
 import org.springframework.stereotype.Service;
@@ -45,5 +46,15 @@ public class ProductRightsServiceImpl implements ProductRightsService {
     @Override
     public void deleteByProductIdAndUserId(int productId, int userId) {
         productRightsDao.deleteByProductIdAndUserId(productId, userId);
+    }
+
+    @Override
+    public boolean hasProductEditorRight(int productId, int userId) {
+        Optional<ProductRight> productRightOptional = productRightsDao.findByProductIdAndUserId(productId, userId);
+        if (productRightOptional.isEmpty()) {
+            return false;
+        }
+        return productRightOptional.get().getObjectRightsType().equals(ObjectRight.OWNER)
+                || productRightOptional.get().getObjectRightsType().equals(ObjectRight.EDITOR);
     }
 }

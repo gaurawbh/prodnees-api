@@ -18,7 +18,7 @@ public class DocumentRightActionImpl implements DocumentRightAction {
     }
 
     @Override
-    public DocumentRight save(DocumentRight documentRight) {
+    public DocumentRight addNew(DocumentRight documentRight) {
         return documentRightService.save(documentRight);
     }
 

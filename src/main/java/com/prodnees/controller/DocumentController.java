@@ -10,6 +10,7 @@ import com.prodnees.domain.rels.DocumentRight;
 import com.prodnees.dto.DocumentDto;
 import com.prodnees.model.DocumentModel;
 import com.prodnees.util.LocalAssert;
+import com.prodnees.util.ValidatorUtil;
 import com.prodnees.web.exception.NeesNotFoundException;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -21,15 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -59,19 +52,10 @@ public class DocumentController {
 
     @PostMapping("/document")
     public ResponseEntity<?> save(@RequestParam MultipartFile file,
-                                  String name) {
-        int userId = RequestContext.getUserId();
+                                  @RequestParam(required = false) String description) {
         DocumentModel documentModel = new DocumentModel();
         try {
-            Document document = new Document()
-                    .setName(name)
-                    .setFile(file.getBytes());
-            documentModel = documentAction.save(document);
-            DocumentRight documentRight = new DocumentRight()
-                    .setUserId(userId)
-                    .setDocumentId(documentModel.getId())
-                    .setDocumentRightsType(ObjectRight.OWNER);
-            documentRightAction.save(documentRight);
+            documentModel = documentAction.addNew(description, file);
         } catch (IOException e) {
             e.printStackTrace();
             localLogger.error(e.getMessage());
@@ -87,11 +71,7 @@ public class DocumentController {
      */
     @PutMapping("/document")
     public ResponseEntity<?> update(@Validated @RequestBody DocumentDto dto) {
-        int userId = RequestContext.getUserId();
-        DocumentRight documentRight = documentRightAction.findByDocumentIdAndUserId(dto.getId(), userId).orElseThrow(NeesNotFoundException::new);
-        LocalAssert.isTrue(documentRightAction.hasEditRights(documentRight), APIErrors.UPDATE_DENIED);
-        Document document = documentAction.getById(dto.getId()).setName(dto.getName());
-        return configure(document);
+        return configure(documentAction.update(dto));
     }
 
     /**
@@ -136,8 +116,9 @@ public class DocumentController {
                                  HttpServletResponse servletResponse) {
         int userId = RequestContext.getUserId();
         LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(id, userId), APIErrors.OBJECT_NOT_FOUND);
-        byte[] file = documentAction.getById(id).getFile();
-        InputStream inputStream = new ByteArrayInputStream(file);
+        Document document = documentAction.getById(id);
+        servletResponse.setContentType(ValidatorUtil.ifValidStringOrElse(document.getContentType(), MediaType.APPLICATION_PDF_VALUE));
+        InputStream inputStream = new ByteArrayInputStream(document.getFile());
         try {
             IOUtils.copy(inputStream, servletResponse.getOutputStream());
         } catch (IOException e) {

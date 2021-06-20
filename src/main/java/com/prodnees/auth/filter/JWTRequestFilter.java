@@ -5,7 +5,7 @@ import com.prodnees.auth.dao.BlockedJwtDao;
 import com.prodnees.auth.jwt.JwtService;
 import com.prodnees.auth.service.LoginUserDetailsService;
 import com.prodnees.config.constants.APIErrors;
-import com.prodnees.service.user.UserService;
+import com.prodnees.auth.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

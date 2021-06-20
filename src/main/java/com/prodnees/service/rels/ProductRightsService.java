@@ -18,4 +18,6 @@ public interface ProductRightsService {
     List<ProductRight> getAllByProductId(int productId);
 
     void deleteByProductIdAndUserId(int productId, int userId);
+
+    boolean hasProductEditorRight(int productId, int userId);
 }

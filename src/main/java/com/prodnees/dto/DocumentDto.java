@@ -7,7 +7,7 @@ public class DocumentDto {
     @Positive(message = "id must be a positive number")
     private int id;
     @NotBlank(message = "name cannot be null or blank")
-    private String name;
+    private String description;
 
     public int getId() {
         return id;
@@ -18,12 +18,12 @@ public class DocumentDto {
         return this;
     }
 
-    public String getName() {
-        return name;
+    public String getDescription() {
+        return description;
     }
 
-    public DocumentDto setName(String name) {
-        this.name = name;
+    public DocumentDto setDescription(String description) {
+        this.description = description;
         return this;
     }
 }

@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface ProductRightsDao extends JpaRepository<ProductRight, Integer> {
 
-    Optional<ProductRight> findByProductIdAndUserId(int productId, int ownerId);
+    Optional<ProductRight> findByProductIdAndUserId(int productId, int userId);
 
     List<ProductRight> getAllByUserId(int ownerId);
 

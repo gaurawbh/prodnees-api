@@ -1,10 +1,10 @@
-package com.prodnees.auth.service.impl;
+package com.prodnees.auth.action.impl;
 
 import com.prodnees.auth.dao.TempPasswordInfoDao;
 import com.prodnees.auth.domain.TempPasswordInfo;
 import com.prodnees.auth.domain.User;
 import com.prodnees.auth.domain.UserRole;
-import com.prodnees.auth.service.UserAction;
+import com.prodnees.auth.action.UserAction;
 import com.prodnees.auth.util.OtpUtil;
 import com.prodnees.domain.rels.Associates;
 import com.prodnees.domain.user.UserAttributes;
@@ -15,7 +15,7 @@ import com.prodnees.service.email.EmailPlaceHolders;
 import com.prodnees.service.email.LocalEmailService;
 import com.prodnees.service.rels.AssociatesService;
 import com.prodnees.service.user.UserAttributesService;
-import com.prodnees.service.user.UserService;
+import com.prodnees.auth.service.UserService;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

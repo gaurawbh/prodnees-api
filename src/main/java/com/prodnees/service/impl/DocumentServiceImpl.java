@@ -1,5 +1,6 @@
 package com.prodnees.service.impl;
 
+import com.prodnees.auth.config.tenancy.CurrentTenantResolver;
 import com.prodnees.dao.DocumentDao;
 import com.prodnees.domain.Document;
 import com.prodnees.service.DocumentService;
@@ -41,5 +42,10 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public void deleteById(int id) {
         documentDao.deleteById(id);
+    }
+
+    @Override
+    public int getNextId() {
+        return documentDao.getNextId(CurrentTenantResolver.getTenant(), "document", "id");
     }
 }

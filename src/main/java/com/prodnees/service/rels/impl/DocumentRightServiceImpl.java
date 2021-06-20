@@ -1,6 +1,7 @@
 package com.prodnees.service.rels.impl;
 
 import com.prodnees.dao.rels.DocumentRightDao;
+import com.prodnees.domain.enums.ObjectRight;
 import com.prodnees.domain.rels.DocumentRight;
 import com.prodnees.service.rels.DocumentRightService;
 import org.springframework.stereotype.Service;
@@ -40,5 +41,12 @@ public class DocumentRightServiceImpl implements DocumentRightService {
     @Override
     public List<DocumentRight> getAllByUserId(int userId) {
         return documentRightDao.getAllByUserId(userId);
+    }
+
+
+    @Override
+    public boolean hasEditRights(DocumentRight documentRight) {
+        return documentRight.getDocumentRightsType() == ObjectRight.OWNER
+                || documentRight.getDocumentRightsType() == ObjectRight.EDITOR;
     }
 }

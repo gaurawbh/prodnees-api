@@ -1,8 +1,8 @@
 package com.prodnees.auth.controller;
 
-import com.prodnees.auth.service.AuthAction;
+import com.prodnees.auth.action.AuthAction;
 import com.prodnees.auth.service.SignupService;
-import com.prodnees.auth.service.UserAction;
+import com.prodnees.auth.action.UserAction;
 import com.prodnees.dto.user.SignupDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;

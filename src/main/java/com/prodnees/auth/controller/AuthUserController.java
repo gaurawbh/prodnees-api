@@ -8,7 +8,7 @@ import com.prodnees.auth.domain.User;
 import com.prodnees.auth.dto.SecPasswordDto;
 import com.prodnees.auth.dto.TempPasswordDto;
 import com.prodnees.auth.filter.RequestContext;
-import com.prodnees.auth.service.UserAction;
+import com.prodnees.auth.action.UserAction;
 import com.prodnees.domain.user.UserAttributes;
 import com.prodnees.model.user.UserModel;
 import org.springframework.http.ResponseEntity;
