@@ -13,7 +13,7 @@ import com.prodnees.service.email.EmailPlaceHolders;
 import com.prodnees.service.email.LocalEmailService;
 import com.prodnees.service.rels.BatchRightService;
 import com.prodnees.service.user.UserAttributesService;
-import com.prodnees.service.user.UserService;
+import com.prodnees.auth.service.UserService;
 import com.prodnees.web.exception.NeesNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

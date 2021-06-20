@@ -1,4 +1,4 @@
-package com.prodnees.auth.service;
+package com.prodnees.auth.action;
 
 import com.prodnees.auth.domain.User;
 import com.prodnees.dto.user.SignupDto;

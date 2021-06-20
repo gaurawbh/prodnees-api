@@ -1,9 +1,9 @@
 package com.prodnees.controller;
 
 import com.prodnees.action.rel.ProductRightAction;
+import com.prodnees.auth.action.UserAction;
 import com.prodnees.auth.controller.SignupController;
 import com.prodnees.auth.filter.RequestContext;
-import com.prodnees.auth.service.UserAction;
 import com.prodnees.config.constants.APIErrors;
 import com.prodnees.domain.batch.Product;
 import com.prodnees.domain.enums.ObjectRight;
@@ -12,33 +12,18 @@ import com.prodnees.dto.ProductDto;
 import com.prodnees.dto.ProductRightDto;
 import com.prodnees.service.batch.ProductService;
 import com.prodnees.service.rels.AssociatesService;
-import com.prodnees.util.MapperUtil;
-import com.prodnees.util.ValidatorUtil;
-import com.prodnees.web.exception.NeesNotFoundException;
-import com.prodnees.web.response.LocalResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-import static com.prodnees.config.constants.APIErrors.ACCESS_DENIED;
-import static com.prodnees.config.constants.APIErrors.EMAIL_NOT_FOUND;
-import static com.prodnees.config.constants.APIErrors.OBJECT_NOT_FOUND;
-import static com.prodnees.config.constants.APIErrors.UPDATE_DENIED;
+import static com.prodnees.config.constants.APIErrors.*;
 import static com.prodnees.web.response.LocalResponse.configure;
 
 
@@ -64,52 +49,53 @@ public class ProductController {
 
     @PostMapping("/product")
     public ResponseEntity<?> save(@Validated @RequestBody ProductDto dto) {
-        int ownerId = RequestContext.getUserId();
-        Product product = MapperUtil.getDozer().map(dto, Product.class);
-        product = productService.save(product);
-        productRightAction.save(new ProductRight()
-                .setUserId(ownerId)
-                .setProductId(product.getId())
-                .setObjectRightsType(ObjectRight.OWNER));
-        return configure(product);
+        return configure(productService.addNew(dto));
     }
 
+    /**
+     * if id is not provided, check the {@link ProductRight} return the {@link Product} the user has right to
+     *
+     * @param id
+     * @return
+     */
     @GetMapping("/products")
     public ResponseEntity<?> get(@RequestParam Optional<Integer> id) {
         int userId = RequestContext.getUserId();
         AtomicReference<Object> atomicReference = new AtomicReference<>();
-        id.ifPresentOrElse(integer -> {
-            Assert.isTrue(productRightAction.findByProductIdAndUserId(integer, userId).isPresent(), OBJECT_NOT_FOUND.getMessage());
-            atomicReference.set(productService.getById(integer));
-        }, () -> {
+        if (id.isPresent()) {
+            Assert.isTrue(productRightAction.existsByProductIdAndUserId(id.get(), userId), OBJECT_NOT_FOUND.getMessage());
+            return configure(productService.getById(id.get()));
+        } else {
             Iterable<Integer> productIdIterable = productRightAction.getAllByUserId(userId).stream().map(ProductRight::getProductId).collect(Collectors.toList());
-            atomicReference.set(productService.getAllByIds(productIdIterable));
-        });
-
-        return LocalResponse.configure(atomicReference.get());
+            return configure(productService.getAllByIds(productIdIterable));
+        }
     }
 
-
+    /**
+     * User has to be {@link ObjectRight#OWNER} or {@link ObjectRight#EDITOR} to update a {@link Product}
+     * @param dto
+     * @return
+     */
     @PutMapping("/product")
     public ResponseEntity<?> update(@Validated @RequestBody ProductDto dto) {
         int userId = RequestContext.getUserId();
-        ProductRight productRights = productRightAction.findByProductIdAndUserId(dto.getId(), userId)
-                .orElseThrow(NeesNotFoundException::new);
-        Assert.isTrue(productRights.getObjectRightsType().equals(ObjectRight.OWNER), UPDATE_DENIED.getMessage());
-        Product product = productService.getById(dto.getId());
-        product.setName(dto.getName())
-                .setDescription(ValidatorUtil.ifValidStringOrElse(dto.getDescription(), product.getDescription()));
-        return configure(productService.save(product));
+        Assert.isTrue(productRightAction.hasProductEditorRight(dto.getId(), userId), UPDATE_DENIED.getMessage());
+        return configure(productService.update(dto));
     }
+
+    /**
+     * Only {@link ObjectRight#OWNER} can delete a {@link Product}
+     * @param id
+     * @return
+     */
 
     @DeleteMapping("/product")
     public ResponseEntity<?> delete(@RequestParam int id) {
         int userId = RequestContext.getUserId();
-        ProductRight productRights = productRightAction.findByProductIdAndUserId(id, userId)
-                .orElseThrow(NeesNotFoundException::new);
+        ProductRight productRights = productRightAction.getByProductIdAndUserId(id, userId);
         Assert.isTrue(productRights.getObjectRightsType().equals(ObjectRight.OWNER), ACCESS_DENIED.getMessage());
         productService.deleteById(productRights.getProductId());
-        return configure("successfully deleted product");
+        return configure("successfully deleted product with id: " + id);
     }
 
     /**

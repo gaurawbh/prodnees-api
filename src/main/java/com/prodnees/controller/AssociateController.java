@@ -3,7 +3,7 @@ package com.prodnees.controller;
 import com.prodnees.action.rel.AssociateInvitationAction;
 import com.prodnees.auth.domain.User;
 import com.prodnees.auth.filter.RequestContext;
-import com.prodnees.auth.service.UserAction;
+import com.prodnees.auth.action.UserAction;
 import com.prodnees.config.constants.APIErrors;
 import com.prodnees.domain.enums.InvitationAction;
 import com.prodnees.domain.rels.AssociateInvitation;

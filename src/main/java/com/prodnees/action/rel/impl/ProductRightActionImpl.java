@@ -13,7 +13,8 @@ import com.prodnees.service.email.EmailPlaceHolders;
 import com.prodnees.service.email.LocalEmailService;
 import com.prodnees.service.rels.ProductRightsService;
 import com.prodnees.service.user.UserAttributesService;
-import com.prodnees.service.user.UserService;
+import com.prodnees.auth.service.UserService;
+import com.prodnees.web.exception.NeesNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -27,12 +28,13 @@ import java.util.Optional;
 
 @Service
 public class ProductRightActionImpl implements ProductRightAction {
+    Logger localLogger = LoggerFactory.getLogger(this.getClass());
+
     private final ProductRightsService productRightsService;
     private final LocalEmailService localEmailService;
     private final UserService userService;
     private final UserAttributesService userAttributesService;
     private final ProductService productService;
-    Logger localLogger = LoggerFactory.getLogger(this.getClass());
 
     public ProductRightActionImpl(ProductRightsService productRightsService,
                                   LocalEmailService localEmailService,
@@ -69,6 +71,12 @@ public class ProductRightActionImpl implements ProductRightAction {
     @Override
     public Optional<ProductRight> findByProductIdAndUserId(int productId, int userId) {
         return productRightsService.findByProductIdAndUserId(productId, userId);
+    }
+
+    @Override
+    public ProductRight getByProductIdAndUserId(int productId, int userId) {
+        return productRightsService.findByProductIdAndUserId(productId, userId)
+                .orElseThrow(()-> new NeesNotFoundException(String.format("ProductRight with productId: %d and userId: %d not found", productId, userId)));
     }
 
     @Override
@@ -109,6 +117,11 @@ public class ProductRightActionImpl implements ProductRightAction {
             return false;
         }
 
+    }
+
+    @Override
+    public boolean hasProductEditorRight(int productId, int userId) {
+            return productRightsService.hasProductEditorRight(productId, userId);
     }
 
     @Override

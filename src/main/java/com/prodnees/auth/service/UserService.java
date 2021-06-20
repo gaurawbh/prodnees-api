@@ -1,4 +1,4 @@
-package com.prodnees.service.user;
+package com.prodnees.auth.service;
 
 import com.prodnees.auth.domain.User;
 

@@ -2,7 +2,10 @@ package com.prodnees.action.stage.impl;
 
 import com.prodnees.action.stage.StageTodoAction;
 import com.prodnees.domain.stage.StageTodo;
+import com.prodnees.dto.stage.StageTodoDto;
 import com.prodnees.service.stage.StageTodoService;
+import com.prodnees.util.MapperUtil;
+import com.prodnees.web.exception.NeesNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,8 +30,18 @@ public class StageTodoActionImpl implements StageTodoAction {
     }
 
     @Override
+    public StageTodo addNew(StageTodoDto dto, int batchId) {
+        StageTodo stageTodo = MapperUtil.getDozer().map(dto, StageTodo.class)
+                .setBatchId(batchId)
+                .setComplete(false);
+        return save(stageTodo);
+
+    }
+
+    @Override
     public StageTodo getById(int id) {
-        return stageTodoService.getById(id);
+        return stageTodoService.findById(id)
+                .orElseThrow(()->new NeesNotFoundException(String.format("Stage Todo with id: %d not found", id)));
     }
 
     @Override

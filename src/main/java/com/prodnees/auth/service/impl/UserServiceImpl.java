@@ -1,8 +1,8 @@
-package com.prodnees.service.user.impl;
+package com.prodnees.auth.service.impl;
 
 import com.prodnees.auth.dao.UserDao;
 import com.prodnees.auth.domain.User;
-import com.prodnees.service.user.UserService;
+import com.prodnees.auth.service.UserService;
 import org.springframework.stereotype.Service;
 
 @Service

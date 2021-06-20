@@ -19,6 +19,7 @@ import com.prodnees.service.rels.StageApprovalDocumentService;
 import com.prodnees.service.stage.StageService;
 import com.prodnees.service.stage.StageTodoService;
 import com.prodnees.util.ValidatorUtil;
+import com.prodnees.web.exception.NeesNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
@@ -111,7 +112,7 @@ public class StageActionImpl implements StageAction {
 
     @Override
     public Stage getById(int id) {
-        return stageService.getById(id);
+        return stageService.findById(id).orElseThrow(()-> new NeesNotFoundException(String.format("Stage with id: %d not found", id)));
     }
 
     @Override
