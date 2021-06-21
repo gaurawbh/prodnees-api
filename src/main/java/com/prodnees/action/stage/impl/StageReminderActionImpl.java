@@ -1,11 +1,15 @@
 package com.prodnees.action.stage.impl;
 
 import com.prodnees.action.stage.StageReminderAction;
+import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.domain.enums.StageState;
 import com.prodnees.domain.stage.StageReminder;
+import com.prodnees.dto.stage.StageReminderDto;
 import com.prodnees.service.email.EmailPlaceHolders;
 import com.prodnees.service.email.LocalEmailService;
 import com.prodnees.service.stage.StageReminderService;
+import com.prodnees.util.MapperUtil;
+import com.prodnees.web.exception.NeesNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -38,6 +42,23 @@ public class StageReminderActionImpl implements StageReminderAction {
     @Override
     public StageReminder save(StageReminder stageReminder) {
         return stageReminderService.save(stageReminder);
+    }
+
+    @Override
+    public StageReminder addNew(StageReminderDto dto) {
+        String sender = RequestContext.getUsername();
+
+        StageReminder stageReminder = MapperUtil.getDozer().map(dto, StageReminder.class);
+        stageReminder.setRecipients(String.join(", ", dto.getRecipientEmails()))
+                .setSender(sender)
+                .setSent(false);
+        return stageReminderService.save(stageReminder);
+    }
+
+    @Override
+    public StageReminder getById(int id) {
+        return stageReminderService.findById(id)
+                .orElseThrow(() -> new NeesNotFoundException(String.format("Stage Reminder with id: %d not found", id)));
     }
 
     @Override

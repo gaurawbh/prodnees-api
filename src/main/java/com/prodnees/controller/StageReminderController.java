@@ -5,11 +5,10 @@ import com.prodnees.action.stage.StageReminderAction;
 import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.config.constants.APIErrors;
 import com.prodnees.domain.enums.StageState;
+import com.prodnees.domain.stage.Stage;
 import com.prodnees.domain.stage.StageReminder;
 import com.prodnees.dto.stage.StageReminderDto;
 import com.prodnees.util.LocalAssert;
-import com.prodnees.util.MapperUtil;
-import com.prodnees.web.exception.NeesNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -41,35 +40,44 @@ public class StageReminderController {
         this.stageAction = stageAction;
     }
 
+    /**
+     * {@link StageReminder} can be added to a {@link Stage} in {@link StageState#IN_PROGRESS} or in {@link StageState#COMPLETE}
+     * <i>Meaning, when to send this reminder? When the {@link StageState} moves to {@link StageState#IN_PROGRESS} or when it's marked as {@link StageState#COMPLETE} ? </i>
+     * <p>{@link StageReminder} cannot be added to a {@link Stage} that is already marked as {@link StageState#COMPLETE}</p>
+     *
+     * @param reminderDto
+     * @return
+     */
     @PostMapping("/stage-reminder")
-    public ResponseEntity<?> save(@Validated @RequestBody StageReminderDto dto) {
+    public ResponseEntity<?> save(@Validated @RequestBody StageReminderDto reminderDto) {
         int editorId = RequestContext.getUserId();
-        String sender = RequestContext.getUsername();
-        LocalAssert.isTrue(stageAction.hasStageEditorRights(dto.getStageId(), editorId),
-                String.format("stage with id: %d not found or you do not have editor right to the batch the stage belongs to.", dto.getStageId()));
+        LocalAssert.isTrue(stageAction.hasStageEditorRights(reminderDto.getStageId(), editorId),
+                String.format("stage with id: %d not found or you do not have editor right to the batch the stage belongs to.", reminderDto.getStageId()));
 
-        LocalAssert.isTrue(dto.getStageState().equals(StageState.IN_PROGRESS) || dto.getStageState().equals(StageState.COMPLETE),
+        LocalAssert.isTrue(reminderDto.getStageState().equals(StageState.IN_PROGRESS) || reminderDto.getStageState().equals(StageState.COMPLETE),
                 String.format("stage reminder can only be set for stage's state %s or %s", StageState.IN_PROGRESS.name(), StageState.COMPLETE.name()));
-        for (String email : dto.getRecipientEmails()) {
+
+        Stage stage = stageAction.getById(reminderDto.getStageId());
+        LocalAssert.isFalse(stage.getState().equals(StageState.COMPLETE),
+                String.format("Stage with id: %d is already marked as complete. You cannot add reminders to a Stage marked as complete", reminderDto.getStageId()));
+        if (reminderDto.getStageState().equals(StageState.IN_PROGRESS)) {
+            LocalAssert.isTrue(stage.getState().equals(StageState.OPEN), String.format("Stage with id: %d is already %s", reminderDto.getStageId(), stage.getState()));
+        }
+        for (String email : reminderDto.getRecipientEmails()) {
             LocalAssert.isTrue(RequestContext.isValidEmail(email), String.format("Invalid email format for %s", email));
         }
-        StageReminder stageReminder = MapperUtil.getDozer().map(dto, StageReminder.class);
-        stageReminder.setRecipients(String.join(", ", dto.getRecipientEmails()))
-                .setSender(sender)
-                .setSent(false);
-        return configure(stageReminderAction.save(stageReminder));
+
+        return configure(stageReminderAction.addNew(reminderDto));
     }
 
-    //todo for batchId
     @GetMapping("/stage-reminders")
     public ResponseEntity<?> get(@RequestParam Optional<Integer> id,
-                                 @RequestParam Optional<Integer> stageId,
-                                 @RequestParam Optional<Integer> batchId) {
+                                 @RequestParam Optional<Integer> stageId) {
         int userId = RequestContext.getUserId();
         String userEmail = RequestContext.getUsername();
 
         if (id.isPresent()) {
-            StageReminder stageReminder = stageReminderAction.findById(id.get()).orElseThrow(NeesNotFoundException::new);
+            StageReminder stageReminder = stageReminderAction.getById(id.get());
             LocalAssert.isTrue(stageAction.hasStageReaderRights(stageReminder.getStageId(), userId), APIErrors.OBJECT_NOT_FOUND);
             return configure(stageReminder);
         } else if (stageId.isPresent()) {
@@ -89,12 +97,12 @@ public class StageReminderController {
     @DeleteMapping("/stage-reminder")
     public ResponseEntity<?> delete(@RequestParam int id) {
         int userId = RequestContext.getUserId();
-        StageReminder stageReminder = stageReminderAction.findById(id).orElseThrow(NeesNotFoundException::new);
+        StageReminder stageReminder = stageReminderAction.getById(id);
         LocalAssert.isTrue(stageAction.hasStageEditorRights(stageReminder.getStageId(), userId),
                 String.format("you do not have enough rights to the stage with id: %d the stage reminder belongs to", stageReminder.getStageId()));
         LocalAssert.isFalse(stageReminder.isSent(), "stage reminder is already sent and cannot be deleted");
         stageReminderAction.deleteById(id);
-        return configure("successfully deleted stage reminder");
+        return configure("successfully deleted stage reminder with id: " + id);
     }
 
 

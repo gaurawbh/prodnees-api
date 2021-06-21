@@ -6,13 +6,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+/**
+ * Gives option on what {@link StageState} to send this reminder to the recipients
+ */
+
 @Entity
 public class StageReminder {
     @Id
     @GeneratedValue
     private int id;
     private int stageId;
-    private StageState stageState; // on what state status, should this reminder be sent out
+    private StageState stageState; // on what Stage state, should this reminder be sent out
     private String recipients; // comma separated emails
     private String message;
     private String sender;
