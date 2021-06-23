@@ -21,8 +21,8 @@ public class BatchRight implements Serializable {
         return batchId;
     }
 
-    public BatchRight setBatchId(int batchProductId) {
-        this.batchId = batchProductId;
+    public BatchRight setBatchId(int batchId) {
+        this.batchId = batchId;
         return this;
     }
 

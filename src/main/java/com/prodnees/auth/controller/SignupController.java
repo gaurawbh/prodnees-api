@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +21,7 @@ import static com.prodnees.core.web.response.LocalResponse.configure;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/auth")
 public class SignupController {
     private final UserAction userAction;
     private final AuthAction authAction;
@@ -37,13 +39,13 @@ public class SignupController {
         return userAction.existsByEmail(email);
     }
 
-    @PostMapping("/user/signup")
+    @PostMapping("/signup")
     @Transactional
     public ResponseEntity<?> signup(@Validated @RequestBody SignupDto dto) {
         return configure(signupService.signup(dto));
     }
 
-    @PostMapping("/user/forgot-password")
+    @PostMapping("/forgot-password")
     public ResponseEntity<?> save(@RequestParam String email) {
         Assert.isTrue(userAction.existsByEmail(email), USER_NOT_FOUND.getMessage());
         authAction.processForgotPassword(email);

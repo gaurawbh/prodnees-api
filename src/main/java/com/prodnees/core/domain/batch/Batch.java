@@ -23,6 +23,7 @@ public class Batch {
     private BatchState state;
     @JsonFormat(pattern = FormatUtil.DATE)
     private LocalDate createdDate;
+    private LocalDate startDate;
 
     public int getId() {
         return id;
@@ -75,6 +76,15 @@ public class Batch {
 
     public Batch setCreatedDate(LocalDate createDate) {
         this.createdDate = createDate;
+        return this;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public Batch setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
         return this;
     }
 }

@@ -39,8 +39,8 @@ public class Stage {
         return batchId;
     }
 
-    public Stage setBatchId(int batchProductId) {
-        this.batchId = batchProductId;
+    public Stage setBatchId(int batchId) {
+        this.batchId = batchId;
         return this;
     }
 

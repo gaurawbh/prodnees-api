@@ -6,7 +6,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Positive;
 
 public class BatchApprovalDocumentDto {
-    @Positive(message = "batchProductId must be a positive number")
+    @Positive(message = "batchId must be a positive number")
     private int batchId;
     @Positive(message = "documentId must be a positive number")
     private int documentId;

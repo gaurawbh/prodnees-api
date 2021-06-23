@@ -10,6 +10,9 @@ public interface BatchRightService {
 
     Optional<BatchRight> findByBatchIdAndUserId(int batchId, int ownerId);
 
+
+    BatchRight getByBatchIdAndUserId(int batchId, int ownerId);
+
     List<BatchRight> getAllByBatchId(int batchId);
 
     List<BatchRight> getAllByUserId(int userId);

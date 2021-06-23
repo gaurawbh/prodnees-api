@@ -28,8 +28,8 @@ public class StageTodo {
         return batchId;
     }
 
-    public StageTodo setBatchId(int batchProductId) {
-        this.batchId = batchProductId;
+    public StageTodo setBatchId(int batchId) {
+        this.batchId = batchId;
         return this;
     }
 

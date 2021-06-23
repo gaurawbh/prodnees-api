@@ -4,6 +4,7 @@ import com.prodnees.core.dao.rels.BatchRightsDao;
 import com.prodnees.core.domain.enums.ObjectRight;
 import com.prodnees.core.domain.rels.BatchRight;
 import com.prodnees.core.service.rels.BatchRightService;
+import com.prodnees.core.web.exception.NeesNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,13 +24,19 @@ public class BatchRightServiceImpl implements BatchRightService {
     }
 
     @Override
-    public Optional<BatchRight> findByBatchIdAndUserId(int batchProductId, int ownerId) {
-        return batchRightsDao.findByBatchIdAndUserId(batchProductId, ownerId);
+    public Optional<BatchRight> findByBatchIdAndUserId(int batchId, int ownerId) {
+        return batchRightsDao.findByBatchIdAndUserId(batchId, ownerId);
     }
 
     @Override
-    public List<BatchRight> getAllByBatchId(int batchProductId) {
-        return batchRightsDao.getAllByBatchId(batchProductId);
+    public BatchRight getByBatchIdAndUserId(int batchId, int ownerId) {
+        return findByBatchIdAndUserId(batchId, ownerId)
+                .orElseThrow(()-> new NeesNotFoundException(String.format("BatchRight for userId: %d and batchId: %d not found", ownerId, batchId)));
+    }
+
+    @Override
+    public List<BatchRight> getAllByBatchId(int batchId) {
+        return batchRightsDao.getAllByBatchId(batchId);
     }
 
     @Override
@@ -55,17 +62,17 @@ public class BatchRightServiceImpl implements BatchRightService {
      * Check if a user has reader rights to a batch product.
      * <p>Owners, editors, and reader have edit rights</p>
      *
-     * @param batchProductId
+     * @param batchId
      * @param readerId,      @alias userId
      * @return
      */
     @Override
-    public boolean hasBatchReaderRights(int batchProductId, int readerId) {
-        return batchRightsDao.existsByBatchIdAndUserId(batchProductId, readerId);
+    public boolean hasBatchReaderRights(int batchId, int readerId) {
+        return batchRightsDao.existsByBatchIdAndUserId(batchId, readerId);
     }
 
     @Override
-    public void deleteByBatchIdAndUserId(int batchProductId, int userId) {
-        batchRightsDao.deleteByBatchIdAndUserId(batchProductId, userId);
+    public void deleteByBatchIdAndUserId(int batchId, int userId) {
+        batchRightsDao.deleteByBatchIdAndUserId(batchId, userId);
     }
 }

@@ -34,57 +34,12 @@ public class BatchModel {
         return this;
     }
 
-    public StageApprovalDocumentModel getStateApprovalDocumentModel() {
-        return stageApprovalDocument;
-    }
-
-    public BatchModel setStateApprovalDocumentModel(StageApprovalDocumentModel stageApprovalDocumentModel) {
-        this.stageApprovalDocument = stageApprovalDocumentModel;
-        return this;
-    }
-
-    public ObjectRight getRightType() {
-        return rightType;
-    }
-
-    public BatchModel setRightType(ObjectRight rightType) {
-        this.rightType = rightType;
-        return this;
-    }
-
     public Product getProduct() {
         return product;
     }
 
     public BatchModel setProduct(Product product) {
         this.product = product;
-        return this;
-    }
-
-    public List<StageModel> getStageList() {
-        return stageList;
-    }
-
-    public BatchModel setStageList(List<StageModel> stageList) {
-        this.stageList = stageList;
-        return this;
-    }
-
-    public List<StageModel> getStateModelList() {
-        return stageList;
-    }
-
-    public BatchModel setStateModelList(List<StageModel> stageModelList) {
-        this.stageList = stageModelList;
-        return this;
-    }
-
-    public StageApprovalDocumentModel getStageApprovalDocument() {
-        return stageApprovalDocument;
-    }
-
-    public BatchModel setStageApprovalDocument(StageApprovalDocumentModel stageApprovalDocument) {
-        this.stageApprovalDocument = stageApprovalDocument;
         return this;
     }
 
@@ -106,12 +61,39 @@ public class BatchModel {
         return this;
     }
 
+    public List<StageModel> getStageList() {
+        return stageList;
+    }
+
+    public BatchModel setStageList(List<StageModel> stageList) {
+        this.stageList = stageList;
+        return this;
+    }
+
+    public StageApprovalDocumentModel getStageApprovalDocument() {
+        return stageApprovalDocument;
+    }
+
+    public BatchModel setStageApprovalDocument(StageApprovalDocumentModel stageApprovalDocument) {
+        this.stageApprovalDocument = stageApprovalDocument;
+        return this;
+    }
+
     public BatchState getStatus() {
         return status;
     }
 
     public BatchModel setStatus(BatchState status) {
         this.status = status;
+        return this;
+    }
+
+    public ObjectRight getRightType() {
+        return rightType;
+    }
+
+    public BatchModel setRightType(ObjectRight rightType) {
+        this.rightType = rightType;
         return this;
     }
 
@@ -123,6 +105,4 @@ public class BatchModel {
         this.createdDate = createdDate;
         return this;
     }
-
-
 }

@@ -19,8 +19,8 @@ public class StageServiceImpl implements StageService {
     }
 
     @Override
-    public boolean existsByBatchId(int batchProductId) {
-        return stageDao.existsByBatchId(batchProductId);
+    public boolean existsByBatchId(int batchId) {
+        return stageDao.existsByBatchId(batchId);
     }
 
     @Override
@@ -39,13 +39,13 @@ public class StageServiceImpl implements StageService {
     }
 
     @Override
-    public List<Stage> getAllByBatchId(int batchProductId) {
-        return stageDao.getAllByBatchId(batchProductId);
+    public List<Stage> getAllByBatchId(int batchId) {
+        return stageDao.getAllByBatchId(batchId);
     }
 
     @Override
-    public List<Stage> getAllByBatchIdAndState(int batchProductId, StageState state) {
-        return stageDao.getAllByBatchIdAndState(batchProductId, state);
+    public List<Stage> getAllByBatchIdAndState(int batchId, StageState state) {
+        return stageDao.getAllByBatchIdAndState(batchId, state);
     }
 
     @Override

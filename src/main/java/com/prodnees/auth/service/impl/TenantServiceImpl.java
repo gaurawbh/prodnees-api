@@ -6,7 +6,7 @@
 
 package com.prodnees.auth.service.impl;
 
-import com.prodnees.auth.config.HibernateConfig1;
+import com.prodnees.auth.config.SessionFactoryConfig;
 import com.prodnees.auth.domain.ApplicationRight;
 import com.prodnees.auth.domain.User;
 import com.prodnees.auth.domain.UserRole;
@@ -33,12 +33,12 @@ public class TenantServiceImpl implements TenantService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final DataSource dataSource;
-    private final HibernateConfig1 hibernateConfig1;
+    private final SessionFactoryConfig sessionFactoryConfig;
 
     public TenantServiceImpl(DataSource dataSource,
-                             HibernateConfig1 hibernateConfig1) {
+                             SessionFactoryConfig sessionFactoryConfig) {
         this.dataSource = dataSource;
-        this.hibernateConfig1 = hibernateConfig1;
+        this.sessionFactoryConfig = sessionFactoryConfig;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class TenantServiceImpl implements TenantService {
         if (re.migrationsExecuted > 0) {
             logger.info("Schema {} was successfully created", schema);
         }
-        Session session = hibernateConfig1.getCurrentSession(schema).openSession();
+        Session session = sessionFactoryConfig.getCurrentSession(schema).openSession();
 
         Transaction tx = session.beginTransaction();
 

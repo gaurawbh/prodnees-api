@@ -4,8 +4,6 @@ import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.core.action.BatchAction;
 import com.prodnees.core.action.rel.BatchRightAction;
 import com.prodnees.core.action.rel.DocumentRightAction;
-import com.prodnees.core.action.stage.StageAction;
-import com.prodnees.core.action.stage.StageTodoAction;
 import com.prodnees.core.config.constants.APIErrors;
 import com.prodnees.core.domain.batch.Batch;
 import com.prodnees.core.domain.batch.BatchApprovalDocument;
@@ -36,7 +34,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -52,29 +49,23 @@ import static com.prodnees.core.config.constants.APIErrors.UPDATE_DENIED;
 import static com.prodnees.core.web.response.LocalResponse.configure;
 
 @RestController
-@RequestMapping("/secure/")
+//@RequestMapping("/secure/")
 @CrossOrigin
 @Transactional
 public class BatchController {
     private final BatchAction batchAction;
     private final BatchRightAction batchRightAction;
-    private final StageAction stageAction;
-    private final StageTodoAction stageTodoAction;
     private final AssociatesService associatesService;
     private final DocumentRightAction documentRightAction;
     private final BatchProductApprovalDocumentService batchProductApprovalDocumentService;
 
     public BatchController(BatchAction batchAction,
                            BatchRightAction batchRightAction,
-                           StageAction stageAction,
-                           StageTodoAction stageTodoAction,
                            AssociatesService associatesService,
                            DocumentRightAction documentRightAction,
                            BatchProductApprovalDocumentService batchProductApprovalDocumentService) {
         this.batchAction = batchAction;
         this.batchRightAction = batchRightAction;
-        this.stageAction = stageAction;
-        this.stageTodoAction = stageTodoAction;
         this.associatesService = associatesService;
         this.documentRightAction = documentRightAction;
         this.batchProductApprovalDocumentService = batchProductApprovalDocumentService;
@@ -225,7 +216,7 @@ public class BatchController {
 
     /**
      * if rightOf path is product,
-     * <i>return {@link java.util.List} of {@link BatchRight} by batchProductId</i>
+     * <i>return {@link java.util.List} of {@link BatchRight} by batchId</i>
      * <p>if rightOf path is user,</p>
      * <i>return {@link java.util.List} of {@link BatchRight} by userId</i>
      *

@@ -17,7 +17,6 @@ import com.prodnees.core.model.stage.StageModel;
 import com.prodnees.core.service.rels.BatchRightService;
 import com.prodnees.core.util.LocalAssert;
 import com.prodnees.core.util.ValidatorUtil;
-import com.prodnees.core.web.exception.NeesNotFoundException;
 import com.prodnees.core.web.response.LocalResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +27,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,7 +35,7 @@ import java.util.List;
 import static com.prodnees.core.web.response.LocalResponse.configure;
 
 @RestController
-@RequestMapping("/secure")
+//@RequestMapping("/secure")
 @CrossOrigin
 @Transactional
 public class StageController {
@@ -98,7 +96,7 @@ public class StageController {
      * @return
      */
     @GetMapping("/stages/batch")
-    public ResponseEntity<?> getAllByBatchProductId(@RequestParam int batchId) {
+    public ResponseEntity<?> getAllByBatchId(@RequestParam int batchId) {
         int userId = RequestContext.getUserId();
         LocalAssert.isTrue(batchRightService.hasBatchReaderRights(batchId, userId), APIErrors.BATCH_NOT_FOUND);
         return configure(stageAction.getAllByBatchId(batchId));
@@ -139,7 +137,7 @@ public class StageController {
     @PutMapping("/stage/start")
     public ResponseEntity<?> markStageStarted(@RequestParam int id) {
         int userId = RequestContext.getUserId();
-        Stage stage = stageAction.findById(id).orElseThrow(NeesNotFoundException::new);
+        Stage stage = stageAction.getById(id);
         LocalAssert.isTrue(stageAction.hasStageEditorRights(id, userId), APIErrors.BATCH_NOT_FOUND);
         stage.setState(StageState.IN_PROGRESS);
         List<StageReminder> stageReminderList = stageReminderAction.getAllByStageIdAndStageState(id, StageState.IN_PROGRESS);
@@ -157,8 +155,7 @@ public class StageController {
     @PutMapping("/stage/complete")
     public ResponseEntity<?> markStageComplete(@RequestParam int id) {
         int userId = RequestContext.getUserId();
-        Stage stage = stageAction.findById(id)
-                .orElseThrow(NeesNotFoundException::new);
+        Stage stage = stageAction.getById(id);
 
         LocalAssert.isTrue(stageAction.hasStageEditorRights(id, userId), APIErrors.BATCH_NOT_FOUND);
         List<StageTodo> stageTodoList = stageTodoAction.getAllByStageId(stage.getId());

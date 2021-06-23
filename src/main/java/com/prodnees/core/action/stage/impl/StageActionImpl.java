@@ -55,8 +55,8 @@ public class StageActionImpl implements StageAction {
     }
 
     @Override
-    public boolean existsByBatchId(int batchProductId) {
-        return stageService.existsByBatchId(batchProductId);
+    public boolean existsByBatchId(int batchId) {
+        return stageService.existsByBatchId(batchId);
     }
 
     @Override
@@ -125,16 +125,16 @@ public class StageActionImpl implements StageAction {
     }
 
     @Override
-    public List<StageModel> getAllByBatchId(int batchProductId) {
-        List<Stage> stageList = stageService.getAllByBatchId(batchProductId);
+    public List<StageModel> getAllByBatchId(int batchId) {
+        List<Stage> stageList = stageService.getAllByBatchId(batchId);
         List<StageModel> stageModelList = new ArrayList<>();
         stageList.forEach(state -> stageModelList.add(entityToModel(state)));
         return stageModelList;
     }
 
     @Override
-    public List<Stage> getAllByBatchIdAndState(int batchProductId, StageState state) {
-        return stageService.getAllByBatchIdAndState(batchProductId, state);
+    public List<Stage> getAllByBatchIdAndState(int batchId, StageState state) {
+        return stageService.getAllByBatchIdAndState(batchId, state);
     }
 
     @Override
