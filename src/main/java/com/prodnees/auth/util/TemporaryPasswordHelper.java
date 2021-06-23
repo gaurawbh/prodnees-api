@@ -8,8 +8,8 @@ package com.prodnees.auth.util;
 
 
 import com.prodnees.auth.service.SignupService;
-import com.prodnees.service.email.EmailPlaceHolders;
-import com.prodnees.service.email.LocalEmailService;
+import com.prodnees.core.service.email.EmailPlaceHolders;
+import com.prodnees.core.service.email.LocalEmailService;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;

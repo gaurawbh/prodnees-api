@@ -7,8 +7,8 @@
 package com.prodnees.auth.service;
 
 
-import com.prodnees.dto.user.SignupDto;
-import com.prodnees.model.user.UserModel;
+import com.prodnees.core.dto.user.SignupDto;
+import com.prodnees.core.model.user.UserModel;
 
 public interface SignupService {
 

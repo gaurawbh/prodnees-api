@@ -6,8 +6,8 @@
 
 package com.prodnees.auth.filter;
 
-import com.prodnees.util.JWTUtil;
-import com.prodnees.util.LocalAssert;
+import com.prodnees.core.util.JWTUtil;
+import com.prodnees.core.util.LocalAssert;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;

@@ -6,7 +6,7 @@
 
 package com.prodnees.auth.domain;
 
-import com.prodnees.config.constraints.CurrencyCode;
+import com.prodnees.core.config.constraints.CurrencyCode;
 import org.apache.tomcat.util.buf.StringUtils;
 
 import javax.persistence.Entity;

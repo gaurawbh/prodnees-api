@@ -1,9 +1,9 @@
 package com.prodnees.auth.controller;
 
 import com.prodnees.auth.action.AuthAction;
-import com.prodnees.auth.service.SignupService;
 import com.prodnees.auth.action.UserAction;
-import com.prodnees.dto.user.SignupDto;
+import com.prodnees.auth.service.SignupService;
+import com.prodnees.core.dto.user.SignupDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.prodnees.config.constants.APIErrors.USER_NOT_FOUND;
-import static com.prodnees.web.response.LocalResponse.configure;
+import static com.prodnees.core.config.constants.APIErrors.USER_NOT_FOUND;
+import static com.prodnees.core.web.response.LocalResponse.configure;
 
 @RestController
 @CrossOrigin

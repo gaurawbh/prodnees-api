@@ -1,17 +1,17 @@
 package com.prodnees.auth.controller;
 
+import com.prodnees.auth.action.AuthAction;
+import com.prodnees.auth.action.UserAction;
 import com.prodnees.auth.dao.ForgotPasswordInfoDao;
 import com.prodnees.auth.dao.TempPasswordInfoDao;
 import com.prodnees.auth.domain.User;
 import com.prodnees.auth.dto.AuthDto;
 import com.prodnees.auth.jwt.JwtService;
 import com.prodnees.auth.model.AuthResponse;
-import com.prodnees.auth.action.AuthAction;
 import com.prodnees.auth.service.LoginUserDetailsService;
-import com.prodnees.auth.action.UserAction;
-import com.prodnees.web.exception.NeesBadCredentialException;
-import com.prodnees.web.exception.NeesForbiddenException;
-import com.prodnees.web.response.LocalResponse;
+import com.prodnees.core.web.exception.NeesBadCredentialException;
+import com.prodnees.core.web.exception.NeesForbiddenException;
+import com.prodnees.core.web.response.LocalResponse;
 import io.jsonwebtoken.lang.Assert;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.prodnees.config.constants.APIErrors.EMAIL_NOT_FOUND;
-import static com.prodnees.config.constants.APIErrors.USER_NOT_ENABLED;
+import static com.prodnees.core.config.constants.APIErrors.EMAIL_NOT_FOUND;
+import static com.prodnees.core.config.constants.APIErrors.USER_NOT_ENABLED;
 
 @RestController
 @CrossOrigin

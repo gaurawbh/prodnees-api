@@ -1,6 +1,6 @@
 package com.prodnees.auth.config;
 
-import com.prodnees.config.constants.APIErrors;
+import com.prodnees.core.config.constants.APIErrors;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;

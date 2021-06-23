@@ -1,5 +1,6 @@
 package com.prodnees.auth.controller;
 
+import com.prodnees.auth.action.UserAction;
 import com.prodnees.auth.dao.BlockedJwtDao;
 import com.prodnees.auth.dao.ForgotPasswordInfoDao;
 import com.prodnees.auth.dao.TempPasswordInfoDao;
@@ -8,9 +9,8 @@ import com.prodnees.auth.domain.User;
 import com.prodnees.auth.dto.SecPasswordDto;
 import com.prodnees.auth.dto.TempPasswordDto;
 import com.prodnees.auth.filter.RequestContext;
-import com.prodnees.auth.action.UserAction;
-import com.prodnees.domain.user.UserAttributes;
-import com.prodnees.model.user.UserModel;
+import com.prodnees.core.domain.user.UserAttributes;
+import com.prodnees.core.model.user.UserModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.prodnees.web.response.LocalResponse.configure;
+import static com.prodnees.core.web.response.LocalResponse.configure;
 
 /**
  * Should only use Entity and Dao classes from auth schema

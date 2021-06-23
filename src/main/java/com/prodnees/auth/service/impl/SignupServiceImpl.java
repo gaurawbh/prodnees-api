@@ -20,18 +20,18 @@ import com.prodnees.auth.service.TenantService;
 import com.prodnees.auth.util.OtpUtil;
 import com.prodnees.auth.util.TemporaryPasswordHelper;
 import com.prodnees.auth.util.TenantUtil;
-import com.prodnees.dto.user.SignupDto;
-import com.prodnees.model.user.UserModel;
-import com.prodnees.service.email.LocalEmailService;
-import com.prodnees.util.LocalAssert;
-import com.prodnees.web.exception.NeesBadRequestException;
+import com.prodnees.core.dto.user.SignupDto;
+import com.prodnees.core.model.user.UserModel;
+import com.prodnees.core.service.email.LocalEmailService;
+import com.prodnees.core.util.LocalAssert;
+import com.prodnees.core.web.exception.NeesBadRequestException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
-import static com.prodnees.config.constants.APIErrors.EMAIL_TAKEN;
+import static com.prodnees.core.config.constants.APIErrors.EMAIL_TAKEN;
 
 
 @Service
@@ -60,7 +60,7 @@ public class SignupServiceImpl implements SignupService {
      * Perform in sequence:
      * <p>save {@link Company}</p>
      * <p>save {@link com.prodnees.auth.domain.User}</p>
-     * <p>save {@link com.prodnees.domain.user.UserAttributes}</p>
+     * <p>save {@link com.prodnees.core.domain.user.UserAttributes}</p>
      * <p>save {@link TempPasswordInfo}</p>
      * <p>email {@link TempPasswordInfo} to the new user</p>
      *

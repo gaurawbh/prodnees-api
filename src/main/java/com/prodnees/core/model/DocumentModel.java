@@ -1,0 +1,57 @@
+package com.prodnees.core.model;
+
+import com.prodnees.core.domain.enums.ObjectRight;
+
+public class DocumentModel {
+
+    private int id;
+    private String name;
+    private String documentUrl;
+    private String documentDownloadUrl;
+    private ObjectRight objectRight;
+
+    public int getId() {
+        return id;
+    }
+
+    public DocumentModel setId(int id) {
+        this.id = id;
+        return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public DocumentModel setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public String getDocumentUrl() {
+        return documentUrl;
+    }
+
+    public DocumentModel setDocumentUrl(String documentUrl) {
+        this.documentUrl = documentUrl;
+        return this;
+    }
+
+    public String getDocumentDownloadUrl() {
+        return documentDownloadUrl;
+    }
+
+    public DocumentModel setDocumentDownloadUrl(String documentDownloadUrl) {
+        this.documentDownloadUrl = documentDownloadUrl;
+        return this;
+    }
+
+    public ObjectRight getObjectRightType() {
+        return objectRight;
+    }
+
+    public DocumentModel setObjectRightType(ObjectRight objectRight) {
+        this.objectRight = objectRight;
+        return this;
+    }
+}

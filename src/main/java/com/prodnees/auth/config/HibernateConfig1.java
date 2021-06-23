@@ -1,7 +1,7 @@
 package com.prodnees.auth.config;
 
 import com.prodnees.auth.util.TenantUtil;
-import com.prodnees.domain.user.UserAttributes;
+import com.prodnees.core.domain.user.UserAttributes;
 import org.hibernate.SessionFactory;
 import org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy;
 import org.springframework.context.annotation.Bean;
