@@ -13,4 +13,6 @@ public interface InspectionTypeService {
     void deleteById(int id);
 
     List<InspectionType> findAll();
+
+    boolean existsByName(String name);
 }

@@ -4,4 +4,5 @@ import com.prodnees.qc.domain.InspectionType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface InspectionTypeDao extends JpaRepository<InspectionType, Integer> {
+    boolean existsByName(String name);
 }
