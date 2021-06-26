@@ -2,6 +2,7 @@ package com.prodnees.core.model.stage;
 
 import com.prodnees.core.domain.batch.RawProduct;
 import com.prodnees.core.domain.enums.StageState;
+import com.prodnees.core.domain.stage.StageReminder;
 import com.prodnees.core.domain.stage.StageTodo;
 
 import java.util.List;
@@ -13,16 +14,16 @@ import java.util.List;
  * <p> Final State [A Batch Production Has Completed]</p>
  */
 public class StageModel {
-    List<StageApprovalDocumentModel> approvalDocumentList;
-    List<StageTodo> stageTodoList;
-    List<RawProduct> rawProductList;
     private int id;
     private int batchId;
     private int index;
     private String name;
     private String description;
     private StageState status;
-
+private List<StageReminder> stageReminderList;
+    List<StageApprovalDocumentModel> approvalDocumentList;
+    List<StageTodo> stageTodoList;
+    List<RawProduct> rawProductList;
     public List<StageApprovalDocumentModel> getApprovalDocumentList() {
         return approvalDocumentList;
     }

@@ -5,6 +5,7 @@ import com.prodnees.core.action.DocumentAction;
 import com.prodnees.core.config.constants.APIErrors;
 import com.prodnees.core.controller.DocumentController;
 import com.prodnees.core.domain.Document;
+import com.prodnees.core.domain.NeesContentType;
 import com.prodnees.core.domain.enums.ObjectRight;
 import com.prodnees.core.domain.rels.DocumentRight;
 import com.prodnees.core.dto.DocumentDto;
@@ -12,6 +13,7 @@ import com.prodnees.core.model.DocumentModel;
 import com.prodnees.core.service.DocumentService;
 import com.prodnees.core.service.rels.DocumentRightService;
 import com.prodnees.core.util.LocalAssert;
+import com.prodnees.core.web.exception.NeesBadRequestException;
 import com.prodnees.core.web.exception.NeesNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,25 +38,6 @@ public class DocumentActionImpl implements DocumentAction {
         this.documentRightService = documentRightService;
     }
 
-    /**
-     * Does not build with userId and ObjectRightType
-     *
-     * @param document
-     * @return
-     */
-    public static DocumentModel entityToModel(Document document) {
-        return new DocumentModel()
-                .setId(document.getId())
-                .setName(document.getName())
-                .setDocumentUrl(MvcUriComponentsBuilder.fromController(DocumentController.class)
-                        .path("document/load")
-                        .queryParam("id", document.getId())
-                        .toUriString())
-                .setDocumentDownloadUrl(MvcUriComponentsBuilder.fromController(DocumentController.class)
-                        .path("document/download")
-                        .queryParam("id", document.getId())
-                        .toUriString());
-    }
 
     @Override
     public DocumentModel save(Document document) {
@@ -75,19 +58,22 @@ public class DocumentActionImpl implements DocumentAction {
         int userId = RequestContext.getUserId();
         int nextId = documentService.getNextId();
         String name = "Document-" + nextId;
+        if (!NeesContentType.supportedContentTypes().contains(file.getContentType())) {
+            throw new NeesBadRequestException(String.format("Unsupported file type. Supported file types: %s", NeesContentType.supportedContentTypes()));
+        }
         Document document = new Document()
                 .setName(name)
                 .setDescription(description)
                 .setContentType(file.getContentType())
                 .setCreatedDatetime(LocalDateTime.now(ZoneId.of("UTC")))
                 .setFile(file.getBytes());
-        DocumentModel documentModel = save(document);
+        document = documentService.save(document);
         DocumentRight documentRight = new DocumentRight()
                 .setUserId(userId)
-                .setDocumentId(documentModel.getId())
+                .setDocumentId(document.getId())
                 .setDocumentRightsType(ObjectRight.OWNER);
         documentRightService.save(documentRight);
-        return documentModel;
+        return entityToModel(document, documentRight);
     }
 
     @Override
@@ -123,6 +109,20 @@ public class DocumentActionImpl implements DocumentAction {
         documentService.deleteById(id);
     }
 
+
+    /**
+     * Builds  a complete model including the userId
+     *
+     * @param documentRight
+     * @return
+     */
+    public DocumentModel entityToModel(Document document, DocumentRight documentRight) {
+        DocumentModel model = entityToModel(document);
+        model.setObjectRight(documentRight.getDocumentRightsType());
+        return model;
+    }
+
+
     /**
      * Builds  a complete model including the userId
      *
@@ -131,9 +131,23 @@ public class DocumentActionImpl implements DocumentAction {
      */
     public DocumentModel entityToModel(DocumentRight documentRight) {
         Document document = documentService.getById(documentRight.getDocumentId());
+        DocumentModel model = entityToModel(document);
+        model.setObjectRight(documentRight.getDocumentRightsType());
+        return model;
+    }
+
+    /**
+     * Does not build with userId and ObjectRightType
+     *
+     * @param document
+     * @return
+     */
+    public DocumentModel entityToModel(Document document) {
         return new DocumentModel()
                 .setId(document.getId())
                 .setName(document.getName())
+                .setDescription(document.getDescription())
+                .setContentType(document.getContentType())
                 .setDocumentUrl(MvcUriComponentsBuilder.fromController(DocumentController.class)
                         .path("document/load")
                         .queryParam("id", document.getId())
@@ -141,7 +155,8 @@ public class DocumentActionImpl implements DocumentAction {
                 .setDocumentDownloadUrl(MvcUriComponentsBuilder.fromController(DocumentController.class)
                         .path("document/download")
                         .queryParam("id", document.getId())
-                        .toUriString())
-                .setObjectRightType(documentRight.getDocumentRightsType());
+                        .toUriString());
     }
+
+
 }

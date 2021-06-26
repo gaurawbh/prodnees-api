@@ -18,15 +18,6 @@ public class DocumentRight implements Serializable {
     private int documentId;
     private ObjectRight objectRight;
 
-    public DocumentRight() {
-    }
-
-    public DocumentRight(int userId, int documentId, ObjectRight objectRight) {
-        this.userId = userId;
-        this.documentId = documentId;
-        this.objectRight = objectRight;
-    }
-
     public int getUserId() {
         return userId;
     }

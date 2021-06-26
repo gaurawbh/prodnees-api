@@ -1,10 +1,13 @@
 package com.prodnees.auth.action.impl;
 
 import com.prodnees.auth.action.UserAction;
+import com.prodnees.auth.config.tenancy.TenantContext;
 import com.prodnees.auth.dao.TempPasswordInfoDao;
+import com.prodnees.auth.domain.ApplicationRight;
 import com.prodnees.auth.domain.TempPasswordInfo;
 import com.prodnees.auth.domain.User;
 import com.prodnees.auth.domain.UserRole;
+import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.auth.service.UserService;
 import com.prodnees.auth.util.OtpUtil;
 import com.prodnees.core.domain.rels.Associates;
@@ -68,19 +71,29 @@ public class UserActionImpl implements UserAction {
         String generatedPassword = OtpUtil.generateRandomOtp(6);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         User user = userService.save(new User()
+                .setFirstName(dto.getFirstName())
+                .setLastName(dto.getLastName())
+                .setSchemaInstance(TenantContext.getCurrentTenant())
+                .setCompanyId(RequestContext.getCompanyId())
                 .setEmail(dto.getEmail())
                 .setPassword(passwordEncoder.encode(generatedPassword))
                 .setEnabled(true)
-                .setRole(UserRole.owner));
+                .setRole(UserRole.owner)
+                .setApplicationRight(ApplicationRight.user));
         sendInitialPassword(user.getEmail(), generatedPassword);
 
         UserAttributes attributes = new UserAttributes();
         attributes.setUserId(user.getId())
                 .setFirstName(dto.getFirstName())
                 .setLastName(dto.getLastName())
-                .setEmail(user.getEmail());
+                .setEmail(user.getEmail())
+                .setApplicationRight(user.getApplicationRight())
+                .setPhoneNumber(dto.getPhoneNumber())
+                .setRole(user.getRole());
         userAttributesService.save(attributes);
-        tempPasswordInfoDao.save(new TempPasswordInfo().setEmail(user.getEmail()).setCreatedDateTime(LocalDateTime.now()));
+        tempPasswordInfoDao.save(new TempPasswordInfo()
+                .setEmail(user.getEmail())
+                .setCreatedDateTime(LocalDateTime.now()));
         return mapToUserModel(user);
     }
 

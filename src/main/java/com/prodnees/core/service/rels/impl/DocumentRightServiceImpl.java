@@ -20,7 +20,7 @@ public class DocumentRightServiceImpl implements DocumentRightService {
 
     @Override
     public DocumentRight save(DocumentRight documentRight) {
-        return documentRightDao.save(documentRight);
+        return documentRightDao.saveAndFlush(documentRight);
     }
 
     @Override

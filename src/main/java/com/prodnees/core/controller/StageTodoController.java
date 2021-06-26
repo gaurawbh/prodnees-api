@@ -9,6 +9,7 @@ import com.prodnees.core.domain.stage.Stage;
 import com.prodnees.core.domain.stage.StageTodo;
 import com.prodnees.core.dto.stage.StageTodoDto;
 import com.prodnees.core.util.LocalAssert;
+import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,7 +27,6 @@ import java.util.Optional;
 import static com.prodnees.core.web.response.LocalResponse.configure;
 
 @RestController
-@RequestMapping("/secure")
 @CrossOrigin
 @Transactional
 public class StageTodoController {
@@ -72,6 +71,7 @@ public class StageTodoController {
         }
     }
 
+    //todo incorrect behaviour
     @PutMapping("/stage-todo")
     public ResponseEntity<?> update(@Validated @RequestBody StageTodoDto dto) {
         Stage stage = stageAction.getById(dto.getStageId());
@@ -81,6 +81,13 @@ public class StageTodoController {
         LocalAssert.isTrue(batchRightAction.hasBatchEditorRights(stage.getBatchId(), editorId),
                 "batch the stage belongs to not found or insufficient rights to add Stage Todo to the Stage");
         return configure();
+    }
+
+    //todo incomplete
+    @PutMapping("/stage-todo/complete")
+    public ResponseEntity<?> markComplete(@RequestParam int id){
+        throw new NotImplementedException(" This end point is not yet implemented");
+
     }
 
     @DeleteMapping("/stage-todo")

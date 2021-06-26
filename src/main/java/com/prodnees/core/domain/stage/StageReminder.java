@@ -1,5 +1,6 @@
 package com.prodnees.core.domain.stage;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.prodnees.core.domain.enums.StageState;
 
 import javax.persistence.Entity;
@@ -16,8 +17,9 @@ public class StageReminder {
     @GeneratedValue
     private int id;
     private int stageId;
-    private StageState stageState; // on what Stage state, should this reminder be sent out
-    private String recipients; // comma separated emails
+    private StageState onStageState; // on what Stage state, should this reminder be sent out
+    @JsonProperty("recipients")
+    private String recipientsJson; // comma separated emails
     private String message;
     private String sender;
     private boolean sent;
@@ -41,20 +43,20 @@ public class StageReminder {
     }
 
     public StageState getStateStatus() {
-        return stageState;
+        return onStageState;
     }
 
     public StageReminder setStateStatus(StageState stageState) {
-        this.stageState = stageState;
+        this.onStageState = stageState;
         return this;
     }
 
-    public String getRecipients() {
-        return recipients;
+    public String getRecipientsJson() {
+        return recipientsJson;
     }
 
-    public StageReminder setRecipients(String recipients) {
-        this.recipients = recipients;
+    public StageReminder setRecipientsJson(String recipients) {
+        this.recipientsJson = recipients;
         return this;
     }
 

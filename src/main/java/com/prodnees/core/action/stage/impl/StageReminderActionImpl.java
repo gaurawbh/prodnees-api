@@ -49,7 +49,7 @@ public class StageReminderActionImpl implements StageReminderAction {
         String sender = RequestContext.getUsername();
 
         StageReminder stageReminder = MapperUtil.getDozer().map(dto, StageReminder.class);
-        stageReminder.setRecipients(String.join(", ", dto.getRecipientEmails()))
+        stageReminder.setRecipientsJson(String.join(", ", dto.getRecipientEmails()))
                 .setSender(sender)
                 .setSent(false);
         return stageReminderService.save(stageReminder);
@@ -89,7 +89,7 @@ public class StageReminderActionImpl implements StageReminderAction {
 
     @Override
     public void sendStageReminder(StageReminder stageReminder) {
-        String[] emails = stageReminder.getRecipients().split(",");
+        String[] emails = stageReminder.getRecipientsJson().split(",");
         for (String email : emails) {
             Map<String, Object> stateReminderMail = new HashMap<>();
             stateReminderMail.put(EmailPlaceHolders.TITLE, "You have a new State Reminder");

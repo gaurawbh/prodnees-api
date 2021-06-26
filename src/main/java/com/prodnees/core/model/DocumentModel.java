@@ -6,6 +6,8 @@ public class DocumentModel {
 
     private int id;
     private String name;
+    private String description;
+    private String contentType;
     private String documentUrl;
     private String documentDownloadUrl;
     private ObjectRight objectRight;
@@ -28,6 +30,24 @@ public class DocumentModel {
         return this;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public DocumentModel setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public DocumentModel setContentType(String contentType) {
+        this.contentType = contentType;
+        return this;
+    }
+
     public String getDocumentUrl() {
         return documentUrl;
     }
@@ -46,11 +66,11 @@ public class DocumentModel {
         return this;
     }
 
-    public ObjectRight getObjectRightType() {
+    public ObjectRight getObjectRight() {
         return objectRight;
     }
 
-    public DocumentModel setObjectRightType(ObjectRight objectRight) {
+    public DocumentModel setObjectRight(ObjectRight objectRight) {
         this.objectRight = objectRight;
         return this;
     }
