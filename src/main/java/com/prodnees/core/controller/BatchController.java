@@ -7,12 +7,13 @@ import com.prodnees.core.action.rel.DocumentRightAction;
 import com.prodnees.core.config.constants.APIErrors;
 import com.prodnees.core.domain.batch.Batch;
 import com.prodnees.core.domain.batch.BatchApprovalDocument;
+import com.prodnees.core.domain.doc.DocumentPermission;
+import com.prodnees.core.domain.doc.UserDocumentRight;
 import com.prodnees.core.domain.enums.ApprovalDocumentState;
 import com.prodnees.core.domain.enums.BatchState;
 import com.prodnees.core.domain.enums.ObjectRight;
 import com.prodnees.core.domain.rels.Associates;
 import com.prodnees.core.domain.rels.BatchRight;
-import com.prodnees.core.domain.rels.DocumentRight;
 import com.prodnees.core.dto.batch.BatchApprovalDocumentDto;
 import com.prodnees.core.dto.batch.BatchDto;
 import com.prodnees.core.dto.batch.BatchRightDto;
@@ -163,7 +164,7 @@ public class BatchController {
     /**
      * only description can be changed of a Batch.
      * <p>productId on Request Body will be ignored</p>
-     * <i>User must have editor rights, i.e. {@link ObjectRight#OWNER}  or {@link ObjectRight#EDITOR} </i>
+     * <i>User must have editor rights, i.e. {@link ObjectRight#Owner}  or {@link ObjectRight#Editor} </i>
      *
      * @param dto
      * @return
@@ -179,7 +180,7 @@ public class BatchController {
     }
 
     /**
-     * <p>check the user has {@link ObjectRight#OWNER} rights of the Batch</p>
+     * <p>check the user has {@link ObjectRight#Owner} rights of the Batch</p>
      * <p>check the Batch does not have any States or {@link com.prodnees.core.domain.stage.StageTodo} associated with it</p>
      *
      * @param id
@@ -189,7 +190,7 @@ public class BatchController {
     public ResponseEntity<?> deleteBatch(@RequestParam int id) {
         int ownerId = RequestContext.getUserId();
         BatchRight batchRight = batchRightAction.getByBatchIdAndUserId(id, ownerId);
-        LocalAssert.isTrue(batchRight.getObjectRight().equals(ObjectRight.OWNER), ACCESS_DENIED);
+        LocalAssert.isTrue(batchRight.getObjectRight().equals(ObjectRight.Owner), ACCESS_DENIED);
         batchAction.deleteById(id);
         return configure();
     }
@@ -206,10 +207,10 @@ public class BatchController {
     public ResponseEntity<?> saveBatchRight(@Validated @RequestBody BatchRightDto dto) {
         int adminId = RequestContext.getUserId();
         RequestContext.denySelfManagement(dto.getEmail());
-        Assert.isTrue(dto.getObjectRightsType() != ObjectRight.OWNER, "you can only assign an editor or a  viewer");
+        Assert.isTrue(dto.getObjectRightsType() != ObjectRight.Owner, "you can only assign an editor or a  viewer");
         Assert.isTrue(associatesService.existsByAdminIdAndAssociateEmail(adminId, dto.getEmail()), APIErrors.ASSOCIATES_ONLY.getMessage());
         BatchRight batchRight = batchRightAction.getByBatchIdAndUserId(dto.getBatchId(), adminId);
-        Assert.isTrue(batchRight.getObjectRight().equals(ObjectRight.OWNER),
+        Assert.isTrue(batchRight.getObjectRight().equals(ObjectRight.Owner),
                 "only owners can invite others to admin their batch product or update the rights");
         return configure(batchRightAction.save(dto));
     }
@@ -256,10 +257,10 @@ public class BatchController {
         int adminId = RequestContext.getUserId();
         Assert.isTrue(userId != adminId, "you cannot delete your own batch product rights");
         BatchRight adminBatchRight = batchRightAction.getByBatchIdAndUserId(batchId, adminId);// check you have permission, you are an owner
-        Assert.isTrue(adminBatchRight.getObjectRight() == ObjectRight.OWNER,
+        Assert.isTrue(adminBatchRight.getObjectRight() == ObjectRight.Owner,
                 UPDATE_DENIED.getMessage());
         BatchRight userBatchRight = batchRightAction.getByBatchIdAndUserId(batchId, userId); // check the other user is not the owner
-        Assert.isTrue(userBatchRight.getObjectRight() != ObjectRight.OWNER,
+        Assert.isTrue(userBatchRight.getObjectRight() != ObjectRight.Owner,
                 "you cannot remove another owner's batch product rights");
         batchRightAction.deleteByBatchIdAndUserId(batchId, userId);
         return configure();
@@ -289,11 +290,11 @@ public class BatchController {
                 .setState(ApprovalDocumentState.OPEN);
 
         batchProductApprovalDocumentService.save(batchApprovalDocument);
-        DocumentRight documentRight = new DocumentRight()
+        UserDocumentRight userDocumentRight = new UserDocumentRight()
                 .setUserId(associatesOptional.get().getAssociateId())
                 .setDocumentId(dto.getDocumentId())
-                .setDocumentRightsType(ObjectRight.EDITOR);
-        documentRightAction.addNew(documentRight);
+                .setDocumentPermission(DocumentPermission.Edit);
+        documentRightAction.addNew(userDocumentRight);
 
         return configure();
 

@@ -1,6 +1,6 @@
 package com.prodnees.core.model;
 
-import com.prodnees.core.domain.enums.ObjectRight;
+import com.prodnees.core.domain.doc.DocumentPermission;
 
 public class DocumentModel {
 
@@ -10,7 +10,7 @@ public class DocumentModel {
     private String contentType;
     private String documentUrl;
     private String documentDownloadUrl;
-    private ObjectRight objectRight;
+    private DocumentPermission documentPermission;
 
     public int getId() {
         return id;
@@ -66,12 +66,13 @@ public class DocumentModel {
         return this;
     }
 
-    public ObjectRight getObjectRight() {
-        return objectRight;
+
+    public DocumentPermission getDocumentPermission() {
+        return documentPermission;
     }
 
-    public DocumentModel setObjectRight(ObjectRight objectRight) {
-        this.objectRight = objectRight;
+    public DocumentModel setDocumentPermission(DocumentPermission documentPermission) {
+        this.documentPermission = documentPermission;
         return this;
     }
 }

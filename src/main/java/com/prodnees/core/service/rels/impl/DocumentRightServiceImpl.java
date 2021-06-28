@@ -1,8 +1,8 @@
 package com.prodnees.core.service.rels.impl;
 
 import com.prodnees.core.dao.rels.DocumentRightDao;
-import com.prodnees.core.domain.enums.ObjectRight;
-import com.prodnees.core.domain.rels.DocumentRight;
+import com.prodnees.core.domain.doc.DocumentPermission;
+import com.prodnees.core.domain.doc.UserDocumentRight;
 import com.prodnees.core.service.rels.DocumentRightService;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +19,12 @@ public class DocumentRightServiceImpl implements DocumentRightService {
     }
 
     @Override
-    public DocumentRight save(DocumentRight documentRight) {
-        return documentRightDao.saveAndFlush(documentRight);
+    public UserDocumentRight save(UserDocumentRight userDocumentRight) {
+        return documentRightDao.saveAndFlush(userDocumentRight);
     }
 
     @Override
-    public Optional<DocumentRight> findByDocumentIdAndUserId(int documentId, int userId) {
+    public Optional<UserDocumentRight> findByDocumentIdAndUserId(int documentId, int userId) {
         return documentRightDao.findByDocumentIdAndUserId(documentId, userId);
     }
 
@@ -34,19 +34,19 @@ public class DocumentRightServiceImpl implements DocumentRightService {
     }
 
     @Override
-    public List<DocumentRight> getAllByDocumentId(int documentId) {
+    public List<UserDocumentRight> getAllByDocumentId(int documentId) {
         return documentRightDao.getAllByDocumentId(documentId);
     }
 
     @Override
-    public List<DocumentRight> getAllByUserId(int userId) {
+    public List<UserDocumentRight> getAllByUserId(int userId) {
         return documentRightDao.getAllByUserId(userId);
     }
 
 
     @Override
-    public boolean hasEditRights(DocumentRight documentRight) {
-        return documentRight.getDocumentRightsType() == ObjectRight.OWNER
-                || documentRight.getDocumentRightsType() == ObjectRight.EDITOR;
+    public boolean hasEditRights(UserDocumentRight userDocumentRight) {
+        return userDocumentRight.getDocumentPermission() == DocumentPermission.Delete
+                || userDocumentRight.getDocumentPermission() == DocumentPermission.Edit;
     }
 }

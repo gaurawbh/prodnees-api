@@ -2,7 +2,7 @@ package com.prodnees.core.service.impl;
 
 import com.prodnees.auth.config.tenancy.CurrentTenantResolver;
 import com.prodnees.core.dao.NeesDocDao;
-import com.prodnees.core.domain.NeesDoc;
+import com.prodnees.core.domain.doc.NeesDoc;
 import com.prodnees.core.service.NeesDocumentService;
 import org.springframework.stereotype.Service;
 

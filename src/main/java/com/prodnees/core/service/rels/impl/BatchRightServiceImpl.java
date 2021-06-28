@@ -54,8 +54,8 @@ public class BatchRightServiceImpl implements BatchRightService {
      */
     @Override
     public boolean hasBatchEditorRights(int batchId, int editorId) {
-        return batchRightsDao.existsByBatchIdAndUserIdAndObjectRight(batchId, editorId, ObjectRight.OWNER)
-                || batchRightsDao.existsByBatchIdAndUserIdAndObjectRight(batchId, editorId, ObjectRight.EDITOR);
+        return batchRightsDao.existsByBatchIdAndUserIdAndObjectRight(batchId, editorId, ObjectRight.Owner)
+                || batchRightsDao.existsByBatchIdAndUserIdAndObjectRight(batchId, editorId, ObjectRight.Editor);
     }
 
     /**

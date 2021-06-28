@@ -54,7 +54,7 @@ public class ProductRightsServiceImpl implements ProductRightsService {
         if (productRightOptional.isEmpty()) {
             return false;
         }
-        return productRightOptional.get().getObjectRightsType().equals(ObjectRight.OWNER)
-                || productRightOptional.get().getObjectRightsType().equals(ObjectRight.EDITOR);
+        return productRightOptional.get().getObjectRightsType().equals(ObjectRight.Owner)
+                || productRightOptional.get().getObjectRightsType().equals(ObjectRight.Editor);
     }
 }

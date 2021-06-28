@@ -1,7 +1,7 @@
 package com.prodnees.core.dao;
 
 import com.prodnees.core.dao.queries.QueryConstants;
-import com.prodnees.core.domain.NeesDoc;
+import com.prodnees.core.domain.doc.NeesDoc;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

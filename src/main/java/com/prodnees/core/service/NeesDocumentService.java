@@ -1,6 +1,6 @@
 package com.prodnees.core.service;
 
-import com.prodnees.core.domain.NeesDoc;
+import com.prodnees.core.domain.doc.NeesDoc;
 
 public interface NeesDocumentService {
 

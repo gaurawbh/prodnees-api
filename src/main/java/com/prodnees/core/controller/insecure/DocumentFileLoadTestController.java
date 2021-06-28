@@ -1,6 +1,6 @@
 package com.prodnees.core.controller.insecure;
 
-import com.prodnees.core.domain.NeesDoc;
+import com.prodnees.core.domain.doc.NeesDoc;
 import com.prodnees.core.service.NeesDocumentService;
 import com.prodnees.core.util.LocalAssert;
 import com.prodnees.core.web.exception.NeesNotFoundException;

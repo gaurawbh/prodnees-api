@@ -80,7 +80,7 @@ public class BatchActionImpl implements BatchAction {
         batchRightService.save(new BatchRight()
                 .setUserId(userId)
                 .setBatchId(batch.getId())
-                .setObjectRight(ObjectRight.OWNER));
+                .setObjectRight(ObjectRight.Owner));
         return mapToModel(batch);
     }
 

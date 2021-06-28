@@ -5,9 +5,9 @@ import com.prodnees.core.action.DocumentAction;
 import com.prodnees.core.config.constants.APIErrors;
 import com.prodnees.core.controller.DocumentController;
 import com.prodnees.core.domain.NeesContentType;
-import com.prodnees.core.domain.NeesDoc;
-import com.prodnees.core.domain.enums.ObjectRight;
-import com.prodnees.core.domain.rels.DocumentRight;
+import com.prodnees.core.domain.doc.DocumentPermission;
+import com.prodnees.core.domain.doc.NeesDoc;
+import com.prodnees.core.domain.doc.UserDocumentRight;
 import com.prodnees.core.dto.DocumentDto;
 import com.prodnees.core.model.DocumentModel;
 import com.prodnees.core.service.NeesDocumentService;
@@ -47,8 +47,8 @@ public class DocumentActionImpl implements DocumentAction {
     @Override
     public DocumentModel update(DocumentDto dto) {
         int userId = RequestContext.getUserId();
-        DocumentRight documentRight = documentRightService.findByDocumentIdAndUserId(dto.getId(), userId).orElseThrow(NeesNotFoundException::new);
-        LocalAssert.isTrue(documentRightService.hasEditRights(documentRight), APIErrors.UPDATE_DENIED);
+        UserDocumentRight userDocumentRight = documentRightService.findByDocumentIdAndUserId(dto.getId(), userId).orElseThrow(NeesNotFoundException::new);
+        LocalAssert.isTrue(documentRightService.hasEditRights(userDocumentRight), APIErrors.UPDATE_DENIED);
         NeesDoc neesDoc = neesDocumentService.getById(dto.getId()).setDescription(dto.getDescription());
         return save(neesDoc);
     }
@@ -68,12 +68,12 @@ public class DocumentActionImpl implements DocumentAction {
                 .setCreatedDatetime(LocalDateTime.now(ZoneId.of("UTC")))
                 .setFile(file.getBytes());
         neesDoc = neesDocumentService.save(neesDoc);
-        DocumentRight documentRight = new DocumentRight()
+        UserDocumentRight userDocumentRight = new UserDocumentRight()
                 .setUserId(userId)
                 .setDocumentId(neesDoc.getId())
-                .setDocumentRightsType(ObjectRight.OWNER);
-        documentRightService.save(documentRight);
-        return entityToModel(neesDoc, documentRight);
+                .setDocumentPermission(DocumentPermission.Delete);
+        documentRightService.save(userDocumentRight);
+        return entityToModel(neesDoc, userDocumentRight);
     }
 
     @Override
@@ -93,9 +93,9 @@ public class DocumentActionImpl implements DocumentAction {
 
     @Override
     public List<DocumentModel> getAllByUserId(int userId) {
-        List<DocumentRight> documentRightList = documentRightService.getAllByUserId(userId);
+        List<UserDocumentRight> userDocumentRightList = documentRightService.getAllByUserId(userId);
         List<DocumentModel> documentModelList = new ArrayList<>();
-        documentRightList.forEach(documentRight -> documentModelList.add(entityToModel(documentRight)));
+        userDocumentRightList.forEach(documentRight -> documentModelList.add(entityToModel(documentRight)));
         return documentModelList;
     }
 
@@ -113,12 +113,12 @@ public class DocumentActionImpl implements DocumentAction {
     /**
      * Builds  a complete model including the userId
      *
-     * @param documentRight
+     * @param userDocumentRight
      * @return
      */
-    public DocumentModel entityToModel(NeesDoc neesDoc, DocumentRight documentRight) {
+    public DocumentModel entityToModel(NeesDoc neesDoc, UserDocumentRight userDocumentRight) {
         DocumentModel model = entityToModel(neesDoc);
-        model.setObjectRight(documentRight.getDocumentRightsType());
+        model.setDocumentPermission(userDocumentRight.getDocumentPermission());
         return model;
     }
 
@@ -126,13 +126,13 @@ public class DocumentActionImpl implements DocumentAction {
     /**
      * Builds  a complete model including the userId
      *
-     * @param documentRight
+     * @param userDocumentRight
      * @return
      */
-    public DocumentModel entityToModel(DocumentRight documentRight) {
-        NeesDoc neesDoc = neesDocumentService.getById(documentRight.getDocumentId());
+    public DocumentModel entityToModel(UserDocumentRight userDocumentRight) {
+        NeesDoc neesDoc = neesDocumentService.getById(userDocumentRight.getDocumentId());
         DocumentModel model = entityToModel(neesDoc);
-        model.setObjectRight(documentRight.getDocumentRightsType());
+        model.setDocumentPermission(userDocumentRight.getDocumentPermission());
         return model;
     }
 

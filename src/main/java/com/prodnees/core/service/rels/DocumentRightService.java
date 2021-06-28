@@ -1,21 +1,21 @@
 package com.prodnees.core.service.rels;
 
-import com.prodnees.core.domain.rels.DocumentRight;
+import com.prodnees.core.domain.doc.UserDocumentRight;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface DocumentRightService {
-    DocumentRight save(DocumentRight documentRight);
+    UserDocumentRight save(UserDocumentRight userDocumentRight);
 
-    Optional<DocumentRight> findByDocumentIdAndUserId(int documentId, int userId);
+    Optional<UserDocumentRight> findByDocumentIdAndUserId(int documentId, int userId);
 
     boolean existsByDocumentIdAndUserId(int documentId, int userId);
 
-    List<DocumentRight> getAllByDocumentId(int documentId);
+    List<UserDocumentRight> getAllByDocumentId(int documentId);
 
-    List<DocumentRight> getAllByUserId(int userId);
+    List<UserDocumentRight> getAllByUserId(int userId);
 
-    boolean hasEditRights(DocumentRight documentRight);
+    boolean hasEditRights(UserDocumentRight userDocumentRight);
 
 }

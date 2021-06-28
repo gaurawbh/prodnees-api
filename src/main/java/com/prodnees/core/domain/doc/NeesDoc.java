@@ -1,4 +1,4 @@
-package com.prodnees.core.domain;
+package com.prodnees.core.domain.doc;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.prodnees.core.config.constants.DateTimeFormats;
@@ -20,7 +20,7 @@ public class NeesDoc {
     private int id;
     private String name;
     private String description;
-//    private String
+    private boolean deleted;
     private String contentType;
     @JsonFormat(pattern = DateTimeFormats.DATE_TIME)
     private LocalDateTime createdDatetime;

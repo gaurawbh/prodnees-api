@@ -1,8 +1,7 @@
 package com.prodnees.core.action.rel.impl;
 
 import com.prodnees.core.action.rel.DocumentRightAction;
-import com.prodnees.core.domain.enums.ObjectRight;
-import com.prodnees.core.domain.rels.DocumentRight;
+import com.prodnees.core.domain.doc.UserDocumentRight;
 import com.prodnees.core.service.rels.DocumentRightService;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +17,12 @@ public class DocumentRightActionImpl implements DocumentRightAction {
     }
 
     @Override
-    public DocumentRight addNew(DocumentRight documentRight) {
-        return documentRightService.save(documentRight);
+    public UserDocumentRight addNew(UserDocumentRight userDocumentRight) {
+        return documentRightService.save(userDocumentRight);
     }
 
     @Override
-    public Optional<DocumentRight> findByDocumentIdAndUserId(int documentId, int userId) {
+    public Optional<UserDocumentRight> findByDocumentIdAndUserId(int documentId, int userId) {
         return documentRightService.findByDocumentIdAndUserId(documentId, userId);
     }
 
@@ -33,20 +32,18 @@ public class DocumentRightActionImpl implements DocumentRightAction {
     }
 
     @Override
-    public List<DocumentRight> getAllByDocumentId(int documentId) {
+    public List<UserDocumentRight> getAllByDocumentId(int documentId) {
         return documentRightService.getAllByDocumentId(documentId);
 
     }
 
     @Override
-    public List<DocumentRight> getAllByUserId(int userId) {
+    public List<UserDocumentRight> getAllByUserId(int userId) {
         return documentRightService.getAllByUserId(userId);
     }
 
     @Override
-    public boolean hasEditRights(DocumentRight documentRight) {
-        return documentRight.getDocumentRightsType() == ObjectRight.OWNER
-                || documentRight.getDocumentRightsType() == ObjectRight.EDITOR;
+    public boolean hasEditRights(UserDocumentRight userDocumentRight) {return documentRightService.hasEditRights(userDocumentRight);
     }
 
 }

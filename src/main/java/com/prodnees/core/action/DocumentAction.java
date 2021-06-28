@@ -1,6 +1,6 @@
 package com.prodnees.core.action;
 
-import com.prodnees.core.domain.NeesDoc;
+import com.prodnees.core.domain.doc.NeesDoc;
 import com.prodnees.core.dto.DocumentDto;
 import com.prodnees.core.model.DocumentModel;
 import org.springframework.web.multipart.MultipartFile;

@@ -4,9 +4,10 @@ import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.core.action.DocumentAction;
 import com.prodnees.core.action.rel.DocumentRightAction;
 import com.prodnees.core.config.constants.APIErrors;
-import com.prodnees.core.domain.NeesDoc;
+import com.prodnees.core.domain.doc.DocumentPermission;
+import com.prodnees.core.domain.doc.NeesDoc;
+import com.prodnees.core.domain.doc.UserDocumentRight;
 import com.prodnees.core.domain.enums.ObjectRight;
-import com.prodnees.core.domain.rels.DocumentRight;
 import com.prodnees.core.dto.DocumentDto;
 import com.prodnees.core.model.DocumentModel;
 import com.prodnees.core.util.LocalAssert;
@@ -81,7 +82,7 @@ public class DocumentController {
     }
 
     /**
-     * Only {@link ObjectRight#OWNER} can delete a document.
+     * Only {@link ObjectRight#Owner} can delete a document.
      * <p>A document cannot be deleted if it is referenced by an {@link com.prodnees.core.domain.stage.StageApprovalDocument}</p>
      *
      * @param id
@@ -91,9 +92,9 @@ public class DocumentController {
     public ResponseEntity<?> delete(@RequestParam int id) {
 
         int userId = RequestContext.getUserId();
-        DocumentRight documentRight = documentRightAction.findByDocumentIdAndUserId(id, userId)
+        UserDocumentRight userDocumentRight = documentRightAction.findByDocumentIdAndUserId(id, userId)
                 .orElseThrow(NeesNotFoundException::new);
-        LocalAssert.isTrue(documentRight.getDocumentRightsType() == ObjectRight.OWNER, APIErrors.UPDATE_DENIED);
+        LocalAssert.isTrue(userDocumentRight.getDocumentPermission() == DocumentPermission.Delete, APIErrors.UPDATE_DENIED);
         documentAction.deleteById(id);
         return configure();
     }
