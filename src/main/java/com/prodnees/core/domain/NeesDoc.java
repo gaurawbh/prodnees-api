@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  * <P>{@link com.prodnees.core.domain.stage.StageApprovalDocument}</P>
  */
 @Entity
-public class Document {
+public class NeesDoc {
     @Id
     @GeneratedValue
     private int id;
@@ -30,7 +30,7 @@ public class Document {
         return id;
     }
 
-    public Document setId(int id) {
+    public NeesDoc setId(int id) {
         this.id = id;
         return this;
     }
@@ -39,7 +39,7 @@ public class Document {
         return name;
     }
 
-    public Document setName(String name) {
+    public NeesDoc setName(String name) {
         this.name = name;
         return this;
     }
@@ -48,7 +48,7 @@ public class Document {
         return description;
     }
 
-    public Document setDescription(String description) {
+    public NeesDoc setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -57,7 +57,7 @@ public class Document {
         return contentType;
     }
 
-    public Document setContentType(String contentType) {
+    public NeesDoc setContentType(String contentType) {
         this.contentType = contentType;
         return this;
     }
@@ -66,7 +66,7 @@ public class Document {
         return createdDatetime;
     }
 
-    public Document setCreatedDatetime(LocalDateTime createdDatetime) {
+    public NeesDoc setCreatedDatetime(LocalDateTime createdDatetime) {
         this.createdDatetime = createdDatetime;
         return this;
     }
@@ -75,7 +75,7 @@ public class Document {
         return file;
     }
 
-    public Document setFile(byte[] file) {
+    public NeesDoc setFile(byte[] file) {
         this.file = file;
         return this;
     }

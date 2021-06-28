@@ -4,7 +4,7 @@ import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.core.action.DocumentAction;
 import com.prodnees.core.action.rel.DocumentRightAction;
 import com.prodnees.core.config.constants.APIErrors;
-import com.prodnees.core.domain.Document;
+import com.prodnees.core.domain.NeesDoc;
 import com.prodnees.core.domain.enums.ObjectRight;
 import com.prodnees.core.domain.rels.DocumentRight;
 import com.prodnees.core.dto.DocumentDto;
@@ -70,7 +70,7 @@ public class DocumentController {
     }
 
     /**
-     * Only {@link Document} #name can be updated of a Document
+     * Only {@link NeesDoc} #name can be updated of a Document
      *
      * @param dto
      * @return
@@ -122,9 +122,9 @@ public class DocumentController {
                                  HttpServletResponse servletResponse) {
         int userId = RequestContext.getUserId();
         LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(id, userId), APIErrors.OBJECT_NOT_FOUND);
-        Document document = documentAction.getById(id);
-        servletResponse.setContentType(ValidatorUtil.ifValidStringOrElse(document.getContentType(), MediaType.APPLICATION_PDF_VALUE));
-        InputStream inputStream = new ByteArrayInputStream(document.getFile());
+        NeesDoc neesDoc = documentAction.getById(id);
+        servletResponse.setContentType(ValidatorUtil.ifValidStringOrElse(neesDoc.getContentType(), MediaType.APPLICATION_PDF_VALUE));
+        InputStream inputStream = new ByteArrayInputStream(neesDoc.getFile());
         try {
             IOUtils.copy(inputStream, servletResponse.getOutputStream());
         } catch (IOException e) {
@@ -137,12 +137,12 @@ public class DocumentController {
         int userId = RequestContext.getUserId();
         LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(id, userId),
                 APIErrors.OBJECT_NOT_FOUND);
-        Document document = documentAction.getById(id);
+        NeesDoc neesDoc = documentAction.getById(id);
 
-        Resource resource = new ByteArrayResource(document.getFile());
+        Resource resource = new ByteArrayResource(neesDoc.getFile());
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_PDF)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename = " + document.getName() + ".pdf")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename = " + neesDoc.getName() + ".pdf")
                 .body(resource);
     }
 }

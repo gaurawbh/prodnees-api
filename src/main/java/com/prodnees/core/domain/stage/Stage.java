@@ -1,6 +1,8 @@
 package com.prodnees.core.domain.stage;
 
+import com.prodnees.core.domain.batch.Batch;
 import com.prodnees.core.domain.enums.StageState;
+import org.springframework.data.annotation.Reference;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -19,6 +21,7 @@ public class Stage {
     @Id
     @GeneratedValue
     private int id;
+    @Reference(Batch.class)
     private int batchId;
     private int indx; //index
     private String name;

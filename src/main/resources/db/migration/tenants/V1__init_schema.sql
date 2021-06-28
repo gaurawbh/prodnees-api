@@ -1,4 +1,4 @@
-create table document
+create table nees_doc
 (
     id               int auto_increment
         primary key,
@@ -178,7 +178,7 @@ create table batch_approval_document
         foreign key (batch_id) references batch (id)
             on update cascade on delete cascade,
     constraint batch_approval_document_ibfk_2
-        foreign key (document_id) references document (id),
+        foreign key (document_id) references nees_doc (id),
     constraint batch_approval_document_ibfk_3
         foreign key (approver_id) references user_attributes (user_id)
             on update cascade on delete cascade
@@ -208,7 +208,7 @@ create table document_right
         foreign key (user_id) references user_attributes (user_id)
             on update cascade on delete cascade,
     constraint document_right_ibfk_2
-        foreign key (document_id) references document (id)
+        foreign key (document_id) references nees_doc (id)
             on update cascade on delete cascade
 );
 
@@ -254,7 +254,7 @@ create table stage_approval_document
         foreign key (stage_id) references stage (id)
             on update cascade on delete cascade,
     constraint stage_approval_document_ibfk_2
-        foreign key (document_id) references document (id),
+        foreign key (document_id) references nees_doc (id),
     constraint stage_approval_document_ibfk_3
         foreign key (approver_id) references user_attributes (user_id)
             on update cascade on delete cascade

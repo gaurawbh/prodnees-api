@@ -1,6 +1,6 @@
 package com.prodnees.core.action;
 
-import com.prodnees.core.domain.Document;
+import com.prodnees.core.domain.NeesDoc;
 import com.prodnees.core.dto.DocumentDto;
 import com.prodnees.core.model.DocumentModel;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,13 +11,13 @@ import java.util.List;
 
 public interface DocumentAction {
 
-    DocumentModel save(Document document);
+    DocumentModel save(NeesDoc neesDoc);
 
     DocumentModel update(DocumentDto dto);
 
     DocumentModel addNew(@Nullable String description, MultipartFile file) throws IOException;
 
-    Document getById(int id);
+    NeesDoc getById(int id);
 
     DocumentModel getModelById(int id);
 

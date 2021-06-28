@@ -1,7 +1,7 @@
 package com.prodnees.core.controller.insecure;
 
-import com.prodnees.core.domain.Document;
-import com.prodnees.core.service.DocumentService;
+import com.prodnees.core.domain.NeesDoc;
+import com.prodnees.core.service.NeesDocumentService;
 import com.prodnees.core.util.LocalAssert;
 import com.prodnees.core.web.exception.NeesNotFoundException;
 import org.apache.commons.io.IOUtils;
@@ -28,11 +28,11 @@ import java.io.InputStream;
 @Transactional
 public class DocumentFileLoadTestController {
 
-    private final DocumentService documentService;
+    private final NeesDocumentService neesDocumentService;
     Logger localLogger = LoggerFactory.getLogger(this.getClass());
 
-    public DocumentFileLoadTestController(DocumentService documentService) {
-        this.documentService = documentService;
+    public DocumentFileLoadTestController(NeesDocumentService neesDocumentService) {
+        this.neesDocumentService = neesDocumentService;
     }
 
     @GetMapping(value = "/document-load-example",
@@ -40,7 +40,7 @@ public class DocumentFileLoadTestController {
     public @ResponseBody
     byte[] loadDocumentFile(@RequestParam int id) {
 
-        byte[] file = documentService.getById(id).getFile();
+        byte[] file = neesDocumentService.getById(id).getFile();
         InputStream inputStream = new ByteArrayInputStream(file);
         try {
             return IOUtils.toByteArray(inputStream);
@@ -52,12 +52,12 @@ public class DocumentFileLoadTestController {
 
     @GetMapping(value = "/document-download-example")
     public ResponseEntity<Resource> downloadDocumentFile(@RequestParam int id) {
-        LocalAssert.isTrue(documentService.existsById(id), "document not found");
-        Document document = documentService.getById(id);
-        Resource resource = new ByteArrayResource(document.getFile());
+        LocalAssert.isTrue(neesDocumentService.existsById(id), "document not found");
+        NeesDoc neesDoc = neesDocumentService.getById(id);
+        Resource resource = new ByteArrayResource(neesDoc.getFile());
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_PDF)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename = " + document.getName() + ".pdf")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename = " + neesDoc.getName() + ".pdf")
                 .body(resource);
 
     }

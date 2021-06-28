@@ -3,7 +3,7 @@ package com.prodnees.core.action.stage.impl;
 import com.prodnees.core.action.StageList;
 import com.prodnees.core.action.stage.StageAction;
 import com.prodnees.core.controller.DocumentController;
-import com.prodnees.core.domain.Document;
+import com.prodnees.core.domain.NeesDoc;
 import com.prodnees.core.domain.batch.RawProduct;
 import com.prodnees.core.domain.enums.StageState;
 import com.prodnees.core.domain.stage.Stage;
@@ -12,7 +12,7 @@ import com.prodnees.core.domain.stage.StageTodo;
 import com.prodnees.core.dto.stage.StageDto;
 import com.prodnees.core.model.stage.StageApprovalDocumentModel;
 import com.prodnees.core.model.stage.StageModel;
-import com.prodnees.core.service.DocumentService;
+import com.prodnees.core.service.NeesDocumentService;
 import com.prodnees.core.service.batch.RawProductService;
 import com.prodnees.core.service.rels.BatchRightService;
 import com.prodnees.core.service.rels.StageApprovalDocumentService;
@@ -33,7 +33,7 @@ public class StageActionImpl implements StageAction {
     private final StageApprovalDocumentService stageApprovalDocumentService;
     private final StageTodoService stageTodoService;
     private final RawProductService rawProductService;
-    private final DocumentService documentService;
+    private final NeesDocumentService neesDocumentService;
     private final BatchRightService batchRightService;
     private final StageList stageList;
 
@@ -42,14 +42,14 @@ public class StageActionImpl implements StageAction {
                            StageApprovalDocumentService stageApprovalDocumentService,
                            StageTodoService stageTodoService,
                            RawProductService rawProductService,
-                           DocumentService documentService,
+                           NeesDocumentService neesDocumentService,
                            BatchRightService batchRightService,
                            StageList stageList) {
         this.stageService = stageService;
         this.stageApprovalDocumentService = stageApprovalDocumentService;
         this.stageTodoService = stageTodoService;
         this.rawProductService = rawProductService;
-        this.documentService = documentService;
+        this.neesDocumentService = neesDocumentService;
         this.batchRightService = batchRightService;
         this.stageList = stageList;
     }
@@ -163,21 +163,21 @@ public class StageActionImpl implements StageAction {
     }
 
     private StageApprovalDocumentModel entityToModel(StageApprovalDocument stageApprovalDocument) {
-        Document document = documentService.getById(stageApprovalDocument.getDocumentId());
+        NeesDoc neesDoc = neesDocumentService.getById(stageApprovalDocument.getDocumentId());
 
         return new StageApprovalDocumentModel()
                 .setId(stageApprovalDocument.getId())
-                .setName(document.getName())
+                .setName(neesDoc.getName())
                 .setDocumentId(stageApprovalDocument.getDocumentId())
                 .setApproverId(stageApprovalDocument.getApproverId())
                 .setApproverEmail(stageApprovalDocument.getApproverEmail())
                 .setDocumentUrl(MvcUriComponentsBuilder.fromController(DocumentController.class)
                         .path("document/load")
-                        .queryParam("id", document.getId())
+                        .queryParam("id", neesDoc.getId())
                         .toUriString())
                 .setDocumentDownloadUrl(MvcUriComponentsBuilder.fromController(DocumentController.class)
                         .path("document/download")
-                        .queryParam("id", document.getId())
+                        .queryParam("id", neesDoc.getId())
                         .toUriString())
                 .setApprovalDocumentState(stageApprovalDocument.getState());
 

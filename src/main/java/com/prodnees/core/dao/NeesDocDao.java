@@ -1,15 +1,15 @@
 package com.prodnees.core.dao;
 
 import com.prodnees.core.dao.queries.QueryConstants;
-import com.prodnees.core.domain.Document;
+import com.prodnees.core.domain.NeesDoc;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface DocumentDao extends JpaRepository<Document, Integer> {
+public interface NeesDocDao extends JpaRepository<NeesDoc, Integer> {
 
-    Document getById(int id);
+    NeesDoc getById(int id);
 
-    Document getByName(String name);
+    NeesDoc getByName(String name);
 
     boolean existsByName(String name);
 
