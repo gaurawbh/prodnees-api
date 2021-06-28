@@ -10,7 +10,7 @@ public interface StageReminderDao extends JpaRepository<StageReminder, Integer> 
 
     List<StageReminder> getAllByStageId(int stageId);
 
-    List<StageReminder> getAllByStageIdAndStageState(int stageId, StageState stageState);
+    List<StageReminder> getAllByStageIdAndOnStageState(int stageId, StageState stageState);
 
     void deleteAllByStageId(int stageId);
 

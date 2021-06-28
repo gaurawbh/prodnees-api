@@ -34,7 +34,7 @@ public class StageReminderServiceImpl implements StageReminderService {
 
     @Override
     public List<StageReminder> getAllByStageIdAndStateState(int stageId, StageState stageState) {
-        return stageReminderDao.getAllByStageIdAndStageState(stageId, stageState);
+        return stageReminderDao.getAllByStageIdAndOnStageState(stageId, stageState);
     }
 
     @Override

@@ -33,4 +33,9 @@ public class ProdNeesApplication {
         return ResponseEntity.ok().body(objectMap);
 
     }
+
+    @GetMapping("/hola")
+    public ResponseEntity<?> greet(){
+        return ResponseEntity.ok("Hola! coma estaas!");
+    }
 }
