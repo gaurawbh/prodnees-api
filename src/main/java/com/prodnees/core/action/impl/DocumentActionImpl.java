@@ -64,7 +64,7 @@ public class DocumentActionImpl implements DocumentAction {
         NeesDoc neesDoc = new NeesDoc()
                 .setName(name)
                 .setDescription(description)
-                .setContentType(file.getContentType())
+                .setMimeContentType(file.getContentType())
                 .setCreatedDatetime(LocalDateTime.now(ZoneId.of("UTC")))
                 .setFile(file.getBytes());
         neesDoc = neesDocumentService.save(neesDoc);
@@ -147,7 +147,7 @@ public class DocumentActionImpl implements DocumentAction {
                 .setId(neesDoc.getId())
                 .setName(neesDoc.getName())
                 .setDescription(neesDoc.getDescription())
-                .setContentType(neesDoc.getContentType())
+                .setContentType(neesDoc.getMimeContentType())
                 .setDocumentUrl(MvcUriComponentsBuilder.fromController(DocumentController.class)
                         .path("document/load")
                         .queryParam("id", neesDoc.getId())

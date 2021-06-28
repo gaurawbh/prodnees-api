@@ -124,7 +124,7 @@ public class DocumentController {
         int userId = RequestContext.getUserId();
         LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(id, userId), APIErrors.OBJECT_NOT_FOUND);
         NeesDoc neesDoc = documentAction.getById(id);
-        servletResponse.setContentType(ValidatorUtil.ifValidStringOrElse(neesDoc.getContentType(), MediaType.APPLICATION_PDF_VALUE));
+        servletResponse.setContentType(ValidatorUtil.ifValidStringOrElse(neesDoc.getMimeContentType(), MediaType.APPLICATION_PDF_VALUE));
         InputStream inputStream = new ByteArrayInputStream(neesDoc.getFile());
         try {
             IOUtils.copy(inputStream, servletResponse.getOutputStream());
