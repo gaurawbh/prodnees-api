@@ -1,4 +1,4 @@
-package com.prodnees.core.dao.rels;
+package com.prodnees.core.dao.doc;
 
 import com.prodnees.core.domain.doc.UserDocumentRight;
 import org.springframework.data.jpa.repository.JpaRepository;

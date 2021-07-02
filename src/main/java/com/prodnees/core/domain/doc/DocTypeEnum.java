@@ -12,8 +12,12 @@ public enum DocTypeEnum {
 
     DocTypeEnum(List<DocSubType> docSubTypeList) {
         this.docSubTypeList = docSubTypeList;
-
     }
+
+   public List<DocSubType> getDocSubTypeList() {
+        return docSubTypeList;
+    }
+
 
 }
 

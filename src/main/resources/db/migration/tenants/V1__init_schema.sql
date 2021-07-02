@@ -1,15 +1,66 @@
-create table nees_doc
+create table if not exists user_attributes
 (
-    id               int auto_increment
+    user_id           int          not null
         primary key,
-    name             varchar(255)                           not null,
-    file             longblob                               not null,
-    description      text                                   null,
-    created_datetime datetime     default CURRENT_TIMESTAMP not null,
-    content_type     varchar(100) default 'application/pdf' not null
+    application_right varchar(100) not null,
+    role              varchar(100) not null,
+    first_name        varchar(255) not null,
+    last_name         varchar(255) not null,
+    email             varchar(255) not null,
+    phone_number      varchar(50)  null,
+    address           varchar(255) null,
+    constraint email
+        unique (email)
 );
 
-create table product
+create table if not exists nees_doc
+(
+    id                int auto_increment
+        primary key,
+    name              varchar(255)                           not null,
+    description       text                                   null,
+    created_datetime  datetime     default CURRENT_TIMESTAMP not null,
+    mime_content_type varchar(100) default 'application/pdf' not null,
+    number            varchar(100)                           not null,
+    deleted           bit          default b'0'              not null,
+    doc_type          varchar(100)                           null,
+    doc_sub_type      varchar(100)                           null,
+    object_type       varchar(100)                           null,
+    object_id         int                                    null,
+    created_by        int                                    null,
+    last_modified_by  int                                    null,
+    modified_datetime datetime     default CURRENT_TIMESTAMP not null,
+    constraint nees_doc_user_attributes_user_id_fk
+        foreign key (created_by) references user_attributes (user_id)
+            on update cascade on delete set null,
+    constraint nees_doc_user_attributes_user_id_fk_2
+        foreign key (last_modified_by) references user_attributes (user_id)
+);
+
+
+create table if not exists nees_doc_type
+(
+    id             int auto_increment
+        primary key,
+    name           varchar(100)     not null,
+    description    text             null,
+    sub_types_json json             null,
+    active         bit default b'1' null,
+    sys            bit default b'1' null
+);
+
+create table if not exists nees_file
+(
+    doc_id int      not null
+        primary key,
+    file   longblob not null,
+    constraint nees_file_ibfk_1
+        foreign key (doc_id) references nees_doc (id)
+            on update cascade on delete cascade
+);
+
+
+create table if not exists product
 (
     id          int auto_increment
         primary key,
@@ -17,7 +68,7 @@ create table product
     description text         null
 );
 
-create table batch
+create table if not exists batch
 (
     id           int auto_increment
         primary key,
@@ -32,7 +83,7 @@ create table batch
             on update cascade
 );
 
-create table raw_product
+create table if not exists raw_product
 (
     id          int auto_increment
         primary key,
@@ -40,7 +91,7 @@ create table raw_product
     description text         null
 );
 
-create table stage
+create table if not exists stage
 (
     id          int auto_increment
         primary key,
@@ -54,7 +105,7 @@ create table stage
             on update cascade on delete cascade
 );
 
-create table stage_raw_product
+create table if not exists stage_raw_product
 (
     stage_id       int not null,
     raw_product_id int not null,
@@ -66,7 +117,7 @@ create table stage_raw_product
             on update cascade
 );
 
-create table stage_reminder
+create table if not exists stage_reminder
 (
     id          int auto_increment
         primary key,
@@ -81,7 +132,7 @@ create table stage_reminder
             on update cascade on delete cascade
 );
 
-create table stage_todo
+create table if not exists stage_todo
 (
     id          int auto_increment
         primary key,
@@ -100,22 +151,9 @@ create table stage_todo
             on update cascade on delete cascade
 );
 
-create table user_attributes
-(
-    user_id           int          not null
-        primary key,
-    application_right varchar(100) not null,
-    role              varchar(100) not null,
-    first_name        varchar(255) not null,
-    last_name         varchar(255) not null,
-    email             varchar(255) not null,
-    phone_number      varchar(50)  null,
-    address           varchar(255) null,
-    constraint email
-        unique (email)
-);
 
-create table associate_invitation
+
+create table if not exists associate_invitation
 (
     invitor_id      int              not null,
     invitor_email   varchar(255)     not null,
@@ -141,7 +179,7 @@ create table associate_invitation
             on update cascade on delete cascade
 );
 
-create table associates
+create table if not exists associates
 (
     admin_id        int          not null,
     associate_id    int          not null,
@@ -165,26 +203,7 @@ create table associates
             on update cascade on delete cascade
 );
 
-create table batch_approval_document
-(
-    id             int auto_increment
-        primary key,
-    batch_id       int          not null,
-    document_id    int          not null,
-    stage          varchar(100) not null,
-    approver_id    int          not null,
-    approver_email varchar(255) not null,
-    constraint batch_approval_document_ibfk_1
-        foreign key (batch_id) references batch (id)
-            on update cascade on delete cascade,
-    constraint batch_approval_document_ibfk_2
-        foreign key (document_id) references nees_doc (id),
-    constraint batch_approval_document_ibfk_3
-        foreign key (approver_id) references user_attributes (user_id)
-            on update cascade on delete cascade
-);
-
-create table batch_right
+create table if not exists batch_right
 (
     batch_id     int          not null,
     user_id      int          not null,
@@ -198,7 +217,7 @@ create table batch_right
             on update cascade on delete cascade
 );
 
-create table document_right
+create table if not exists document_right
 (
     user_id      int          not null,
     document_id  int          not null,
@@ -212,7 +231,7 @@ create table document_right
             on update cascade on delete cascade
 );
 
-create table inspection_type
+create table if not exists inspection_type
 (
     id              int auto_increment
         primary key,
@@ -227,7 +246,7 @@ create table inspection_type
             on update cascade on delete set null
 );
 
-create table product_right
+create table if not exists product_right
 (
     product_id   int          not null,
     user_id      int          not null,
@@ -241,22 +260,4 @@ create table product_right
             on update cascade on delete cascade
 );
 
-create table stage_approval_document
-(
-    id             int auto_increment
-        primary key,
-    stage_id       int          not null,
-    document_id    int          not null,
-    state          varchar(100) not null,
-    approver_id    int          not null,
-    approver_email varchar(255) not null,
-    constraint stage_approval_document_ibfk_1
-        foreign key (stage_id) references stage (id)
-            on update cascade on delete cascade,
-    constraint stage_approval_document_ibfk_2
-        foreign key (document_id) references nees_doc (id),
-    constraint stage_approval_document_ibfk_3
-        foreign key (approver_id) references user_attributes (user_id)
-            on update cascade on delete cascade
-);
 

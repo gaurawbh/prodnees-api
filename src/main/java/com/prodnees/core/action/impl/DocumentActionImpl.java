@@ -7,12 +7,17 @@ import com.prodnees.core.controller.DocumentController;
 import com.prodnees.core.domain.NeesContentType;
 import com.prodnees.core.domain.doc.DocumentPermission;
 import com.prodnees.core.domain.doc.NeesDoc;
+import com.prodnees.core.domain.doc.NeesDocType;
+import com.prodnees.core.domain.doc.NeesFile;
 import com.prodnees.core.domain.doc.UserDocumentRight;
 import com.prodnees.core.dto.DocumentDto;
 import com.prodnees.core.model.DocumentModel;
 import com.prodnees.core.service.NeesDocumentService;
+import com.prodnees.core.service.doc.NeesDocTypeService;
+import com.prodnees.core.service.doc.NeesFileService;
 import com.prodnees.core.service.rels.DocumentRightService;
 import com.prodnees.core.util.LocalAssert;
+import com.prodnees.core.util.LocalStringUtils;
 import com.prodnees.core.web.exception.NeesBadRequestException;
 import com.prodnees.core.web.exception.NeesNotFoundException;
 import org.springframework.stereotype.Service;
@@ -31,11 +36,17 @@ public class DocumentActionImpl implements DocumentAction {
 
     private final NeesDocumentService neesDocumentService;
     private final DocumentRightService documentRightService;
+    private final NeesDocTypeService neesDocTypeService;
+    private final NeesFileService neesFileService;
 
     public DocumentActionImpl(NeesDocumentService neesDocumentService,
-                              DocumentRightService documentRightService) {
+                              DocumentRightService documentRightService,
+                              NeesDocTypeService neesDocTypeService,
+                              NeesFileService neesFileService) {
         this.neesDocumentService = neesDocumentService;
         this.documentRightService = documentRightService;
+        this.neesDocTypeService = neesDocTypeService;
+        this.neesFileService = neesFileService;
     }
 
 
@@ -53,21 +64,47 @@ public class DocumentActionImpl implements DocumentAction {
         return save(neesDoc);
     }
 
+    /**
+     * Checks:
+     * <p>if doctype is not empty, check the doctype exists</p>
+     * <p>if docSubType is not empty, check if the docSubType is the valid for the docType</p>
+     * <p>docSubType will be ignored if docType is null</p>
+     *
+     * @param docType
+     * @param docSubType
+     * @param file
+     * @return
+     * @throws IOException
+     */
+
     @Override
-    public DocumentModel addNew(@Nullable String description, MultipartFile file) throws IOException {
+    public DocumentModel addNew(@Nullable String docType, @Nullable String docSubType, MultipartFile file) throws IOException {
+        if (LocalStringUtils.hasValue(docType)) {
+            NeesDocType neesDocType = neesDocTypeService.getByName(docType);
+            List<String> docSubTypesList = neesDocTypeService.extractSubTypes(neesDocType);
+            if (!docSubTypesList.contains(docSubType)) {
+                throw new NeesBadRequestException(String.format("Invalid docSubType: %s for docType: %s. Available docSubTypes: %s",
+                        docSubType, docType, docSubTypesList));
+            }
+        }
         int userId = RequestContext.getUserId();
         int nextId = neesDocumentService.getNextId();
-        String name = "Document-" + nextId;
+        String number = "Document-" + nextId;
         if (!NeesContentType.supportedContentTypes().contains(file.getContentType())) {
             throw new NeesBadRequestException(String.format("Unsupported file type. Supported file types: %s", NeesContentType.supportedContentTypes()));
         }
         NeesDoc neesDoc = new NeesDoc()
-                .setName(name)
-                .setDescription(description)
+                .setNumber(number)
+                .setName(file.getName())
                 .setMimeContentType(file.getContentType())
-                .setCreatedDatetime(LocalDateTime.now(ZoneId.of("UTC")))
-                .setFile(file.getBytes());
+                .setCreatedDatetime(LocalDateTime.now(ZoneId.of("UTC")));
         neesDoc = neesDocumentService.save(neesDoc);
+
+        NeesFile neesFile = new NeesFile()
+                .setDocId(neesDoc.getId())
+                .setFile(file.getBytes());
+        neesFileService.save(neesFile);
+
         UserDocumentRight userDocumentRight = new UserDocumentRight()
                 .setUserId(userId)
                 .setDocumentId(neesDoc.getId())

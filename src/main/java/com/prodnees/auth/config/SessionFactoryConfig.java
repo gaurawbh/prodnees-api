@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
+import java.util.List;
+
 import static org.hibernate.cfg.AvailableSettings.DIALECT;
 import static org.hibernate.cfg.AvailableSettings.DRIVER;
 import static org.hibernate.cfg.AvailableSettings.PASS;
@@ -24,6 +26,10 @@ public class SessionFactoryConfig {
     }
 
     public SessionFactory getCurrentSession(String schema) {
+        return getCurrentSession(schema, List.of(UserAttributes.class));
+    }
+
+    public SessionFactory getCurrentSession(String schema, List<Class<?>> annotatedClasses) {
         org.hibernate.cfg.Configuration config = new org.hibernate.cfg.Configuration();
 
         config.setProperty(DRIVER, environment.getProperty(LocalSettings.Datasource.DRIVER));//"com.mysql.cj.jdbc.Driver"
@@ -32,10 +38,11 @@ public class SessionFactoryConfig {
         config.setProperty(PASS, environment.getProperty(LocalSettings.Datasource.PASSWORD));
         config.setProperty(DIALECT, environment.getProperty(LocalSettings.JPA.DB_PLATFORM));//"org.hibernate.dialect.MySQL8Dialect");
         config.setPhysicalNamingStrategy(new SpringPhysicalNamingStrategy());
-        config.addAnnotatedClass(UserAttributes.class);
+        annotatedClasses.forEach(config::addAnnotatedClass);
         return config.buildSessionFactory();
 
     }
+
 
     /**
      * {@link SessionFactoryConfig#getCurrentSession(String)} does not fail during the build time since it is not a bean,

@@ -1,7 +1,7 @@
 package com.prodnees.core.service.impl;
 
 import com.prodnees.auth.config.tenancy.CurrentTenantResolver;
-import com.prodnees.core.dao.NeesDocDao;
+import com.prodnees.core.dao.doc.NeesDocDao;
 import com.prodnees.core.domain.doc.NeesDoc;
 import com.prodnees.core.service.NeesDocumentService;
 import org.springframework.stereotype.Service;
@@ -46,6 +46,6 @@ public class NeesDocumentServiceImpl implements NeesDocumentService {
 
     @Override
     public int getNextId() {
-        return neesDocDao.getNextId(CurrentTenantResolver.getTenant(), "document", "id");
+        return neesDocDao.getNextId(CurrentTenantResolver.getTenant(), "nees_doc", "id");
     }
 }

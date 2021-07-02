@@ -6,6 +6,7 @@
 
 package com.prodnees.auth.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.annotations.VisibleForTesting;
 import com.prodnees.auth.dao.CompanyDao;
 import com.prodnees.auth.dao.TempPasswordInfoDao;
@@ -68,7 +69,7 @@ public class SignupServiceImpl implements SignupService {
      * @return
      */
     @Override
-    public UserModel signup(SignupDto dto) {
+    public UserModel signup(SignupDto dto) throws JsonProcessingException {
         Company company = registerCompany(dto);
         String tempPassword = getTempPassword();
         User user = registerUser(dto, tempPassword, company.getId());

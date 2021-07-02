@@ -2,17 +2,20 @@ package com.prodnees.core.domain.doc;
 
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import java.io.Serializable;
 
-@Entity
+@Entity(name = "document_right")
 @IdClass(UserDocumentRightId.class)
 public class UserDocumentRight implements Serializable {
     @Id
     private int userId;
     @Id
     private int documentId;
+    @Enumerated(EnumType.STRING)
     private DocumentPermission documentPermission;
 
 

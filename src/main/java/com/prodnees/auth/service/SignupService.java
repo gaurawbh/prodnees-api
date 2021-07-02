@@ -7,11 +7,12 @@
 package com.prodnees.auth.service;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.prodnees.core.dto.user.SignupDto;
 import com.prodnees.core.model.user.UserModel;
 
 public interface SignupService {
 
-    UserModel signup(SignupDto dto);
+    UserModel signup(SignupDto dto) throws JsonProcessingException;
 
 }

@@ -15,7 +15,7 @@ public interface DocumentAction {
 
     DocumentModel update(DocumentDto dto);
 
-    DocumentModel addNew(@Nullable String description, MultipartFile file) throws IOException;
+    DocumentModel addNew(@Nullable String docType, @Nullable String docSubType, MultipartFile file) throws IOException;
 
     NeesDoc getById(int id);
 

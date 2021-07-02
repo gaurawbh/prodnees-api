@@ -1,6 +1,6 @@
 package com.prodnees.core.service.rels.impl;
 
-import com.prodnees.core.dao.rels.DocumentRightDao;
+import com.prodnees.core.dao.doc.DocumentRightDao;
 import com.prodnees.core.domain.doc.DocumentPermission;
 import com.prodnees.core.domain.doc.UserDocumentRight;
 import com.prodnees.core.service.rels.DocumentRightService;

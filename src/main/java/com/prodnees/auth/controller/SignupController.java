@@ -1,5 +1,6 @@
 package com.prodnees.auth.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.prodnees.auth.action.AuthAction;
 import com.prodnees.auth.action.UserAction;
 import com.prodnees.auth.service.SignupService;
@@ -41,7 +42,7 @@ public class SignupController {
 
     @PostMapping("/signup")
     @Transactional
-    public ResponseEntity<?> signup(@Validated @RequestBody SignupDto dto) {
+    public ResponseEntity<?> signup(@Validated @RequestBody SignupDto dto) throws JsonProcessingException {
         return configure(signupService.signup(dto));
     }
 

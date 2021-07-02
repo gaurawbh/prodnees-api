@@ -2,12 +2,9 @@ package com.prodnees.core.action.stage.impl;
 
 import com.prodnees.core.action.StageList;
 import com.prodnees.core.action.stage.StageAction;
-import com.prodnees.core.controller.DocumentController;
 import com.prodnees.core.domain.batch.RawProduct;
-import com.prodnees.core.domain.doc.NeesDoc;
 import com.prodnees.core.domain.enums.StageState;
 import com.prodnees.core.domain.stage.Stage;
-import com.prodnees.core.domain.stage.StageApprovalDocument;
 import com.prodnees.core.domain.stage.StageTodo;
 import com.prodnees.core.dto.stage.StageDto;
 import com.prodnees.core.model.stage.StageApprovalDocumentModel;
@@ -15,12 +12,10 @@ import com.prodnees.core.model.stage.StageModel;
 import com.prodnees.core.service.NeesDocumentService;
 import com.prodnees.core.service.batch.RawProductService;
 import com.prodnees.core.service.rels.BatchRightService;
-import com.prodnees.core.service.rels.StageApprovalDocumentService;
 import com.prodnees.core.service.stage.StageService;
 import com.prodnees.core.service.stage.StageTodoService;
 import com.prodnees.core.web.exception.NeesNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +25,6 @@ import java.util.Optional;
 public class StageActionImpl implements StageAction {
 
     private final StageService stageService;
-    private final StageApprovalDocumentService stageApprovalDocumentService;
     private final StageTodoService stageTodoService;
     private final RawProductService rawProductService;
     private final NeesDocumentService neesDocumentService;
@@ -39,14 +33,12 @@ public class StageActionImpl implements StageAction {
 
 
     public StageActionImpl(StageService stageService,
-                           StageApprovalDocumentService stageApprovalDocumentService,
                            StageTodoService stageTodoService,
                            RawProductService rawProductService,
                            NeesDocumentService neesDocumentService,
                            BatchRightService batchRightService,
                            StageList stageList) {
         this.stageService = stageService;
-        this.stageApprovalDocumentService = stageApprovalDocumentService;
         this.stageTodoService = stageTodoService;
         this.rawProductService = rawProductService;
         this.neesDocumentService = neesDocumentService;
@@ -145,11 +137,9 @@ public class StageActionImpl implements StageAction {
 
     private StageModel entityToModel(Stage stage) {
         StageModel stageModel = new StageModel();
-        List<StageApprovalDocument> stageApprovalDocumentList = stageApprovalDocumentService.getAllByStageId(stage.getId());
         List<StageTodo> stageTodoList = stageTodoService.getAllByStageId(stage.getId());
         List<RawProduct> rawProductList = rawProductService.getAllByStageId(stage.getId());
         List<StageApprovalDocumentModel> stageApprovalDocumentModelList = new ArrayList<>();
-        stageApprovalDocumentList.forEach(stateApprovalDocument -> stageApprovalDocumentModelList.add(entityToModel(stateApprovalDocument)));
         stageModel.setId(stage.getId())
                 .setBatchId(stage.getBatchId())
                 .setIndex(stage.getIndx())
@@ -160,27 +150,6 @@ public class StageActionImpl implements StageAction {
                 .setRawProductList(rawProductList)
                 .setStatus(stage.getState());
         return stageModel;
-    }
-
-    private StageApprovalDocumentModel entityToModel(StageApprovalDocument stageApprovalDocument) {
-        NeesDoc neesDoc = neesDocumentService.getById(stageApprovalDocument.getDocumentId());
-
-        return new StageApprovalDocumentModel()
-                .setId(stageApprovalDocument.getId())
-                .setName(neesDoc.getName())
-                .setDocumentId(stageApprovalDocument.getDocumentId())
-                .setApproverId(stageApprovalDocument.getApproverId())
-                .setApproverEmail(stageApprovalDocument.getApproverEmail())
-                .setDocumentUrl(MvcUriComponentsBuilder.fromController(DocumentController.class)
-                        .path("document/load")
-                        .queryParam("id", neesDoc.getId())
-                        .toUriString())
-                .setDocumentDownloadUrl(MvcUriComponentsBuilder.fromController(DocumentController.class)
-                        .path("document/download")
-                        .queryParam("id", neesDoc.getId())
-                        .toUriString())
-                .setApprovalDocumentState(stageApprovalDocument.getState());
-
     }
 
 }

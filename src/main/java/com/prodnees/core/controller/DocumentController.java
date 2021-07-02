@@ -13,12 +13,8 @@ import com.prodnees.core.model.DocumentModel;
 import com.prodnees.core.util.LocalAssert;
 import com.prodnees.core.util.ValidatorUtil;
 import com.prodnees.core.web.exception.NeesNotFoundException;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,9 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -57,12 +51,13 @@ public class DocumentController {
         this.documentRightAction = documentRightAction;
     }
 
-    @PostMapping("/document")
-    public ResponseEntity<?> save(@RequestParam MultipartFile file,
-                                  @RequestParam(required = false) String description) {
+    @PostMapping("/document/upload")
+    public ResponseEntity<?> save(@RequestParam(required = false) String docType,
+                                  @RequestParam(required = false) String docSubType,
+                                  @RequestParam MultipartFile file) {
         DocumentModel documentModel = new DocumentModel();
         try {
-            documentModel = documentAction.addNew(description, file);
+            documentModel = documentAction.addNew(docType, docSubType, file);
         } catch (IOException e) {
             e.printStackTrace();
             localLogger.error(e.getMessage());
@@ -83,7 +78,6 @@ public class DocumentController {
 
     /**
      * Only {@link ObjectRight#Owner} can delete a document.
-     * <p>A document cannot be deleted if it is referenced by an {@link com.prodnees.core.domain.stage.StageApprovalDocument}</p>
      *
      * @param id
      * @return
@@ -125,25 +119,25 @@ public class DocumentController {
         LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(id, userId), APIErrors.OBJECT_NOT_FOUND);
         NeesDoc neesDoc = documentAction.getById(id);
         servletResponse.setContentType(ValidatorUtil.ifValidStringOrElse(neesDoc.getMimeContentType(), MediaType.APPLICATION_PDF_VALUE));
-        InputStream inputStream = new ByteArrayInputStream(neesDoc.getFile());
-        try {
-            IOUtils.copy(inputStream, servletResponse.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        InputStream inputStream = new ByteArrayInputStream(neesDoc.getFile());
+//        try {
+//            IOUtils.copy(inputStream, servletResponse.getOutputStream());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
-    @GetMapping("/document/download")
-    public ResponseEntity<?> downloadDocumentFile(@RequestParam int id) {
-        int userId = RequestContext.getUserId();
-        LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(id, userId),
-                APIErrors.OBJECT_NOT_FOUND);
-        NeesDoc neesDoc = documentAction.getById(id);
-
-        Resource resource = new ByteArrayResource(neesDoc.getFile());
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_PDF)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename = " + neesDoc.getName() + ".pdf")
-                .body(resource);
-    }
+//    @GetMapping("/document/download")
+//    public ResponseEntity<?> downloadDocumentFile(@RequestParam int id) {
+//        int userId = RequestContext.getUserId();
+//        LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(id, userId),
+//                APIErrors.OBJECT_NOT_FOUND);
+//        NeesDoc neesDoc = documentAction.getById(id);
+//
+//        Resource resource = new ByteArrayResource(neesDoc.getFile());
+//        return ResponseEntity.ok()
+//                .contentType(MediaType.APPLICATION_PDF)
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename = " + neesDoc.getName() + ".pdf")
+//                .body(resource);
+//    }
 }
