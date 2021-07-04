@@ -21,4 +21,14 @@ public class NeesContentType implements Serializable {
 
     }
 
+    public static MediaType getMediaType(String contentType) {
+        switch (contentType) {
+            case IMAGE_JPEG_VALUE:
+                return MediaType.IMAGE_JPEG;
+            case IMAGE_PNG_VALUE:
+                return MediaType.IMAGE_PNG;
+            default:
+                return MediaType.APPLICATION_PDF;
+        }
+    }
 }

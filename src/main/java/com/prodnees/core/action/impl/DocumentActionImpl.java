@@ -1,5 +1,6 @@
 package com.prodnees.core.action.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.core.action.DocumentAction;
 import com.prodnees.core.config.constants.APIErrors;
@@ -12,11 +13,13 @@ import com.prodnees.core.domain.doc.NeesDoctype;
 import com.prodnees.core.domain.doc.NeesFile;
 import com.prodnees.core.domain.doc.UserDocumentRight;
 import com.prodnees.core.domain.user.UserAttributes;
-import com.prodnees.core.dto.DocumentDto;
+import com.prodnees.core.dto.NeesDocDto;
 import com.prodnees.core.model.DocumentModel;
 import com.prodnees.core.model.NeesDocProps;
 import com.prodnees.core.model.NeesObjProps;
 import com.prodnees.core.service.NeesDocumentService;
+import com.prodnees.core.service.batch.BatchService;
+import com.prodnees.core.service.batch.ProductService;
 import com.prodnees.core.service.doc.NeesDocTypeService;
 import com.prodnees.core.service.doc.NeesFileService;
 import com.prodnees.core.service.rels.DocumentRightService;
@@ -47,17 +50,23 @@ public class DocumentActionImpl implements DocumentAction {
     private final NeesDocTypeService neesDocTypeService;
     private final NeesFileService neesFileService;
     private final UserAttributesService userAttributesService;
+    private final BatchService batchService;
+    private final ProductService productService;
 
     public DocumentActionImpl(NeesDocumentService neesDocumentService,
                               DocumentRightService documentRightService,
                               NeesDocTypeService neesDocTypeService,
                               NeesFileService neesFileService,
-                              UserAttributesService userAttributesService) {
+                              UserAttributesService userAttributesService,
+                              BatchService batchService,
+                              ProductService productService) {
         this.neesDocumentService = neesDocumentService;
         this.documentRightService = documentRightService;
         this.neesDocTypeService = neesDocTypeService;
         this.neesFileService = neesFileService;
         this.userAttributesService = userAttributesService;
+        this.batchService = batchService;
+        this.productService = productService;
     }
 
 
@@ -67,12 +76,30 @@ public class DocumentActionImpl implements DocumentAction {
     }
 
     @Override
-    public DocumentModel update(DocumentDto dto) {
+    public DocumentModel update(NeesDocDto dto) {
         int userId = RequestContext.getUserId();
-        UserDocumentRight userDocumentRight = documentRightService.findByDocumentIdAndUserId(dto.getId(), userId).orElseThrow(NeesNotFoundException::new);
+        UserDocumentRight userDocumentRight = documentRightService.findByDocumentIdAndUserId(dto.getId(), userId)
+                .orElseThrow(() -> new NeesNotFoundException(String.format("Document with id: %d not found", dto.getId())));
         LocalAssert.isTrue(documentRightService.hasEditRights(userDocumentRight), APIErrors.UPDATE_DENIED);
-        NeesDoc neesDoc = neesDocumentService.getById(dto.getId()).setDescription(dto.getDescription());
+        NeesDoc neesDoc = neesDocumentService.getById(dto.getId());
+        neesDoc.setName(dto.getName())
+                .setDescription(dto.getDescription());
+        if (dto.getObjectId() != null) {
+            LocalAssert.isTrue(isValidDocObjectType(neesDoc.getObjectType()), "Invalid document objectType");
+            if (neesDoc.getObjectType().equalsIgnoreCase("Product")) {
+                productService.getById(dto.getObjectId()); // check if the user has the right to Product
+                neesDoc.setObjectId(dto.getObjectId());
+            }
+            if (neesDoc.getObjectType().equalsIgnoreCase("Batch")) {
+                batchService.getById(dto.getId()); // check if the user has the right to Batch
+                neesDoc.setObjectId(dto.getObjectId());
+            }
+        }
         return save(neesDoc);
+    }
+
+    boolean isValidDocObjectType(String objectType) {
+        return objectType.equals("Batch") || objectType.equals("Product");
     }
 
     /**
@@ -94,6 +121,7 @@ public class DocumentActionImpl implements DocumentAction {
         if (LocalStringUtils.hasValue(docType)) {
             NeesDoctype neesDocType = neesDocTypeService.getByName(docType);
             neesDoc.setDocType(docType);
+            neesDoc.setObjectType(docType);//Doctypes are just object types
             List<String> docSubTypesList = neesDocTypeService.extractSubTypes(neesDocType);
             if (LocalStringUtils.hasValue(docSubType)) {
                 if (!docSubTypesList.contains(docSubType)) {
@@ -102,7 +130,6 @@ public class DocumentActionImpl implements DocumentAction {
                 }
                 neesDoc.setDocSubType(docSubType);
             }
-
         }
         int userId = RequestContext.getUserId();
         int nextId = neesDocumentService.getNextId();
@@ -122,6 +149,7 @@ public class DocumentActionImpl implements DocumentAction {
 
         NeesFile neesFile = new NeesFile()
                 .setDocId(neesDoc.getId())
+                .setMimeContentType(file.getContentType())
                 .setFile(file.getBytes());
         neesFileService.save(neesFile);
 
@@ -130,7 +158,31 @@ public class DocumentActionImpl implements DocumentAction {
                 .setDocumentId(neesDoc.getId())
                 .setDocumentPermission(DocumentPermission.Delete);
         documentRightService.save(userDocumentRight);
-        return entityToModel(neesDoc, userDocumentRight, false);
+        return entityToModelM(neesDoc, userDocumentRight);
+    }
+
+    @Override
+    public Map<String, Object> reclassify(int id, String doctype, @Nullable String docSubtype) throws JsonProcessingException {
+
+        int userId = RequestContext.getUserId();
+        UserDocumentRight userDocumentRight = documentRightService.findByDocumentIdAndUserId(id, userId)
+                .orElseThrow(() -> new NeesNotFoundException(String.format("Document with id: %d not found", id)));
+        NeesDoc neesDoc = neesDocumentService.getById(id);
+        NeesDoctype neesDocType = neesDocTypeService.getByName(doctype);
+        neesDoc.setDocType(doctype)
+                .setObjectType(doctype)//Doctypes are just object types
+                .setObjectId(null);//reclassifying a document will remove the objectId
+        List<String> docSubTypesList = neesDocTypeService.extractSubTypes(neesDocType);
+        if (LocalStringUtils.hasValue(docSubtype)) {
+            if (!docSubTypesList.contains(docSubtype)) {
+                throw new NeesBadRequestException(String.format("Invalid docSubType: %s for docType: %s. Available docSubTypes: %s",
+                        docSubtype, doctype, docSubTypesList));
+            }
+            neesDoc.setDocSubType(docSubtype);
+        }
+
+
+        return entityToModelM(neesDocumentService.save(neesDoc), userDocumentRight);
     }
 
     @Override
@@ -166,17 +218,14 @@ public class DocumentActionImpl implements DocumentAction {
         neesDocumentService.deleteById(id);
     }
 
-
-    /**
-     * Builds  a complete model including the userId
-     *
-     * @param userDocumentRight
-     * @return
-     */
-    public DocumentModel entityToModel(NeesDoc neesDoc, UserDocumentRight userDocumentRight) {
-        DocumentModel model = entityToModel(neesDoc);
-        model.setDocumentPermission(userDocumentRight.getDocumentPermission());
-        return model;
+    @Override
+    public List<Map<String, Object>> getValidDocObjects(int id) {
+        NeesDoc neesDoc = neesDocumentService.getById(id);
+        LocalAssert.isTrue(LocalStringUtils.hasValue(neesDoc.getObjectType()), "Document is not classified yet. Please classify first");
+        if (neesDoc.getObjectType().equalsIgnoreCase("Stage")) {
+            throw new NeesBadRequestException("Adding Stages from the document is not yet supported. Add it's document from the Stage page");
+        }
+        return neesDocumentService.getValidDocObjects(id);
     }
 
 
@@ -215,7 +264,7 @@ public class DocumentActionImpl implements DocumentAction {
                         .toUriString());
     }
 
-    public Map<String, Object> entityToModel(NeesDoc neesDoc, UserDocumentRight userDocumentRight, boolean ignoreThisParam) {
+    public Map<String, Object> entityToModelM(NeesDoc neesDoc, UserDocumentRight userDocumentRight) {
 
         Map<String, Object> createdBy = new HashMap<>();
         UserAttributes createdByU = userAttributesService.getByUserId(neesDoc.getCreatedBy());

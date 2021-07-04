@@ -7,6 +7,7 @@ import javax.persistence.Id;
 public class NeesFile {
     @Id
     private int docId;
+    private String mimeContentType;
     private byte[] file;
 
     public int getDocId() {
@@ -24,6 +25,15 @@ public class NeesFile {
 
     public NeesFile setFile(byte[] file) {
         this.file = file;
+        return this;
+    }
+
+    public String getMimeContentType() {
+        return mimeContentType;
+    }
+
+    public NeesFile setMimeContentType(String mimeContentType) {
+        this.mimeContentType = mimeContentType;
         return this;
     }
 }

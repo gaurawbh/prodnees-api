@@ -23,6 +23,7 @@ public class Batch {
     private BatchState state;
     @JsonFormat(pattern = FormatUtil.DATE)
     private LocalDate createdDate;
+    @JsonFormat(pattern = FormatUtil.DATE)
     private LocalDate startDate;
 
     public int getId() {

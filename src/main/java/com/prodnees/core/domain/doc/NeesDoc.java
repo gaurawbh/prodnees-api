@@ -7,28 +7,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * A document that can be referenced in other Objects or ApprovalDocument
  */
 @Entity
 public class NeesDoc {
-
-    public static final List<String> fieldsNoFile =
-            Arrays.asList(
-                    "id",
-                    "doc_number",
-                    "name",
-                    "description",
-                    "deleted",
-                    "doc_type",
-                    "doc_sub_type",
-                    "object_type",
-                    "object_id",
-                    "mime_content_type",
-                    "created_datetime");
 
     @Id
     @GeneratedValue

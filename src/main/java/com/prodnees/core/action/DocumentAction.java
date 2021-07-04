@@ -1,7 +1,8 @@
 package com.prodnees.core.action;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.prodnees.core.domain.doc.NeesDoc;
-import com.prodnees.core.dto.DocumentDto;
+import com.prodnees.core.dto.NeesDocDto;
 import com.prodnees.core.model.DocumentModel;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,7 +15,7 @@ public interface DocumentAction {
 
     DocumentModel save(NeesDoc neesDoc);
 
-    DocumentModel update(DocumentDto dto);
+    DocumentModel update(NeesDocDto dto);
 
     Map<String, Object> addNew(@Nullable String docType, @Nullable String docSubType, MultipartFile file) throws IOException;
 
@@ -29,4 +30,8 @@ public interface DocumentAction {
     boolean existsByName(String name);
 
     void deleteById(int id);
+
+    List<Map<String, Object>> getValidDocObjects(int id);
+
+    Map<String, Object> reclassify(int id, String doctype,@Nullable String docSubtype) throws JsonProcessingException;
 }

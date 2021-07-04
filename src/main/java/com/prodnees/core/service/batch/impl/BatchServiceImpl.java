@@ -1,10 +1,14 @@
 package com.prodnees.core.service.batch.impl;
 
 import com.prodnees.auth.config.tenancy.CurrentTenantResolver;
+import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.core.dao.batchproduct.BatchDao;
+import com.prodnees.core.dao.rels.BatchRightsDao;
 import com.prodnees.core.domain.batch.Batch;
 import com.prodnees.core.domain.enums.BatchState;
 import com.prodnees.core.service.batch.BatchService;
+import com.prodnees.core.util.LocalAssert;
+import com.prodnees.core.web.exception.NeesNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +17,12 @@ import java.util.Optional;
 @Service
 public class BatchServiceImpl implements BatchService {
     private final BatchDao batchDao;
+    private final BatchRightsDao batchRightsDao;
 
-    public BatchServiceImpl(BatchDao batchDao) {
+    public BatchServiceImpl(BatchDao batchDao,
+                            BatchRightsDao batchRightsDao) {
         this.batchDao = batchDao;
+        this.batchRightsDao = batchRightsDao;
     }
 
     @Override
@@ -25,7 +32,11 @@ public class BatchServiceImpl implements BatchService {
 
     @Override
     public Batch getById(int id) {
-        return batchDao.getById(id);
+        Batch batch = batchDao.findById(id)
+                .orElseThrow(() -> new NeesNotFoundException(String.format("Batch with id: %d not found", id)));
+        LocalAssert.isTrue(batchRightsDao.existsByBatchIdAndUserId(id, RequestContext.getUserId()), String.format("Batch with id: %d not found", id));
+        return batch;
+
     }
 
     @Override

@@ -6,17 +6,24 @@ import com.prodnees.core.action.DocumentAction;
 import com.prodnees.core.action.NeesDocTypeAction;
 import com.prodnees.core.action.rel.DocumentRightAction;
 import com.prodnees.core.config.constants.APIErrors;
+import com.prodnees.core.domain.NeesContentType;
 import com.prodnees.core.domain.doc.DocumentPermission;
 import com.prodnees.core.domain.doc.NeesDoc;
+import com.prodnees.core.domain.doc.NeesFile;
 import com.prodnees.core.domain.doc.UserDocumentRight;
 import com.prodnees.core.domain.enums.ObjectRight;
-import com.prodnees.core.dto.DocumentDto;
+import com.prodnees.core.dto.NeesDocDto;
 import com.prodnees.core.model.DocumentModel;
+import com.prodnees.core.service.doc.NeesFileService;
 import com.prodnees.core.util.LocalAssert;
 import com.prodnees.core.util.ValidatorUtil;
 import com.prodnees.core.web.exception.NeesNotFoundException;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +38,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -47,14 +56,17 @@ public class DocumentController {
     private final DocumentAction documentAction;
     private final DocumentRightAction documentRightAction;
     private final NeesDocTypeAction neesDocTypeAction;
+    private final NeesFileService neesFileService;
 
 
     public DocumentController(DocumentAction documentAction,
                               DocumentRightAction documentRightAction,
-                              NeesDocTypeAction neesDocTypeAction) {
+                              NeesDocTypeAction neesDocTypeAction,
+                              NeesFileService neesFileService) {
         this.documentAction = documentAction;
         this.documentRightAction = documentRightAction;
         this.neesDocTypeAction = neesDocTypeAction;
+        this.neesFileService = neesFileService;
     }
 
     @GetMapping("/doctypes")
@@ -80,6 +92,11 @@ public class DocumentController {
         return configure(documentModel);
     }
 
+    @GetMapping("/document/objects")
+    public ResponseEntity<?> getObjectsForDoc(@RequestParam int id) {
+        return configure(documentAction.getValidDocObjects(id));
+    }
+
     /**
      * Only {@link NeesDoc} #name can be updated of a Document
      *
@@ -87,8 +104,15 @@ public class DocumentController {
      * @return
      */
     @PutMapping("/document")
-    public ResponseEntity<?> update(@Validated @RequestBody DocumentDto dto) {
+    public ResponseEntity<?> update(@Validated @RequestBody NeesDocDto dto) {
         return configure(documentAction.update(dto));
+    }
+
+    @PutMapping("/document/reclassify")
+    public ResponseEntity<?> reClassify(@RequestParam int id,
+                                        @RequestParam String doctype,
+                                        @RequestParam(required = false) String docSubtype) throws JsonProcessingException {
+        return configure(documentAction.reclassify(id, doctype, docSubtype));
     }
 
     /**
@@ -132,27 +156,29 @@ public class DocumentController {
                                  HttpServletResponse servletResponse) {
         int userId = RequestContext.getUserId();
         LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(id, userId), APIErrors.OBJECT_NOT_FOUND);
-        NeesDoc neesDoc = documentAction.getById(id);
-        servletResponse.setContentType(ValidatorUtil.ifValidStringOrElse(neesDoc.getMimeContentType(), MediaType.APPLICATION_PDF_VALUE));
-//        InputStream inputStream = new ByteArrayInputStream(neesDoc.getFile());
-//        try {
-//            IOUtils.copy(inputStream, servletResponse.getOutputStream());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        NeesFile neesFile = neesFileService.getByDocId(id);
+        servletResponse.setContentType(ValidatorUtil.ifValidStringOrElse(neesFile.getMimeContentType(), MediaType.APPLICATION_PDF_VALUE));
+        InputStream inputStream = new ByteArrayInputStream(neesFile.getFile());
+        try {
+            IOUtils.copy(inputStream, servletResponse.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-//    @GetMapping("/document/download")
-//    public ResponseEntity<?> downloadDocumentFile(@RequestParam int id) {
-//        int userId = RequestContext.getUserId();
-//        LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(id, userId),
-//                APIErrors.OBJECT_NOT_FOUND);
-//        NeesDoc neesDoc = documentAction.getById(id);
-//
-//        Resource resource = new ByteArrayResource(neesDoc.getFile());
-//        return ResponseEntity.ok()
-//                .contentType(MediaType.APPLICATION_PDF)
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename = " + neesDoc.getName() + ".pdf")
-//                .body(resource);
-//    }
+    @GetMapping("/document/download")
+    public ResponseEntity<?> downloadDocumentFile(@RequestParam int id) {
+        int userId = RequestContext.getUserId();
+        LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(id, userId),
+                APIErrors.OBJECT_NOT_FOUND);
+        NeesDoc neesDoc = documentAction.getById(id);
+        NeesFile neesFile = neesFileService.getByDocId(id);
+        Resource resource = new ByteArrayResource(neesFile.getFile());
+        return ResponseEntity.ok()
+                .contentType(NeesContentType.getMediaType(neesFile.getMimeContentType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename = " + neesDoc.getName() + ".pdf")
+                .body(resource);
+    }
+
+
 }

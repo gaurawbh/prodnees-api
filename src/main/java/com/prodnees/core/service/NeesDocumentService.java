@@ -2,6 +2,9 @@ package com.prodnees.core.service;
 
 import com.prodnees.core.domain.doc.NeesDoc;
 
+import java.util.List;
+import java.util.Map;
+
 public interface NeesDocumentService {
 
     NeesDoc save(NeesDoc neesDoc);
@@ -17,5 +20,7 @@ public interface NeesDocumentService {
     void deleteById(int id);
 
     int getNextId();
+
+    List<Map<String, Object>> getValidDocObjects(int id);
 
 }
