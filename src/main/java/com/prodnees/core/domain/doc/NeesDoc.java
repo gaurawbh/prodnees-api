@@ -41,17 +41,20 @@ public class NeesDoc {
     private String name;
 
     private String description;
+    private String docType;
+    private String docSubType;
+    private String mimeContentType;
+    private String objectType;
+    private Integer objectId;
+    private Integer createdBy;
+    private Integer lastModifiedBy;
 
     //Files will not be permanently deleted. Will not be visible to the User if marked as deleted
     private boolean deleted;
-
-    private String docType;
-    private String docSubType;
-    private String objectType;
-    private Integer objectId;
-    private String mimeContentType;
     @JsonFormat(pattern = DateTimeFormats.DATE_TIME)
     private LocalDateTime createdDatetime;
+    @JsonFormat(pattern = DateTimeFormats.DATE_TIME)
+    private LocalDateTime modifiedDatetime;
 
     public int getId() {
         return id;
@@ -134,6 +137,24 @@ public class NeesDoc {
         return this;
     }
 
+    public Integer getCreatedBy() {
+        return createdBy;
+    }
+
+    public NeesDoc setCreatedBy(Integer createdBy) {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    public Integer getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public NeesDoc setLastModifiedBy(Integer lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+        return this;
+    }
+
     public String getMimeContentType() {
         return mimeContentType;
     }
@@ -152,4 +173,12 @@ public class NeesDoc {
         return this;
     }
 
+    public LocalDateTime getModifiedDatetime() {
+        return modifiedDatetime;
+    }
+
+    public NeesDoc setModifiedDatetime(LocalDateTime modifiedDateTime) {
+        this.modifiedDatetime = modifiedDateTime;
+        return this;
+    }
 }

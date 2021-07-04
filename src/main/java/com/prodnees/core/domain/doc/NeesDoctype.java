@@ -1,18 +1,21 @@
 package com.prodnees.core.domain.doc;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class NeesDocType {
+public class NeesDoctype {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     private String description;
+    @JsonProperty("subTypes")
     private String subTypesJson;
     private boolean active;
     private boolean sys; // if it is system, users cannot delete it
@@ -21,7 +24,7 @@ public class NeesDocType {
         return id;
     }
 
-    public NeesDocType setId(int id) {
+    public NeesDoctype setId(int id) {
         this.id = id;
         return this;
     }
@@ -30,7 +33,7 @@ public class NeesDocType {
         return name;
     }
 
-    public NeesDocType setName(String name) {
+    public NeesDoctype setName(String name) {
         this.name = name;
         return this;
     }
@@ -39,7 +42,7 @@ public class NeesDocType {
         return description;
     }
 
-    public NeesDocType setDescription(String description) {
+    public NeesDoctype setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -48,7 +51,7 @@ public class NeesDocType {
         return subTypesJson;
     }
 
-    public NeesDocType setSubTypesJson(String subTypesJson) {
+    public NeesDoctype setSubTypesJson(String subTypesJson) {
         this.subTypesJson = subTypesJson;
         return this;
     }
@@ -57,7 +60,7 @@ public class NeesDocType {
         return active;
     }
 
-    public NeesDocType setActive(boolean active) {
+    public NeesDoctype setActive(boolean active) {
         this.active = active;
         return this;
     }
@@ -66,7 +69,7 @@ public class NeesDocType {
         return sys;
     }
 
-    public NeesDocType setSys(boolean system) {
+    public NeesDoctype setSys(boolean system) {
         this.sys = system;
         return this;
     }

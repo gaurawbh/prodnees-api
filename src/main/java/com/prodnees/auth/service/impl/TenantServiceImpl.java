@@ -15,7 +15,7 @@ import com.prodnees.auth.domain.UserRole;
 import com.prodnees.auth.service.TenantService;
 import com.prodnees.core.domain.doc.DocSubType;
 import com.prodnees.core.domain.doc.DocTypeEnum;
-import com.prodnees.core.domain.doc.NeesDocType;
+import com.prodnees.core.domain.doc.NeesDoctype;
 import com.prodnees.core.domain.user.UserAttributes;
 import com.prodnees.core.util.LocalAssert;
 import org.flywaydb.core.Flyway;
@@ -58,7 +58,7 @@ public class TenantServiceImpl implements TenantService {
         }
         List<Class<?>> annotatedClasses = new ArrayList<>();
         annotatedClasses.add(UserAttributes.class);
-        annotatedClasses.add(NeesDocType.class);
+        annotatedClasses.add(NeesDoctype.class);
         Session session = sessionFactoryConfig.getCurrentSession(schema, annotatedClasses).openSession();
 
         Transaction tx = session.beginTransaction();
@@ -74,12 +74,13 @@ public class TenantServiceImpl implements TenantService {
 
         DocTypeEnum[] docTypeEnums = DocTypeEnum.values();
         for (DocTypeEnum docType : docTypeEnums) {
-            NeesDocType neesDocType = new NeesDocType();
+            NeesDoctype neesDocType = new NeesDoctype();
             List<DocSubType> subTypes = docType.getDocSubTypeList();
             ObjectMapper objectMapper = new ObjectMapper();
             neesDocType.setName(docType.name())
                     .setDescription(String.format("Documents related to %s will use this doctype", docType.name()))
                     .setSys(true)
+                    .setActive(true)
                     .setSubTypesJson(objectMapper.writeValueAsString(subTypes));
             session.save(neesDocType);
         }

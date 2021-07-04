@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import java.io.Serializable;
 
-@Entity(name = "document_right")
+@Entity
 @IdClass(UserDocumentRightId.class)
 public class UserDocumentRight implements Serializable {
     @Id

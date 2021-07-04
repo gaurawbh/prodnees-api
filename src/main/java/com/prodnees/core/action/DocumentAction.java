@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public interface DocumentAction {
 
@@ -15,7 +16,7 @@ public interface DocumentAction {
 
     DocumentModel update(DocumentDto dto);
 
-    DocumentModel addNew(@Nullable String docType, @Nullable String docSubType, MultipartFile file) throws IOException;
+    Map<String, Object> addNew(@Nullable String docType, @Nullable String docSubType, MultipartFile file) throws IOException;
 
     NeesDoc getById(int id);
 
