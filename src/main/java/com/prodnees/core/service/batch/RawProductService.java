@@ -1,6 +1,6 @@
 package com.prodnees.core.service.batch;
 
-import com.prodnees.core.domain.batch.RawProduct;
+import com.prodnees.shelf.domain.RawProduct;
 
 import java.util.List;
 

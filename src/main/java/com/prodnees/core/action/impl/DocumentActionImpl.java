@@ -149,6 +149,7 @@ public class DocumentActionImpl implements DocumentAction {
 
         NeesFile neesFile = new NeesFile()
                 .setDocId(neesDoc.getId())
+                .setFileName(file.getOriginalFilename())
                 .setMimeContentType(file.getContentType())
                 .setFile(file.getBytes());
         neesFileService.save(neesFile);

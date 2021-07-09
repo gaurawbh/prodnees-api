@@ -2,8 +2,8 @@ package com.prodnees.core.service.impl;
 
 import com.prodnees.auth.config.tenancy.CurrentTenantResolver;
 import com.prodnees.auth.filter.RequestContext;
-import com.prodnees.core.dao.batchproduct.BatchDao;
-import com.prodnees.core.dao.batchproduct.ProductDao;
+import com.prodnees.core.dao.batch.BatchDao;
+import com.prodnees.core.dao.batch.ProductDao;
 import com.prodnees.core.dao.doc.NeesDocDao;
 import com.prodnees.core.dao.rels.BatchRightsDao;
 import com.prodnees.core.dao.rels.ProductRightsDao;

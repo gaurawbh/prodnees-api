@@ -2,7 +2,7 @@ package com.prodnees.core.service.batch.impl;
 
 import com.prodnees.auth.config.tenancy.CurrentTenantResolver;
 import com.prodnees.auth.filter.RequestContext;
-import com.prodnees.core.dao.batchproduct.BatchDao;
+import com.prodnees.core.dao.batch.BatchDao;
 import com.prodnees.core.dao.rels.BatchRightsDao;
 import com.prodnees.core.domain.batch.Batch;
 import com.prodnees.core.domain.enums.BatchState;

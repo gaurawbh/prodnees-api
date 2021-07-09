@@ -132,7 +132,6 @@ public class BatchActionImpl implements BatchAction {
         model.setId(batch.getId())
                 .setName(batch.getName())
                 .setProduct(product)
-                .setStageApprovalDocument(null)
                 .setStatus(batch.getState())
                 .setDescription(batch.getDescription())
                 .setCreatedDate(batch.getCreatedDate());

@@ -2,12 +2,10 @@ package com.prodnees.core.action.stage.impl;
 
 import com.prodnees.core.action.StageList;
 import com.prodnees.core.action.stage.StageAction;
-import com.prodnees.core.domain.batch.RawProduct;
 import com.prodnees.core.domain.enums.StageState;
 import com.prodnees.core.domain.stage.Stage;
 import com.prodnees.core.domain.stage.StageTodo;
 import com.prodnees.core.dto.stage.StageDto;
-import com.prodnees.core.model.stage.StageApprovalDocumentModel;
 import com.prodnees.core.model.stage.StageModel;
 import com.prodnees.core.service.NeesDocumentService;
 import com.prodnees.core.service.batch.RawProductService;
@@ -15,6 +13,7 @@ import com.prodnees.core.service.rels.BatchRightService;
 import com.prodnees.core.service.stage.StageService;
 import com.prodnees.core.service.stage.StageTodoService;
 import com.prodnees.core.web.exception.NeesNotFoundException;
+import com.prodnees.shelf.domain.RawProduct;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -139,15 +138,13 @@ public class StageActionImpl implements StageAction {
         StageModel stageModel = new StageModel();
         List<StageTodo> stageTodoList = stageTodoService.getAllByStageId(stage.getId());
         List<RawProduct> rawProductList = rawProductService.getAllByStageId(stage.getId());
-        List<StageApprovalDocumentModel> stageApprovalDocumentModelList = new ArrayList<>();
         stageModel.setId(stage.getId())
                 .setBatchId(stage.getBatchId())
                 .setIndex(stage.getIndx())
                 .setName(stage.getName())
                 .setDescription(stage.getDescription())
-                .setApprovalDocumentList(stageApprovalDocumentModelList)
-                .setStageTodoList(stageTodoList)
-                .setRawProductList(rawProductList)
+                .setStageTodos(stageTodoList)
+                .setRawProducts(rawProductList)
                 .setStatus(stage.getState());
         return stageModel;
     }

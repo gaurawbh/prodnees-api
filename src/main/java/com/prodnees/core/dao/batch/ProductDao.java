@@ -1,4 +1,4 @@
-package com.prodnees.core.dao.batchproduct;
+package com.prodnees.core.dao.batch;
 
 import com.prodnees.core.domain.batch.Product;
 import org.springframework.data.jpa.repository.JpaRepository;

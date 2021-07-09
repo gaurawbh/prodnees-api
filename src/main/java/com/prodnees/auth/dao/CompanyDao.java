@@ -23,7 +23,4 @@ public interface CompanyDao extends JpaRepository<Company, Integer> {
 
     Page<Company> getAllByActive(boolean active, Pageable pageable);
 
-//    @Query(value = "select schemaInstance from Company")
-//    List<String> getAllSchemas();
-
 }

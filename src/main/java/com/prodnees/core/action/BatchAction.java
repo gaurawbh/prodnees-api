@@ -16,7 +16,6 @@ public interface BatchAction {
 
     boolean isEditable(int id);
 
-
     List<BatchModel> getAllByState(BatchState state);
 
     BatchModel save(Batch batch);

@@ -1,8 +1,8 @@
 package com.prodnees.core.service.batch.impl;
 
-import com.prodnees.core.dao.batchproduct.RawProductDao;
-import com.prodnees.core.domain.batch.RawProduct;
 import com.prodnees.core.service.batch.RawProductService;
+import com.prodnees.shelf.dao.RawProductDao;
+import com.prodnees.shelf.domain.RawProduct;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

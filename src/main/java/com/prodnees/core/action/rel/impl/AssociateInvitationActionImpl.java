@@ -21,7 +21,7 @@ import java.util.Optional;
 public class AssociateInvitationActionImpl implements AssociateInvitationAction {
     private final LocalEmailService localEmailService;
     private final AssociateInvitationService associateInvitationService;
-    Logger localLogger = LoggerFactory.getLogger(this.getClass());
+    private final Logger localLogger = LoggerFactory.getLogger(this.getClass());
 
     public AssociateInvitationActionImpl(LocalEmailService localEmailService,
                                          AssociateInvitationService associateInvitationService) {

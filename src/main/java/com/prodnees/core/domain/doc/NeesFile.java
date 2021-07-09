@@ -8,6 +8,7 @@ public class NeesFile {
     @Id
     private int docId;
     private String mimeContentType;
+    private String fileName;
     private byte[] file;
 
     public int getDocId() {
@@ -34,6 +35,15 @@ public class NeesFile {
 
     public NeesFile setMimeContentType(String mimeContentType) {
         this.mimeContentType = mimeContentType;
+        return this;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public NeesFile setFileName(String fileName) {
+        this.fileName = fileName;
         return this;
     }
 }

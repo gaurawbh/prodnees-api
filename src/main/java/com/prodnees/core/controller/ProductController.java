@@ -122,7 +122,7 @@ public class ProductController {
         Assert.isTrue(userAction.existsByEmail(dto.getEmail()),
                 String.format(EMAIL_NOT_FOUND.getMessage(), dto.getEmail())
                         + String.format(". Invite them to signup at %s ",
-                        MvcUriComponentsBuilder.fromController(SignupController.class).path("/user/signup").build().toString()));
+                        MvcUriComponentsBuilder.fromController(SignupController.class).path("/user/signup").build()));
         Assert.isTrue(associatesService.existsByAdminIdAndAssociateEmail(userId, dto.getEmail()), APIErrors.ASSOCIATES_ONLY.getMessage());
         Optional<ProductRight> optionalProductRights = productRightAction.findByProductIdAndUserId(dto.getProductId(), userId);
         Assert.isTrue(optionalProductRights.isPresent() && optionalProductRights.get().getObjectRightsType() == ObjectRight.Owner,

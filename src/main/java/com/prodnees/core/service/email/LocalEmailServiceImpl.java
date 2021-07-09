@@ -50,10 +50,7 @@ public class LocalEmailServiceImpl implements LocalEmailService {
 
     }
 
-    @Override
-    public String getSystemEmailAddress() {
-        return "neesmanage@neesum.com";
-    }
+
 
     /**
      * placeholders contained in  mail_template.html are:

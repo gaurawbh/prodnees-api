@@ -10,7 +10,9 @@ public interface LocalEmailService {
 
     void sendHtmlMessage(String to, String subject, String htmlBody) throws MessagingException, UnsupportedEncodingException;
 
-    String getSystemEmailAddress();
+    default String getSystemEmailAddress() {
+        return "neesmanage@neesum.com";
+    }
 
     void sendTemplateEmail(String to, String subject, Map<String, Object> templateModel) throws MessagingException, UnsupportedEncodingException;
 

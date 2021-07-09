@@ -1,7 +1,7 @@
-package com.prodnees.core.dao.batchproduct;
+package com.prodnees.shelf.dao;
 
 import com.prodnees.core.dao.queries.QueryConstants;
-import com.prodnees.core.domain.batch.RawProduct;
+import com.prodnees.shelf.domain.RawProduct;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

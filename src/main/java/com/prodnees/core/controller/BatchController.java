@@ -6,9 +6,13 @@ import com.prodnees.core.action.rel.BatchRightAction;
 import com.prodnees.core.action.rel.DocumentRightAction;
 import com.prodnees.core.config.constants.APIErrors;
 import com.prodnees.core.domain.batch.Batch;
+import com.prodnees.core.domain.doc.DocumentPermission;
+import com.prodnees.core.domain.doc.UserDocumentRight;
 import com.prodnees.core.domain.enums.BatchState;
 import com.prodnees.core.domain.enums.ObjectRight;
+import com.prodnees.core.domain.rels.Associates;
 import com.prodnees.core.domain.rels.BatchRight;
+import com.prodnees.core.dto.batch.BatchApprovalDocumentDto;
 import com.prodnees.core.dto.batch.BatchDto;
 import com.prodnees.core.dto.batch.BatchRightDto;
 import com.prodnees.core.model.batch.BatchModel;
@@ -17,11 +21,11 @@ import com.prodnees.core.util.LocalAssert;
 import com.prodnees.core.util.ValidatorUtil;
 import com.prodnees.core.web.exception.NeesNotFoundException;
 import com.prodnees.core.web.response.LocalResponse;
+import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,8 +47,6 @@ import static com.prodnees.core.config.constants.APIErrors.UPDATE_DENIED;
 import static com.prodnees.core.web.response.LocalResponse.configure;
 
 @RestController
-//@RequestMapping("/secure/")
-@CrossOrigin
 @Transactional
 public class BatchController {
     private final BatchAction batchAction;
@@ -264,31 +266,24 @@ public class BatchController {
      * @param dto
      * @return
      */
-//    @PostMapping("/batch/approval-document")
-//    public ResponseEntity<?> addApprovalDocument(@RequestBody @Validated BatchApprovalDocumentDto dto) {
-//
-//        int userId = RequestContext.getUserId();
-//        Optional<Associates> associatesOptional = associatesService.findByAdminIdAndAssociateEmail(userId, dto.getApproverEmail());
-//        LocalAssert.isTrue(associatesOptional.isPresent(), "approver must be an associate.");
-//        LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(dto.getDocumentId(), userId), "document not found");
-//        LocalAssert.isTrue(batchRightAction.hasBatchEditorRights(dto.getBatchId(), userId), OBJECT_NOT_FOUND);
-//        BatchApprovalDocument batchApprovalDocument = new BatchApprovalDocument()
-//                .setBatchId(dto.getBatchId())
-//                .setDocumentId(dto.getDocumentId())
-//                .setApproverId(associatesOptional.get().getAssociateId())
-//                .setApproverEmail(associatesOptional.get().getAssociateEmail())
-//                .setState(ApprovalDocumentState.OPEN);
-//
-//        batchProductApprovalDocumentService.save(batchApprovalDocument);
-//        UserDocumentRight userDocumentRight = new UserDocumentRight()
-//                .setUserId(associatesOptional.get().getAssociateId())
-//                .setDocumentId(dto.getDocumentId())
-//                .setDocumentPermission(DocumentPermission.Edit);
-//        documentRightAction.addNew(userDocumentRight);
-//
-//        return configure();
-//
-//    }
+    @PostMapping("/batch/approval-document")
+    public ResponseEntity<?> addApprovalDocument(@RequestBody @Validated BatchApprovalDocumentDto dto) {
+
+        int userId = RequestContext.getUserId();
+        Optional<Associates> associatesOptional = associatesService.findByAdminIdAndAssociateEmail(userId, dto.getApproverEmail());
+        LocalAssert.isTrue(associatesOptional.isPresent(), "approver must be an associate.");
+        LocalAssert.isTrue(documentRightAction.existsByDocumentIdAndUserId(dto.getDocumentId(), userId), "document not found");
+        LocalAssert.isTrue(batchRightAction.hasBatchEditorRights(dto.getBatchId(), userId), OBJECT_NOT_FOUND);
+
+        UserDocumentRight userDocumentRight = new UserDocumentRight()
+                .setUserId(associatesOptional.get().getAssociateId())
+                .setDocumentId(dto.getDocumentId())
+                .setDocumentPermission(DocumentPermission.Edit);
+        documentRightAction.addNew(userDocumentRight);
+
+      throw new NotImplementedException("batch/approval-document not yet implemented");
+
+    }
 
 
 }

@@ -1,9 +1,9 @@
 package com.prodnees.core.model.stage;
 
-import com.prodnees.core.domain.batch.RawProduct;
 import com.prodnees.core.domain.enums.StageState;
 import com.prodnees.core.domain.stage.StageReminder;
 import com.prodnees.core.domain.stage.StageTodo;
+import com.prodnees.shelf.domain.RawProduct;
 
 import java.util.List;
 
@@ -20,34 +20,25 @@ public class StageModel {
     private String name;
     private String description;
     private StageState status;
-private List<StageReminder> stageReminderList;
-    List<StageApprovalDocumentModel> approvalDocumentList;
-    List<StageTodo> stageTodoList;
-    List<RawProduct> rawProductList;
-    public List<StageApprovalDocumentModel> getApprovalDocumentList() {
-        return approvalDocumentList;
+    private List<StageReminder> stageReminders;
+    List<StageTodo> stageTodos;
+    List<RawProduct> rawProducts;
+
+    public List<StageTodo> getStageTodos() {
+        return stageTodos;
     }
 
-    public StageModel setApprovalDocumentList(List<StageApprovalDocumentModel> approvalDocumentList) {
-        this.approvalDocumentList = approvalDocumentList;
+    public StageModel setStageTodos(List<StageTodo> stageTodos) {
+        this.stageTodos = stageTodos;
         return this;
     }
 
-    public List<StageTodo> getStageTodoList() {
-        return stageTodoList;
+    public List<RawProduct> getRawProducts() {
+        return rawProducts;
     }
 
-    public StageModel setStageTodoList(List<StageTodo> stageTodoList) {
-        this.stageTodoList = stageTodoList;
-        return this;
-    }
-
-    public List<RawProduct> getRawProductList() {
-        return rawProductList;
-    }
-
-    public StageModel setRawProductList(List<RawProduct> rawProductList) {
-        this.rawProductList = rawProductList;
+    public StageModel setRawProducts(List<RawProduct> rawProducts) {
+        this.rawProducts = rawProducts;
         return this;
     }
 
@@ -102,6 +93,15 @@ private List<StageReminder> stageReminderList;
 
     public StageModel setStatus(StageState status) {
         this.status = status;
+        return this;
+    }
+
+    public List<StageReminder> getStageReminders() {
+        return stageReminders;
+    }
+
+    public StageModel setStageReminders(List<StageReminder> stageReminders) {
+        this.stageReminders = stageReminders;
         return this;
     }
 }

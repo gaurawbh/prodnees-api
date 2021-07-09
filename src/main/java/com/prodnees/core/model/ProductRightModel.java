@@ -10,8 +10,6 @@ public class ProductRightModel {
     private UserModel userModel;
     private ObjectRight objectRight;
 
-
-
     public UserModel getUserModel() {
         return userModel;
     }

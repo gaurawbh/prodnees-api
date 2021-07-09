@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.prodnees.core.domain.batch.Product;
 import com.prodnees.core.domain.enums.BatchState;
 import com.prodnees.core.domain.enums.ObjectRight;
-import com.prodnees.core.model.stage.StageApprovalDocumentModel;
 import com.prodnees.core.model.stage.StageModel;
 
 import java.time.LocalDate;
@@ -18,8 +17,7 @@ public class BatchModel {
     private Product product;
     private String name;
     private String description;
-    private List<StageModel> stageList;
-    private StageApprovalDocumentModel stageApprovalDocument;
+    private List<StageModel> stages;
     private BatchState status;
     private ObjectRight rightType;
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -61,21 +59,12 @@ public class BatchModel {
         return this;
     }
 
-    public List<StageModel> getStageList() {
-        return stageList;
+    public List<StageModel> getStages() {
+        return stages;
     }
 
-    public BatchModel setStageList(List<StageModel> stageList) {
-        this.stageList = stageList;
-        return this;
-    }
-
-    public StageApprovalDocumentModel getStageApprovalDocument() {
-        return stageApprovalDocument;
-    }
-
-    public BatchModel setStageApprovalDocument(StageApprovalDocumentModel stageApprovalDocument) {
-        this.stageApprovalDocument = stageApprovalDocument;
+    public BatchModel setStages(List<StageModel> stages) {
+        this.stages = stages;
         return this;
     }
 

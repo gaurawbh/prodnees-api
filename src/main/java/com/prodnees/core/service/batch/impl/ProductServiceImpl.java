@@ -1,7 +1,7 @@
 package com.prodnees.core.service.batch.impl;
 
 import com.prodnees.auth.filter.RequestContext;
-import com.prodnees.core.dao.batchproduct.ProductDao;
+import com.prodnees.core.dao.batch.ProductDao;
 import com.prodnees.core.dao.rels.ProductRightsDao;
 import com.prodnees.core.domain.batch.Product;
 import com.prodnees.core.domain.enums.ObjectRight;
