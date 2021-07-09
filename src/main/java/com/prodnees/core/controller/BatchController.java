@@ -40,7 +40,6 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-import static com.prodnees.core.config.constants.APIErrors.ACCESS_DENIED;
 import static com.prodnees.core.config.constants.APIErrors.BATCH_NOT_FOUND;
 import static com.prodnees.core.config.constants.APIErrors.OBJECT_NOT_FOUND;
 import static com.prodnees.core.config.constants.APIErrors.UPDATE_DENIED;
@@ -156,7 +155,7 @@ public class BatchController {
     /**
      * only description can be changed of a Batch.
      * <p>productId on Request Body will be ignored</p>
-     * <i>User must have editor rights, i.e. {@link ObjectRight#Owner}  or {@link ObjectRight#Editor} </i>
+     * <i>User must have editor rights, i.e. {@link ObjectRight#full}  or {@link ObjectRight#update} </i>
      *
      * @param dto
      * @return
@@ -172,7 +171,7 @@ public class BatchController {
     }
 
     /**
-     * <p>check the user has {@link ObjectRight#Owner} rights of the Batch</p>
+     * <p>check the user has {@link ObjectRight#full} rights of the Batch</p>
      * <p>check the Batch does not have any States or {@link com.prodnees.core.domain.stage.StageTodo} associated with it</p>
      *
      * @param id
@@ -181,8 +180,7 @@ public class BatchController {
     @DeleteMapping("/batch")
     public ResponseEntity<?> deleteBatch(@RequestParam int id) {
         int ownerId = RequestContext.getUserId();
-        BatchRight batchRight = batchRightAction.getByBatchIdAndUserId(id, ownerId);
-        LocalAssert.isTrue(batchRight.getObjectRight().equals(ObjectRight.Owner), ACCESS_DENIED);
+        LocalAssert.isTrue(batchRightAction.hasBatchEditorRights(id, ownerId), OBJECT_NOT_FOUND);
         batchAction.deleteById(id);
         return configure();
     }
@@ -199,10 +197,10 @@ public class BatchController {
     public ResponseEntity<?> saveBatchRight(@Validated @RequestBody BatchRightDto dto) {
         int adminId = RequestContext.getUserId();
         RequestContext.denySelfManagement(dto.getEmail());
-        Assert.isTrue(dto.getObjectRightsType() != ObjectRight.Owner, "you can only assign an editor or a  viewer");
+        Assert.isTrue(dto.getObjectRightsType() != ObjectRight.full, "you can only assign an editor or a  viewer");
         Assert.isTrue(associatesService.existsByAdminIdAndAssociateEmail(adminId, dto.getEmail()), APIErrors.ASSOCIATES_ONLY.getMessage());
         BatchRight batchRight = batchRightAction.getByBatchIdAndUserId(dto.getBatchId(), adminId);
-        Assert.isTrue(batchRight.getObjectRight().equals(ObjectRight.Owner),
+        Assert.isTrue(batchRight.getObjectRight().equals(ObjectRight.full),
                 "only owners can invite others to admin their batch product or update the rights");
         return configure(batchRightAction.save(dto));
     }
@@ -249,10 +247,10 @@ public class BatchController {
         int adminId = RequestContext.getUserId();
         Assert.isTrue(userId != adminId, "you cannot delete your own batch product rights");
         BatchRight adminBatchRight = batchRightAction.getByBatchIdAndUserId(batchId, adminId);// check you have permission, you are an owner
-        Assert.isTrue(adminBatchRight.getObjectRight() == ObjectRight.Owner,
+        Assert.isTrue(adminBatchRight.getObjectRight() == ObjectRight.full,
                 UPDATE_DENIED.getMessage());
         BatchRight userBatchRight = batchRightAction.getByBatchIdAndUserId(batchId, userId); // check the other user is not the owner
-        Assert.isTrue(userBatchRight.getObjectRight() != ObjectRight.Owner,
+        Assert.isTrue(userBatchRight.getObjectRight() != ObjectRight.full,
                 "you cannot remove another owner's batch product rights");
         batchRightAction.deleteByBatchIdAndUserId(batchId, userId);
         return configure();

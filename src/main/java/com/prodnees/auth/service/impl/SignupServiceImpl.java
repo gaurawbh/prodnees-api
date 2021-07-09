@@ -11,17 +11,16 @@ import com.google.common.annotations.VisibleForTesting;
 import com.prodnees.auth.dao.CompanyDao;
 import com.prodnees.auth.dao.TempPasswordInfoDao;
 import com.prodnees.auth.dao.UserDao;
-import com.prodnees.auth.domain.ApplicationRight;
+import com.prodnees.auth.domain.ApplicationRole;
 import com.prodnees.auth.domain.Company;
 import com.prodnees.auth.domain.TempPasswordInfo;
 import com.prodnees.auth.domain.User;
-import com.prodnees.auth.domain.UserRole;
+import com.prodnees.auth.dto.SignupDto;
 import com.prodnees.auth.service.SignupService;
 import com.prodnees.auth.service.TenantService;
 import com.prodnees.auth.util.OtpUtil;
 import com.prodnees.auth.util.TemporaryPasswordHelper;
 import com.prodnees.auth.util.TenantUtil;
-import com.prodnees.core.dto.user.SignupDto;
 import com.prodnees.core.model.user.UserModel;
 import com.prodnees.core.service.email.LocalEmailService;
 import com.prodnees.core.util.LocalAssert;
@@ -29,6 +28,7 @@ import com.prodnees.core.web.exception.NeesBadRequestException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -69,6 +69,7 @@ public class SignupServiceImpl implements SignupService {
      * @return
      */
     @Override
+    @Transactional
     public UserModel signup(SignupDto dto) throws JsonProcessingException {
         Company company = registerCompany(dto);
         String tempPassword = getTempPassword();
@@ -94,7 +95,7 @@ public class SignupServiceImpl implements SignupService {
     @VisibleForTesting
     Company registerCompany(SignupDto dto) {
         if (companyDao.existsByName(dto.getCompanyName())) {
-            throw new NeesBadRequestException("COMPANY_ALREADY_REGISTERED");
+            throw new NeesBadRequestException(String.format("Company: %s is already registered. Contact us for more information", dto.getCompanyName()));
         }
         Company company = new Company()
                 .setName(dto.getCompanyName())
@@ -114,13 +115,12 @@ public class SignupServiceImpl implements SignupService {
         String schema = TenantUtil.newSchema(companyId);
         User user = new User()
                 .setEmail(dto.getEmail())
-                .setRole(UserRole.owner)
+                .setRole(ApplicationRole.appOwner)
                 .setPassword(password)
                 .setEnabled(true)
                 .setFirstName(dto.getFirstName())
                 .setLastName(dto.getLastName())
                 .setCompanyId(companyId)
-                .setApplicationRight(ApplicationRight.owner)
                 .setSchemaInstance(schema);
         Company company = companyDao.getById(companyId);
         companyDao.save(company.setSchemaInstance(schema));// save schemaInstance to Company

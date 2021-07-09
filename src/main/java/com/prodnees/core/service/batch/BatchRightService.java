@@ -1,4 +1,4 @@
-package com.prodnees.core.service.rels;
+package com.prodnees.core.service.batch;
 
 import com.prodnees.core.domain.rels.BatchRight;
 
@@ -9,7 +9,6 @@ public interface BatchRightService {
     BatchRight save(BatchRight batchRight);
 
     Optional<BatchRight> findByBatchIdAndUserId(int batchId, int ownerId);
-
 
     BatchRight getByBatchIdAndUserId(int batchId, int ownerId);
 

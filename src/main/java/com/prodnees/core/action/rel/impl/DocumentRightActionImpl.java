@@ -2,7 +2,7 @@ package com.prodnees.core.action.rel.impl;
 
 import com.prodnees.core.action.rel.DocumentRightAction;
 import com.prodnees.core.domain.doc.UserDocumentRight;
-import com.prodnees.core.service.rels.DocumentRightService;
+import com.prodnees.core.service.doc.DocumentRightService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

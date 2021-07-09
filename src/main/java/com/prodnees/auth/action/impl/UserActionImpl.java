@@ -3,16 +3,15 @@ package com.prodnees.auth.action.impl;
 import com.prodnees.auth.action.UserAction;
 import com.prodnees.auth.config.tenancy.TenantContext;
 import com.prodnees.auth.dao.TempPasswordInfoDao;
-import com.prodnees.auth.domain.ApplicationRight;
+import com.prodnees.auth.domain.ApplicationRole;
 import com.prodnees.auth.domain.TempPasswordInfo;
 import com.prodnees.auth.domain.User;
-import com.prodnees.auth.domain.UserRole;
+import com.prodnees.auth.dto.SignupDto;
 import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.auth.service.UserService;
 import com.prodnees.auth.util.OtpUtil;
 import com.prodnees.core.domain.rels.Associates;
 import com.prodnees.core.domain.user.UserAttributes;
-import com.prodnees.core.dto.user.SignupDto;
 import com.prodnees.core.model.user.AssociateModel;
 import com.prodnees.core.model.user.UserModel;
 import com.prodnees.core.service.email.EmailPlaceHolders;
@@ -78,8 +77,7 @@ public class UserActionImpl implements UserAction {
                 .setEmail(dto.getEmail())
                 .setPassword(passwordEncoder.encode(generatedPassword))
                 .setEnabled(true)
-                .setRole(UserRole.owner)
-                .setApplicationRight(ApplicationRight.user));
+                .setRole(ApplicationRole.appOwner));
         sendInitialPassword(user.getEmail(), generatedPassword);
 
         UserAttributes attributes = new UserAttributes();
@@ -87,7 +85,6 @@ public class UserActionImpl implements UserAction {
                 .setFirstName(dto.getFirstName())
                 .setLastName(dto.getLastName())
                 .setEmail(user.getEmail())
-                .setApplicationRight(user.getApplicationRight())
                 .setPhoneNumber(dto.getPhoneNumber())
                 .setRole(user.getRole());
         userAttributesService.save(attributes);

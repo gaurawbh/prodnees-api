@@ -8,7 +8,7 @@ package com.prodnees.auth.service;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.prodnees.core.dto.user.SignupDto;
+import com.prodnees.auth.dto.SignupDto;
 import com.prodnees.core.model.user.UserModel;
 
 public interface SignupService {

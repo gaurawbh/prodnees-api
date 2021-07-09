@@ -1,7 +1,6 @@
 package com.prodnees.core.domain.user;
 
-import com.prodnees.auth.domain.ApplicationRight;
-import com.prodnees.auth.domain.UserRole;
+import com.prodnees.auth.domain.ApplicationRole;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,9 +12,7 @@ public class UserAttributes {
     @Id
     private int userId;
     @Enumerated(EnumType.STRING)
-    private ApplicationRight applicationRight;
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
+    private ApplicationRole role;
     private String firstName;
     private String lastName;
     private String email;
@@ -76,21 +73,12 @@ public class UserAttributes {
         return this;
     }
 
-    public ApplicationRight getApplicationRight() {
-        return applicationRight;
-    }
-
-    public UserAttributes setApplicationRight(ApplicationRight applicationRight) {
-        this.applicationRight = applicationRight;
-        return this;
-    }
-
-    public UserRole getRole() {
+    public ApplicationRole getRole() {
         return role;
     }
 
-    public UserAttributes setRole(UserRole userRole) {
-        this.role = userRole;
+    public UserAttributes setRole(ApplicationRole applicationRole) {
+        this.role = applicationRole;
         return this;
     }
 }

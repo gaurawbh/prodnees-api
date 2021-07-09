@@ -1,4 +1,4 @@
-package com.prodnees.core.service.rels;
+package com.prodnees.core.service.stage;
 
 import com.prodnees.core.domain.rels.StageApprover;
 

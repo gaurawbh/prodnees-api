@@ -14,7 +14,7 @@ import com.prodnees.core.domain.stage.StageReminder;
 import com.prodnees.core.domain.stage.StageTodo;
 import com.prodnees.core.dto.stage.StageDto;
 import com.prodnees.core.model.stage.StageModel;
-import com.prodnees.core.service.rels.BatchRightService;
+import com.prodnees.core.service.batch.BatchRightService;
 import com.prodnees.core.util.LocalAssert;
 import com.prodnees.core.util.ValidatorUtil;
 import com.prodnees.core.web.response.LocalResponse;

@@ -1,8 +1,8 @@
-package com.prodnees.core.service.rels.impl;
+package com.prodnees.core.service.stage.impl;
 
 import com.prodnees.core.dao.rels.StageRawProductDao;
 import com.prodnees.core.domain.rels.StageRawProduct;
-import com.prodnees.core.service.rels.StageRawProductService;
+import com.prodnees.core.service.stage.StageRawProductService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

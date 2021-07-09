@@ -2,6 +2,7 @@ package com.prodnees.core.controller;
 
 import com.prodnees.auth.action.UserAction;
 import com.prodnees.auth.domain.User;
+import com.prodnees.auth.dto.SignupDto;
 import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.core.action.rel.AssociateInvitationAction;
 import com.prodnees.core.config.constants.APIErrors;
@@ -10,7 +11,6 @@ import com.prodnees.core.domain.rels.AssociateInvitation;
 import com.prodnees.core.domain.rels.Associates;
 import com.prodnees.core.dto.AssociateInvitationActionDto;
 import com.prodnees.core.dto.AssociateInvitationDto;
-import com.prodnees.core.dto.user.SignupDto;
 import com.prodnees.core.model.user.AssociateModel;
 import com.prodnees.core.model.user.UserModel;
 import com.prodnees.core.service.rels.AssociatesService;

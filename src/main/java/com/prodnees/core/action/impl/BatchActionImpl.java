@@ -10,9 +10,9 @@ import com.prodnees.core.domain.rels.BatchRight;
 import com.prodnees.core.dto.batch.BatchDto;
 import com.prodnees.core.model.batch.BatchListModel;
 import com.prodnees.core.model.batch.BatchModel;
+import com.prodnees.core.service.batch.BatchRightService;
 import com.prodnees.core.service.batch.BatchService;
 import com.prodnees.core.service.batch.ProductService;
-import com.prodnees.core.service.rels.BatchRightService;
 import com.prodnees.core.util.LocalAssert;
 import com.prodnees.core.util.MapperUtil;
 import com.prodnees.core.web.exception.NeesNotFoundException;
@@ -80,7 +80,7 @@ public class BatchActionImpl implements BatchAction {
         batchRightService.save(new BatchRight()
                 .setUserId(userId)
                 .setBatchId(batch.getId())
-                .setObjectRight(ObjectRight.Owner));
+                .setObjectRight(ObjectRight.full));
         return mapToModel(batch);
     }
 

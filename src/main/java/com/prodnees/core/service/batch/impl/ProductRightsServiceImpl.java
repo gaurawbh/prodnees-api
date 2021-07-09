@@ -1,9 +1,9 @@
-package com.prodnees.core.service.rels.impl;
+package com.prodnees.core.service.batch.impl;
 
 import com.prodnees.core.dao.rels.ProductRightsDao;
 import com.prodnees.core.domain.enums.ObjectRight;
 import com.prodnees.core.domain.rels.ProductRight;
-import com.prodnees.core.service.rels.ProductRightsService;
+import com.prodnees.core.service.batch.ProductRightsService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,7 +54,7 @@ public class ProductRightsServiceImpl implements ProductRightsService {
         if (productRightOptional.isEmpty()) {
             return false;
         }
-        return productRightOptional.get().getObjectRightsType().equals(ObjectRight.Owner)
-                || productRightOptional.get().getObjectRightsType().equals(ObjectRight.Editor);
+        return productRightOptional.get().getObjectRightsType().equals(ObjectRight.full)
+                || productRightOptional.get().getObjectRightsType().equals(ObjectRight.update);
     }
 }

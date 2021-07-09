@@ -40,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
         productRightsDao.save(new ProductRight()
                 .setUserId(ownerId)
                 .setProductId(product.getId())
-                .setObjectRightsType(ObjectRight.Owner));
+                .setObjectRightsType(ObjectRight.full));
         return product;
     }
 

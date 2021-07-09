@@ -1,5 +1,8 @@
 package com.prodnees.core.domain.enums;
 
 public enum ObjectRight {
-    Owner, Editor, Reader
+    full, //crud
+    update,//cru
+    viewOnly,
+    noAccess,//r
 }

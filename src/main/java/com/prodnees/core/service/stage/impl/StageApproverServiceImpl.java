@@ -1,8 +1,8 @@
-package com.prodnees.core.service.rels.impl;
+package com.prodnees.core.service.stage.impl;
 
 import com.prodnees.core.dao.rels.StageApproverDao;
 import com.prodnees.core.domain.rels.StageApprover;
-import com.prodnees.core.service.rels.StageApproverService;
+import com.prodnees.core.service.stage.StageApproverService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

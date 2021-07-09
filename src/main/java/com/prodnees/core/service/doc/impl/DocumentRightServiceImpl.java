@@ -1,9 +1,9 @@
-package com.prodnees.core.service.rels.impl;
+package com.prodnees.core.service.doc.impl;
 
 import com.prodnees.core.dao.doc.DocumentRightDao;
 import com.prodnees.core.domain.doc.DocumentPermission;
 import com.prodnees.core.domain.doc.UserDocumentRight;
-import com.prodnees.core.service.rels.DocumentRightService;
+import com.prodnees.core.service.doc.DocumentRightService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -8,7 +8,6 @@ import com.prodnees.core.util.ValidatorUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +18,6 @@ import static com.prodnees.core.web.response.LocalResponse.configure;
 
 @RestController
 @RequestMapping("/secure/")
-@CrossOrigin
 @Transactional
 public class UserController {
     private final UserAttributesService userAttributesService;

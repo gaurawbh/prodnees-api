@@ -1,5 +1,6 @@
 package com.prodnees.auth.config;
 
+import com.prodnees.auth.domain.ApplicationRole;
 import com.prodnees.auth.filter.JWTRequestFilter;
 import com.prodnees.auth.service.LoginUserDetailsService;
 import org.springframework.context.annotation.Bean;
@@ -52,6 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/auth/**","/").permitAll()
+                .antMatchers("/sys/**").hasAnyRole(ApplicationRole.appOwner.name(), ApplicationRole.sysAdmin.name())
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().accessDeniedHandler(new LocalAccessDeniedHandler())

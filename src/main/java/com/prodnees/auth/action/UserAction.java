@@ -1,7 +1,7 @@
 package com.prodnees.auth.action;
 
 import com.prodnees.auth.domain.User;
-import com.prodnees.core.dto.user.SignupDto;
+import com.prodnees.auth.dto.SignupDto;
 import com.prodnees.core.model.user.AssociateModel;
 import com.prodnees.core.model.user.UserModel;
 

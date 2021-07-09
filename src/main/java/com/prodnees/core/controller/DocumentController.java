@@ -116,7 +116,7 @@ public class DocumentController {
     }
 
     /**
-     * Only {@link ObjectRight#Owner} can delete a document.
+     * Only {@link ObjectRight#full} can delete a document.
      *
      * @param id
      * @return

@@ -25,14 +25,12 @@ public class User {
     @JsonIgnore
     private String password;
     @Enumerated(EnumType.STRING)
-    private UserRole role;
+    private ApplicationRole role;
     private boolean enabled;
     private int companyId;
     private String schemaInstance;
     private String firstName;
     private String lastName;
-    @Enumerated(EnumType.STRING)
-    ApplicationRight applicationRight;
 
     public int getId() {
         return id;
@@ -61,11 +59,11 @@ public class User {
         return this;
     }
 
-    public UserRole getRole() {
+    public ApplicationRole getRole() {
         return role;
     }
 
-    public User setRole(UserRole role) {
+    public User setRole(ApplicationRole role) {
         this.role = role;
         return this;
     }
@@ -115,12 +113,4 @@ public class User {
         return this;
     }
 
-    public ApplicationRight getApplicationRight() {
-        return applicationRight;
-    }
-
-    public User setApplicationRight(ApplicationRight application_right) {
-        this.applicationRight = application_right;
-        return this;
-    }
 }

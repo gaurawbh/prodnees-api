@@ -1,9 +1,11 @@
-package com.prodnees.core.service.rels.impl;
+package com.prodnees.core.service.batch.impl;
 
+import com.prodnees.auth.domain.ApplicationRole;
+import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.core.dao.rels.BatchRightsDao;
 import com.prodnees.core.domain.enums.ObjectRight;
 import com.prodnees.core.domain.rels.BatchRight;
-import com.prodnees.core.service.rels.BatchRightService;
+import com.prodnees.core.service.batch.BatchRightService;
 import com.prodnees.core.web.exception.NeesNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +33,7 @@ public class BatchRightServiceImpl implements BatchRightService {
     @Override
     public BatchRight getByBatchIdAndUserId(int batchId, int ownerId) {
         return findByBatchIdAndUserId(batchId, ownerId)
-                .orElseThrow(()-> new NeesNotFoundException(String.format("BatchRight for userId: %d and batchId: %d not found", ownerId, batchId)));
+                .orElseThrow(() -> new NeesNotFoundException(String.format("BatchRight for userId: %d and batchId: %d not found", ownerId, batchId)));
     }
 
     @Override
@@ -49,13 +51,15 @@ public class BatchRightServiceImpl implements BatchRightService {
      * <p>Only owners and editors have edit rights</p>
      *
      * @param batchId
-     * @param editorId,      @alias userId
+     * @param editorId, @alias userId
      * @return
      */
     @Override
     public boolean hasBatchEditorRights(int batchId, int editorId) {
-        return batchRightsDao.existsByBatchIdAndUserIdAndObjectRight(batchId, editorId, ObjectRight.Owner)
-                || batchRightsDao.existsByBatchIdAndUserIdAndObjectRight(batchId, editorId, ObjectRight.Editor);
+        ApplicationRole applicationRole = RequestContext.getUserRole();
+        Optional<BatchRight> batchRightOptional = findByBatchIdAndUserId(batchId, editorId);
+        return applicationRole.equals(ApplicationRole.appOwner)
+                || (batchRightOptional.isPresent() && (batchRightOptional.get().getObjectRight().equals(ObjectRight.full) || batchRightOptional.get().getObjectRight().equals(ObjectRight.update)));
     }
 
     /**
@@ -63,12 +67,14 @@ public class BatchRightServiceImpl implements BatchRightService {
      * <p>Owners, editors, and reader have edit rights</p>
      *
      * @param batchId
-     * @param readerId,      @alias userId
+     * @param readerId, @alias userId
      * @return
      */
     @Override
     public boolean hasBatchReaderRights(int batchId, int readerId) {
-        return batchRightsDao.existsByBatchIdAndUserId(batchId, readerId);
+        ApplicationRole applicationRole = RequestContext.getUserRole();
+        return applicationRole.equals(ApplicationRole.appOwner)
+                || batchRightsDao.existsByBatchIdAndUserId(batchId, readerId);
     }
 
     @Override

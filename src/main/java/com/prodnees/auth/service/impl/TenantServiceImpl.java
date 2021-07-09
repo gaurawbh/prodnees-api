@@ -9,9 +9,8 @@ package com.prodnees.auth.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prodnees.auth.config.SessionFactoryConfig;
-import com.prodnees.auth.domain.ApplicationRight;
+import com.prodnees.auth.domain.ApplicationRole;
 import com.prodnees.auth.domain.User;
-import com.prodnees.auth.domain.UserRole;
 import com.prodnees.auth.service.TenantService;
 import com.prodnees.core.domain.doc.DocSubType;
 import com.prodnees.core.domain.doc.DocTypeEnum;
@@ -65,9 +64,8 @@ public class TenantServiceImpl implements TenantService {
 
         UserAttributes employee = new UserAttributes()
                 .setUserId(user.getId())
-                .setApplicationRight(ApplicationRight.owner)
                 .setEmail(user.getEmail())
-                .setRole(UserRole.owner)
+                .setRole(ApplicationRole.appOwner)
                 .setFirstName(user.getFirstName())
                 .setLastName(user.getLastName());
         session.save(employee);

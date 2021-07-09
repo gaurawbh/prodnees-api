@@ -1,13 +1,12 @@
 package com.prodnees.core.dto.user;
 
+import com.prodnees.auth.domain.ApplicationRole;
 import com.prodnees.core.config.constants.LocalConstants;
-import com.prodnees.core.config.constraints.PhoneNumber;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-public class SignupDto {
-
+public class ApplicationUserDto {
     @NotBlank(message = "firstName cannot be null or blank")
     private String firstName;
     @NotBlank(message = "lastName cannot be null or blank")
@@ -15,16 +14,13 @@ public class SignupDto {
     @NotBlank(message = "email cannot be null or blank")
     @Email(regexp = LocalConstants.EMAIL_REGEX, message = "invalid email format")
     private String email;
-    @PhoneNumber(message = "phoneNumber can only contain numbers and '+'")
-    private String phoneNumber;
-    @NotBlank(message = "companyName is a required field and cannot be blank")
-    private String companyName;
+    private ApplicationRole applicationRole;
 
     public String getFirstName() {
         return firstName;
     }
 
-    public SignupDto setFirstName(String firstName) {
+    public ApplicationUserDto setFirstName(String firstName) {
         this.firstName = firstName;
         return this;
     }
@@ -33,7 +29,7 @@ public class SignupDto {
         return lastName;
     }
 
-    public SignupDto setLastName(String lastName) {
+    public ApplicationUserDto setLastName(String lastName) {
         this.lastName = lastName;
         return this;
     }
@@ -42,26 +38,17 @@ public class SignupDto {
         return email;
     }
 
-    public SignupDto setEmail(String email) {
+    public ApplicationUserDto setEmail(String email) {
         this.email = email;
         return this;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public ApplicationRole getApplicationRole() {
+        return applicationRole;
     }
 
-    public SignupDto setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-        return this;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public SignupDto setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public ApplicationUserDto setApplicationRole(ApplicationRole applicationRole) {
+        this.applicationRole = applicationRole;
         return this;
     }
 }
