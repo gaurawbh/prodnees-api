@@ -4,10 +4,13 @@ import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.core.action.stage.StageReminderAction;
 import com.prodnees.core.domain.enums.StageState;
 import com.prodnees.core.domain.stage.StageReminder;
+import com.prodnees.core.domain.user.NeesObject;
 import com.prodnees.core.dto.stage.StageReminderDto;
 import com.prodnees.core.service.email.EmailPlaceHolders;
 import com.prodnees.core.service.email.LocalEmailService;
 import com.prodnees.core.service.stage.StageReminderService;
+import com.prodnees.core.service.user.NeesObjectRightService;
+import com.prodnees.core.util.LocalAssert;
 import com.prodnees.core.util.MapperUtil;
 import com.prodnees.core.web.exception.NeesNotFoundException;
 import org.slf4j.Logger;
@@ -23,15 +26,19 @@ import java.util.Optional;
 
 @Service
 public class StageReminderActionImpl implements StageReminderAction {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private final StageReminderService stageReminderService;
     private final LocalEmailService localEmailService;
-    Logger localLogger = LoggerFactory.getLogger(this.getClass());
+    private final NeesObjectRightService neesObjectRightService;
 
 
     public StageReminderActionImpl(StageReminderService stageReminderService,
-                                   LocalEmailService localEmailService) {
+                                   LocalEmailService localEmailService,
+                                   NeesObjectRightService neesObjectRightService) {
         this.stageReminderService = stageReminderService;
         this.localEmailService = localEmailService;
+        this.neesObjectRightService = neesObjectRightService;
     }
 
     @Override
@@ -98,12 +105,26 @@ public class StageReminderActionImpl implements StageReminderAction {
             try {
                 localEmailService.sendTemplateEmail(email, "New State Reminder", stateReminderMail);
             } catch (MessagingException | UnsupportedEncodingException e) {
-                localLogger.warn("state reminder with id: {} for stateId: {} could not be sent", stageReminder.getId(), stageReminder.getStageId());
+                logger.warn("state reminder with id: {} for stateId: {} could not be sent", stageReminder.getId(), stageReminder.getStageId());
                 e.printStackTrace();
             }
 
         }
 
+
+    }
+
+    private void verifyViewRights() {
+        LocalAssert.isTrue(neesObjectRightService.hasViewObjectRight(RequestContext.getUserId(), NeesObject.batch), "Insufficient right to view Batch");
+    }
+
+    private void verifyUpdateRights() {
+        LocalAssert.isTrue(neesObjectRightService.hasUpdateObjectRight(RequestContext.getUserId(), NeesObject.batch), "Insufficient right to add or update Batch");
+
+    }
+
+    private void verifyFullRights() {
+        LocalAssert.isTrue(neesObjectRightService.hasFullObjectRight(RequestContext.getUserId(), NeesObject.batch), "Insufficient right to delete Batch");
 
     }
 }

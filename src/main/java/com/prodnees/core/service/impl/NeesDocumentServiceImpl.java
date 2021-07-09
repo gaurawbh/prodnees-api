@@ -5,16 +5,17 @@ import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.core.dao.batch.BatchDao;
 import com.prodnees.core.dao.batch.ProductDao;
 import com.prodnees.core.dao.doc.NeesDocDao;
-import com.prodnees.core.dao.rels.BatchRightsDao;
 import com.prodnees.core.dao.rels.ProductRightsDao;
 import com.prodnees.core.dao.stage.StageDao;
 import com.prodnees.core.domain.batch.Batch;
 import com.prodnees.core.domain.batch.Product;
 import com.prodnees.core.domain.doc.NeesDoc;
-import com.prodnees.core.domain.rels.BatchRight;
 import com.prodnees.core.domain.rels.ProductRight;
+import com.prodnees.core.domain.user.NeesObject;
 import com.prodnees.core.model.NeesObjProps;
 import com.prodnees.core.service.NeesDocumentService;
+import com.prodnees.core.service.user.NeesObjectRightService;
+import com.prodnees.core.util.LocalAssert;
 import com.prodnees.core.util.LocalStringUtils;
 import com.prodnees.core.web.exception.NeesBadRequestException;
 import com.prodnees.core.web.exception.NeesNotFoundException;
@@ -32,21 +33,22 @@ public class NeesDocumentServiceImpl implements NeesDocumentService {
     private final BatchDao batchDao;
     private final StageDao stageDao;
     private final ProductDao productDao;
-    private final BatchRightsDao batchRightsDao;
     private final ProductRightsDao productRightsDao;
+    private final NeesObjectRightService neesObjectRightService;
+
 
     public NeesDocumentServiceImpl(NeesDocDao neesDocDao,
                                    BatchDao batchDao,
                                    StageDao stageDao,
                                    ProductDao productDao,
-                                   BatchRightsDao batchRightsDao,
-                                   ProductRightsDao productRightsDao) {
+                                   ProductRightsDao productRightsDao,
+                                   NeesObjectRightService neesObjectRightService) {
         this.neesDocDao = neesDocDao;
         this.batchDao = batchDao;
         this.stageDao = stageDao;
         this.productDao = productDao;
-        this.batchRightsDao = batchRightsDao;
         this.productRightsDao = productRightsDao;
+        this.neesObjectRightService = neesObjectRightService;
     }
 
     @Override
@@ -103,9 +105,7 @@ public class NeesDocumentServiceImpl implements NeesDocumentService {
         Map<String, Object> docObject = new HashMap<>();
         switch (objectType) {
             case "Batch":
-                List<BatchRight> batchRights = batchRightsDao.getAllByUserId(userId);
-                List<Integer> batchIds = batchRights.stream().map(BatchRight::getBatchId).collect(Collectors.toList());
-                List<Batch> batches = batchDao.findAllById(batchIds);
+                List<Batch> batches = batchDao.findAll();
                 batches.forEach(batch -> {
                     docObject.put(NeesObjProps.id.name(), batch.getId());
                     docObject.put(NeesObjProps.id.name(), batch.getName());
@@ -124,5 +124,19 @@ public class NeesDocumentServiceImpl implements NeesDocumentService {
                 });
         }
         return docObjects;
+    }
+
+    private void verifyViewRights() {
+        LocalAssert.isTrue(neesObjectRightService.hasViewObjectRight(RequestContext.getUserId(), NeesObject.document), "Insufficient right to view Batch");
+    }
+
+    private void verifyUpdateRights() {
+        LocalAssert.isTrue(neesObjectRightService.hasUpdateObjectRight(RequestContext.getUserId(), NeesObject.document), "Insufficient right to add or update Batch");
+
+    }
+
+    private void verifyFullRights() {
+        LocalAssert.isTrue(neesObjectRightService.hasFullObjectRight(RequestContext.getUserId(), NeesObject.document), "Insufficient right to delete Batch");
+
     }
 }

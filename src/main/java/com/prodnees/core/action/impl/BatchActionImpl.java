@@ -5,14 +5,13 @@ import com.prodnees.core.action.BatchAction;
 import com.prodnees.core.domain.batch.Batch;
 import com.prodnees.core.domain.batch.Product;
 import com.prodnees.core.domain.enums.BatchState;
-import com.prodnees.core.domain.enums.ObjectRight;
-import com.prodnees.core.domain.rels.BatchRight;
+import com.prodnees.core.domain.user.NeesObject;
 import com.prodnees.core.dto.batch.BatchDto;
 import com.prodnees.core.model.batch.BatchListModel;
 import com.prodnees.core.model.batch.BatchModel;
-import com.prodnees.core.service.batch.BatchRightService;
 import com.prodnees.core.service.batch.BatchService;
 import com.prodnees.core.service.batch.ProductService;
+import com.prodnees.core.service.user.NeesObjectRightService;
 import com.prodnees.core.util.LocalAssert;
 import com.prodnees.core.util.MapperUtil;
 import com.prodnees.core.web.exception.NeesNotFoundException;
@@ -26,15 +25,15 @@ import java.util.List;
 public class BatchActionImpl implements BatchAction {
 
     private final BatchService batchService;
-    private final BatchRightService batchRightService;
     private final ProductService productService;
+    private final NeesObjectRightService neesObjectRightService;
 
     public BatchActionImpl(BatchService batchService,
-                           BatchRightService batchRightService,
-                           ProductService productService) {
+                           ProductService productService,
+                           NeesObjectRightService neesObjectRightService) {
         this.batchService = batchService;
-        this.batchRightService = batchRightService;
         this.productService = productService;
+        this.neesObjectRightService = neesObjectRightService;
     }
 
     @Override
@@ -64,50 +63,50 @@ public class BatchActionImpl implements BatchAction {
 
     @Override
     public BatchModel save(Batch batch) {
+        verifyUpdateRights();
         return mapToModel(batchService.save(batch));
     }
 
     @Override
     public BatchModel create(BatchDto dto) {
         LocalAssert.isTrue(productService.existsById(dto.getProductId()), String.format("Product with id: %d not found", dto.getProductId()));
-        int userId = RequestContext.getUserId();
+        verifyUpdateRights();
         int nextId = batchService.getNextId();
         String batchName = "Batch-" + nextId;
-
         Batch batch = MapperUtil.getDozer().map(dto, Batch.class);
         batch.setName(batchName).setCreatedDate(LocalDate.now()).setState(BatchState.OPEN);
         batch = batchService.save(batch);
-        batchRightService.save(new BatchRight()
-                .setUserId(userId)
-                .setBatchId(batch.getId())
-                .setObjectRight(ObjectRight.full));
         return mapToModel(batch);
     }
 
     @Override
     public Batch getById(int id) {
+        verifyViewRights();
         return batchService.findById(id)
                 .orElseThrow(() -> new NeesNotFoundException(String.format("Batch with id: %d not found", id)));
     }
 
     @Override
     public BatchModel getModelById(int id) {
-        return mapToModel(batchService.getById(id));
+        return mapToModel(getById(id));
     }
 
     @Override
     public List<Batch> getAllByProductId(int productId) {
+        verifyViewRights();
         return batchService.getAllByProductId(productId);
     }
 
     @Override
-    public List<Batch> getAllByIds(Iterable<Integer> ids) {
-        return batchService.getAllByIds(ids);
+    public List<Batch> findAll() {
+        verifyViewRights();
+        return batchService.findAll();
     }
 
     @Override
-    public BatchListModel getListModelByIds(Iterable<Integer> ids) {
-        List<Batch> batchList = batchService.getAllByIds(ids);
+    public BatchListModel getBatchList() {
+        verifyViewRights();
+        List<Batch> batchList = batchService.findAll();
         return new BatchListModel()
                 .setBatches(batchList)
                 .setCount(batchList.size())
@@ -120,6 +119,7 @@ public class BatchActionImpl implements BatchAction {
 
     @Override
     public void deleteById(int id) {
+        verifyFullRights();
         batchService.deleteById(id);
     }
 
@@ -127,7 +127,7 @@ public class BatchActionImpl implements BatchAction {
         BatchModel model = new BatchModel();
         Product product = productService.getById(batch.getProductId());
         int userId = RequestContext.getUserId();
-        model.setRightType(batchRightService.findByBatchIdAndUserId(batch.getId(), userId).get().getObjectRight());
+        model.setRightType(neesObjectRightService.getByUserIdAndNeesObject(userId, NeesObject.batch).getObjectRight());
 
         model.setId(batch.getId())
                 .setName(batch.getName())
@@ -136,6 +136,20 @@ public class BatchActionImpl implements BatchAction {
                 .setDescription(batch.getDescription())
                 .setCreatedDate(batch.getCreatedDate());
         return model;
+
+    }
+
+    private void verifyViewRights() {
+        LocalAssert.isTrue(neesObjectRightService.hasViewObjectRight(RequestContext.getUserId(), NeesObject.batch), "Insufficient right to view Batch");
+    }
+
+    private void verifyUpdateRights() {
+        LocalAssert.isTrue(neesObjectRightService.hasUpdateObjectRight(RequestContext.getUserId(), NeesObject.batch), "Insufficient right to add or update Batch");
+
+    }
+
+    private void verifyFullRights() {
+        LocalAssert.isTrue(neesObjectRightService.hasFullObjectRight(RequestContext.getUserId(), NeesObject.batch), "Insufficient right to delete Batch");
 
     }
 }

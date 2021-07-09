@@ -15,6 +15,9 @@ import com.prodnees.auth.service.TenantService;
 import com.prodnees.core.domain.doc.DocSubType;
 import com.prodnees.core.domain.doc.DocTypeEnum;
 import com.prodnees.core.domain.doc.NeesDoctype;
+import com.prodnees.core.domain.enums.ObjectRight;
+import com.prodnees.core.domain.user.NeesObject;
+import com.prodnees.core.domain.user.NeesObjectRight;
 import com.prodnees.core.domain.user.UserAttributes;
 import com.prodnees.core.util.LocalAssert;
 import org.flywaydb.core.Flyway;
@@ -58,17 +61,18 @@ public class TenantServiceImpl implements TenantService {
         List<Class<?>> annotatedClasses = new ArrayList<>();
         annotatedClasses.add(UserAttributes.class);
         annotatedClasses.add(NeesDoctype.class);
+        annotatedClasses.add(NeesObjectRight.class);
         Session session = sessionFactoryConfig.getCurrentSession(schema, annotatedClasses).openSession();
 
         Transaction tx = session.beginTransaction();
 
-        UserAttributes employee = new UserAttributes()
+        UserAttributes userAttributes = new UserAttributes()
                 .setUserId(user.getId())
                 .setEmail(user.getEmail())
                 .setRole(ApplicationRole.appOwner)
                 .setFirstName(user.getFirstName())
                 .setLastName(user.getLastName());
-        session.save(employee);
+        session.save(userAttributes);
 
         DocTypeEnum[] docTypeEnums = DocTypeEnum.values();
         for (DocTypeEnum docType : docTypeEnums) {
@@ -81,6 +85,14 @@ public class TenantServiceImpl implements TenantService {
                     .setActive(true)
                     .setSubTypesJson(objectMapper.writeValueAsString(subTypes));
             session.save(neesDocType);
+        }
+        NeesObject[] neesObjects = NeesObject.values();
+        for (NeesObject neesObject : neesObjects) {
+            NeesObjectRight neesObjectRight = new NeesObjectRight();
+            neesObjectRight.setUserId(user.getId())
+                    .setNeesObject(neesObject)
+                    .setObjectRight(ObjectRight.full);
+            session.save(neesObjectRight);
         }
 
         tx.commit();

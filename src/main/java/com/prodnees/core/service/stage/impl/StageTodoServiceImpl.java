@@ -3,6 +3,7 @@ package com.prodnees.core.service.stage.impl;
 import com.prodnees.core.dao.stage.StageTodoDao;
 import com.prodnees.core.domain.stage.StageTodo;
 import com.prodnees.core.service.stage.StageTodoService;
+import com.prodnees.core.web.exception.NeesNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +29,8 @@ public class StageTodoServiceImpl implements StageTodoService {
 
     @Override
     public StageTodo getById(int id) {
-        return stageTodoDao.getById(id);
+        return stageTodoDao.findById(id)
+                .orElseThrow(()->new NeesNotFoundException(String.format("Stage Todo with id: %d not found", id)));
     }
 
     @Override

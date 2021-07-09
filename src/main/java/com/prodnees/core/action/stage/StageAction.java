@@ -1,8 +1,6 @@
 package com.prodnees.core.action.stage;
 
-import com.prodnees.core.domain.batch.Batch;
 import com.prodnees.core.domain.enums.StageState;
-import com.prodnees.core.domain.rels.BatchRight;
 import com.prodnees.core.domain.stage.Stage;
 import com.prodnees.core.dto.stage.StageDto;
 import com.prodnees.core.model.stage.StageModel;
@@ -13,24 +11,6 @@ import java.util.Optional;
 public interface StageAction {
 
     boolean existsByBatchId(int batchId);
-
-    /**
-     * A user will have the same {@link BatchRight} to a Stage as the {@link Batch} the Stage belongs to
-     *
-     * @param id
-     * @param editorId
-     * @return
-     */
-    boolean hasStageEditorRights(int id, int editorId);
-
-    /**
-     * A user will have the same {@link BatchRight} to a Stage as the {@link Batch} the Stage belongs to
-     *
-     * @param id
-     * @param readerId
-     * @return
-     */
-    boolean hasStageReaderRights(int id, int readerId);
 
     boolean existsById(int id);
 

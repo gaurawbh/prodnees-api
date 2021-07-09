@@ -2,7 +2,6 @@ create table if not exists user_attributes
 (
     user_id           int          not null
         primary key,
-    application_right varchar(100) not null,
     role              varchar(100) not null,
     first_name        varchar(255) not null,
     last_name         varchar(255) not null,
@@ -262,4 +261,12 @@ create table if not exists product_right
             on update cascade on delete cascade
 );
 
-
+create table nees_object_right
+(
+    id           int auto_increment primary key,
+    user_id      int          not null,
+    nees_object  varchar(100) not null,
+    object_right varchar(100) not null,
+    foreign key (user_id) references user_attributes (user_id)
+        on update cascade on delete cascade
+)

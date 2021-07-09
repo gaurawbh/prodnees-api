@@ -115,7 +115,7 @@ public class SignupServiceImpl implements SignupService {
         String schema = TenantUtil.newSchema(companyId);
         User user = new User()
                 .setEmail(dto.getEmail())
-                .setRole(ApplicationRole.appOwner)
+                .setRole(ApplicationRole.appOwner)//first user that signs up a company wil always be an appOwner
                 .setPassword(password)
                 .setEnabled(true)
                 .setFirstName(dto.getFirstName())

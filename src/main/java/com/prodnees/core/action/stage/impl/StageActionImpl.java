@@ -1,17 +1,20 @@
 package com.prodnees.core.action.stage.impl;
 
+import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.core.action.StageList;
 import com.prodnees.core.action.stage.StageAction;
 import com.prodnees.core.domain.enums.StageState;
 import com.prodnees.core.domain.stage.Stage;
 import com.prodnees.core.domain.stage.StageTodo;
+import com.prodnees.core.domain.user.NeesObject;
 import com.prodnees.core.dto.stage.StageDto;
 import com.prodnees.core.model.stage.StageModel;
 import com.prodnees.core.service.NeesDocumentService;
-import com.prodnees.core.service.batch.BatchRightService;
 import com.prodnees.core.service.batch.RawProductService;
 import com.prodnees.core.service.stage.StageService;
 import com.prodnees.core.service.stage.StageTodoService;
+import com.prodnees.core.service.user.NeesObjectRightService;
+import com.prodnees.core.util.LocalAssert;
 import com.prodnees.core.web.exception.NeesNotFoundException;
 import com.prodnees.shelf.domain.RawProduct;
 import org.springframework.stereotype.Service;
@@ -27,48 +30,26 @@ public class StageActionImpl implements StageAction {
     private final StageTodoService stageTodoService;
     private final RawProductService rawProductService;
     private final NeesDocumentService neesDocumentService;
-    private final BatchRightService batchRightService;
     private final StageList stageList;
-
+    private final NeesObjectRightService neesObjectRightService;
 
     public StageActionImpl(StageService stageService,
                            StageTodoService stageTodoService,
                            RawProductService rawProductService,
                            NeesDocumentService neesDocumentService,
-                           BatchRightService batchRightService,
-                           StageList stageList) {
+                           StageList stageList,
+                           NeesObjectRightService neesObjectRightService) {
         this.stageService = stageService;
         this.stageTodoService = stageTodoService;
         this.rawProductService = rawProductService;
         this.neesDocumentService = neesDocumentService;
-        this.batchRightService = batchRightService;
         this.stageList = stageList;
+        this.neesObjectRightService = neesObjectRightService;
     }
 
     @Override
     public boolean existsByBatchId(int batchId) {
         return stageService.existsByBatchId(batchId);
-    }
-
-    @Override
-    public boolean hasStageEditorRights(int id, int editorId) {
-        Optional<Stage> stateOptional = findById(id);
-        if (stateOptional.isEmpty()) {
-            return false;
-        } else {
-            return batchRightService.hasBatchEditorRights(stateOptional.get().getBatchId(), editorId);
-        }
-
-    }
-
-    @Override
-    public boolean hasStageReaderRights(int id, int readerId) {
-        Optional<Stage> stateOptional = findById(id);
-        if (stateOptional.isEmpty()) {
-            return false;
-        } else {
-            return batchRightService.hasBatchReaderRights(stateOptional.get().getBatchId(), readerId);
-        }
     }
 
     @Override
@@ -147,6 +128,20 @@ public class StageActionImpl implements StageAction {
                 .setRawProducts(rawProductList)
                 .setStatus(stage.getState());
         return stageModel;
+    }
+
+    private void verifyViewRights() {
+        LocalAssert.isTrue(neesObjectRightService.hasViewObjectRight(RequestContext.getUserId(), NeesObject.batch), "Insufficient right to view Batch");
+    }
+
+    private void verifyUpdateRights() {
+        LocalAssert.isTrue(neesObjectRightService.hasUpdateObjectRight(RequestContext.getUserId(), NeesObject.batch), "Insufficient right to add or update Batch");
+
+    }
+
+    private void verifyFullRights() {
+        LocalAssert.isTrue(neesObjectRightService.hasFullObjectRight(RequestContext.getUserId(), NeesObject.batch), "Insufficient right to delete Batch");
+
     }
 
 }

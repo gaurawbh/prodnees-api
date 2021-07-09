@@ -28,9 +28,9 @@ public interface BatchAction {
 
     List<Batch> getAllByProductId(int productId);
 
-    List<Batch> getAllByIds(Iterable<Integer> ids);
+    List<Batch> findAll();
 
-    BatchListModel getListModelByIds(Iterable<Integer> ids);
+    BatchListModel getBatchList();
 
     void deleteById(int id);
 }

@@ -27,4 +27,6 @@ public interface BatchService {
     List<Batch> getAllByUserIdAndState(int userId, BatchState state);
 
     int getNextId();
+
+    List<Batch> findAll();
 }
