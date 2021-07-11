@@ -15,8 +15,12 @@ public class SignupDto {
     @NotBlank(message = "email cannot be null or blank")
     @Email(regexp = LocalConstants.EMAIL_REGEX, message = "invalid email format")
     private String email;
+    private String username;
     @PhoneNumber(message = "phoneNumber can only contain numbers and '+'")
     private String phoneNumber;
+    //Domain info
+    private String domainName;
+    private String domainSuffix;
     @NotBlank(message = "companyName is a required field and cannot be blank")
     private String companyName;
 
@@ -62,6 +66,33 @@ public class SignupDto {
 
     public SignupDto setCompanyName(String companyName) {
         this.companyName = companyName;
+        return this;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public SignupDto setUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public String getDomainName() {
+        return domainName;
+    }
+
+    public SignupDto setDomainName(String domainName) {
+        this.domainName = domainName;
+        return this;
+    }
+
+    public String getDomainSuffix() {
+        return domainSuffix;
+    }
+
+    public SignupDto setDomainSuffix(String domainSuffix) {
+        this.domainSuffix = domainSuffix;
         return this;
     }
 }
