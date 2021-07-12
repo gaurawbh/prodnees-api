@@ -1,6 +1,7 @@
 package com.prodnees.core.domain.user;
 
 import com.prodnees.core.domain.enums.ObjectRight;
+import org.springframework.data.annotation.Reference;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotNull;
 @IdClass(NeesObjectRightId.class)
 public class NeesObjectRight {
     @Id
+    @Reference(to = UserAttributes.class)
     private int userId;
     @Id
     @Enumerated(EnumType.STRING)

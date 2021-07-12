@@ -2,14 +2,15 @@ package com.prodnees.core.controller.sys;
 
 import com.prodnees.auth.domain.ApplicationRole;
 import com.prodnees.core.action.ApplicationOwnerAction;
+import com.prodnees.core.action.SysAdminAction;
 import com.prodnees.core.dto.user.ApplicationUserDto;
 import com.prodnees.core.service.user.UserAttributesService;
 import com.prodnees.core.web.response.LocalResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,16 +25,20 @@ public class SysAdminController {
 
     private final ApplicationOwnerAction applicationOwnerAction;
     private final UserAttributesService userAttributesService;
+    private final SysAdminAction sysAdminAction;
 
-    public SysAdminController(ApplicationOwnerAction applicationOwnerAction, UserAttributesService userAttributesService) {
+    public SysAdminController(ApplicationOwnerAction applicationOwnerAction,
+                              UserAttributesService userAttributesService,
+                              SysAdminAction sysAdminAction) {
         this.applicationOwnerAction = applicationOwnerAction;
         this.userAttributesService = userAttributesService;
+        this.sysAdminAction = sysAdminAction;
     }
 
     @GetMapping("/users")
-    public ResponseEntity<?> getUsers(@RequestParam Optional<Integer> userId) {
-        if (userId.isPresent()) {
-            return LocalResponse.configure(userAttributesService.getByUserId(userId.get()));
+    public ResponseEntity<?> getUsers(@RequestParam Optional<Integer> id) {
+        if (id.isPresent()) {
+            return LocalResponse.configure(userAttributesService.getByUserId(id.get()));
         } else {
             return LocalResponse.configure(userAttributesService.findAll());
         }
@@ -41,7 +46,7 @@ public class SysAdminController {
 
     @PostMapping("/user")
     public ResponseEntity<?> addApplicationUser(@Validated @RequestBody ApplicationUserDto dto) {
-        return LocalResponse.configure(applicationOwnerAction.addApplicationUser(dto));
+        return LocalResponse.configure(sysAdminAction.addApplicationUser(dto));
     }
 
     @GetMapping("/application-roles")
@@ -49,10 +54,10 @@ public class SysAdminController {
         return LocalResponse.configure(Arrays.asList(ApplicationRole.values()));
     }
 
-    @DeleteMapping("/user")
+
+    @PutMapping("/user/disable")
     public ResponseEntity<?> deleteApplicationUser(@RequestParam int id) {
-        applicationOwnerAction.deleteApplicationUser(id);
-        return LocalResponse.configure();
+        return LocalResponse.configure(sysAdminAction.disableUser(id));
     }
 
 }

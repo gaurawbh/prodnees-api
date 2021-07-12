@@ -8,7 +8,6 @@ import com.prodnees.core.domain.enums.ObjectRight;
 import com.prodnees.core.domain.rels.ProductRight;
 import com.prodnees.core.dto.ProductDto;
 import com.prodnees.core.service.batch.ProductService;
-import com.prodnees.core.util.LocalAssert;
 import com.prodnees.core.util.MapperUtil;
 import com.prodnees.core.util.ValidatorUtil;
 import com.prodnees.core.web.exception.NeesNotFoundException;
@@ -54,10 +53,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getById(int id) {
-        Product product = productDao.findById(id)
+        return productDao.findById(id)
                 .orElseThrow(() -> new NeesNotFoundException(String.format("Product with id: %d not found", id)));
-        LocalAssert.isTrue(productRightsDao.existsByProductIdAndUserId(id, RequestContext.getUserId()), String.format("Product with id: %d not found", id));
-        return product;
     }
 
     @Override
