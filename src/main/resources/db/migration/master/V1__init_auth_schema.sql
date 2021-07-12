@@ -57,8 +57,7 @@ create table user
     schema_instance   varchar(100)     not null,
     first_name        varchar(100)     not null,
     last_name         varchar(100)     not null,
-    application_right varchar(100)     not null,
-    constraint username
+    constraint username_email
         unique (email),
     constraint user_ibfk_1
         foreign key (company_id) references company (id)

@@ -9,9 +9,7 @@ import com.prodnees.core.dto.stage.StageTodoDto;
 import com.prodnees.core.util.LocalAssert;
 import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,8 +23,6 @@ import java.util.Optional;
 import static com.prodnees.core.web.response.LocalResponse.configure;
 
 @RestController
-@CrossOrigin
-@Transactional
 public class StageTodoController {
 
     private final StageTodoAction stageTodoAction;

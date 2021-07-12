@@ -22,6 +22,7 @@ public class FlywayConfig {
                 .dataSource(dataSource)
                 .schemas(TenantUtil.MASTER_SCHEMA)
                 .baselineOnMigrate(true)
+                .validateOnMigrate(false)
                 .load();
         flyway.migrate();
         return flyway;

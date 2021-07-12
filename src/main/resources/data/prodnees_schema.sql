@@ -1,44 +1,4 @@
-create table if not exists user_attributes
-(
-    user_id           int          not null
-        primary key,
-    application_right varchar(100) not null,
-    role              varchar(100) not null,
-    first_name        varchar(255) not null,
-    last_name         varchar(255) not null,
-    email             varchar(255) not null,
-    phone_number      varchar(50)  null,
-    address           varchar(255) null,
-    constraint email
-        unique (email)
-);
-
-create table if not exists nees_doc
-(
-    id                int auto_increment
-        primary key,
-    name              varchar(255)                           not null,
-    description       text                                   null,
-    created_datetime  datetime     default CURRENT_TIMESTAMP not null,
-    mime_content_type varchar(100) default 'application/pdf' not null,
-    number            varchar(100)                           not null,
-    deleted           bit          default b'0'              not null,
-    doc_type          varchar(100)                           null,
-    doc_sub_type      varchar(100)                           null,
-    object_type       varchar(100)                           null,
-    object_id         int                                    null,
-    created_by        int                                    null,
-    last_modified_by  int                                    null,
-    modified_datetime datetime     default CURRENT_TIMESTAMP not null,
-    constraint nees_doc_user_attributes_user_id_fk
-        foreign key (created_by) references user_attributes (user_id)
-            on update cascade on delete set null,
-    constraint nees_doc_user_attributes_user_id_fk_2
-        foreign key (last_modified_by) references user_attributes (user_id)
-);
-
-
-create table if not exists nees_doc_type
+create table if not exists nees_doctype
 (
     id             int auto_increment
         primary key,
@@ -48,17 +8,6 @@ create table if not exists nees_doc_type
     active         bit default b'1' null,
     sys            bit default b'1' null
 );
-
-create table if not exists nees_file
-(
-    doc_id int      not null
-        primary key,
-    file   longblob not null,
-    constraint nees_file_ibfk_1
-        foreign key (doc_id) references nees_doc (id)
-            on update cascade on delete cascade
-);
-
 
 create table if not exists product
 (
@@ -151,7 +100,19 @@ create table if not exists stage_todo
             on update cascade on delete cascade
 );
 
-
+create table if not exists user_attributes
+(
+    user_id      int          not null
+        primary key,
+    role         varchar(100) not null,
+    first_name   varchar(255) not null,
+    last_name    varchar(255) not null,
+    email        varchar(255) not null,
+    phone_number varchar(50)  null,
+    address      varchar(255) null,
+    constraint email
+        unique (email)
+);
 
 create table if not exists associate_invitation
 (
@@ -217,20 +178,6 @@ create table if not exists batch_right
             on update cascade on delete cascade
 );
 
-create table user_document_right
-(
-    user_id             int          not null,
-    document_id         int          not null,
-    document_permission varchar(100) not null,
-    primary key (user_id, document_id),
-    constraint user_document_right_ibfk_1
-        foreign key (user_id) references prod_2.user_attributes (user_id)
-            on update cascade on delete cascade,
-    constraint user_document_right_ibfk_2
-        foreign key (document_id) references prod_2.nees_doc (id)
-            on update cascade on delete cascade
-);
-
 create table if not exists inspection_type
 (
     id              int auto_increment
@@ -246,6 +193,67 @@ create table if not exists inspection_type
             on update cascade on delete set null
 );
 
+create table if not exists nees_doc
+(
+    id                int auto_increment
+        primary key,
+    number            varchar(100)                           not null,
+    name              varchar(255)                           not null,
+    description       text                                   null,
+    doc_type          varchar(100)                           null,
+    doc_sub_type      varchar(100)                           null,
+    mime_content_type varchar(100) default 'application/pdf' not null,
+    object_type       varchar(100)                           null,
+    object_id         int                                    null,
+    created_by        int                                    null,
+    last_modified_by  int                                    null,
+    deleted           bit          default b'0'              not null,
+    created_datetime  datetime     default CURRENT_TIMESTAMP not null,
+    modified_datetime datetime     default CURRENT_TIMESTAMP not null,
+    constraint nees_doc_user_attributes_user_id_fk
+        foreign key (created_by) references user_attributes (user_id)
+            on update cascade on delete set null,
+    constraint nees_doc_user_attributes_user_id_fk_2
+        foreign key (last_modified_by) references user_attributes (user_id)
+);
+
+create table if not exists document_right
+(
+    user_id      int          not null,
+    document_id  int          not null,
+    object_right varchar(100) not null,
+    primary key (user_id, document_id),
+    constraint document_right_ibfk_1
+        foreign key (user_id) references user_attributes (user_id)
+            on update cascade on delete cascade,
+    constraint document_right_ibfk_2
+        foreign key (document_id) references nees_doc (id)
+            on update cascade on delete cascade
+);
+
+create table if not exists nees_file
+(
+    doc_id            int                                    not null
+        primary key,
+    mime_content_type varchar(100) default 'application/pdf' not null,
+    file_name         varchar(255)                           not null,
+    file              longblob                               not null,
+    constraint nees_file_ibfk_1
+        foreign key (doc_id) references nees_doc (id)
+            on update cascade on delete cascade
+);
+
+create table if not exists nees_object_right
+(
+    user_id      int          not null,
+    nees_object  varchar(100) not null,
+    object_right varchar(100) not null,
+    primary key (user_id, nees_object),
+    constraint nees_object_right_ibfk_1
+        foreign key (user_id) references user_attributes (user_id)
+            on update cascade on delete cascade
+);
+
 create table if not exists product_right
 (
     product_id   int          not null,
@@ -259,5 +267,4 @@ create table if not exists product_right
         foreign key (user_id) references user_attributes (user_id)
             on update cascade on delete cascade
 );
-
 

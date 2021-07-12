@@ -14,7 +14,7 @@ public class ApplicationUserDto {
     @NotBlank(message = "email cannot be null or blank")
     @Email(regexp = LocalConstants.EMAIL_REGEX, message = "invalid email format")
     private String email;
-    private ApplicationRole applicationRole;
+    private ApplicationRole role;
 
     public String getFirstName() {
         return firstName;
@@ -43,12 +43,12 @@ public class ApplicationUserDto {
         return this;
     }
 
-    public ApplicationRole getApplicationRole() {
-        return applicationRole;
+    public ApplicationRole getRole() {
+        return role;
     }
 
-    public ApplicationUserDto setApplicationRole(ApplicationRole applicationRole) {
-        this.applicationRole = applicationRole;
+    public ApplicationUserDto setRole(ApplicationRole role) {
+        this.role = role;
         return this;
     }
 }

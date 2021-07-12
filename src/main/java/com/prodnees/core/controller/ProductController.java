@@ -4,19 +4,15 @@ import com.prodnees.auth.action.UserAction;
 import com.prodnees.auth.controller.SignupController;
 import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.core.action.rel.ProductRightAction;
-import com.prodnees.core.config.constants.APIErrors;
 import com.prodnees.core.domain.batch.Product;
 import com.prodnees.core.domain.enums.ObjectRight;
 import com.prodnees.core.domain.rels.ProductRight;
 import com.prodnees.core.dto.ProductDto;
 import com.prodnees.core.dto.ProductRightDto;
 import com.prodnees.core.service.batch.ProductService;
-import com.prodnees.core.service.rels.AssociatesService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,22 +34,17 @@ import static com.prodnees.core.web.response.LocalResponse.configure;
 
 
 @RestController
-@CrossOrigin
-@Transactional
 public class ProductController {
     private final ProductService productService;
     private final UserAction userAction;
     private final ProductRightAction productRightAction;
-    private final AssociatesService associatesService;
 
     public ProductController(ProductService productService,
                              UserAction userAction,
-                             ProductRightAction productRightAction,
-                             AssociatesService associatesService) {
+                             ProductRightAction productRightAction) {
         this.productService = productService;
         this.userAction = userAction;
         this.productRightAction = productRightAction;
-        this.associatesService = associatesService;
     }
 
     @PostMapping("/product")
@@ -123,7 +114,6 @@ public class ProductController {
                 String.format(EMAIL_NOT_FOUND.getMessage(), dto.getEmail())
                         + String.format(". Invite them to signup at %s ",
                         MvcUriComponentsBuilder.fromController(SignupController.class).path("/user/signup").build()));
-        Assert.isTrue(associatesService.existsByAdminIdAndAssociateEmail(userId, dto.getEmail()), APIErrors.ASSOCIATES_ONLY.getMessage());
         Optional<ProductRight> optionalProductRights = productRightAction.findByProductIdAndUserId(dto.getProductId(), userId);
         Assert.isTrue(optionalProductRights.isPresent() && optionalProductRights.get().getObjectRightsType() == ObjectRight.full,
                 "only owners can invite others to admin their product");

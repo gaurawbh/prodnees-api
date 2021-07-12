@@ -5,29 +5,22 @@ import com.prodnees.core.domain.enums.ObjectRight;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.validation.constraints.NotNull;
 
 @Entity
+@IdClass(NeesObjectRightId.class)
 public class NeesObjectRight {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
     private int userId;
+    @Id
     @Enumerated(EnumType.STRING)
     private NeesObject neesObject;
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "objectRight is a required field")
     private ObjectRight objectRight;
 
-    public int getId() {
-        return id;
-    }
-
-    public NeesObjectRight setId(int id) {
-        this.id = id;
-        return this;
-    }
 
     public int getUserId() {
         return userId;

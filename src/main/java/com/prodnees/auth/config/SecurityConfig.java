@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web){
+    public void configure(WebSecurity web) {
         web.ignoring()
                 .antMatchers("/resources/**");
     }
@@ -52,8 +52,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/auth/**","/").permitAll()
+                .antMatchers("/auth/**", "/").permitAll()
                 .antMatchers("/sys/**").hasAnyRole(ApplicationRole.appOwner.name(), ApplicationRole.sysAdmin.name())
+                .antMatchers("/ownr/**").hasRole(ApplicationRole.appOwner.name())
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().accessDeniedHandler(new LocalAccessDeniedHandler())

@@ -1,8 +1,11 @@
 package com.prodnees.auth.model;
 
+import com.prodnees.auth.domain.ApplicationRole;
+
 public class AuthResponse {
     private int userId;
     private boolean isTempPassword;
+    private ApplicationRole role;
     private String zoneId;
     private String jwt;
 
@@ -39,6 +42,15 @@ public class AuthResponse {
 
     public AuthResponse setJwt(String jwt) {
         this.jwt = jwt;
+        return this;
+    }
+
+    public ApplicationRole getRole() {
+        return role;
+    }
+
+    public AuthResponse setRole(ApplicationRole role) {
+        this.role = role;
         return this;
     }
 }

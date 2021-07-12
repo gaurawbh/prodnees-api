@@ -10,14 +10,12 @@ import com.prodnees.auth.dto.SecPasswordDto;
 import com.prodnees.auth.dto.TempPasswordDto;
 import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.core.domain.user.UserAttributes;
-import com.prodnees.core.model.user.UserModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +30,6 @@ import static com.prodnees.core.web.response.LocalResponse.configure;
 
 @RestController
 @RequestMapping("/secure/")
-@CrossOrigin
 @Transactional
 public class AuthUserController {
 
@@ -52,7 +49,6 @@ public class AuthUserController {
     }
 
 
-
     /**
      * After the password has been changed:
      * <p>add row to BlockedJwt</p>
@@ -70,10 +66,10 @@ public class AuthUserController {
         Assert.isTrue(dto.getNewPassword().equals(dto.getRepeatNewPassword()), "newPassword and repeatNewPassword do not match");
         Assert.isTrue(!dto.getOldPassword().equals(dto.getNewPassword()), "password not updated, your oldPassword and newPassword are same");
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
-        UserModel userModel = userAction.save(user);
+        user = userAction.save(user);
         String jwt = RequestContext.extractToken();
         blockedJwtDao.save(new BlockedJwt().setJwt(jwt).setUserId(user.getId()).setEmail(user.getEmail())); // add to BlockedJwt
-        return configure(userModel);
+        return configure(user);
     }
 
     /**
@@ -97,16 +93,14 @@ public class AuthUserController {
         Assert.isTrue(isTempPasswordJwt, "temporary password must be used to change your temporary password");
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        UserModel userModel = userAction.save(user);
+        user = userAction.save(user);
         String jwt = RequestContext.extractToken();
         blockedJwtDao.save(new BlockedJwt().setJwt(jwt).setUserId(user.getId()).setEmail(user.getEmail())); // add to BlockedJwt
         forgotPasswordInfoDao.deleteByEmail(user.getEmail()); // remove row from ForgotPasswordInfo
         tempPasswordInfoDao.deleteByEmail(user.getEmail()); // remove row from TempPasswordInfo
 
-        return configure(userModel);
+        return configure(user);
     }
-
-
 
 
 }

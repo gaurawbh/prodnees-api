@@ -8,7 +8,7 @@ import com.prodnees.core.domain.rels.ProductRight;
 import com.prodnees.core.domain.user.UserAttributes;
 import com.prodnees.core.dto.ProductRightDto;
 import com.prodnees.core.model.ProductRightModel;
-import com.prodnees.core.model.user.UserModel;
+import com.prodnees.core.model.user.NeesUserDetails;
 import com.prodnees.core.service.batch.ProductRightsService;
 import com.prodnees.core.service.batch.ProductService;
 import com.prodnees.core.service.email.EmailPlaceHolders;
@@ -94,7 +94,7 @@ public class ProductRightActionImpl implements ProductRightAction {
         Product product = productService.getById(productRight.getProductId());
         UserAttributes userAttributes = userAttributesService.getByUserId(productRight.getUserId());
         return productRightModel.setProduct(product)
-                .setUserModel(new UserModel()
+                .setUserModel(new NeesUserDetails()
                         .setId(userAttributes.getUserId())
                         .setEmail(userAttributes.getEmail())
                         .setFirstName(userAttributes.getFirstName())

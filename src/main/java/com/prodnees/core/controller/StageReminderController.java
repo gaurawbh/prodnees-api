@@ -11,7 +11,6 @@ import com.prodnees.core.util.LocalAssert;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +25,6 @@ import java.util.Optional;
 import static com.prodnees.core.web.response.LocalResponse.configure;
 
 @RestController
-@CrossOrigin
 @Transactional
 @RequestMapping("/secure/")
 public class StageReminderController {

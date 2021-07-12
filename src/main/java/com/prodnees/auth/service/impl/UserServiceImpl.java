@@ -38,4 +38,9 @@ public class UserServiceImpl implements UserService {
     public User getByEmail(String email) {
         return userDao.findByEmail(email);
     }
+
+    @Override
+    public void deleteById(int id) {
+        userDao.deleteById(id);
+    }
 }

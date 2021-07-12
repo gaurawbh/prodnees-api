@@ -2,20 +2,20 @@ package com.prodnees.core.model;
 
 import com.prodnees.core.domain.batch.Product;
 import com.prodnees.core.domain.enums.ObjectRight;
-import com.prodnees.core.model.user.UserModel;
+import com.prodnees.core.model.user.NeesUserDetails;
 
 public class ProductRightModel {
 
     private Product product;
-    private UserModel userModel;
+    private NeesUserDetails neesUserDetails;
     private ObjectRight objectRight;
 
-    public UserModel getUserModel() {
-        return userModel;
+    public NeesUserDetails getUserModel() {
+        return neesUserDetails;
     }
 
-    public ProductRightModel setUserModel(UserModel userModel) {
-        this.userModel = userModel;
+    public ProductRightModel setUserModel(NeesUserDetails neesUserDetails) {
+        this.neesUserDetails = neesUserDetails;
         return this;
     }
 

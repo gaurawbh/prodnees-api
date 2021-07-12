@@ -2,7 +2,10 @@ package com.prodnees.core.model.user;
 
 import com.prodnees.auth.domain.ApplicationRole;
 
-public class UserModel {
+/**
+ * Complete Details of a User.
+ */
+public class NeesUserDetails {
     private int id;
     private String email;
     private ApplicationRole role;
@@ -17,7 +20,7 @@ public class UserModel {
         return id;
     }
 
-    public UserModel setId(int id) {
+    public NeesUserDetails setId(int id) {
         this.id = id;
         return this;
     }
@@ -26,7 +29,7 @@ public class UserModel {
         return email;
     }
 
-    public UserModel setEmail(String email) {
+    public NeesUserDetails setEmail(String email) {
         this.email = email;
         return this;
     }
@@ -39,12 +42,12 @@ public class UserModel {
         return companyId;
     }
 
-    public UserModel setCompanyId(int companyId) {
+    public NeesUserDetails setCompanyId(int companyId) {
         this.companyId = companyId;
         return this;
     }
 
-    public UserModel setRole(ApplicationRole role) {
+    public NeesUserDetails setRole(ApplicationRole role) {
         this.role = role;
         return this;
     }
@@ -53,7 +56,7 @@ public class UserModel {
         return enabled;
     }
 
-    public UserModel setEnabled(boolean enabled) {
+    public NeesUserDetails setEnabled(boolean enabled) {
         this.enabled = enabled;
         return this;
     }
@@ -62,7 +65,7 @@ public class UserModel {
         return firstName;
     }
 
-    public UserModel setFirstName(String firstName) {
+    public NeesUserDetails setFirstName(String firstName) {
         this.firstName = firstName;
         return this;
     }
@@ -71,7 +74,7 @@ public class UserModel {
         return lastName;
     }
 
-    public UserModel setLastName(String lastName) {
+    public NeesUserDetails setLastName(String lastName) {
         this.lastName = lastName;
         return this;
     }
@@ -80,7 +83,7 @@ public class UserModel {
         return phoneNumber;
     }
 
-    public UserModel setPhoneNumber(String phoneNumber) {
+    public NeesUserDetails setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
         return this;
     }
@@ -89,7 +92,7 @@ public class UserModel {
         return address;
     }
 
-    public UserModel setAddress(String address) {
+    public NeesUserDetails setAddress(String address) {
         this.address = address;
         return this;
     }

@@ -19,4 +19,5 @@ public interface NeesObjectRightService {
 
     boolean hasViewObjectRight(int userId, NeesObject object);
 
+    NeesObjectRight update(NeesObjectRight objectRight);
 }

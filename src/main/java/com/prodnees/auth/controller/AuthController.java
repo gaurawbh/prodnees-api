@@ -20,7 +20,6 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +29,6 @@ import static com.prodnees.core.config.constants.APIErrors.EMAIL_NOT_FOUND;
 import static com.prodnees.core.config.constants.APIErrors.USER_NOT_ENABLED;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/auth")
 public class AuthController {
     private final AuthenticationManager authenticationManager;
@@ -68,6 +66,7 @@ public class AuthController {
         boolean isForgotPassword = forgotPasswordInfoDao.existsByEmail(authDto.getEmail());
         AuthResponse authResponse = new AuthResponse()
                 .setUserId(user.getId())
+                .setRole(user.getRole())
                 .setZoneId("UTC");
         if (isForgotPassword && authAction.authenticateWithForgotPasswordCredentials(authDto.getEmail(), authDto.getPassword())) {
             final String jwt = jwtService.generateToken(userDetails, true);

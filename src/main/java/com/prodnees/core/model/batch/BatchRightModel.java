@@ -2,12 +2,12 @@ package com.prodnees.core.model.batch;
 
 import com.prodnees.core.domain.batch.Batch;
 import com.prodnees.core.domain.enums.ObjectRight;
-import com.prodnees.core.model.user.UserModel;
+import com.prodnees.core.model.user.NeesUserDetails;
 
 public class BatchRightModel {
 
     private Batch batch;
-    private UserModel user;
+    private NeesUserDetails user;
     private ObjectRight objectRight;
 
     public Batch getBatchProduct() {
@@ -19,11 +19,11 @@ public class BatchRightModel {
         return this;
     }
 
-    public UserModel getUser() {
+    public NeesUserDetails getUser() {
         return user;
     }
 
-    public BatchRightModel setUser(UserModel user) {
+    public BatchRightModel setUser(NeesUserDetails user) {
         this.user = user;
         return this;
     }

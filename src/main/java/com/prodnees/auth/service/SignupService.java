@@ -9,10 +9,10 @@ package com.prodnees.auth.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.prodnees.auth.dto.SignupDto;
-import com.prodnees.core.model.user.UserModel;
+import com.prodnees.core.model.user.NeesUserDetails;
 
 public interface SignupService {
 
-    UserModel signup(SignupDto dto) throws JsonProcessingException;
+    NeesUserDetails signup(SignupDto dto) throws JsonProcessingException;
 
 }

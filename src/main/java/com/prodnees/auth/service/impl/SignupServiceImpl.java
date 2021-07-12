@@ -21,7 +21,7 @@ import com.prodnees.auth.service.TenantService;
 import com.prodnees.auth.util.OtpUtil;
 import com.prodnees.auth.util.TemporaryPasswordHelper;
 import com.prodnees.auth.util.TenantUtil;
-import com.prodnees.core.model.user.UserModel;
+import com.prodnees.core.model.user.NeesUserDetails;
 import com.prodnees.core.service.email.LocalEmailService;
 import com.prodnees.core.util.LocalAssert;
 import com.prodnees.core.web.exception.NeesBadRequestException;
@@ -70,7 +70,7 @@ public class SignupServiceImpl implements SignupService {
      */
     @Override
     @Transactional
-    public UserModel signup(SignupDto dto) throws JsonProcessingException {
+    public NeesUserDetails signup(SignupDto dto) throws JsonProcessingException {
         Company company = registerCompany(dto);
         String tempPassword = getTempPassword();
         User user = registerUser(dto, tempPassword, company.getId());
@@ -83,7 +83,7 @@ public class SignupServiceImpl implements SignupService {
         TempPasswordInfo tempPasswordInfo1 = tempPasswordInfoDao.save(tempPasswordInfo);
         new TemporaryPasswordHelper(emailService).emailTemporaryPassword(user.getEmail(), tempPassword, company.getId());
 
-        return new UserModel()
+        return new NeesUserDetails()
                 .setEmail(user.getEmail())
                 .setFirstName(user.getFirstName())
                 .setLastName(user.getLastName())
