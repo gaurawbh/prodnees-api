@@ -8,6 +8,7 @@ package com.prodnees.auth.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableList;
 import com.prodnees.auth.config.SessionFactoryConfig;
 import com.prodnees.auth.domain.ApplicationRole;
 import com.prodnees.auth.domain.User;
@@ -20,6 +21,8 @@ import com.prodnees.core.domain.user.NeesObject;
 import com.prodnees.core.domain.user.NeesObjectRight;
 import com.prodnees.core.domain.user.UserAttributes;
 import com.prodnees.core.util.LocalAssert;
+import com.prodnees.shelf.domain.ProductGroup;
+import com.prodnees.shelf.domain.ProductGroupEnum;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.output.MigrateResult;
 import org.hibernate.Session;
@@ -30,7 +33,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.prodnees.auth.util.TenantUtil.VALID_SCHEMA_PATTERN;
@@ -40,6 +42,11 @@ import static com.prodnees.auth.util.TenantUtil.VALID_SCHEMA_PATTERN;
 @Transactional
 public class TenantServiceImpl implements TenantService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final List<Class<?>> annotatedClasses = ImmutableList.of(
+            UserAttributes.class,
+            NeesDoctype.class,
+            NeesObjectRight.class,
+            ProductGroup.class);
 
     private final DataSource dataSource;
     private final SessionFactoryConfig sessionFactoryConfig;
@@ -58,42 +65,14 @@ public class TenantServiceImpl implements TenantService {
         if (re.migrationsExecuted > 0) {
             logger.info("Schema {} was successfully created", schema);
         }
-        List<Class<?>> annotatedClasses = new ArrayList<>();
-        annotatedClasses.add(UserAttributes.class);
-        annotatedClasses.add(NeesDoctype.class);
-        annotatedClasses.add(NeesObjectRight.class);
         Session session = sessionFactoryConfig.getCurrentSession(schema, annotatedClasses).openSession();
 
         Transaction tx = session.beginTransaction();
 
-        UserAttributes userAttributes = new UserAttributes()
-                .setUserId(user.getId())
-                .setEmail(user.getEmail())
-                .setRole(ApplicationRole.appOwner)
-                .setFirstName(user.getFirstName())
-                .setLastName(user.getLastName());
-        session.save(userAttributes);
-
-        DocTypeEnum[] docTypeEnums = DocTypeEnum.values();
-        for (DocTypeEnum docType : docTypeEnums) {
-            NeesDoctype neesDocType = new NeesDoctype();
-            List<DocSubType> subTypes = docType.getDocSubTypeList();
-            ObjectMapper objectMapper = new ObjectMapper();
-            neesDocType.setName(docType.name())
-                    .setDescription(String.format("Documents related to %s will use this doctype", docType.name()))
-                    .setSys(true)
-                    .setActive(true)
-                    .setSubTypesJson(objectMapper.writeValueAsString(subTypes));
-            session.save(neesDocType);
-        }
-        NeesObject[] neesObjects = NeesObject.values();
-        for (NeesObject neesObject : neesObjects) {
-            NeesObjectRight neesObjectRight = new NeesObjectRight();
-            neesObjectRight.setUserId(user.getId())
-                    .setNeesObject(neesObject)
-                    .setObjectRight(ObjectRight.full);
-            session.save(neesObjectRight);
-        }
+        addUserAttributes(session, user);
+        addDocTypes(session);
+        addNeesObjectRights(session, user);
+        addProductGroups(session);
 
         tx.commit();
         session.close();
@@ -106,6 +85,56 @@ public class TenantServiceImpl implements TenantService {
                 .schemas(schema)
                 .load();
         return flyway.migrate();
+    }
+
+    void addUserAttributes(Session session, User user) {
+        UserAttributes userAttributes = new UserAttributes()
+                .setUserId(user.getId())
+                .setEmail(user.getEmail())
+                .setRole(ApplicationRole.appOwner)
+                .setFirstName(user.getFirstName())
+                .setLastName(user.getLastName());
+        session.save(userAttributes);
+    }
+
+    void addDocTypes(Session session) throws JsonProcessingException {
+        DocTypeEnum[] docTypeEnums = DocTypeEnum.values();
+        for (DocTypeEnum docType : docTypeEnums) {
+            NeesDoctype neesDocType = new NeesDoctype();
+            List<DocSubType> subTypes = docType.getDocSubTypeList();
+            ObjectMapper objectMapper = new ObjectMapper();
+            neesDocType.setName(docType.name())
+                    .setDescription(String.format("Documents related to %s will use this doctype", docType.name()))
+                    .setSys(true)
+                    .setActive(true)
+                    .setSubTypesJson(objectMapper.writeValueAsString(subTypes));
+            session.save(neesDocType);
+        }
+    }
+
+    void addNeesObjectRights(Session session, User user) {
+        NeesObject[] neesObjects = NeesObject.values();
+        for (NeesObject neesObject : neesObjects) {
+            NeesObjectRight neesObjectRight = new NeesObjectRight();
+            neesObjectRight.setUserId(user.getId())
+                    .setNeesObject(neesObject)
+                    .setObjectRight(ObjectRight.full);
+            session.save(neesObjectRight);
+        }
+    }
+
+
+    private void addProductGroups(Session session) {
+        ProductGroupEnum[] productGroupEnums = ProductGroupEnum.values();
+        for (ProductGroupEnum groupEnum : productGroupEnums) {
+            ProductGroup productGroup = new ProductGroup()
+                    .setPrivateKey(groupEnum.name())
+                    .setLabel(groupEnum.getLabel())
+                    .setDescription(groupEnum.getDescription())
+                    .setActive(groupEnum.isActive())
+                    .setSys(true);
+            session.save(productGroup);
+        }
     }
 
 }

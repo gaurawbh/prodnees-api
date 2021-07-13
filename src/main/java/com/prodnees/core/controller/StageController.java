@@ -1,6 +1,5 @@
 package com.prodnees.core.controller;
 
-import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.core.action.BatchAction;
 import com.prodnees.core.action.stage.StageAction;
 import com.prodnees.core.action.stage.StageReminderAction;
@@ -21,10 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -70,9 +69,8 @@ public class StageController {
      * @param id
      * @return
      */
-    @GetMapping("/stages")
-    public ResponseEntity<?> getById(@RequestParam int id) {
-        int userId = RequestContext.getUserId();
+    @GetMapping("/stages/{id}")
+    public ResponseEntity<?> getById(@PathVariable int id) {
         StageModel stageModel = stageAction.getModelById(id);
         return configure(stageModel);
     }
@@ -83,8 +81,8 @@ public class StageController {
      * @param batchId
      * @return
      */
-    @GetMapping("/stages/batch")
-    public ResponseEntity<?> getAllByBatchId(@RequestParam int batchId) {
+    @GetMapping("/stages/batch/{batchId}")
+    public ResponseEntity<?> getAllByBatchId(@PathVariable int batchId) {
         return configure(stageAction.getAllByBatchId(batchId));
     }
 
@@ -102,8 +100,8 @@ public class StageController {
         return configure();
     }
 
-    @DeleteMapping("/stage")
-    public ResponseEntity<?> delete(@RequestParam int id) {
+    @DeleteMapping("/stage/{id}")
+    public ResponseEntity<?> delete(@PathVariable int id) {
         stageAction.deleteById(id);
         return configure("stage deleted successfully");
     }
@@ -115,8 +113,8 @@ public class StageController {
      * @param id
      * @return
      */
-    @PutMapping("/stage/start")
-    public ResponseEntity<?> markStageStarted(@RequestParam int id) {
+    @PutMapping("/stage/{id}/start")
+    public ResponseEntity<?> markStageStarted(@PathVariable int id) {
         Stage stage = stageAction.getById(id);
         stage.setState(StageState.IN_PROGRESS);
         List<StageReminder> stageReminderList = stageReminderAction.getAllByStageIdAndStageState(id, StageState.IN_PROGRESS);
@@ -131,8 +129,8 @@ public class StageController {
      * @param id
      * @return
      */
-    @PutMapping("/stage/complete")
-    public ResponseEntity<?> markStageComplete(@RequestParam int id) {
+    @PutMapping("/stage/complete/{id}")
+    public ResponseEntity<?> markStageComplete(@PathVariable int id) {
         Stage stage = stageAction.getById(id);
 
         List<StageTodo> stageTodoList = stageTodoAction.getAllByStageId(stage.getId());

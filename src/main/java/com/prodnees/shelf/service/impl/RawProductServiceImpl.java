@@ -1,8 +1,8 @@
-package com.prodnees.core.service.batch.impl;
+package com.prodnees.shelf.service.impl;
 
-import com.prodnees.core.service.batch.RawProductService;
 import com.prodnees.shelf.dao.RawProductDao;
-import com.prodnees.shelf.domain.RawProduct;
+import com.prodnees.shelf.domain.RawMaterial;
+import com.prodnees.shelf.service.RawProductService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,22 +17,22 @@ public class RawProductServiceImpl implements RawProductService {
     }
 
     @Override
-    public RawProduct save(RawProduct rawProduct) {
-        return rawProductDao.save(rawProduct);
+    public RawMaterial save(RawMaterial rawMaterial) {
+        return rawProductDao.save(rawMaterial);
     }
 
     @Override
-    public RawProduct getById(int id) {
+    public RawMaterial getById(int id) {
         return rawProductDao.getById(id);
     }
 
     @Override
-    public RawProduct getByName(String name) {
+    public RawMaterial getByName(String name) {
         return rawProductDao.getByName(name);
     }
 
     @Override
-    public List<RawProduct> getAllByStageId(int id) {
+    public List<RawMaterial> getAllByStageId(int id) {
         return rawProductDao.getAllByStageId(id);
     }
 }

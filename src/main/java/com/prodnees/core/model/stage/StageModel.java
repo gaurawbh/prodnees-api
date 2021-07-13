@@ -3,7 +3,7 @@ package com.prodnees.core.model.stage;
 import com.prodnees.core.domain.enums.StageState;
 import com.prodnees.core.domain.stage.StageReminder;
 import com.prodnees.core.domain.stage.StageTodo;
-import com.prodnees.shelf.domain.RawProduct;
+import com.prodnees.shelf.domain.RawMaterial;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class StageModel {
     private StageState status;
     private List<StageReminder> stageReminders;
     List<StageTodo> stageTodos;
-    List<RawProduct> rawProducts;
+    List<RawMaterial> rawMaterials;
 
     public List<StageTodo> getStageTodos() {
         return stageTodos;
@@ -33,12 +33,12 @@ public class StageModel {
         return this;
     }
 
-    public List<RawProduct> getRawProducts() {
-        return rawProducts;
+    public List<RawMaterial> getRawProducts() {
+        return rawMaterials;
     }
 
-    public StageModel setRawProducts(List<RawProduct> rawProducts) {
-        this.rawProducts = rawProducts;
+    public StageModel setRawProducts(List<RawMaterial> rawMaterials) {
+        this.rawMaterials = rawMaterials;
         return this;
     }
 

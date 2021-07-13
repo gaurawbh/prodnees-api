@@ -14,14 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static com.prodnees.core.web.response.LocalResponse.configure;
 
@@ -34,32 +32,20 @@ public class BatchController {
         this.batchAction = batchAction;
     }
 
-    /**
-     * On saving a new BatchProduct:
-     * <p>save to BatchProductRights</p>
-     *
-     * @param dto
-     * @return
-     */
-
     @PostMapping("/batch")
     public ResponseEntity<?> saveBatch(@Validated @RequestBody BatchDto dto) {
         return configure(batchAction.create(dto));
     }
 
-    /**
-     * returns {@link BatchModel} by it's id if id is provided
-     * <p>returns list of {@link BatchModel}</p> that belongs to a user if id is not provided
-     *
-     * @param id
-     * @return
-     */
-    @GetMapping("/batches")
-    public ResponseEntity<?> getBatches(@RequestParam Optional<Integer> id) {
-        AtomicReference<Object> atomicReference = new AtomicReference<>();
 
-        id.ifPresentOrElse(integer -> atomicReference.set(batchAction.getModelById(integer)), () -> atomicReference.set(batchAction.getBatchList()));
-        return configure(atomicReference.get());
+    @GetMapping("/batches/{id}")
+    public ResponseEntity<?> getBatchById(@PathVariable int id) {
+        return configure(batchAction.getModelById(id));
+    }
+
+    @GetMapping("/batches")
+    public ResponseEntity<?> getBatches() {
+        return configure(batchAction.getBatchList());
     }
 
     /**
@@ -134,8 +120,8 @@ public class BatchController {
      * @param id
      * @return
      */
-    @DeleteMapping("/batch")
-    public ResponseEntity<?> deleteBatch(@RequestParam int id) {
+    @DeleteMapping("/batch/{id}")
+    public ResponseEntity<?> deleteBatch(@PathVariable int id) {
         batchAction.deleteById(id);
         return configure();
     }

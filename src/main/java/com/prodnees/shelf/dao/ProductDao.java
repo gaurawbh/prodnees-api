@@ -1,6 +1,6 @@
-package com.prodnees.core.dao.batch;
+package com.prodnees.shelf.dao;
 
-import com.prodnees.core.domain.batch.Product;
+import com.prodnees.shelf.domain.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProductDao extends JpaRepository<Product, Integer> {

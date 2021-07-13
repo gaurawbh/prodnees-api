@@ -1,4 +1,4 @@
-package com.prodnees.core.domain.batch;
+package com.prodnees.shelf.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

@@ -10,13 +10,13 @@ import com.prodnees.core.domain.user.NeesObject;
 import com.prodnees.core.dto.stage.StageDto;
 import com.prodnees.core.model.stage.StageModel;
 import com.prodnees.core.service.NeesDocumentService;
-import com.prodnees.core.service.batch.RawProductService;
 import com.prodnees.core.service.stage.StageService;
 import com.prodnees.core.service.stage.StageTodoService;
 import com.prodnees.core.service.user.NeesObjectRightService;
 import com.prodnees.core.util.LocalAssert;
 import com.prodnees.core.web.exception.NeesNotFoundException;
-import com.prodnees.shelf.domain.RawProduct;
+import com.prodnees.shelf.domain.RawMaterial;
+import com.prodnees.shelf.service.RawProductService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -118,14 +118,14 @@ public class StageActionImpl implements StageAction {
     private StageModel entityToModel(Stage stage) {
         StageModel stageModel = new StageModel();
         List<StageTodo> stageTodoList = stageTodoService.getAllByStageId(stage.getId());
-        List<RawProduct> rawProductList = rawProductService.getAllByStageId(stage.getId());
+        List<RawMaterial> rawMaterialList = rawProductService.getAllByStageId(stage.getId());
         stageModel.setId(stage.getId())
                 .setBatchId(stage.getBatchId())
                 .setIndex(stage.getIndx())
                 .setName(stage.getName())
                 .setDescription(stage.getDescription())
                 .setStageTodos(stageTodoList)
-                .setRawProducts(rawProductList)
+                .setRawProducts(rawMaterialList)
                 .setStatus(stage.getState());
         return stageModel;
     }

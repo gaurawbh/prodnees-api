@@ -3,18 +3,20 @@ package com.prodnees.core.action.impl;
 import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.core.action.BatchAction;
 import com.prodnees.core.domain.batch.Batch;
-import com.prodnees.core.domain.batch.Product;
 import com.prodnees.core.domain.enums.BatchState;
+import com.prodnees.core.domain.enums.ObjectRight;
 import com.prodnees.core.domain.user.NeesObject;
 import com.prodnees.core.dto.batch.BatchDto;
 import com.prodnees.core.model.batch.BatchListModel;
 import com.prodnees.core.model.batch.BatchModel;
 import com.prodnees.core.service.batch.BatchService;
-import com.prodnees.core.service.batch.ProductService;
 import com.prodnees.core.service.user.NeesObjectRightService;
 import com.prodnees.core.util.LocalAssert;
 import com.prodnees.core.util.MapperUtil;
+import com.prodnees.core.web.exception.NeesBadRequestException;
 import com.prodnees.core.web.exception.NeesNotFoundException;
+import com.prodnees.shelf.domain.Product;
+import com.prodnees.shelf.service.ProductService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -63,14 +65,14 @@ public class BatchActionImpl implements BatchAction {
 
     @Override
     public BatchModel save(Batch batch) {
-        verifyUpdateRights();
+        verifyRight(ObjectRight.update);
         return mapToModel(batchService.save(batch));
     }
 
     @Override
     public BatchModel create(BatchDto dto) {
         LocalAssert.isTrue(productService.existsById(dto.getProductId()), String.format("Product with id: %d not found", dto.getProductId()));
-        verifyUpdateRights();
+        verifyRight(ObjectRight.update);
         int nextId = batchService.getNextId();
         String batchName = "Batch-" + nextId;
         Batch batch = MapperUtil.getDozer().map(dto, Batch.class);
@@ -81,7 +83,7 @@ public class BatchActionImpl implements BatchAction {
 
     @Override
     public Batch getById(int id) {
-        verifyViewRights();
+        verifyRight(ObjectRight.viewOnly);
         return batchService.findById(id)
                 .orElseThrow(() -> new NeesNotFoundException(String.format("Batch with id: %d not found", id)));
     }
@@ -93,19 +95,21 @@ public class BatchActionImpl implements BatchAction {
 
     @Override
     public List<Batch> getAllByProductId(int productId) {
-        verifyViewRights();
+        verifyRight(ObjectRight.viewOnly);
         return batchService.getAllByProductId(productId);
     }
 
     @Override
     public List<Batch> findAll() {
-        verifyViewRights();
+        verifyRight(ObjectRight.viewOnly);
+
         return batchService.findAll();
     }
 
     @Override
     public BatchListModel getBatchList() {
-        verifyViewRights();
+        verifyRight(ObjectRight.viewOnly);
+
         List<Batch> batchList = batchService.findAll();
         return new BatchListModel()
                 .setBatches(batchList)
@@ -119,7 +123,8 @@ public class BatchActionImpl implements BatchAction {
 
     @Override
     public void deleteById(int id) {
-        verifyFullRights();
+        verifyRight(ObjectRight.full);
+
         batchService.deleteById(id);
     }
 
@@ -139,17 +144,20 @@ public class BatchActionImpl implements BatchAction {
 
     }
 
-    private void verifyViewRights() {
-        LocalAssert.isTrue(neesObjectRightService.hasViewObjectRight(RequestContext.getUserId(), NeesObject.batch), "Insufficient right to view Batch");
+    private void verifyRight(ObjectRight objectRight) {
+        switch (objectRight) {
+            case full:
+                LocalAssert.isTrue(neesObjectRightService.hasFullObjectRight(RequestContext.getUserId(), NeesObject.batch),
+                        "Insufficient right to delete Batch");
+            case update:
+                LocalAssert.isTrue(neesObjectRightService.hasUpdateObjectRight(RequestContext.getUserId(), NeesObject.batch),
+                        "Insufficient right to add or update Batch");
+            case viewOnly:
+                LocalAssert.isTrue(neesObjectRightService.hasFullObjectRight(RequestContext.getUserId(), NeesObject.batch),
+                        "Insufficient right to delete Batch");
+            default:
+                throw new NeesBadRequestException("Insufficient right to Batch");
+        }
     }
 
-    private void verifyUpdateRights() {
-        LocalAssert.isTrue(neesObjectRightService.hasUpdateObjectRight(RequestContext.getUserId(), NeesObject.batch), "Insufficient right to add or update Batch");
-
-    }
-
-    private void verifyFullRights() {
-        LocalAssert.isTrue(neesObjectRightService.hasFullObjectRight(RequestContext.getUserId(), NeesObject.batch), "Insufficient right to delete Batch");
-
-    }
 }

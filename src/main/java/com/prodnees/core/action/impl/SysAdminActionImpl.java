@@ -33,6 +33,7 @@ public class SysAdminActionImpl implements SysAdminAction {
     private final TempPasswordInfoDao tempPasswordInfoDao;
     private final LocalEmailService localEmailService;
     private final NeesObjectRightService objectRightService;
+
     public SysAdminActionImpl(UserService userService,
                               UserAttributesService userAttributesService,
                               TempPasswordInfoDao tempPasswordInfoDao,
@@ -51,7 +52,6 @@ public class SysAdminActionImpl implements SysAdminAction {
                 .setEnabled(false);
         return userService.save(user);
     }
-
 
 
     @Override
@@ -111,7 +111,6 @@ public class SysAdminActionImpl implements SysAdminAction {
             objectRightService.save(neesObjectRight);
         }
     }
-
 
 
     private String getTempPassword() {

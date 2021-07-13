@@ -5,7 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class RawProduct {
+public class RawMaterial {
     @Id
     @GeneratedValue
     private int id;
@@ -16,7 +16,7 @@ public class RawProduct {
         return id;
     }
 
-    public RawProduct setId(int id) {
+    public RawMaterial setId(int id) {
         this.id = id;
         return this;
     }
@@ -25,7 +25,7 @@ public class RawProduct {
         return name;
     }
 
-    public RawProduct setName(String name) {
+    public RawMaterial setName(String name) {
         this.name = name;
         return this;
     }
@@ -34,7 +34,7 @@ public class RawProduct {
         return description;
     }
 
-    public RawProduct setDescription(String description) {
+    public RawMaterial setDescription(String description) {
         this.description = description;
         return this;
     }

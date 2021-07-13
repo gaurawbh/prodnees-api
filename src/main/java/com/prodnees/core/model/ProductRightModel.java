@@ -1,8 +1,8 @@
 package com.prodnees.core.model;
 
-import com.prodnees.core.domain.batch.Product;
 import com.prodnees.core.domain.enums.ObjectRight;
 import com.prodnees.core.model.user.NeesUserDetails;
+import com.prodnees.shelf.domain.Product;
 
 public class ProductRightModel {
 

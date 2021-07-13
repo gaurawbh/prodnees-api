@@ -1,10 +1,10 @@
 package com.prodnees.core.model.batch;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.prodnees.core.domain.batch.Product;
 import com.prodnees.core.domain.enums.BatchState;
 import com.prodnees.core.domain.enums.ObjectRight;
 import com.prodnees.core.model.stage.StageModel;
+import com.prodnees.shelf.domain.Product;
 
 import java.time.LocalDate;
 import java.util.List;

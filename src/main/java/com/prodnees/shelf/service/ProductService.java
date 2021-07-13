@@ -1,7 +1,7 @@
-package com.prodnees.core.service.batch;
+package com.prodnees.shelf.service;
 
-import com.prodnees.core.domain.batch.Product;
 import com.prodnees.core.dto.ProductDto;
+import com.prodnees.shelf.domain.Product;
 
 import java.util.List;
 
@@ -18,6 +18,8 @@ public interface ProductService {
     Product getByName(String name);
 
     List<Product> getAllByIds(Iterable<Integer> productIdIterable);
+
+    List<Product> findAll();
 
     void deleteById(int id);
 

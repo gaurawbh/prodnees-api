@@ -1,16 +1,13 @@
-package com.prodnees.core.service.batch.impl;
+package com.prodnees.shelf.service.impl;
 
 import com.prodnees.auth.filter.RequestContext;
-import com.prodnees.core.dao.batch.ProductDao;
-import com.prodnees.core.dao.rels.ProductRightsDao;
-import com.prodnees.core.domain.batch.Product;
-import com.prodnees.core.domain.enums.ObjectRight;
-import com.prodnees.core.domain.rels.ProductRight;
 import com.prodnees.core.dto.ProductDto;
-import com.prodnees.core.service.batch.ProductService;
 import com.prodnees.core.util.MapperUtil;
 import com.prodnees.core.util.ValidatorUtil;
 import com.prodnees.core.web.exception.NeesNotFoundException;
+import com.prodnees.shelf.dao.ProductDao;
+import com.prodnees.shelf.domain.Product;
+import com.prodnees.shelf.service.ProductService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,12 +15,9 @@ import java.util.List;
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductDao productDao;
-    private final ProductRightsDao productRightsDao;
 
-    public ProductServiceImpl(ProductDao productDao,
-                              ProductRightsDao productRightsDao) {
+    public ProductServiceImpl(ProductDao productDao) {
         this.productDao = productDao;
-        this.productRightsDao = productRightsDao;
     }
 
     @Override
@@ -36,10 +30,6 @@ public class ProductServiceImpl implements ProductService {
         int ownerId = RequestContext.getUserId();
         Product product = MapperUtil.getDozer().map(dto, Product.class);
         product = productDao.save(product);
-        productRightsDao.save(new ProductRight()
-                .setUserId(ownerId)
-                .setProductId(product.getId())
-                .setObjectRightsType(ObjectRight.full));
         return product;
     }
 
@@ -65,6 +55,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> getAllByIds(Iterable<Integer> productIdIterable) {
         return productDao.findAllById(productIdIterable);
+    }
+
+    @Override
+    public List<Product> findAll() {
+        return productDao.findAll();
     }
 
     @Override

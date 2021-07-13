@@ -39,6 +39,7 @@ public class FlywayConfig {
                         Flyway flyway = Flyway.configure()
                                 .locations("db/migration/tenants")
                                 .dataSource(dataSource)
+                                .cleanOnValidationError(true)
                                 .schemas(company.getSchemaInstance())
                                 .load();
                         flyway.migrate();

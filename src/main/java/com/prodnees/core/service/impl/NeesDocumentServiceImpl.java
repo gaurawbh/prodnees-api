@@ -3,14 +3,10 @@ package com.prodnees.core.service.impl;
 import com.prodnees.auth.config.tenancy.CurrentTenantResolver;
 import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.core.dao.batch.BatchDao;
-import com.prodnees.core.dao.batch.ProductDao;
 import com.prodnees.core.dao.doc.NeesDocDao;
-import com.prodnees.core.dao.rels.ProductRightsDao;
 import com.prodnees.core.dao.stage.StageDao;
 import com.prodnees.core.domain.batch.Batch;
-import com.prodnees.core.domain.batch.Product;
 import com.prodnees.core.domain.doc.NeesDoc;
-import com.prodnees.core.domain.rels.ProductRight;
 import com.prodnees.core.domain.user.NeesObject;
 import com.prodnees.core.model.NeesObjProps;
 import com.prodnees.core.service.NeesDocumentService;
@@ -19,13 +15,14 @@ import com.prodnees.core.util.LocalAssert;
 import com.prodnees.core.util.LocalStringUtils;
 import com.prodnees.core.web.exception.NeesBadRequestException;
 import com.prodnees.core.web.exception.NeesNotFoundException;
+import com.prodnees.shelf.dao.ProductDao;
+import com.prodnees.shelf.domain.Product;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class NeesDocumentServiceImpl implements NeesDocumentService {
@@ -33,7 +30,6 @@ public class NeesDocumentServiceImpl implements NeesDocumentService {
     private final BatchDao batchDao;
     private final StageDao stageDao;
     private final ProductDao productDao;
-    private final ProductRightsDao productRightsDao;
     private final NeesObjectRightService neesObjectRightService;
 
 
@@ -41,13 +37,11 @@ public class NeesDocumentServiceImpl implements NeesDocumentService {
                                    BatchDao batchDao,
                                    StageDao stageDao,
                                    ProductDao productDao,
-                                   ProductRightsDao productRightsDao,
                                    NeesObjectRightService neesObjectRightService) {
         this.neesDocDao = neesDocDao;
         this.batchDao = batchDao;
         this.stageDao = stageDao;
         this.productDao = productDao;
-        this.productRightsDao = productRightsDao;
         this.neesObjectRightService = neesObjectRightService;
     }
 
@@ -114,9 +108,7 @@ public class NeesDocumentServiceImpl implements NeesDocumentService {
             case "Stage":
                 throw new NeesBadRequestException("Adding Stages from the document is not yet supported. Add it's document from the Stage page");
             case "Product":
-                List<ProductRight> productRights = productRightsDao.getAllByUserId(userId);
-                List<Integer> productIds = productRights.stream().map(ProductRight::getProductId).collect(Collectors.toList());
-                List<Product> products = productDao.findAllById(productIds);
+                List<Product> products = productDao.findAll();
                 products.forEach(product -> {
                     docObject.put(NeesObjProps.id.name(), product.getId());
                     docObject.put(NeesObjProps.id.name(), product.getName());
