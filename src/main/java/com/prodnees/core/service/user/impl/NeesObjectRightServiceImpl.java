@@ -2,6 +2,7 @@ package com.prodnees.core.service.user.impl;
 
 import com.prodnees.auth.domain.ApplicationRole;
 import com.prodnees.auth.domain.User;
+import com.prodnees.auth.filter.RequestContext;
 import com.prodnees.auth.service.UserService;
 import com.prodnees.core.dao.user.NeesObjectRightDao;
 import com.prodnees.core.domain.enums.ObjectRight;
@@ -36,25 +37,38 @@ public class NeesObjectRightServiceImpl implements NeesObjectRightService {
 
     @Override
     public NeesObjectRight getByUserIdAndNeesObject(int userId, NeesObject object) {
-        return neesObjectRightDao.getByUserIdAndNeesObject(userId, object);
+        return neesObjectRightDao.findByUserIdAndNeesObject(userId, object)
+                .orElseGet(() -> {
+                    ObjectRight objectRight;
+                    if (RequestContext.getUserRole().equals(ApplicationRole.appOwner.name()) || RequestContext.getUserRole().equals(ApplicationRole.sysAdmin.name())) {
+                        objectRight = ObjectRight.full;
+                    } else {
+                        objectRight = ObjectRight.noAccess;
+                    }
+                    NeesObjectRight right = new NeesObjectRight()
+                            .setUserId(userId)
+                            .setNeesObject(object)
+                            .setObjectRight(objectRight);
+                    return neesObjectRightDao.save(right);
+                });
     }
 
     @Override
     public boolean hasFullObjectRight(int userId, NeesObject object) {
-        NeesObjectRight objectRight = neesObjectRightDao.getByUserIdAndNeesObject(userId, object);
+        NeesObjectRight objectRight = getByUserIdAndNeesObject(userId, object);
         return objectRight.getObjectRight().equals(ObjectRight.full);
     }
 
     @Override
     public boolean hasUpdateObjectRight(int userId, NeesObject object) {
-        NeesObjectRight objectRight = neesObjectRightDao.getByUserIdAndNeesObject(userId, object);
+        NeesObjectRight objectRight = getByUserIdAndNeesObject(userId, object);
         return objectRight.getObjectRight().equals(ObjectRight.full)
                 || objectRight.getObjectRight().equals(ObjectRight.update);
     }
 
     @Override
     public boolean hasViewObjectRight(int userId, NeesObject object) {
-        NeesObjectRight objectRight = neesObjectRightDao.getByUserIdAndNeesObject(userId, object);
+        NeesObjectRight objectRight = getByUserIdAndNeesObject(userId, object);
         return !objectRight.getObjectRight().equals(ObjectRight.noAccess);
     }
 

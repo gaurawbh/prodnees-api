@@ -13,7 +13,6 @@ import com.prodnees.core.service.batch.BatchService;
 import com.prodnees.core.service.user.NeesObjectRightService;
 import com.prodnees.core.util.LocalAssert;
 import com.prodnees.core.util.MapperUtil;
-import com.prodnees.core.web.exception.NeesBadRequestException;
 import com.prodnees.core.web.exception.NeesNotFoundException;
 import com.prodnees.shelf.domain.Product;
 import com.prodnees.shelf.service.ProductService;
@@ -153,10 +152,8 @@ public class BatchActionImpl implements BatchAction {
                 LocalAssert.isTrue(neesObjectRightService.hasUpdateObjectRight(RequestContext.getUserId(), NeesObject.batch),
                         "Insufficient right to add or update Batch");
             case viewOnly:
-                LocalAssert.isTrue(neesObjectRightService.hasFullObjectRight(RequestContext.getUserId(), NeesObject.batch),
+                LocalAssert.isTrue(neesObjectRightService.hasViewObjectRight(RequestContext.getUserId(), NeesObject.batch),
                         "Insufficient right to delete Batch");
-            default:
-                throw new NeesBadRequestException("Insufficient right to Batch");
         }
     }
 

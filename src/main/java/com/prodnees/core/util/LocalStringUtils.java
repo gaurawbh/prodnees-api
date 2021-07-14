@@ -20,4 +20,19 @@ public class LocalStringUtils extends StringUtils {
         return arg != null && !arg.isBlank();
     }
 
+    public static String toLowerCamelCase(String originalStr) {
+        String alphaNumericStr = originalStr.replaceAll("[^A-Za-z0-9]", " ");
+        String[] strArray = alphaNumericStr.split(" ");
+        StringBuilder camelCaseBuilder = new StringBuilder();
+        for (int i = 0; i < strArray.length; i++) {
+            if (i == 0) {
+                camelCaseBuilder.append(strArray[i].toLowerCase().strip());
+            } else {
+                camelCaseBuilder.append(strArray[i].toLowerCase().replaceFirst("[a-z0-9]", strArray[i].substring(0, 1).toUpperCase()));
+            }
+
+        }
+        return camelCaseBuilder.toString();
+    }
+
 }

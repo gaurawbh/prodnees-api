@@ -6,7 +6,6 @@
 
 package com.prodnees.auth.filter;
 
-import com.prodnees.auth.domain.ApplicationRole;
 import com.prodnees.core.util.JWTUtil;
 import com.prodnees.core.util.LocalAssert;
 import io.jsonwebtoken.Claims;
@@ -26,9 +25,9 @@ public class RequestContext {
         return (int) jws.getBody().get(JWTUtil.ClaimFields.USER_ID);
     }
 
-    public static ApplicationRole getUserRole() {
+    public static String getUserRole() {
         Jws<Claims> jws = extractJws();
-        return (ApplicationRole) jws.getBody().get(JWTUtil.ClaimFields.ROLE);
+        return (String) jws.getBody().get(JWTUtil.ClaimFields.ROLE);
     }
 
     public static int getCompanyId() {

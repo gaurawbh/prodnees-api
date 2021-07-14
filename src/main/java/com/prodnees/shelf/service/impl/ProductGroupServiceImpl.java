@@ -1,5 +1,8 @@
 package com.prodnees.shelf.service.impl;
 
+import com.prodnees.core.util.LocalStringUtils;
+import com.prodnees.core.web.exception.NeesBadRequestException;
+import com.prodnees.core.web.exception.NeesNotFoundException;
 import com.prodnees.shelf.dao.ProductGroupDao;
 import com.prodnees.shelf.domain.ProductGroup;
 import com.prodnees.shelf.domain.ProductGroupEnum;
@@ -14,6 +17,12 @@ public class ProductGroupServiceImpl implements ProductGroupService {
 
     public ProductGroupServiceImpl(ProductGroupDao productGroupDao) {
         this.productGroupDao = productGroupDao;
+    }
+
+    @Override
+    public ProductGroup getById(int id) {
+        return productGroupDao.findById(id)
+                .orElseThrow(() -> new NeesNotFoundException(String.format("Product Group with id: %d not found", id)));
     }
 
     @Override
@@ -36,23 +45,25 @@ public class ProductGroupServiceImpl implements ProductGroupService {
 
     @Override
     public ProductGroup addProductGroup(ProductGroup productGroup) {
-        productGroup.setPrivateKey(toCamelCase(productGroup.getLabel()));
+        productGroup.setPrivateKey(LocalStringUtils.toLowerCamelCase(productGroup.getLabel()));
         return productGroupDao.save(productGroup);
     }
 
-    String toCamelCase(String originalStr) {
-        String alphaNumericStr = originalStr.replaceAll("[^A-Za-z0-9]", " ");
-        String[] strArray = alphaNumericStr.split(" ");
-        StringBuilder camelCaseBuilder = new StringBuilder();
-        for (int i = 0; i < strArray.length; i++) {
-            if (i == 0) {
-                camelCaseBuilder.append(strArray[i].toLowerCase().strip());
-            } else {
-                camelCaseBuilder.append(strArray[i].toLowerCase().replaceFirst("[a-z0-9]", strArray[i].substring(0, 1).toUpperCase()));
-            }
-
+    @Override
+    public void deleteById(int id) {
+        ProductGroup productGroup = getById(id);
+        if (productGroup.isSys()) {
+            throw new NeesBadRequestException("Cannot delete system Product Group");
         }
-        return camelCaseBuilder.toString();
+        productGroupDao.deleteById(id);
+    }
+
+    @Override
+    public ProductGroup updateProductGroup(ProductGroup dto) {
+        ProductGroup productGroup = getById(dto.getId());
+        productGroup.setLabel(dto.getLabel())
+                .setDescription(dto.getDescription());
+        return productGroupDao.save(productGroup);
     }
 
 
