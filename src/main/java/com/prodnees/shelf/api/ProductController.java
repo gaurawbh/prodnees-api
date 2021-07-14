@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 import static com.prodnees.core.web.response.LocalResponse.configure;
 
 
@@ -34,13 +36,12 @@ public class ProductController {
     }
 
     @GetMapping("/products/{id}")
-    public ResponseEntity<?> getProductById(@PathVariable int id) {
-        return configure(productService.getById(id));
-    }
-
-    @GetMapping("/products")
-    public ResponseEntity<?> findAllProducts() {
-        return configure(productService.findAll());
+    public ResponseEntity<?> getProductById(@PathVariable Optional<Integer> id) {
+        if (id.isPresent()) {
+            return configure(productService.getById(id.get()));
+        } else {
+            return configure(productService.findAll());
+        }
     }
 
     @PutMapping("/product")

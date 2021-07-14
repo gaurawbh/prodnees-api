@@ -4,7 +4,6 @@ import com.prodnees.core.action.stage.StageAction;
 import com.prodnees.core.action.stage.StageTodoAction;
 import com.prodnees.core.domain.enums.StageState;
 import com.prodnees.core.domain.stage.Stage;
-import com.prodnees.core.domain.stage.StageTodo;
 import com.prodnees.core.dto.stage.StageTodoDto;
 import com.prodnees.core.util.LocalAssert;
 import org.apache.commons.lang3.NotImplementedException;
@@ -12,13 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 import static com.prodnees.core.web.response.LocalResponse.configure;
 
@@ -40,16 +38,14 @@ public class StageTodoController {
         return configure(stageTodoAction.addNew(dto, stage.getBatchId()));
     }
 
-    @GetMapping("/stage-todos")
-    public ResponseEntity<?> get(@RequestParam Optional<Integer> id,
-                                 @RequestParam Optional<Integer> stageId) {
-        LocalAssert.isTrue(id.isPresent() || stageId.isPresent(), "either id or stageId must be present");
-        if (id.isPresent()) {
-            StageTodo stageTodo = stageTodoAction.getById(id.get());
-            return configure(stageTodo);
-        } else {
-            return configure(stageTodoAction.getAllByStageId(stageId.get()));
-        }
+    @GetMapping("/stage-todos/{id}")
+    public ResponseEntity<?> get(@PathVariable int id) {
+        return configure(stageTodoAction.getById(id));
+    }
+
+    @GetMapping("/stage-todos/stage/{stageId}")
+    public ResponseEntity<?> getAllByStage(@PathVariable int stageId) {
+        return configure(stageTodoAction.getAllByStageId(stageId));
     }
 
     //todo incorrect behaviour

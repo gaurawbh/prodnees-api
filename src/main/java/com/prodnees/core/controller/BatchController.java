@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 import static com.prodnees.core.web.response.LocalResponse.configure;
 
 @RestController
@@ -39,13 +41,13 @@ public class BatchController {
 
 
     @GetMapping("/batches/{id}")
-    public ResponseEntity<?> getBatchById(@PathVariable int id) {
-        return configure(batchAction.getModelById(id));
-    }
+    public ResponseEntity<?> getBatchById(@PathVariable Optional<Integer> id) {
 
-    @GetMapping("/batches")
-    public ResponseEntity<?> getBatches() {
-        return configure(batchAction.getBatchList());
+        if (id.isPresent()) {
+            return configure(batchAction.getModelById(id.get()));
+        } else {
+            return configure(batchAction.getBatchList());
+        }
     }
 
     /**
