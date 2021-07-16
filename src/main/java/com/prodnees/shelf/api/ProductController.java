@@ -1,5 +1,6 @@
 package com.prodnees.shelf.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.prodnees.auth.action.UserAction;
 import com.prodnees.core.dto.ProductDto;
 import com.prodnees.shelf.service.ProductService;
@@ -31,11 +32,11 @@ public class ProductController {
     }
 
     @PostMapping("/product")
-    public ResponseEntity<?> addNewProduct(@Validated @RequestBody ProductDto dto) {
-        return configure(productService.addNew(dto));
+    public ResponseEntity<?> addNewProduct(@Validated @RequestBody ProductDto dto) throws JsonProcessingException {
+        return configure(productService.addProduct(dto));
     }
 
-    @GetMapping("/products/{id}")
+    @GetMapping(value = {"/products", "/products/{id}"})
     public ResponseEntity<?> getProductById(@PathVariable Optional<Integer> id) {
         if (id.isPresent()) {
             return configure(productService.getById(id.get()));
@@ -45,7 +46,7 @@ public class ProductController {
     }
 
     @PutMapping("/product")
-    public ResponseEntity<?> updateProduct(@Validated @RequestBody ProductDto dto) {
+    public ResponseEntity<?> updateProduct(@Validated @RequestBody ProductDto dto) throws JsonProcessingException {
         return configure(productService.update(dto));
     }
 

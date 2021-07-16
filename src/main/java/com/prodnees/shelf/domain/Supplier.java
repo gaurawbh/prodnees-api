@@ -6,11 +6,17 @@
 
 package com.prodnees.shelf.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.prodnees.core.config.constants.DateTimeFormats;
+import com.prodnees.core.config.constraints.PhoneNumber;
+import com.prodnees.core.config.constraints.ValidCountryName;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 
 @Entity
 public class Supplier {
@@ -18,12 +24,20 @@ public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotBlank(message = "name is a required field and must not be blank")
+    @NotBlank(message = "name is a required field")
     private String name;
+    @NotBlank(message = "address is a required field")
     private String address;
+    @ValidCountryName
+    private String country;
+    @NotBlank(message = "contactPerson is a required field")
     private String contactPerson;
     private String email;
+    @PhoneNumber
+    @NotBlank(message = "phoneNumber is a required field")
     private String phoneNumber;
+    @JsonFormat(pattern = DateTimeFormats.DATE)
+    private LocalDate lastUsed = LocalDate.now();
     private String description;
 
     public int getId() {
@@ -86,6 +100,24 @@ public class Supplier {
 
     public Supplier setDescription(String description) {
         this.description = description;
+        return this;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public Supplier setCountry(String country) {
+        this.country = country;
+        return this;
+    }
+
+    public LocalDate getLastUsed() {
+        return lastUsed;
+    }
+
+    public Supplier setLastUsed(LocalDate lastUsed) {
+        this.lastUsed = lastUsed;
         return this;
     }
 }

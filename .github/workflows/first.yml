@@ -1,11 +1,11 @@
-name: first
-on: push
-jobs:
-  job1:
-    name: First Job
-    runs-on: ubuntu-latest
-    steps:
-      - name: Step one
-        uses: actions/checkout@v2
-      - name: Step two
-        run: mvn clean install
+#name: first
+#on: push
+#jobs:
+#  job1:
+#    name: First Job
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Step one
+#        uses: actions/checkout@v2
+#      - name: Step two
+#        run: mvn clean install

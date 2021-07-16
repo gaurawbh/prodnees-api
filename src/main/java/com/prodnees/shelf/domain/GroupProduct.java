@@ -18,8 +18,6 @@ public class GroupProduct implements Serializable {
     @Id
     private int productGroupId;
 
-
-
     public int getProductId() {
         return productId;
     }

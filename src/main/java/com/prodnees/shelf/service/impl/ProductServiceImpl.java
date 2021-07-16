@@ -1,19 +1,24 @@
 package com.prodnees.shelf.service.impl;
 
-import com.prodnees.auth.filter.RequestContext;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.prodnees.core.dto.ProductDto;
 import com.prodnees.core.util.MapperUtil;
-import com.prodnees.core.util.ValidatorUtil;
 import com.prodnees.core.web.exception.NeesNotFoundException;
 import com.prodnees.shelf.dao.ProductDao;
 import com.prodnees.shelf.domain.Product;
 import com.prodnees.shelf.service.ProductService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+    private  final String PRICE_HISTORY_DATE = "date";
+    private  final String PRICE_HISTORY_PRICE = "price";
     private final ProductDao productDao;
 
     public ProductServiceImpl(ProductDao productDao) {
@@ -26,18 +31,33 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product addNew(ProductDto dto) {
-        int ownerId = RequestContext.getUserId();
+    public Product addProduct(ProductDto dto) throws JsonProcessingException {
         Product product = MapperUtil.getDozer().map(dto, Product.class);
+        List<Map<String, Object>> priceHistories = new ArrayList<>();
+        Map<String, Object> priceHistory = new HashMap<>();
+        priceHistory.put(PRICE_HISTORY_DATE, LocalDate.now().toString());
+        priceHistory.put(PRICE_HISTORY_PRICE, dto.getPrice());
+        priceHistories.add(priceHistory);
+        product.setPriceHistoryJson(priceHistories)
+                .setAddedDate(LocalDate.now());
         product = productDao.save(product);
         return product;
     }
 
     @Override
-    public Product update(ProductDto dto) {
+    public Product update(ProductDto dto) throws JsonProcessingException {
         Product product = getById(dto.getId());
         product.setName(dto.getName())
-                .setDescription(ValidatorUtil.ifValidStringOrElse(dto.getDescription(), product.getDescription()));
+                .setDescription(dto.getDescription());
+        if (dto.getPrice() > 0 && dto.getPrice() != product.getPrice()) {
+            List<Map<String, Object>> productPriceHistories = product.getPriceHistoryJson();
+            Map<String, Object> priceHistory = new HashMap<>();
+            priceHistory.put(PRICE_HISTORY_DATE, LocalDate.now().toString());
+            priceHistory.put(PRICE_HISTORY_PRICE, dto.getPrice());
+            productPriceHistories.add(priceHistory);
+            product.setPriceHistoryJson(productPriceHistories)
+            .setPrice(dto.getPrice());
+        }
         return productDao.save(product);
     }
 

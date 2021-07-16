@@ -1,11 +1,19 @@
 package com.prodnees.shelf.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.prodnees.core.config.constants.DateTimeFormats;
 import org.springframework.data.annotation.Reference;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Product that needs to be created
@@ -19,7 +27,11 @@ public class Product {
     private String description;
     @Reference(Supplier.class)
     private Integer supplierId;
+    @JsonFormat(pattern = DateTimeFormats.DATE)
     private LocalDate addedDate;
+    private double price;
+    @JsonProperty("priceHistory")
+    private String priceHistoryJson;
 
     public int getId() {
         return id;
@@ -65,4 +77,29 @@ public class Product {
         this.addedDate = addedDate;
         return this;
     }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public Product setPrice(double price) {
+        this.price = price;
+        return this;
+    }
+
+    public List<Map<String, Object>> getPriceHistoryJson() throws JsonProcessingException {
+        if (priceHistoryJson != null) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.readValue(priceHistoryJson, List.class);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    public Product setPriceHistoryJson(List<Map<String, Object>> priceHistory) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        this.priceHistoryJson = objectMapper.writeValueAsString(priceHistory);
+        return this;
+    }
+
 }

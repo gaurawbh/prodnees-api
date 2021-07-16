@@ -6,6 +6,7 @@
 
 package com.prodnees.shelf.service.impl;
 
+import com.prodnees.core.web.exception.NeesBadRequestException;
 import com.prodnees.core.web.exception.NeesNotFoundException;
 import com.prodnees.shelf.dao.ProductDao;
 import com.prodnees.shelf.dao.SupplierDao;
@@ -38,6 +39,9 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public Supplier save(Supplier supplier) {
+        if (supplierDao.existsByName(supplier.getName())) {
+            throw new NeesBadRequestException(String.format("Supplier with name: %s already exists. Supplier name must be unique.", supplier.getName()));
+        }
         return supplierDao.save(supplier);
     }
 

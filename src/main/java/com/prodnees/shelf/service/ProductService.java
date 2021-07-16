@@ -1,5 +1,6 @@
 package com.prodnees.shelf.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.prodnees.core.dto.ProductDto;
 import com.prodnees.shelf.domain.Product;
 
@@ -9,9 +10,9 @@ public interface ProductService {
 
     Product save(Product product);
 
-    Product addNew(ProductDto dto);
+    Product addProduct(ProductDto dto) throws JsonProcessingException;
 
-    Product update(ProductDto dto);
+    Product update(ProductDto dto) throws JsonProcessingException;
 
     Product getById(int id);
 
