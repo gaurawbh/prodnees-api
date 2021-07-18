@@ -2,9 +2,14 @@ package com.prodnees.shelf.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.prodnees.core.dto.ProductDto;
+import com.prodnees.core.util.LocalAssert;
 import com.prodnees.core.util.MapperUtil;
+import com.prodnees.core.web.exception.NeesBadRequestException;
 import com.prodnees.core.web.exception.NeesNotFoundException;
+import com.prodnees.qc.domain.ValueType;
+import com.prodnees.shelf.action.ProductMetadataService;
 import com.prodnees.shelf.dao.ProductDao;
+import com.prodnees.shelf.domain.ObjectAttribute;
 import com.prodnees.shelf.domain.Product;
 import com.prodnees.shelf.service.ProductService;
 import org.springframework.stereotype.Service;
@@ -17,17 +22,46 @@ import java.util.Map;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-    private  final String PRICE_HISTORY_DATE = "date";
-    private  final String PRICE_HISTORY_PRICE = "price";
+    private final String PRICE_HISTORY_DATE = "date";
+    private final String PRICE_HISTORY_PRICE = "price";
     private final ProductDao productDao;
+    private final ProductMetadataService productMetadataService;
 
-    public ProductServiceImpl(ProductDao productDao) {
+    public ProductServiceImpl(ProductDao productDao, ProductMetadataService productMetadataService) {
         this.productDao = productDao;
+        this.productMetadataService = productMetadataService;
     }
 
     @Override
     public Product save(Product product) {
         return productDao.save(product);
+    }
+
+    @Override
+    public Map<String, Object> addProductEx(Map<String, Object> requestBody) {
+        List<ObjectAttribute> productAttributes = productMetadataService.getAllProductFields(false);
+        Map<String, Object> product = new HashMap<>();
+        for (ObjectAttribute objectAttribute : productAttributes) {
+            String privateKey = objectAttribute.getPrivateKey();
+            boolean isRequired = objectAttribute.isRequired();
+            if (isRequired && requestBody.get(privateKey) == null) {
+                throw new NeesBadRequestException(String.format("%s is a required field", privateKey));
+            } else if (requestBody.get(privateKey) == null) {
+                continue;
+            }
+            ValueType valueType = objectAttribute.getValueType();
+            if (valueType.equals(ValueType.String)) {
+                String value = requestBody.get(privateKey).toString();
+            } else if (valueType.equals(ValueType.Number)) {
+                LocalAssert.isTrue(requestBody.get(privateKey) instanceof Number,
+                        String.format("%s field is of type %s. Invalid ValueType", privateKey, valueType));
+                Number number = (Number) requestBody.get(privateKey);
+            } else if (valueType.equals(ValueType.Boolean)) {
+                Boolean bln = (Boolean) requestBody.get(privateKey);
+            }
+            product.put(privateKey, requestBody.get(privateKey));
+        }
+        return product;
     }
 
     @Override
@@ -56,7 +90,7 @@ public class ProductServiceImpl implements ProductService {
             priceHistory.put(PRICE_HISTORY_PRICE, dto.getPrice());
             productPriceHistories.add(priceHistory);
             product.setPriceHistoryJson(productPriceHistories)
-            .setPrice(dto.getPrice());
+                    .setPrice(dto.getPrice());
         }
         return productDao.save(product);
     }

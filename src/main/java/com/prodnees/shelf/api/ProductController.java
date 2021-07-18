@@ -3,6 +3,8 @@ package com.prodnees.shelf.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.prodnees.auth.action.UserAction;
 import com.prodnees.core.dto.ProductDto;
+import com.prodnees.core.web.response.LocalResponse;
+import com.prodnees.shelf.action.ProductMetadataService;
 import com.prodnees.shelf.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
 import java.util.Optional;
 
 import static com.prodnees.core.web.response.LocalResponse.configure;
@@ -23,17 +26,26 @@ import static com.prodnees.core.web.response.LocalResponse.configure;
 @RestController
 public class ProductController {
     private final ProductService productService;
+    private final ProductMetadataService productMetadataService;
     private final UserAction userAction;
 
     public ProductController(ProductService productService,
-                             UserAction userAction) {
+                             ProductMetadataService productMetadataService, UserAction userAction) {
         this.productService = productService;
+        this.productMetadataService = productMetadataService;
         this.userAction = userAction;
     }
 
+    @GetMapping("/product/fields")
+    public ResponseEntity<?> getProductFields() {
+        return LocalResponse.configure(productMetadataService.getAllProductFields(false));
+
+    }
+
     @PostMapping("/product")
-    public ResponseEntity<?> addNewProduct(@Validated @RequestBody ProductDto dto) throws JsonProcessingException {
-        return configure(productService.addProduct(dto));
+    public ResponseEntity<?> addNewProduct(@RequestBody Map<String, Object> requestBody) throws JsonProcessingException {
+//        return configure(productService.addProduct(dto));
+        return configure(productService.addProductEx(requestBody));
     }
 
     @GetMapping(value = {"/products", "/products/{id}"})

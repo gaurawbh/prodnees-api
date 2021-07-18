@@ -3,7 +3,11 @@ package com.prodnees.shelf.domain;
 import com.prodnees.core.domain.user.NeesObject;
 import com.prodnees.qc.domain.ValueType;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
 public class ObjectAttribute {
@@ -14,6 +18,7 @@ public class ObjectAttribute {
     @Enumerated(EnumType.STRING)
     private NeesObject neesObject;
     private String label;
+    private String helpContent;
     @Enumerated(EnumType.STRING)
     private ValueType valueType;
     private boolean required;
@@ -79,6 +84,15 @@ public class ObjectAttribute {
 
     public ObjectAttribute setNeesObject(NeesObject neesObject) {
         this.neesObject = neesObject;
+        return this;
+    }
+
+    public String getHelpContent() {
+        return helpContent;
+    }
+
+    public ObjectAttribute setHelpContent(String helpContent) {
+        this.helpContent = helpContent;
         return this;
     }
 }

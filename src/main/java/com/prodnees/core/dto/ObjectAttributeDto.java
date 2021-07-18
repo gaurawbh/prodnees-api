@@ -12,6 +12,7 @@ public class ObjectAttributeDto {
     private NeesObject neesObject;
     @NotBlank(message = "label is a required field")
     private String label;
+    private String helpContent;
     @NotNull(message = "valueType is a required field")
     private ValueType valueType;
     @NotNull(message = "required is a required field")
@@ -59,6 +60,15 @@ public class ObjectAttributeDto {
 
     public ObjectAttributeDto setRequired(Boolean required) {
         this.required = required;
+        return this;
+    }
+
+    public String getHelpContent() {
+        return helpContent;
+    }
+
+    public ObjectAttributeDto setHelpContent(String helpContent) {
+        this.helpContent = helpContent;
         return this;
     }
 }

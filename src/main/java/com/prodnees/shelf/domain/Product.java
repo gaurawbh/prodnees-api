@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.prodnees.core.config.annotations.NeesLabel;
 import com.prodnees.core.config.constants.DateTimeFormats;
 import org.springframework.data.annotation.Reference;
 
@@ -22,13 +23,19 @@ import java.util.Map;
 public class Product {
     @Id
     @GeneratedValue
+    @NeesLabel("Id")
     private int id;
+    @NeesLabel("Name")
     private String name;
+    @NeesLabel("Description")
     private String description;
     @Reference(Supplier.class)
+    @NeesLabel("Supplier Id")
     private Integer supplierId;
     @JsonFormat(pattern = DateTimeFormats.DATE)
+    @NeesLabel("Added Date")
     private LocalDate addedDate;
+    @NeesLabel("Price")
     private double price;
     @JsonProperty("priceHistory")
     private String priceHistoryJson;

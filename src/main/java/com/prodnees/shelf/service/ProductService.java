@@ -5,10 +5,14 @@ import com.prodnees.core.dto.ProductDto;
 import com.prodnees.shelf.domain.Product;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProductService {
 
     Product save(Product product);
+
+    Map<String, Object> addProductEx(Map<String, Object> requestBody);
+
 
     Product addProduct(ProductDto dto) throws JsonProcessingException;
 

@@ -8,14 +8,47 @@ create table if not exists nees_doctype
     active         bit default b'1' null,
     sys            bit default b'1' null
 );
+create table if not exists supplier
+(
+    id             int auto_increment
+        primary key,
+    name           varchar(255) not null,
+    address        varchar(255) null,
+    country        varchar(128) not null,
+    contact_person varchar(255) not null,
+    email          varchar(255) null,
+    phone_number   varchar(255) null,
+    description    text         null,
+    last_used      date         null
+);
+create table if not exists customer
+(
+    id             int auto_increment
+        primary key,
+    name           varchar(255) not null,
+    address        varchar(255) null,
+    country        varchar(128),
+    contact_person varchar(255) null,
+    email          varchar(255) null,
+    phone_number   varchar(255) null,
+    description    text         null
+);
 
 create table if not exists product
 (
-    id          int auto_increment
+    id                 int auto_increment
         primary key,
-    name        varchar(255) not null,
-    description text         null
+    name               varchar(255) not null,
+    description        text         null,
+    supplier_id        int          null,
+    price              double       null,
+    price_history_json json         null,
+    added_date         date         null,
+    constraint product_supplier_id_fk
+        foreign key (supplier_id) references prod_1.supplier (id)
 );
+
+
 
 create table if not exists batch
 (

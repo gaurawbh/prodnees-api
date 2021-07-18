@@ -24,6 +24,7 @@ public class ObjectAttributeServiceImpl implements ObjectAttributeService {
                 .setNeesObject(dto.getNeesObject())
                 .setPrivateKey(LocalStringUtils.toLowerCamelCase(dto.getLabel()))
                 .setLabel(dto.getLabel())
+                .setHelpContent(dto.getHelpContent())
                 .setValueType(dto.getValueType())
                 .setRequired(dto.getRequired())
                 .setSys(false);
