@@ -1,7 +1,5 @@
 package com.prodnees.shelf.domain;
 
-import com.prodnees.shelf.domain.ID.GroupProductID;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
@@ -11,12 +9,13 @@ import java.io.Serializable;
  * Record of Products that belong to a Group
  */
 @Entity
-@IdClass(GroupProductID.class)
+@IdClass(GroupProduct.class)
 public class GroupProduct implements Serializable {
     @Id
     private int productId;
     @Id
     private int productGroupId;
+    private int units;
 
     public int getProductId() {
         return productId;
@@ -33,6 +32,15 @@ public class GroupProduct implements Serializable {
 
     public GroupProduct setProductGroupId(int productGroupId) {
         this.productGroupId = productGroupId;
+        return this;
+    }
+
+    public int getUnits() {
+        return units;
+    }
+
+    public GroupProduct setUnits(int units) {
+        this.units = units;
         return this;
     }
 }
